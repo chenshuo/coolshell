@@ -1,0 +1,1641 @@
+<!DOCTYPE html>
+<!--[if IE 8]>
+<html id="ie8" dir="ltr" lang="zh-CN"
+	prefix="og: https://ogp.me/ns#" >
+<![endif]-->
+<!--[if !(IE 8) ]><!-->
+<html dir="ltr" lang="zh-CN" prefix="og: https://ogp.me/ns#">
+<!--<![endif]-->
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width" />
+<link rel="profile" href="https://gmpg.org/xfn/11" />
+<link rel="pingback" href="https://coolshell.cn/xmlrpc.php" />
+<link rel="shortcut icon" href="/favicon.png">
+<title>Unix 50 年：Ken Thompson 的密码 | 酷 壳 - CoolShell</title>
+
+<meta name="robots" content="max-image-preview:large" />
+<meta name="keywords" content="bsd,dennis ritchie,ken thompson,unix,unix/linux,技术读物,操作系统,杂项资源" />
+<link rel="canonical" href="https://coolshell.cn/articles/19996.html" />
+<meta name="generator" content="All in One SEO (AIOSEO) 4.3.6.1 " />
+<meta property="og:locale" content="zh_CN" />
+<meta property="og:site_name" content="酷 壳 - CoolShell" />
+<meta property="og:type" content="activity" />
+<meta property="og:title" content="Unix 50 年：Ken Thompson 的密码 | 酷 壳 - CoolShell" />
+<meta property="og:url" content="https://coolshell.cn/articles/19996.html" />
+<meta property="og:image" content="https://coolshell.cn/wp-content/uploads/2019/11/ken.dennis.jpeg" />
+<meta property="og:image:secure_url" content="https://coolshell.cn/wp-content/uploads/2019/11/ken.dennis.jpeg" />
+<meta property="og:image:width" content="980" />
+<meta property="og:image:height" content="606" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="Unix 50 年：Ken Thompson 的密码 | 酷 壳 - CoolShell" />
+<meta name="twitter:image" content="https://coolshell.cn/wp-content/uploads/2019/11/ken.dennis.jpeg" />
+<script type="application/ld+json" class="aioseo-schema">
+			{"@context":"https:\/\/schema.org","@graph":[{"@type":"Article","@id":"https:\/\/coolshell.cn\/articles\/19996.html#article","name":"Unix 50 \u5e74\uff1aKen Thompson \u7684\u5bc6\u7801 | \u9177 \u58f3 - CoolShell","headline":"Unix 50 \u5e74\uff1aKen Thompson \u7684\u5bc6\u7801","author":{"@id":"https:\/\/coolshell.cn\/articles\/author\/haoel#author"},"publisher":{"@id":"https:\/\/coolshell.cn\/#organization"},"image":{"@type":"ImageObject","url":"https:\/\/coolshell.cn\/wp-content\/uploads\/2019\/11\/ken.dennis.jpeg","@id":"https:\/\/coolshell.cn\/#articleImage","width":980,"height":606},"datePublished":"2019-11-03T06:12:54+08:00","dateModified":"2019-11-03T15:57:20+08:00","inLanguage":"zh-CN","commentCount":30,"mainEntityOfPage":{"@id":"https:\/\/coolshell.cn\/articles\/19996.html#webpage"},"isPartOf":{"@id":"https:\/\/coolshell.cn\/articles\/19996.html#webpage"},"articleSection":"Unix\/Linux, \u6280\u672f\u8bfb\u7269, \u64cd\u4f5c\u7cfb\u7edf, \u6742\u9879\u8d44\u6e90, BSD, Dennis Ritchie, Ken Thompson, Unix"},{"@type":"BreadcrumbList","@id":"https:\/\/coolshell.cn\/articles\/19996.html#breadcrumblist","itemListElement":[{"@type":"ListItem","@id":"https:\/\/coolshell.cn\/#listItem","position":1,"item":{"@type":"WebPage","@id":"https:\/\/coolshell.cn\/","name":"\u4e3b\u9801","description":"\u4eab\u53d7\u7f16\u7a0b\u548c\u6280\u672f\u6240\u5e26\u6765\u7684\u5feb\u4e50 \u2013 https:\/\/coolshell.cn","url":"https:\/\/coolshell.cn\/"}}]},{"@type":"Organization","@id":"https:\/\/coolshell.cn\/#organization","name":"\u9177\u58f3-CoolShell","url":"https:\/\/coolshell.cn\/","logo":{"@type":"ImageObject","url":"https:\/\/coolshell.cn\/wp-content\/uploads\/2020\/04\/mini.logo_.png","@id":"https:\/\/coolshell.cn\/#organizationLogo","width":306,"height":306},"image":{"@id":"https:\/\/coolshell.cn\/#organizationLogo"}},{"@type":"Person","@id":"https:\/\/coolshell.cn\/articles\/author\/haoel#author","url":"https:\/\/coolshell.cn\/articles\/author\/haoel","name":"\u9648\u7693","image":{"@type":"ImageObject","@id":"https:\/\/coolshell.cn\/articles\/19996.html#authorImage","url":"https:\/\/secure.gravatar.com\/avatar\/af2fbb7372dd5826e44d87e6ceccea40?s=96&d=mm&r=g","width":96,"height":96,"caption":"\u9648\u7693"}},{"@type":"WebPage","@id":"https:\/\/coolshell.cn\/articles\/19996.html#webpage","url":"https:\/\/coolshell.cn\/articles\/19996.html","name":"Unix 50 \u5e74\uff1aKen Thompson \u7684\u5bc6\u7801 | \u9177 \u58f3 - CoolShell","inLanguage":"zh-CN","isPartOf":{"@id":"https:\/\/coolshell.cn\/#website"},"breadcrumb":{"@id":"https:\/\/coolshell.cn\/articles\/19996.html#breadcrumblist"},"author":{"@id":"https:\/\/coolshell.cn\/articles\/author\/haoel#author"},"creator":{"@id":"https:\/\/coolshell.cn\/articles\/author\/haoel#author"},"datePublished":"2019-11-03T06:12:54+08:00","dateModified":"2019-11-03T15:57:20+08:00"},{"@type":"WebSite","@id":"https:\/\/coolshell.cn\/#website","url":"https:\/\/coolshell.cn\/","name":"\u9177 \u58f3 - CoolShell","description":"\u4eab\u53d7\u7f16\u7a0b\u548c\u6280\u672f\u6240\u5e26\u6765\u7684\u5feb\u4e50 - Coding Your Ambition","inLanguage":"zh-CN","publisher":{"@id":"https:\/\/coolshell.cn\/#organization"}}]}
+		</script>
+<script type="ac7059d1b7f33cd34807b83e-text/javascript">
+			window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+			ga('create', "UA-7486123-1", { 'cookieDomain': 'coolshell.cn' } );
+			ga('send', 'pageview');
+		</script>
+<script async src="https://www.google-analytics.com/analytics.js" type="ac7059d1b7f33cd34807b83e-text/javascript"></script>
+
+<link rel="dns-prefetch" href="//fonts.googleapis.com" />
+<link rel="alternate" type="application/rss+xml" title="酷 壳 - CoolShell &raquo; Feed" href="https://coolshell.cn/feed" />
+<link rel="alternate" type="application/rss+xml" title="酷 壳 - CoolShell &raquo; 评论Feed" href="https://coolshell.cn/comments/feed" />
+<link rel="alternate" type="application/rss+xml" title="酷 壳 - CoolShell &raquo; Unix 50 年：Ken Thompson 的密码评论Feed" href="https://coolshell.cn/articles/19996.html/feed" />
+<script type="ac7059d1b7f33cd34807b83e-text/javascript">
+window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/14.0.0\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/14.0.0\/svg\/","svgExt":".svg","source":{"concatemoji":"https:\/\/coolshell.cn\/wp-includes\/js\/wp-emoji-release.min.js?ver=6.2"}};
+/*! This file is auto-generated */
+!function(e,a,t){var n,r,o,i=a.createElement("canvas"),p=i.getContext&&i.getContext("2d");function s(e,t){p.clearRect(0,0,i.width,i.height),p.fillText(e,0,0);e=i.toDataURL();return p.clearRect(0,0,i.width,i.height),p.fillText(t,0,0),e===i.toDataURL()}function c(e){var t=a.createElement("script");t.src=e,t.defer=t.type="text/javascript",a.getElementsByTagName("head")[0].appendChild(t)}for(o=Array("flag","emoji"),t.supports={everything:!0,everythingExceptFlag:!0},r=0;r<o.length;r++)t.supports[o[r]]=function(e){if(p&&p.fillText)switch(p.textBaseline="top",p.font="600 32px Arial",e){case"flag":return s("\ud83c\udff3\ufe0f\u200d\u26a7\ufe0f","\ud83c\udff3\ufe0f\u200b\u26a7\ufe0f")?!1:!s("\ud83c\uddfa\ud83c\uddf3","\ud83c\uddfa\u200b\ud83c\uddf3")&&!s("\ud83c\udff4\udb40\udc67\udb40\udc62\udb40\udc65\udb40\udc6e\udb40\udc67\udb40\udc7f","\ud83c\udff4\u200b\udb40\udc67\u200b\udb40\udc62\u200b\udb40\udc65\u200b\udb40\udc6e\u200b\udb40\udc67\u200b\udb40\udc7f");case"emoji":return!s("\ud83e\udef1\ud83c\udffb\u200d\ud83e\udef2\ud83c\udfff","\ud83e\udef1\ud83c\udffb\u200b\ud83e\udef2\ud83c\udfff")}return!1}(o[r]),t.supports.everything=t.supports.everything&&t.supports[o[r]],"flag"!==o[r]&&(t.supports.everythingExceptFlag=t.supports.everythingExceptFlag&&t.supports[o[r]]);t.supports.everythingExceptFlag=t.supports.everythingExceptFlag&&!t.supports.flag,t.DOMReady=!1,t.readyCallback=function(){t.DOMReady=!0},t.supports.everything||(n=function(){t.readyCallback()},a.addEventListener?(a.addEventListener("DOMContentLoaded",n,!1),e.addEventListener("load",n,!1)):(e.attachEvent("onload",n),a.attachEvent("onreadystatechange",function(){"complete"===a.readyState&&t.readyCallback()})),(e=t.source||{}).concatemoji?c(e.concatemoji):e.wpemoji&&e.twemoji&&(c(e.twemoji),c(e.wpemoji)))}(window,document,window._wpemojiSettings);
+</script>
+<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 0.07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+<link rel="stylesheet" id="series_font-css" href="https://coolshell.cn/wp-content/plugins/simple-post-series/inc/icomoon/style.css?ver=2.4" type="text/css" media="all" />
+<link rel="stylesheet" id="wp-block-library-css" href="https://coolshell.cn/wp-content/plugins/gutenberg/build/block-library/style.css?ver=15.7.0" type="text/css" media="all" />
+<link rel="stylesheet" id="classic-theme-styles-css" href="https://coolshell.cn/wp-includes/css/classic-themes.min.css?ver=6.2" type="text/css" media="all" />
+<style id="global-styles-inline-css" type="text/css">
+body{--wp--preset--color--black: #000000;--wp--preset--color--cyan-bluish-gray: #abb8c3;--wp--preset--color--white: #ffffff;--wp--preset--color--pale-pink: #f78da7;--wp--preset--color--vivid-red: #cf2e2e;--wp--preset--color--luminous-vivid-orange: #ff6900;--wp--preset--color--luminous-vivid-amber: #fcb900;--wp--preset--color--light-green-cyan: #7bdcb5;--wp--preset--color--vivid-green-cyan: #00d084;--wp--preset--color--pale-cyan-blue: #8ed1fc;--wp--preset--color--vivid-cyan-blue: #0693e3;--wp--preset--color--vivid-purple: #9b51e0;--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple: linear-gradient(135deg,rgba(6,147,227,1) 0%,rgb(155,81,224) 100%);--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan: linear-gradient(135deg,rgb(122,220,180) 0%,rgb(0,208,130) 100%);--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange: linear-gradient(135deg,rgba(252,185,0,1) 0%,rgba(255,105,0,1) 100%);--wp--preset--gradient--luminous-vivid-orange-to-vivid-red: linear-gradient(135deg,rgba(255,105,0,1) 0%,rgb(207,46,46) 100%);--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray: linear-gradient(135deg,rgb(238,238,238) 0%,rgb(169,184,195) 100%);--wp--preset--gradient--cool-to-warm-spectrum: linear-gradient(135deg,rgb(74,234,220) 0%,rgb(151,120,209) 20%,rgb(207,42,186) 40%,rgb(238,44,130) 60%,rgb(251,105,98) 80%,rgb(254,248,76) 100%);--wp--preset--gradient--blush-light-purple: linear-gradient(135deg,rgb(255,206,236) 0%,rgb(152,150,240) 100%);--wp--preset--gradient--blush-bordeaux: linear-gradient(135deg,rgb(254,205,165) 0%,rgb(254,45,45) 50%,rgb(107,0,62) 100%);--wp--preset--gradient--luminous-dusk: linear-gradient(135deg,rgb(255,203,112) 0%,rgb(199,81,192) 50%,rgb(65,88,208) 100%);--wp--preset--gradient--pale-ocean: linear-gradient(135deg,rgb(255,245,203) 0%,rgb(182,227,212) 50%,rgb(51,167,181) 100%);--wp--preset--gradient--electric-grass: linear-gradient(135deg,rgb(202,248,128) 0%,rgb(113,206,126) 100%);--wp--preset--gradient--midnight: linear-gradient(135deg,rgb(2,3,129) 0%,rgb(40,116,252) 100%);--wp--preset--font-size--small: 13px;--wp--preset--font-size--medium: 20px;--wp--preset--font-size--large: 36px;--wp--preset--font-size--x-large: 42px;--wp--preset--spacing--20: 0.44rem;--wp--preset--spacing--30: 0.67rem;--wp--preset--spacing--40: 1rem;--wp--preset--spacing--50: 1.5rem;--wp--preset--spacing--60: 2.25rem;--wp--preset--spacing--70: 3.38rem;--wp--preset--spacing--80: 5.06rem;--wp--preset--shadow--natural: 6px 6px 9px rgba(0, 0, 0, 0.2);--wp--preset--shadow--deep: 12px 12px 50px rgba(0, 0, 0, 0.4);--wp--preset--shadow--sharp: 6px 6px 0px rgba(0, 0, 0, 0.2);--wp--preset--shadow--outlined: 6px 6px 0px -3px rgba(255, 255, 255, 1), 6px 6px rgba(0, 0, 0, 1);--wp--preset--shadow--crisp: 6px 6px 0px rgba(0, 0, 0, 1);}:where(.is-layout-flex){gap: 0.5em;}body .is-layout-flow > .alignleft{float: left;margin-inline-start: 0;margin-inline-end: 2em;}body .is-layout-flow > .alignright{float: right;margin-inline-start: 2em;margin-inline-end: 0;}body .is-layout-flow > .aligncenter{margin-left: auto !important;margin-right: auto !important;}body .is-layout-constrained > .alignleft{float: left;margin-inline-start: 0;margin-inline-end: 2em;}body .is-layout-constrained > .alignright{float: right;margin-inline-start: 2em;margin-inline-end: 0;}body .is-layout-constrained > .aligncenter{margin-left: auto !important;margin-right: auto !important;}body .is-layout-constrained > :where(:not(.alignleft):not(.alignright):not(.alignfull)){max-width: var(--wp--style--global--content-size);margin-left: auto !important;margin-right: auto !important;}body .is-layout-constrained > .alignwide{max-width: var(--wp--style--global--wide-size);}body .is-layout-flex{display: flex;}body .is-layout-flex{flex-wrap: wrap;align-items: center;}body .is-layout-flex > *{margin: 0;}body .is-layout-grid{display: grid;}body .is-layout-grid > *{margin: 0;}:where(.wp-block-columns.is-layout-flex){gap: 2em;}.has-black-color{color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-color{color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-color{color: var(--wp--preset--color--white) !important;}.has-pale-pink-color{color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-color{color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-color{color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-color{color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-color{color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-color{color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-color{color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-color{color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-color{color: var(--wp--preset--color--vivid-purple) !important;}.has-black-background-color{background-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-background-color{background-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-background-color{background-color: var(--wp--preset--color--white) !important;}.has-pale-pink-background-color{background-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-background-color{background-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-background-color{background-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-background-color{background-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-background-color{background-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-background-color{background-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-background-color{background-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-background-color{background-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-background-color{background-color: var(--wp--preset--color--vivid-purple) !important;}.has-black-border-color{border-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-border-color{border-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-border-color{border-color: var(--wp--preset--color--white) !important;}.has-pale-pink-border-color{border-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-border-color{border-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-border-color{border-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-border-color{border-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-border-color{border-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-border-color{border-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-border-color{border-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-border-color{border-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-border-color{border-color: var(--wp--preset--color--vivid-purple) !important;}.has-vivid-cyan-blue-to-vivid-purple-gradient-background{background: var(--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple) !important;}.has-light-green-cyan-to-vivid-green-cyan-gradient-background{background: var(--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan) !important;}.has-luminous-vivid-amber-to-luminous-vivid-orange-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange) !important;}.has-luminous-vivid-orange-to-vivid-red-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-orange-to-vivid-red) !important;}.has-very-light-gray-to-cyan-bluish-gray-gradient-background{background: var(--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray) !important;}.has-cool-to-warm-spectrum-gradient-background{background: var(--wp--preset--gradient--cool-to-warm-spectrum) !important;}.has-blush-light-purple-gradient-background{background: var(--wp--preset--gradient--blush-light-purple) !important;}.has-blush-bordeaux-gradient-background{background: var(--wp--preset--gradient--blush-bordeaux) !important;}.has-luminous-dusk-gradient-background{background: var(--wp--preset--gradient--luminous-dusk) !important;}.has-pale-ocean-gradient-background{background: var(--wp--preset--gradient--pale-ocean) !important;}.has-electric-grass-gradient-background{background: var(--wp--preset--gradient--electric-grass) !important;}.has-midnight-gradient-background{background: var(--wp--preset--gradient--midnight) !important;}.has-small-font-size{font-size: var(--wp--preset--font-size--small) !important;}.has-medium-font-size{font-size: var(--wp--preset--font-size--medium) !important;}.has-large-font-size{font-size: var(--wp--preset--font-size--large) !important;}.has-x-large-font-size{font-size: var(--wp--preset--font-size--x-large) !important;}
+:where(.wp-block-columns.is-layout-flex){gap: 2em;}
+.wp-block-pullquote{font-size: 1.5em;line-height: 1.6;}
+.wp-block-navigation a:where(:not(.wp-element-button)){color: inherit;}
+</style>
+<link rel="stylesheet" id="wp-postratings-css" href="https://coolshell.cn/wp-content/plugins/wp-postratings/css/postratings-css.css?ver=1.90.1" type="text/css" media="all" />
+<link rel="stylesheet" id="wp-pagenavi-css" href="https://coolshell.cn/wp-content/plugins/wp-pagenavi/pagenavi-css.css?ver=2.70" type="text/css" media="all" />
+<link rel="stylesheet" id="ez-toc-css" href="https://coolshell.cn/wp-content/plugins/easy-table-of-contents/assets/css/screen.min.css?ver=2.0.48" type="text/css" media="all" />
+<style id="ez-toc-inline-css" type="text/css">
+div#ez-toc-container p.ez-toc-title {font-size: 120%;}div#ez-toc-container p.ez-toc-title {font-weight: 500;}div#ez-toc-container ul li {font-size: 95%;}div#ez-toc-container nav ul ul li ul li {font-size: %!important;}
+.ez-toc-container-direction {direction: ltr;}.ez-toc-counter ul{counter-reset: item;}.ez-toc-counter nav ul li a::before {content: counters(item, ".", decimal) ". ";display: inline-block;counter-increment: item;flex-grow: 0;flex-shrink: 0;margin-right: .2em; float: left;}.ez-toc-widget-direction {direction: ltr;}.ez-toc-widget-container ul{counter-reset: item;}.ez-toc-widget-container nav ul li a::before {content: counters(item, ".", decimal) ". ";display: inline-block;counter-increment: item;flex-grow: 0;flex-shrink: 0;margin-right: .2em; float: left;}
+</style>
+<link rel="stylesheet" id="bootstrap-css" href="https://coolshell.cn/wp-content/themes/MyNisarg/css/bootstrap.css?ver=6.2" type="text/css" media="all" />
+<link rel="stylesheet" id="nisarg-style-css" href="https://coolshell.cn/wp-content/themes/MyNisarg/style.css?ver=6.2" type="text/css" media="all" />
+<style id="nisarg-style-inline-css" type="text/css">
+	/* Color Scheme */
+
+	/* Accent Color */
+
+	a:active,
+	a:hover,
+	a:focus {
+	    color: #009688;
+	}
+
+	.navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus {
+		color: #009688;
+	}
+
+	
+	.navbar-default .navbar-nav > .active > a, .navbar-default .navbar-nav > .active > a:hover, .navbar-default .navbar-nav > .active > a:focus {
+		color: #009688;			
+	}
+
+	@media (min-width: 768px){
+		.navbar-default .navbar-nav > .active > a, .navbar-default .navbar-nav > .active > a:hover, .navbar-default .navbar-nav > .active > a:focus {
+			border-top: 4px solid #009688;
+		}		
+	}
+
+	.dropdown-menu > .active > a, .dropdown-menu > .active > a:hover, .dropdown-menu > .active > a:focus {	    
+	    background-color: #009688;
+	}
+
+
+	.navbar-default .navbar-nav > .open > a, .navbar-default .navbar-nav > .open > a:hover, .navbar-default .navbar-nav > .open > a:focus {
+		color: #009688;
+	}
+
+	.navbar-default .navbar-nav > li > .dropdown-menu > li > a:hover,
+	.navbar-default .navbar-nav > li > .dropdown-menu > li > a:focus {
+		color: #fff;
+		background-color: #009688;
+	}
+
+	.navbar-default .navbar-nav .open .dropdown-menu > .active > a, .navbar-default .navbar-nav .open .dropdown-menu > .active > a:hover, .navbar-default .navbar-nav .open .dropdown-menu > .active > a:focus {
+		background-color: #fff;
+		color: #009688;
+	}
+
+	@media (max-width: 767px) {
+		.navbar-default .navbar-nav .open .dropdown-menu > li > a:hover {
+			background-color: #009688;
+			color: #fff;
+		}
+	}
+
+	.sticky-post{
+	    background: #009688;
+	    color:white;
+	}
+	
+	.entry-title a:hover,
+	.entry-title a:focus{
+	    color: #009688;
+	}
+
+	.entry-header .entry-meta::after{
+	    background: #009688;
+	}
+
+	.fa {
+		color: #009688;
+	}
+
+	.btn-default{
+		border-bottom: 1px solid #009688;
+	}
+
+	.btn-default:hover, .btn-default:focus{
+	    border-bottom: 1px solid #009688;
+	    background-color: #009688;
+	}
+
+	.nav-previous:hover, .nav-next:hover{
+	    border: 1px solid #009688;
+	    background-color: #009688;
+	}
+
+	.next-post a:hover,.prev-post a:hover{
+	    color: #009688;
+	}
+
+	.posts-navigation .next-post a:hover .fa, .posts-navigation .prev-post a:hover .fa{
+	    color: #009688;
+	}
+
+
+	#secondary .widget-title::after{
+		background-color: #009688;
+	    content: "";
+	    position: absolute;
+	    width: 75px;
+	    display: block;
+	    height: 4px;    
+	    bottom: -15px;
+	}
+
+	#secondary .widget a:hover,
+	#secondary .widget a:focus{
+		color: #009688;
+	}
+
+	#secondary .widget_calendar tbody a {
+	    background-color: #009688;
+	    color: #fff;
+	    padding: 0.2em;
+	}
+
+	#secondary .widget_calendar tbody a:hover{
+	    background-color: #009688;
+	    color: #fff;
+	    padding: 0.2em;
+	}	
+
+</style>
+<link rel="stylesheet" id="font-awesome-css" href="https://coolshell.cn/wp-content/themes/MyNisarg/font-awesome/css/font-awesome.min.css?ver=6.2" type="text/css" media="all" />
+<link rel="stylesheet" id="nisarggooglefonts-css" href="//fonts.googleapis.com/css?family=Lato:400,300italic,700|Source+Sans+Pro:400,400italic" type="text/css" media="all" />
+<link rel="stylesheet" id="enlighterjs-css" href="https://coolshell.cn/wp-content/plugins/enlighter/cache/enlighterjs.min.css?ver=0cuVQBPCj0viGB0" type="text/css" media="all" />
+<script type="ac7059d1b7f33cd34807b83e-text/javascript" src="https://coolshell.cn/wp-includes/js/jquery/jquery.min.js?ver=3.6.3" id="jquery-core-js"></script>
+<script type="ac7059d1b7f33cd34807b83e-text/javascript" src="https://coolshell.cn/wp-includes/js/jquery/jquery-migrate.min.js?ver=3.4.0" id="jquery-migrate-js"></script>
+<script type="ac7059d1b7f33cd34807b83e-text/javascript" src="https://coolshell.cn/wp-content/plugins/simple-post-series/autohide.js?ver=2.4" id="series-js"></script>
+<script type="ac7059d1b7f33cd34807b83e-text/javascript" id="ez-toc-scroll-scriptjs-js-after">
+jQuery(document).ready(function(){document.querySelectorAll(".ez-toc-section").forEach(t=>{t.setAttribute("ez-toc-data-id","#"+decodeURI(t.getAttribute("id")))}),jQuery("a.ez-toc-link").click(function(){let t=jQuery(this).attr("href"),e=jQuery("#wpadminbar"),i=0;30>30&&(i=30),e.length&&(i+=e.height()),jQuery('[ez-toc-data-id="'+decodeURI(t)+'"]').length>0&&(i=jQuery('[ez-toc-data-id="'+decodeURI(t)+'"]').offset().top-i),jQuery("html, body").animate({scrollTop:i},500)})});
+</script>
+<!--[if lt IE 9]>
+<script type='text/javascript' src='https://coolshell.cn/wp-content/themes/MyNisarg/js/html5shiv.js?ver=3.7.3' id='html5shiv-js'></script>
+<![endif]-->
+<link rel="https://api.w.org/" href="https://coolshell.cn/wp-json/" /><link rel="alternate" type="application/json" href="https://coolshell.cn/wp-json/wp/v2/posts/19996" /><link rel="EditURI" type="application/rsd+xml" title="RSD" href="https://coolshell.cn/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="https://coolshell.cn/wp-includes/wlwmanifest.xml" />
+<meta name="generator" content="WordPress 6.2" />
+<link rel="shortlink" href="https://coolshell.cn/?p=19996" />
+<link rel="alternate" type="application/json+oembed" href="https://coolshell.cn/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fcoolshell.cn%2Farticles%2F19996.html" />
+<link rel="alternate" type="text/xml+oembed" href="https://coolshell.cn/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fcoolshell.cn%2Farticles%2F19996.html&#038;format=xml" />
+<script type="ac7059d1b7f33cd34807b83e-text/javascript">
+	window._wp_rp_static_base_url = 'https://wprp.zemanta.com/static/';
+	window._wp_rp_wp_ajax_url = "https://coolshell.cn/wp-admin/admin-ajax.php";
+	window._wp_rp_plugin_version = '3.6.4';
+	window._wp_rp_post_id = '19996';
+	window._wp_rp_num_rel_posts = '6';
+	window._wp_rp_thumbnails = true;
+	window._wp_rp_post_title = 'Unix+50+%E5%B9%B4%EF%BC%9AKen+Thompson+%E7%9A%84%E5%AF%86%E7%A0%81';
+	window._wp_rp_post_tags = ['bsd', 'ken+thompson', 'dennis+ritchie', 'unix', '%E6%8A%80%E6%9C%AF%E8%AF%BB%E7%89%A9', '%E6%9D%82%E9%A1%B9%E8%B5%84%E6%BA%90', 'unix%2Flinux', '%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F', 'devil', 'leah', 'unix', 'gop', 'heritag', 'robert', 'pike', 'vega', 'ken', 'gpu', 'morri', 'thompson', 'de', 'amd', 'amp'];
+	window._wp_rp_promoted_content = true;
+</script>
+<link rel="stylesheet" href="https://coolshell.cn/wp-content/plugins/wordpress-23-related-posts-plugin/static/themes/vertical-m.css?version=3.6.4" />
+<style type="text/css">
+        .site-header { background: #1d2b2d; }
+</style>
+</head>
+<body class="post-template-default single single-post postid-19996 single-format-standard group-blog">
+<link rel="stylesheet" id="nisarg-style-css" href="https://coolshell.cn/wp-content/themes/MyNisarg/style.css" type="text/css" media="all">
+<div id="page" class="hfeed site">
+<header id="masthead" role="banner">
+<nav class="navbar navbar-default navbar-fixed-top navbar-left" role="navigation">
+
+<div class="container" id="navigation_menu">
+<div class="navbar-header">
+<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+<span class="sr-only">Toggle navigation</span>
+<span class="icon-bar"></span>
+<span class="icon-bar"></span>
+<span class="icon-bar"></span>
+</button>
+<a class="navbar-brand" href="https://coolshell.cn/"><div class="coolshell_logo"></div>酷 壳 &#8211; CoolShell</a>
+</div>
+<div class="collapse navbar-collapse navbar-ex1-collapse"><ul id="menu-coolshell" class="nav navbar-nav"><li id="menu-item-17405" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-17405"><a title="首页" href="https://coolshell.cn/">首页</a></li>
+<li id="menu-item-17406" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-17406"><a title="推荐文章" href="https://coolshell.cn/featured">推荐文章</a></li>
+<li id="menu-item-17407" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-17407"><a title="本站插件" href="https://coolshell.cn/plugins">本站插件</a></li>
+<li id="menu-item-17408" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-17408"><a title="留言小本" href="https://coolshell.cn/guestbook">留言小本</a></li>
+<li id="menu-item-17409" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-17409"><a title="关于酷壳" href="https://coolshell.cn/about">关于酷壳</a></li>
+<li id="menu-item-17410" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-17410"><a title="关于陈皓" href="https://coolshell.cn/haoel">关于陈皓</a></li>
+<li id="menu-item-17582" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-17582"><a title="RSS" href="https://coolshell.cn/feed">RSS</a></li>
+</ul></div>
+</div>
+</nav>
+<div id="cc_spacer"></div>
+<div class="site-header">
+<div class="pull-right">
+<a title="把这个链接拖到你的Chrome收藏夹工具栏中" href="javascript:(function(){function c(){var e=document.createElement(&quot;link&quot;);e.setAttribute(&quot;type&quot;,&quot;text/css&quot;);e.setAttribute(&quot;rel&quot;,&quot;stylesheet&quot;);e.setAttribute(&quot;href&quot;,f);e.setAttribute(&quot;class&quot;,l);document.body.appendChild(e)}function h(){var e=document.getElementsByClassName(l);for(var t=0;t<e.length;t++){document.body.removeChild(e[t])}}function p(){var e=document.createElement(&quot;div&quot;);e.setAttribute(&quot;class&quot;,a);document.body.appendChild(e);setTimeout(function(){document.body.removeChild(e)},100)}function d(e){return{height:e.offsetHeight,width:e.offsetWidth}}function v(i){var s=d(i);return s.height>e&&s.height<n&&s.width>t&&s.width<r}function m(e){var t=e;var n=0;while(!!t){n+=t.offsetTop;t=t.offsetParent}return n}function g(){var e=document.documentElement;if(!!window.innerWidth){return window.innerHeight}else if(e&&!isNaN(e.clientHeight)){return e.clientHeight}return 0}function y(){if(window.pageYOffset){return window.pageYOffset}return Math.max(document.documentElement.scrollTop,document.body.scrollTop)}function E(e){var t=m(e);return t>=w&&t<=b+w}function S(){var e=document.createElement(&quot;audio&quot;);e.setAttribute(&quot;class&quot;,l);e.src=i;e.loop=false;e.addEventListener(&quot;canplay&quot;,function(){setTimeout(function(){x(k)},500);setTimeout(function(){N();p();for(var e=0;e<O.length;e++){T(O[e])}},15500)},true);e.addEventListener(&quot;ended&quot;,function(){N();h()},true);e.innerHTML=&quot; <p>If you are reading this, it is because your browser does not support the audio element. We recommend that you get a new browser.</p> <p>&quot;;document.body.appendChild(e);e.play()}function x(e){e.className+=&quot; &quot;+s+&quot; &quot;+o}function T(e){e.className+=&quot; &quot;+s+&quot; &quot;+u[Math.floor(Math.random()*u.length)]}function N(){var e=document.getElementsByClassName(s);var t=new RegExp(&quot;\\b&quot;+s+&quot;\\b&quot;);for(var n=0;n<e.length;){e[n].className=e[n].className.replace(t,&quot;&quot;)}}var e=30;var t=30;var n=350;var r=350;var i=&quot;//s3.amazonaws.com/moovweb-marketing/playground/harlem-shake.mp3&quot;;var s=&quot;mw-harlem_shake_me&quot;;var o=&quot;im_first&quot;;var u=[&quot;im_drunk&quot;,&quot;im_baked&quot;,&quot;im_trippin&quot;,&quot;im_blown&quot;];var a=&quot;mw-strobe_light&quot;;var f=&quot;//s3.amazonaws.com/moovweb-marketing/playground/harlem-shake-style.css&quot;;var l=&quot;mw_added_css&quot;;var b=g();var w=y();var C=document.getElementsByTagName(&quot;*&quot;);var k=null;for(var L=0;L<C.length;L++){var A=C[L];if(v(A)){if(E(A)){k=A;break}}}if(A===null){console.warn(&quot;Could not find a node of the right size. Please try a different page.&quot;);return}c();S();var O=[];for(var L=0;L<C.length;L++){var A=C[L];if(v(A)){O.push(A)}}})()    ">High一下!</a>
+</div>
+<div class="site-branding">
+<a class="home-link" href="https://coolshell.cn/" title="酷 壳 &#8211; CoolShell" rel="home">
+<h1 class="site-title">酷 壳 &#8211; CoolShell</h1>
+<h2 class="site-description">享受编程和技术所带来的快乐 &#8211; Coding Your Ambition</h2>
+</a>
+</div>
+</div>
+</header>
+<div class="container">
+<div class="row">
+<div class="col-md-9 nav-searchbox hidden-lg hidden-md visible-sm-* visible-xs-*">
+<form role="search" method="get" class="search-form" action="https://coolshell.cn/">
+<label>
+<span class="screen-reader-text">Search for:</span>
+<input type="search" class="search-field" placeholder="Search …" value name="s" title="Search for:">
+</label>
+<button type="submit" class="search-submit"><span class="screen-reader-text">Search</span></button>
+</form>
+</div>
+</div>
+</div>
+<div id="content" class="site-content">
+<div class="container">
+<div class="row">
+<div id="primary" class="col-md-9 content-area">
+<main id="main" role="main">
+<article id="post-19996" class="post-content post-19996 post type-post status-publish format-standard hentry category-unixlinux category-techarticle category-operatingsystem category-misc tag-bsd tag-dennis-ritchie tag-ken-thompson tag-unix">
+<header class="entry-header">
+<span class="screen-reader-text">Unix 50 年：Ken Thompson 的密码</span>
+<h1 class="entry-title">Unix 50 年：Ken Thompson 的密码</h1>
+<div class="entry-meta">
+<h5 class="entry-date"><i class="fa fa-calendar-o"></i> <a href="https://coolshell.cn/articles/19996.html" title="14:12" rel="bookmark"><time class="entry-date" datetime="2019-11-03T14:12:54+08:00" pubdate>2019年11月03日 </time></a><span class="byline"><span class="sep"></span><i class="fa fa-user"></i>
+<span class="author vcard"><a class="url fn n" href="https://coolshell.cn/articles/author/haoel" title="View all posts by 陈皓" rel="author">陈皓</a></span></span> <i class="fa fa-comments-o"></i><span class="screen-reader-text">评论 </span> <a href="https://coolshell.cn/articles/19996.html#comments" class="comments-link">30 条评论</a> <i class="fa fa-users" style="margin-left:10px;"></i> 60,081 人阅读</h5>
+</div>
+</header>
+<div class="entry-content">
+<p><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3415450859608158" crossorigin="anonymous" type="ac7059d1b7f33cd34807b83e-text/javascript"></script><img decoding="async" class="alignright size-medium" src="https://coolshell.cn/wp-content/uploads/2019/11/ken.dennis-300x186.jpeg" alt width="300" height="186" />50年前，除了Apollo上天之外，还有一个大事的发生，就是Unix操作系统的诞生，若干年前我写过《Unix的传奇，<a href="https://coolshell.cn/articles/2322.html" target="_blank" rel="noopener noreferrer">上篇</a>，<a href="https://coolshell.cn/articles/2324.html" target="_blank" rel="noopener noreferrer">下篇</a>》，Unix是我入行前十年伴我成长的操作系统，虽然现在Linux早已接过了Unix的时代交接棒，但是，Unix文化对我个人的技术观影响是非常大的（注：《<a href="https://book.douban.com/subject/1467587/" target="_blank" rel="noopener noreferrer">Unix编程艺术</a>》是一本对影响我很深的书），而对于 <a href="https://en.wikipedia.org/wiki/Ken_Thompson">Ken Thompson</a> 和 <a href="https://en.wikipedia.org/wiki/Dennis_Ritchie" target="_blank" rel="noopener noreferrer">Dennis Ritchie</a> 这两位 Unix 的缔造者，也是计算机圈中的神一般的人物。今天，Dennis已经去逝，Ken在Google里跟 Rob Pike和 Robert Griesemer 这两位大神在开发Go语言。</p>
+<p>P.S. 今年，我一直想写篇Unix 50周年纪念的文章，但一直无从下手，因为不想写过大的命题，如果能写个轶事最好不过。正好过完国庆节，技术圈里有个“热搜”——Ken Thompson的密码。但一直没有时间，所以拖到今天才写下来。</p>
+<p>正文开始，2014年，有个叫Leah Neukirchen的程序员（<a href="https://leahneukirchen.org/blog/" target="_blank" rel="noopener noreferrer">blog</a>）在 BSD 3 的源代码中的 <code><a href="https://leahneukirchen.org/blog/archive/2019/10/ken-thompson-s-unix-password.html" target="_blank" rel="noopener noreferrer">/etc/passwd</a></code> 看到了早年Unix黑客们的被 hash了的密码，该文件如下所示：</p>
+<p><span id="more-19996"></span></p>
+<pre>root:OVCPatZ8RFmFY:0:10:Ernie Co-vax,4156427925:/:
+daemon:*:1:1:The devil himself:/:
+bill:.2xvLVqGHJm8M:8:10:&amp; Joy,4156424948:/usr/bill:/bin/csh
+ozalp:m5syt3.lB5LAE:40:10:&amp; Babaoglu,4156423806:/usr/ozalp:/bin/csh
+sklower:8PYh/dUBQT9Ss:2:10:Keith &amp;,4156424972:/usr/staff/sklower:/bin/csh
+kridle:4BkcEieEtjWXI:3:10:Bob &amp;,4156426744:/usr/staff/kridle:/bin/csh
+kurt:olqH1vDqH38aw:4:10:&amp; Shoens,4156420572:/usr/staff/kurt:/bin/csh
+schmidt:FH83PFo4z55cU:7:10:Eric &amp;,4156424951:/usr/staff/schmidt:/bin/csh
+hpk:9ycwM8mmmcp4Q:9:10:Howard Katseff,2019495337:/usr/staff/hpk:/bin/csh
+tbl:cBWEbG59spEmM:10:10:Tom London,2019492006:/usr/staff/tbl:
+jfr:X.ZNnZrciWauE:11:10:John Reiser:/usr/staff/jfr:
+mark:Pb1AmSpsVPG0Y:12:10:&amp; Horton,4156428311:/usr/staff/mark:/bin/csh
+dmr:gfVwhuAMF0Trw:42:10:Dennis Ritchie:/usr/staff/dmr:
+ken:ZghOT0eRm4U9s:52:10:&amp; Thompson:/usr/staff/ken:
+sif:IIVxQSvq1V9R2:53:10:Stuart Feldman:/usr/staff/sif:
+scj:IL2bmGECQJgbk:60:10:Steve Johnson:/usr/staff/scj:
+pjw:N33.MCNcTh5Qw:61:10:Peter J. Weinberger,2015827214:/usr/staff/pjw:/bin/csh
+bwk:ymVglQZjbWYDE:62:10:Brian W. Kernighan,2015826021:/usr/staff/bwk:
+uucp:P0CHBwE/mB51k:66:10:UNIX-to-UNIX Copy:/usr/spool/uucp:/usr/lib/uucp/uucico
+srb:c8UdIntIZCUIA:68:10:Steve Bourne,2015825829:/usr/staff/srb:
+finger::199:199:The &amp; Program:/usr/ucb:/usr/ucb/finger
+who::199:199:The &amp; Program:/usr/ucb:/bin/who
+w::199:199:The &amp; Program:/usr/ucb:/usr/ucb/w
+mckusick:AAZk9Aj5/Ue0E:201:10:Kirk &amp;,4156424948:/usr/staff/mckusick:/bin/csh
+peter:Nc3IkFJyW2u7E:202:10:&amp; Kessler,4156424948:/usr/staff/peter:/bin/csh
+henry:lj1vXnxTAPnDc:203:10:Robert &amp;,4156424948:/usr/staff/henry:/bin/csh
+jkf:9ULn5cWTc0b9E:209:10:John Foderaro,4156424972:/usr/staff/jkf:/bin/csh
+fateman:E9i8fWghn1p/I:300:10:Richard &amp;,4156421879:/usr/staff/fateman:/bin/csh
+fabry:d9B17PTU2RTlM:305:10:Bob &amp;,4156422714:/usr/staff/fabry:/bin/csh
+network:9EZLtSYjeEABE:501:50:*:/usr/net/network:/usr/net/network/nsh
+tty::504:50::/:/bin/tty我</pre>
+<p>（注，以前Unix是一个服务器，所有人都用一个终端到服务器上进行操作，于是，这个服务上的 <code>/etc/passwd</code> 下保存着所有的人的登录密码，能让所有的人都能读到，为了不让别人猜到，这个文件中的密码保存（第二列）被做过哈希处理）</p>
+<p>这位程序员一看，这些个用户不就是<a href="https://en.wikipedia.org/wiki/Dennis_Ritchie" target="_blank" rel="noopener noreferrer">Dennis Ritchie</a>, <a href="https://en.wikipedia.org/wiki/Ken_Thompson">Ken Thompson</a>, <a href="https://en.wikipedia.org/wiki/Brian_Kernighan" target="_blank" rel="noopener noreferrer">Brian W. Kernighan</a>, <a href="https://en.wikipedia.org/wiki/Stephen_R._Bourne" target="_blank" rel="noopener noreferrer">Steve Bourne</a>, <a href="https://en.wikipedia.org/wiki/Bill_Joy" target="_blank" rel="noopener noreferrer">Bill Joy</a> 这些神人的密码吗？！于是，他想看看这些人用什么样的密码。考虑到当时的加密算法用的是基于DES的 <a href="https://minnie.tuhs.org/cgi-bin/utree.pl?file=V7/usr/man/man3/crypt.3">crypt(3)</a> 算法（这个算法今天还在用，像Perl/PHP/Python/Ruby都提供<code>crypt()</code> 函数），而且当时的密码最长只支持8个长度，所以，感觉还是很容易暴力破解的。</p>
+<p>一般来说，暴力破解的这种hash密码的工具主要是用<a href="https://hashcat.net/" target="_blank" rel="noopener noreferrer">hashcat</a> 或 <a href="https://www.openwall.com/john/" target="_blank" rel="noopener noreferrer">john</a> ，很快，Leah 破解了大多数人的密码，因为大多数都使用的是比较弱的密码，比如： <a href="https://en.wikipedia.org/wiki/Brian_Kernighan" target="_blank" rel="noopener noreferrer">Brian W. Kernighan</a> （<code>bwk</code>）使用了 <code>/.,/.,</code> 这样的密码，而 <a href="https://en.wikipedia.org/wiki/Dennis_Ritchie" target="_blank" rel="noopener noreferrer">Dennis Ritchie</a> （<code>dmr</code>）则使用了 <code>dmac</code> 这样的密码。然后，在破解到 Ken Thompson的密码时，搞不定了，花了好几天穷举完了所有的小写字母+数字都没有找到。</p>
+<p>因为这个<code>crypt</code>的算法也是Ken Thompson 和 Robert Morris 写的，他们在40年前就发现，原来的hash算法太快了，这样很容易被暴力穷举，于是在第七版的Unix（1979年发布），他们把算法改成DES的算法，就是要让这个算法变慢。详细地说，用户密码被截断为八个字符，每个字符仅被压缩为7位。这形成56位DES密钥。然后，该密钥用于加密全零位块，然后再次使用相同的密钥对密文进行加密，依此类推，总共进行了25次DES加密。感觉跟区块链的“挖矿”有点像。<strong>在最早的Unix计算机上，这个算法需要花了整整一秒钟的时间来计算密码哈希</strong>。</p>
+<p>这几十年来，计算机的计算速度根据摩尔定律至少double了20次，所以，DES算法已经很容被攻击了，然而，对于Ken Thompson的密码，在2014年还是很不容易被破解的，因为，<strong>如果要加上所有的大小写字符数字和其它特殊字符，那么，在2014年，就算用最快的GPU来穷举所有的8位长度的密码，也需要花上至少2年以上的时间</strong>。</p>
+<p>在2019年10月份，在 <a href="https://www.tuhs.org/">The Unix Heritage Society</a> 这个社区中，<a href="https://inbox.vuxu.org/tuhs/6dceffe228804a76de1e12f18d1fc0dc@inventati.org/" target="_blank" rel="noopener noreferrer">这个事又被人问起来</a>，说以前有个人破解这些密码，不知道有没有全破解出来了？于是Leah看到了，就回应说，那个人是我，但是还是没干出来……于是好些人进来留言。</p>
+<p>5天后，2019年10月08日，一个来自澳大利亚的程序员Nigel Williams说，<a href="https://inbox.vuxu.org/tuhs/CACCFpdx_6oeyNkgH_5jgfxbxWbZ6VtOXQNKOsonHPF2=747ZOw@mail.gmail.com/" target="_blank" rel="noopener noreferrer">Ken的密码我破解出来了</a>，哈希串<code>ZghOT0eRm4U9s</code> 明文是 <code>p/q2-q4!</code>（果然是有数字有特殊字符），小伙说，我在 AMD Radeon Vega 64 的 GPU上运行了 <code>hashcat</code> 这个命令，干了我 4天多，每秒钟的“配速”是930MH/s （每秒钟9亿3千万次hash运算）。然后，<a href="https://inbox.vuxu.org/tuhs/CAG=a+rj8VcXjS-ftaj8P2_duLFSUpmNgB4-dYwnTsY_8g5WdEA@mail.gmail.com/" target="_blank" rel="noopener noreferrer">Ken Thompson 也留言到 “恭喜”</a> ，这样，Ken 的密码在40年后被破解了……</p>
+<p>马上，就有人问到，这个密码是不是国际象棋的走棋？嗯，很像中国象棋中的“车五进一”，“马三退一”，这个密码中的 <code>p</code> 代表 <code>pawn</code> 小兵，从 <code>q2</code> 的位置走到 <code>q4</code>，这个看来是国际象棋中的开局进兵——用来做登录密码，非常合适。而且，Ken Thompson 在 Unix中写下的一个国际象棋的程序 <a href="https://en.wikipedia.org/wiki/Belle_(chess_machine)" target="_blank" rel="noopener noreferrer">Belle</a>，在1978年首次参加<a href="https://en.wikipedia.org/wiki/North_American_Computer_Chess_Championship">计算机协会的北美计算机国际象棋锦标赛</a>时，它获得了第一个冠军头衔，其搜索深度为八层。之后又赢得了四次冠军。1983年，它也成为第一台获得国际象棋“大师”称号的计算机。所以，Ken用这个做密码相当make sense!</p>
+<p style="text-align: center;"><img decoding="async" loading="lazy" class="aligncenter size-full" src="https://coolshell.cn/wp-content/uploads/2019/11/ken.chess_.jpg" alt width="600" height="800" />Ken在贝尔实验室调程序（图片来源：<a href="https://spectrum.ieee.org/tech-history/silicon-revolution/in-1983-this-bell-labs-computer-was-the-first-machine-to-become-a-chess-master" target="_blank" rel="noopener noreferrer">IEEE SPECTRUM</a>）</p>
+<p>当然，还有一个人的密码是所有人里最难破解的，这个人就是<a href="https://en.wikipedia.org/wiki/Bill_Joy" target="_blank" rel="noopener noreferrer">Bill Joy</a>，他最初作为加州大学伯克利分校的研究生，在校期间着手改进Unix 内核，并管理BSD发行版。他最著名的贡献是ex和vi编辑器以及C shell。在Sun公司成立6个月后，他正式成为公司的联合创始人，他在Sun公司的推动了NFS，SPARC处理器，以及Java语言。他还是一个风险投资人员。</p>
+<p>在Ken的密被破解后两周（2019年10月19日），有人号称已经破解了Bill的密码，他在<a href="https://minnie.tuhs.org/pipermail/tuhs/2019-October/019124.html" target="_blank" rel="noopener noreferrer">邮件组中这样写到</a>：</p>
+<blockquote><p>一开始，我使用了大小写字符和数字，8位长度来破解所有的组合，花了我6天的时间，失败了。然后，我开始尝试只用小写字母和控制字符，结果在40分钟内就破解了。但是因为Bill现健在，所以，只要bill同意他才公布这个密码。</p></blockquote>
+<p>在密码里存控制字符？这脑洞，Ctrl+C么？破解者还说，他在一个有三个结点的DELL 的HPC集群上完成这个工作，每个结点包括两个 Tesla V100 nVidia GPU 的显卡，一共30720个CUDA核…… 关于这个显卡多少钱，你可以上网搜吧…… 相当于一块劳力士吧……（我估计这组机器平时是用来挖矿的……[狗头]）</p>
+<p>好了，我们来看一下这个 <code>/etc/passwd</code> 中的这些人的密码是什么样的，<strong>但最主要的是向这些为人类做过巨大贡献的程序员科学家们致敬</strong>！</p>
+<ul>
+<li><strong><a href="https://en.wikipedia.org/wiki/Ken_Thompson" target="_blank" rel="noopener noreferrer">Ken Thompson</a></strong><br/>
+除了是Unix、B语言和Go语言作者之外，他还贡献过正则表达式，QED/ed编辑器，UTF-8编码定义，以及计算机国际象棋Belle……</p>
+<table>
+<tbody>
+<tr>
+<td colspan="1" rowspan="1">登录名</td>
+<td colspan="1" rowspan="1"><b>哈希串</b></td>
+<td colspan="1" rowspan="1"><b>密码</b></td>
+</tr>
+<tr>
+<td colspan="1" rowspan="1"><code>ken</code></td>
+<td colspan="1" rowspan="1"><code>ZghOT0eRm4U9s</code></td>
+<td colspan="1" rowspan="1"><code>p/q2-q4!</code></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><strong><a href="https://en.wikipedia.org/wiki/Dennis_Ritchie" target="_blank" rel="noopener noreferrer">Dennis Ritchie</a></strong><br/>
+Unix和C语言之父，与Ken于1983年获图灵奖，1990年美国国家海明奖章，于2011年去世。</p>
+<table>
+<tbody>
+<tr>
+<td colspan="1" rowspan="1">登录名</td>
+<td colspan="1" rowspan="1"><b>哈希串</b></td>
+<td colspan="1" rowspan="1"><b>密码</b></td>
+</tr>
+<tr>
+<td colspan="1" rowspan="1"><code>dmr</code></td>
+<td colspan="1" rowspan="1"><code>gfVwhuAMF0Trw</code></td>
+<td colspan="1" rowspan="1"><code>dmac</code></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><strong><a href="https://en.wikipedia.org/wiki/Brian_Kernighan" target="_blank" rel="noopener noreferrer">Brian W. Kernighan</a></strong><br/>
+AWK的作者，是AWK中的“K”，也是与Dennis写的K&amp;C的C语言编程书中的“K”，他还编写了很多Unix的其它程序，如：<code>ditroff</code>，而且，设计了著名的<a href="https://en.wikipedia.org/wiki/Heuristic" target="_blank" rel="noopener noreferrer">启发式算法</a>。</p>
+<table>
+<tbody>
+<tr>
+<td colspan="1" rowspan="1">登录名</td>
+<td colspan="1" rowspan="1"><b>哈希串</b></td>
+<td colspan="1" rowspan="1"><b>密码</b></td>
+</tr>
+<tr>
+<td colspan="1" rowspan="1"><code>bwk</code></td>
+<td colspan="1" rowspan="1"><code>ymVglQZjbWYDE</code></td>
+<td colspan="1" rowspan="1"><code>/.,/.,</code></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><strong><a href="https://en.wikipedia.org/wiki/Stephen_R._Bourne" target="_blank" rel="noopener noreferrer">Stephen R. Bourne</a></strong><br/>
+Bourne shell（<code>sh</code>）的作者，Unix Shell作者，同时也是Unix调试器的作者。</p>
+<table>
+<tbody>
+<tr>
+<td colspan="1" rowspan="1">登录名</td>
+<td colspan="1" rowspan="1"><b>哈希串</b></td>
+<td colspan="1" rowspan="1"><b>密码</b></td>
+</tr>
+<tr>
+<td colspan="1" rowspan="1"><code>srb</code></td>
+<td colspan="1" rowspan="1"><code>c8UdIntIZCUIA</code></td>
+<td colspan="1" rowspan="1"><code>bourne</code></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><strong><a href="https://en.wikipedia.org/wiki/Eric_Schmidt" target="_blank" rel="noopener noreferrer">Eric Schmidt</a></strong><br/>
+你可能知道他是Google的CEO，苹果的董事，但是你可能不知道，他当年是是贝尔实施室的实习生，他对Unix的词法分析器 Lex 进行为了完全的重写。他的密码是中的wendy应该是他的妻子。</p>
+<table>
+<tbody>
+<tr>
+<td colspan="1" rowspan="1">登录名</td>
+<td colspan="1" rowspan="1"><b>哈希串</b></td>
+<td colspan="1" rowspan="1"><b>密码</b></td>
+</tr>
+<tr>
+<td colspan="1" rowspan="1"><code>schmidt</code></td>
+<td colspan="1" rowspan="1"><code>FH83PFo4z55cU</code></td>
+<td colspan="1" rowspan="1"><code>wendy!!!</code></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><strong><a href="https://en.wikipedia.org/wiki/Stuart_Feldman" target="_blank" rel="noopener noreferrer">Stuart Feldman</a></strong><br/>
+他除了是Unix系统小组的成员，他还是第一个Fortran 77 编译器的作者，也是 <code>make</code> 的作者。他还是楼上Shmidt慈善基金会的科学负责人，在Google/IBM Research任过职，也担任过ACM的主席。</p>
+<table>
+<tbody>
+<tr>
+<td colspan="1" rowspan="1">登录名</td>
+<td colspan="1" rowspan="1"><b>哈希串</b></td>
+<td colspan="1" rowspan="1"><b>密码</b></td>
+</tr>
+<tr>
+<td colspan="1" rowspan="1"><code>sif</code></td>
+<td colspan="1" rowspan="1"><code>IIVxQSvq1V9R2</code></td>
+<td colspan="1" rowspan="1"><code>axolotl</code></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><strong><a href="https://en.wikipedia.org/wiki/Mary_Ann_Horton" target="_blank" rel="noopener noreferrer">Mark Horton</a></strong><br/>
+Unix贡献者，包括vi和curses，后来变性为女性，新的名字叫Mary Ann Horton。原来的照片在<a href="http://www.ugu.com/sui/ugu/show?I=info.Mark_R._Horton" target="_blank" rel="noopener noreferrer">Unix Guru Universe</a></p>
+<table>
+<tbody>
+<tr>
+<td colspan="1" rowspan="1">登录名</td>
+<td colspan="1" rowspan="1"><b>哈希串</b></td>
+<td colspan="1" rowspan="1"><b>密码</b></td>
+</tr>
+<tr>
+<td colspan="1" rowspan="1"><code>mark</code></td>
+<td colspan="1" rowspan="1"><code>Pb1AmSpsVPG0Y</code></td>
+<td colspan="1" rowspan="1"><code>uio</code></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><strong><a href="https://en.wikipedia.org/wiki/Marshall_Kirk_McKusick" target="_blank" rel="noopener noreferrer">Kirk McKusick</a></strong><br/>
+BSD贡献者，主要负责文件系统UFS以及fsck命令，同时也是<code>gprof</code>的贡献者，公开的同性恋者。</p>
+<table>
+<tbody>
+<tr>
+<td colspan="1" rowspan="1">登录名</td>
+<td colspan="1" rowspan="1"><b>哈希串</b></td>
+<td colspan="1" rowspan="1"><b>密码</b></td>
+</tr>
+<tr>
+<td colspan="1" rowspan="1"><code>mckusick</code></td>
+<td colspan="1" rowspan="1"><code>AAZk9Aj5/Ue0E</code></td>
+<td colspan="1" rowspan="1"><code>foobar</code></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><strong><a href="https://en.wikipedia.org/wiki/Richard_Fateman" target="_blank" rel="noopener noreferrer">Richard Fateman</a></strong><br/>
+他在伯克利的VAX UNIX系统的开发工作中发挥了重要作用，以及开发了<a href="https://en.wikipedia.org/wiki/Franz_Lisp" target="_blank" rel="noopener noreferrer"> Franz Lisp</a>。</p>
+<table>
+<tbody>
+<tr>
+<td colspan="1" rowspan="1">登录名</td>
+<td colspan="1" rowspan="1"><b>哈希串</b></td>
+<td colspan="1" rowspan="1"><b>密码</b></td>
+</tr>
+<tr>
+<td colspan="1" rowspan="1"><code>fateman</code></td>
+<td colspan="1" rowspan="1"><code>E9i8fWghn1p/I</code></td>
+<td colspan="1" rowspan="1"><code>apr1744</code></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><strong>Peter Kessler</strong><br/>
+这位老兄能在网上查到的资料基本没有，可以查到他是 <code>gprof</code> 的贡献者，以及有名字的<a href="https://web.eecs.umich.edu/~weimerw/2009-4610/reading/graham-gprof.pdf" target="_blank" rel="noopener noreferrer">gprof的一篇论文</a></p>
+<table>
+<tbody>
+<tr>
+<td colspan="1" rowspan="1">登录名</td>
+<td colspan="1" rowspan="1"><b>哈希串</b></td>
+<td colspan="1" rowspan="1"><b>密码</b></td>
+</tr>
+<tr>
+<td colspan="1" rowspan="1"><code>peter</code></td>
+<td colspan="1" rowspan="1"><code>Nc3IkFJyW2u7E</code></td>
+<td colspan="1" rowspan="1"><code>...hello</code></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><strong>Kurt Shoens</strong><br/>
+BSD电子邮件开发者。Unix早期版本中使用 <code>uux</code> 和 <code>sendmail</code> 来进行远程消息传递，1978年，Kurt为Unix编写了一个邮件用户代理 Berkeley Mail。相关的历史可以参看<a href="http://heirloom.sourceforge.net/mailx_history.html" target="_blank" rel="noopener noreferrer">这篇文章</a>。</p>
+<table>
+<tbody>
+<tr>
+<td colspan="1" rowspan="1">登录名</td>
+<td colspan="1" rowspan="1"><b>哈希串</b></td>
+<td colspan="1" rowspan="1"><b>密码</b></td>
+</tr>
+<tr>
+<td colspan="1" rowspan="1"><code>kurt</code></td>
+<td colspan="1" rowspan="1"><code>olqH1vDqH38aw</code></td>
+<td colspan="1" rowspan="1"><code>sacristy</code></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><strong><a href="https://franz.com/about/press_room/foderaro_2-2-2015.lhtml" target="_blank" rel="noopener noreferrer">John Foderaro</a></strong><br/>
+他为Berkeley的Lisp语言编写原始的编译器，Lisp语言是一种类似于数据代数的语言，在计算机历史上有和C语言一样的作用。后来他成立了Franz公司，主要开发和部署图形搜索解决方案。</p>
+<table>
+<tbody>
+<tr>
+<td colspan="1" rowspan="1">登录名</td>
+<td colspan="1" rowspan="1"><b>哈希串</b></td>
+<td colspan="1" rowspan="1"><b>密码</b></td>
+</tr>
+<tr>
+<td colspan="1" rowspan="1"><code>jkf</code></td>
+<td colspan="1" rowspan="1"><code>9ULn5cWTc0b9E</code></td>
+<td colspan="1" rowspan="1"><code>sherril.</code></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><strong><a href="https://en.wikipedia.org/wiki/Peter_J._Weinberger" target="_blank" rel="noopener noreferrer">Peter J. Weinberger</a></strong><br/>
+他就是AWK中的那个“W”，同时也是Fortan编译器f77的贡献者，后来是<a title href="https://en.wikipedia.org/wiki/Renaissance_Technologies">Renaissance Technologies</a> （一家对冲基金）的CTO，现在在Google工作，</p>
+<table>
+<tbody>
+<tr>
+<td colspan="1" rowspan="1">登录名</td>
+<td colspan="1" rowspan="1"><b>哈希串</b></td>
+<td colspan="1" rowspan="1"><b>密码</b></td>
+</tr>
+<tr>
+<td colspan="1" rowspan="1"><code>pjw</code></td>
+<td colspan="1" rowspan="1"><code>N33.MCNcTh5Qw</code></td>
+<td colspan="1" rowspan="1"><code>uucpuucp</code></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><strong>John Reiser</strong><br/>
+他主要工作是将Unix和C移植到了DEC VAX上，这个机器在学术界相当流行（陈皓注：我在1994年上大学的时候，就是在这个机器上学习的C语言）。这扩大了Unix和C的影响力。</p>
+<table>
+<tbody>
+<tr>
+<td colspan="1" rowspan="1">登录名</td>
+<td colspan="1" rowspan="1"><b>哈希串</b></td>
+<td colspan="1" rowspan="1"><b>密码</b></td>
+</tr>
+<tr>
+<td colspan="1" rowspan="1"><code>jfr</code></td>
+<td colspan="1" rowspan="1"><code>X.ZNnZrciWauE</code></td>
+<td colspan="1" rowspan="1"><code>5%ghj</code></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><strong><a href="https://en.wikipedia.org/wiki/Stephen_C._Johnson" target="_blank" rel="noopener noreferrer">Steve Johnson</a></strong><br/>
+曾在贝尔实验室和AT＆T工作近20年。他以Yacc，Lint，spell和Portable C编译器而闻名。后来他去了硅谷，加入了一些创业公司，主要从事编译器的工作，以及2D和3D图形，大规模并行系统和嵌入式系统的开发工作。现在他在Wave Computing从事机器学习的工作。</p>
+<table>
+<tbody>
+<tr>
+<td colspan="1" rowspan="1">登录名</td>
+<td colspan="1" rowspan="1"><b>哈希串</b></td>
+<td colspan="1" rowspan="1"><b>密码</b></td>
+</tr>
+<tr>
+<td colspan="1" rowspan="1"><code>scj</code></td>
+<td colspan="1" rowspan="1"><code>IL2bmGECQJgbk</code></td>
+<td colspan="1" rowspan="1"><code>pdq;dq</code></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><strong>Bob Kridle</strong><br/>
+这位老兄的资料在没有太多，只能在 <a href="https://www.oreilly.com/openbook/opensources/book/kirkmck.html_original" target="_blank" rel="noopener noreferrer">Berkeley Unix 20 年</a> 上看到他跟Ken Thompson混过一段时间。</p>
+<table>
+<tbody>
+<tr>
+<td colspan="1" rowspan="1">登录名</td>
+<td colspan="1" rowspan="1"><b>哈希串</b></td>
+<td colspan="1" rowspan="1"><b>密码</b></td>
+</tr>
+<tr>
+<td colspan="1" rowspan="1"><code>kridle</code></td>
+<td colspan="1" rowspan="1"><code>4BkcEieEtjWXI</code></td>
+<td colspan="1" rowspan="1"><code>jilland1</code></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><strong><a href="https://people.eecs.berkeley.edu/~sklower/" target="_blank" rel="noopener noreferrer">Keith Sklower</a></strong><br/>
+BSD 的一个程序员。从他的主页上可以看到他目前在Berkeley大学，信息分析师，主要研究一些网络通信相关的技术。</p>
+<table>
+<tbody>
+<tr>
+<td colspan="1" rowspan="1">登录名</td>
+<td colspan="1" rowspan="1"><b>哈希串</b></td>
+<td colspan="1" rowspan="1"><b>密码</b></td>
+</tr>
+<tr>
+<td colspan="1" rowspan="1"><code>sklower</code></td>
+<td colspan="1" rowspan="1"><code>8PYh/dUBQT9Ss</code></td>
+<td colspan="1" rowspan="1"><code>theik!!!</code></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><strong>Robert Henry</strong><br/>
+网上的资料不多，只在<a href="https://www.tuhs.org/Archive/Documentation/Books/Life_with_Unix.pdf" target="_blank" rel="noopener noreferrer">Life with Unix</a>这本电子书中查到，他写了 <code>error</code></p>
+<table>
+<tbody>
+<tr>
+<td colspan="1" rowspan="1">登录名</td>
+<td colspan="1" rowspan="1"><b>哈希串</b></td>
+<td colspan="1" rowspan="1"><b>密码</b></td>
+</tr>
+<tr>
+<td colspan="1" rowspan="1"><code>henry</code></td>
+<td colspan="1" rowspan="1"><code>lj1vXnxTAPnDc</code></td>
+<td colspan="1" rowspan="1"><code>sn74193n</code></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><strong>Howard Katseff</strong><br/>
+网上的资料不多，只在<a href="https://www.tuhs.org/Archive/Documentation/Books/Life_with_Unix.pdf" target="_blank" rel="noopener noreferrer">Life with Unix</a>这本电子书中查到，他写了 <code>sdb</code> 和 <code>last</code></p>
+<table>
+<tbody>
+<tr>
+<td colspan="1" rowspan="1">登录名</td>
+<td colspan="1" rowspan="1"><b>哈希串</b></td>
+<td colspan="1" rowspan="1"><b>密码</b></td>
+</tr>
+<tr>
+<td colspan="1" rowspan="1"><code>hpk</code></td>
+<td colspan="1" rowspan="1"><code>9ycwM8mmmcp4Q</code></td>
+<td colspan="1" rowspan="1"><code>graduat;</code></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><strong><a href="https://en.wikipedia.org/wiki/%C3%96zalp_Babao%C4%9Flu" target="_blank" rel="noopener noreferrer">Özalp Babaoğlu</a></strong><br/>
+土耳其计算机科学家，1981年在Berkeley担任 BSD Unix的首席设计师，曾经与Sun的创造人Bill Joy在BSD上实现了虚拟内存。</p>
+<table>
+<tbody>
+<tr>
+<td colspan="1" rowspan="1">登录名</td>
+<td colspan="1" rowspan="1"><b>哈希串</b></td>
+<td colspan="1" rowspan="1"><b>密码</b></td>
+</tr>
+<tr>
+<td colspan="1" rowspan="1"><code>ozalp</code></td>
+<td colspan="1" rowspan="1"><code>m5syt3.lB5LAE</code></td>
+<td colspan="1" rowspan="1"><code>12ucdort</code></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><strong><a href="https://en.wikipedia.org/wiki/Bob_Fabry" target="_blank" rel="noopener noreferrer">Bob Fabry</a></strong><br/>
+他主要推动美国国防部高级研究计划局DARPA采用了Unix系统</p>
+<table>
+<tbody>
+<tr>
+<td colspan="1" rowspan="1">登录名</td>
+<td colspan="1" rowspan="1"><b>哈希串</b></td>
+<td colspan="1" rowspan="1"><b>密码</b></td>
+</tr>
+<tr>
+<td colspan="1" rowspan="1"><code>fabry</code></td>
+<td colspan="1" rowspan="1"><code>d9B17PTU2RTlM</code></td>
+<td colspan="1" rowspan="1"><code>561cml..</code></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><strong>Tom London</strong><br/>
+他和John Reiser在把Unix移植到了VAX-11机上。</p>
+<table>
+<tbody>
+<tr>
+<td colspan="1" rowspan="1">登录名</td>
+<td colspan="1" rowspan="1"><b>哈希串</b></td>
+<td colspan="1" rowspan="1"><b>密码</b></td>
+</tr>
+<tr>
+<td colspan="1" rowspan="1"><code>tbl</code></td>
+<td colspan="1" rowspan="1"><code>cBWEbG59spEmM</code></td>
+<td colspan="1" rowspan="1"><code>..pnn521</code></td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+<p>最后，再首尾呼应一下，在我的技术生涯中，Unix文化对我个人的技术观影响是非常大的，<strong>我个人认为 Unix 就像摇滚乐一样，上世纪60年代-80年代，是整个人类最经典最光亮的时代，值得我们每个人向那个时代的人和事致敬！</strong></p>
+<p>————————————————————————</p>
+<p>P.S.</p>
+<p>你可以浏览 Github 的 <a href="https://github.com/dspinellis/unix-history-repo/tree/BSD-3-Snapshot-Development" target="_blank" rel="noopener noreferrer">unix-history-repo</a> 目录（注：本文给的这个链接不在master分支上），这个repo是40年前的代码，涵盖了从1970年创建时的2.5万行内核和26条命令到2017年为止广泛使用的2700万行系统。1.1GB的存储库包含大约一百万次提交和两千多次合并。通过<a href="http://www.dmst.aueb.gr/dds/pubs/jrnl/2016-EMPSE-unix-history/html/unix-history.html" target="_blank" rel="noopener noreferrer">这个链接</a>你可以了解一下这个代码的历史！</p>
+<p>下载这些代码需要你的1.5GB的硬盘空间，你可以查看各个大神写的代码，包括 Ken Thompson 和 Dennis的，以及相关的注释。</p>
+<p>根据这些，你还可以找到 Ken Thompson的 Github账号 <a href="https://github.com/ken" target="_blank" rel="noopener noreferrer">https://github.com/ken</a> 以及别人为dmr建的github帐号 <a href="https://github.com/dmr-1941-2011">https://github.com/dmr-1941-2011</a></p>
+<p>P.S.S</p>
+<p>下面是一些和Unix相关的维基百科资料</p>
+<ul>
+<li><a href="https://en.wikipedia.org/wiki/History_of_Unix" target="_blank" rel="nofollow noopener noreferrer">History of Unix</a></li>
+<li><a href="https://en.wikipedia.org/wiki/List_of_Unix_systems" target="_blank" rel="nofollow noopener noreferrer">List of Unix systems</a></li>
+<li><a href="https://en.wikipedia.org/wiki/List_of_Unix_commands" target="_blank" rel="nofollow noopener noreferrer">List of Unix commands</a></li>
+<li><a href="https://en.wikipedia.org/wiki/List_of_Unix_daemons" target="_blank" rel="nofollow noopener noreferrer">List of Unix daemons</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Research_Unix" target="_blank" rel="nofollow noopener noreferrer">Research Unix</a></li>
+<li><a href="https://en.wikipedia.org/wiki/BSD_Unix" target="_blank" rel="nofollow noopener noreferrer">Berkeley Software Distribution</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Unix_philosophy" target="_blank" rel="nofollow noopener noreferrer">Unix philosophy</a></li>
+</ul>
+<p>还有Unix的社区：TUHS: The Unix Heritage Society &#8211; <a href="http://minnie.tuhs.org/cgi-bin/utree.pl" rel="nofollow">The Unix Tree</a></p>
+<p>（全文完）</p>
+<div style="margin-top: 15px; font-size: 16px;color: #cc0000;">
+<p align="center"><strong>（转载本站文章请注明作者和出处 <a href="https://coolshell.cn/">酷 壳 &#8211; CoolShell</a> ，请勿用于任何商业用途）</strong></p>
+</div>
+<div class="wp_rp_wrap  wp_rp_vertical_m" id="wp_rp_first"><div class="wp_rp_content"><h3 class="related_post_title">相关文章</h3><ul class="related_post wp_rp"><li><a href="https://coolshell.cn/articles/2322.html" class="wp_rp_thumbnail"><img src="https://coolshell.cn/wp-content/uploads/2010/04/o_unixrichiethompson-150x150.jpg" alt="Unix传奇(上篇)" width="150" height="150" /></a><a href="https://coolshell.cn/articles/2322.html" class="wp_rp_title">Unix传奇(上篇)</a></li><li><a href="https://coolshell.cn/articles/9410.html" class="wp_rp_thumbnail"><img src="https://coolshell.cn/wp-content/uploads/2013/04/figure1-150x150.gif" alt="Unix考古记：一个“遗失”的shell" width="150" height="150" /></a><a href="https://coolshell.cn/articles/9410.html" class="wp_rp_title">Unix考古记：一个“遗失”的shell</a></li><li><a href="https://coolshell.cn/articles/1761.html" class="wp_rp_thumbnail"><img src="https://coolshell.cn/wp-content/uploads/2009/11/spell_it_with_e-150x150.jpg" alt="Go语言源码的一个改动" width="150" height="150" /></a><a href="https://coolshell.cn/articles/1761.html" class="wp_rp_title">Go语言源码的一个改动</a></li><li><a href="https://coolshell.cn/articles/18360.html" class="wp_rp_thumbnail"><img src="https://coolshell.cn/wp-content/uploads/2018/05/300x262-150x150.jpg" alt="程序员练级攻略（2018)  与我的专栏" width="150" height="150" /></a><a href="https://coolshell.cn/articles/18360.html" class="wp_rp_title">程序员练级攻略（2018) 与我的专栏</a></li><li><a href="https://coolshell.cn/articles/17998.html" class="wp_rp_thumbnail"><img src="https://coolshell.cn/wp-content/uploads/2017/07/systemd-1-150x150.jpeg" alt="Linux PID 1 和 Systemd" width="150" height="150" /></a><a href="https://coolshell.cn/articles/17998.html" class="wp_rp_title">Linux PID 1 和 Systemd</a></li><li><a href="https://coolshell.cn/articles/12103.html" class="wp_rp_thumbnail"><img src="https://coolshell.cn/wp-content/uploads/2014/11/tux-fork-150x150.gif" alt="vfork 挂掉的一个问题" width="150" height="150" /></a><a href="https://coolshell.cn/articles/12103.html" class="wp_rp_title">vfork 挂掉的一个问题</a></li></ul></div></div>
+<div id="post-ratings-19996" class="post-ratings" itemscope itemtype="https://schema.org/Article" data-nonce="fe047a92a7"><img id="rating_19996_1" src="https://coolshell.cn/wp-content/plugins/wp-postratings/images/stars_crystal/rating_on.gif" alt="好烂啊" title="好烂啊" onmouseover="if (!window.__cfRLUnblockHandlers) return false; current_rating(19996, 1, '好烂啊');" onmouseout="if (!window.__cfRLUnblockHandlers) return false; ratings_off(4.5, 5, 0);" onclick="if (!window.__cfRLUnblockHandlers) return false; rate_post();" onkeypress="if (!window.__cfRLUnblockHandlers) return false; rate_post();" style="cursor: pointer; border: 0px;" data-cf-modified-ac7059d1b7f33cd34807b83e- /><img id="rating_19996_2" src="https://coolshell.cn/wp-content/plugins/wp-postratings/images/stars_crystal/rating_on.gif" alt="有点差" title="有点差" onmouseover="if (!window.__cfRLUnblockHandlers) return false; current_rating(19996, 2, '有点差');" onmouseout="if (!window.__cfRLUnblockHandlers) return false; ratings_off(4.5, 5, 0);" onclick="if (!window.__cfRLUnblockHandlers) return false; rate_post();" onkeypress="if (!window.__cfRLUnblockHandlers) return false; rate_post();" style="cursor: pointer; border: 0px;" data-cf-modified-ac7059d1b7f33cd34807b83e- /><img id="rating_19996_3" src="https://coolshell.cn/wp-content/plugins/wp-postratings/images/stars_crystal/rating_on.gif" alt="凑合看看" title="凑合看看" onmouseover="if (!window.__cfRLUnblockHandlers) return false; current_rating(19996, 3, '凑合看看');" onmouseout="if (!window.__cfRLUnblockHandlers) return false; ratings_off(4.5, 5, 0);" onclick="if (!window.__cfRLUnblockHandlers) return false; rate_post();" onkeypress="if (!window.__cfRLUnblockHandlers) return false; rate_post();" style="cursor: pointer; border: 0px;" data-cf-modified-ac7059d1b7f33cd34807b83e- /><img id="rating_19996_4" src="https://coolshell.cn/wp-content/plugins/wp-postratings/images/stars_crystal/rating_on.gif" alt="还不错" title="还不错" onmouseover="if (!window.__cfRLUnblockHandlers) return false; current_rating(19996, 4, '还不错');" onmouseout="if (!window.__cfRLUnblockHandlers) return false; ratings_off(4.5, 5, 0);" onclick="if (!window.__cfRLUnblockHandlers) return false; rate_post();" onkeypress="if (!window.__cfRLUnblockHandlers) return false; rate_post();" style="cursor: pointer; border: 0px;" data-cf-modified-ac7059d1b7f33cd34807b83e- /><img id="rating_19996_5" src="https://coolshell.cn/wp-content/plugins/wp-postratings/images/stars_crystal/rating_half.gif" alt="很精彩" title="很精彩" onmouseover="if (!window.__cfRLUnblockHandlers) return false; current_rating(19996, 5, '很精彩');" onmouseout="if (!window.__cfRLUnblockHandlers) return false; ratings_off(4.5, 5, 0);" onclick="if (!window.__cfRLUnblockHandlers) return false; rate_post();" onkeypress="if (!window.__cfRLUnblockHandlers) return false; rate_post();" style="cursor: pointer; border: 0px;" data-cf-modified-ac7059d1b7f33cd34807b83e- /> (<strong>73</strong> 人打了分，平均分： <strong>4.48</strong> )<br/><span class="post-ratings-text" id="ratings_19996_text"></span><meta itemprop="name" content="Unix 50 年：Ken Thompson 的密码" /><meta itemprop="headline" content="Unix 50 年：Ken Thompson 的密码" /><meta itemprop="description" content="50年前，除了Apollo上天之外，还有一个大事的发生，就是Unix操作系统的诞生，若干年前我写过《Unix的传奇，上篇，下篇》，Unix是我入行前十年伴我成长的操作系统，虽然现在Linux早已接过了Unix的时代交接棒，但是，Unix文化对我个人的技术观影响是非常大的（注：《Unix编程艺术》是一本对影响我很深的书），而对于 Ken Thompson&nbsp;和 Dennis Ritchie 这两位 U..." /><meta itemprop="datePublished" content="2019-11-03T14:12:54+08:00" /><meta itemprop="dateModified" content="2019-11-03T23:57:20+08:00" /><meta itemprop="url" content="https://coolshell.cn/articles/19996.html" /><meta itemprop="author" content="陈皓" /><meta itemprop="mainEntityOfPage" content="https://coolshell.cn/articles/19996.html" /><div style="display: none;" itemprop="publisher" itemscope itemtype="https://schema.org/Organization"><meta itemprop="name" content="酷 壳 - CoolShell" /><meta itemprop="url" content="https://coolshell.cn" /><div itemprop="logo" itemscope itemtype="https://schema.org/ImageObject"><meta itemprop="url" content /></div></div><div style="display: none;" itemprop="aggregateRating" itemscope itemtype="https://schema.org/AggregateRating"><meta itemprop="bestRating" content="5" /><meta itemprop="worstRating" content="1" /><meta itemprop="ratingValue" content="4.48" /><meta itemprop="ratingCount" content="73" /></div></div><div id="post-ratings-19996-loading" class="post-ratings-loading"><img src="https://coolshell.cn/wp-content/plugins/wp-postratings/images/loading.gif" width="16" height="16" class="post-ratings-image" />Loading...</div>
+</div>
+<footer class="entry-footer">
+<hr><div class="row"><div class="col-md-6 cattegories"><span class="cat-links"><i class="fa fa-folder-open"></i>
+<a href="https://coolshell.cn/category/operatingsystem/unixlinux" rel="category tag">Unix/Linux</a>, <a href="https://coolshell.cn/category/techarticle" rel="category tag">技术读物</a>, <a href="https://coolshell.cn/category/operatingsystem" rel="category tag">操作系统</a>, <a href="https://coolshell.cn/category/misc" rel="category tag">杂项资源</a></span></div><div class="col-md-6 tags"><span class="tags-links"><i class="fa fa-tags"></i> <a href="https://coolshell.cn/tag/bsd" rel="tag">BSD</a>, <a href="https://coolshell.cn/tag/dennis-ritchie" rel="tag">Dennis Ritchie</a>, <a href="https://coolshell.cn/tag/ken-thompson" rel="tag">Ken Thompson</a>, <a href="https://coolshell.cn/tag/unix" rel="tag">Unix</a></span></div></div> </footer>
+</article>
+
+<div id="related_posts">
+<div class="wp_rp_wrap  wp_rp_vertical_m"><div class="wp_rp_content"><h3 class="related_post_title">相关文章</h3><ul class="related_post wp_rp"><li><a href="https://coolshell.cn/articles/2322.html" class="wp_rp_thumbnail"><img src="https://coolshell.cn/wp-content/uploads/2010/04/o_unixrichiethompson-150x150.jpg" alt="Unix传奇(上篇)" width="150" height="150" /></a><a href="https://coolshell.cn/articles/2322.html" class="wp_rp_title">Unix传奇(上篇)</a></li><li><a href="https://coolshell.cn/articles/9410.html" class="wp_rp_thumbnail"><img src="https://coolshell.cn/wp-content/uploads/2013/04/figure1-150x150.gif" alt="Unix考古记：一个“遗失”的shell" width="150" height="150" /></a><a href="https://coolshell.cn/articles/9410.html" class="wp_rp_title">Unix考古记：一个“遗失”的shell</a></li><li><a href="https://coolshell.cn/articles/1761.html" class="wp_rp_thumbnail"><img src="https://coolshell.cn/wp-content/uploads/2009/11/spell_it_with_e-150x150.jpg" alt="Go语言源码的一个改动" width="150" height="150" /></a><a href="https://coolshell.cn/articles/1761.html" class="wp_rp_title">Go语言源码的一个改动</a></li><li><a href="https://coolshell.cn/articles/18360.html" class="wp_rp_thumbnail"><img src="https://coolshell.cn/wp-content/uploads/2018/05/300x262-150x150.jpg" alt="程序员练级攻略（2018)  与我的专栏" width="150" height="150" /></a><a href="https://coolshell.cn/articles/18360.html" class="wp_rp_title">程序员练级攻略（2018) 与我的专栏</a></li><li><a href="https://coolshell.cn/articles/17998.html" class="wp_rp_thumbnail"><img src="https://coolshell.cn/wp-content/uploads/2017/07/systemd-1-150x150.jpeg" alt="Linux PID 1 和 Systemd" width="150" height="150" /></a><a href="https://coolshell.cn/articles/17998.html" class="wp_rp_title">Linux PID 1 和 Systemd</a></li><li><a href="https://coolshell.cn/articles/12103.html" class="wp_rp_thumbnail"><img src="https://coolshell.cn/wp-content/uploads/2014/11/tux-fork-150x150.gif" alt="vfork 挂掉的一个问题" width="150" height="150" /></a><a href="https://coolshell.cn/articles/12103.html" class="wp_rp_title">vfork 挂掉的一个问题</a></li></ul></div></div>
+</div><div class="fixed"></div> 
+</main>
+<div class="post-navigation">
+<nav class="navigation" role="navigation">
+<h2 class="screen-reader-text">Post navigation</h2>
+<div class="nav-links">
+<div class="row">
+
+<div class="col-md-6 next-post">
+<a class href="https://coolshell.cn/articles/20276.html"><span class="next-prev-text"><i class="fa fa-angle-left"></i>
+上一篇</span><br>别让自己“墙”了自己</a>
+</div>
+
+<div class="col-md-6 prev-post">
+<a class href="https://coolshell.cn/articles/19840.html"><span class="next-prev-text">下一篇 <i class="fa fa-angle-right"></i>
+</span><br>HTTP的前世今生</a>
+</div>
+</div>
+</div>
+</nav>
+</div>
+<div class="post-comments">
+<div id="comments" class="comments-area">
+<h2 class="comments-title">
+《<span>Unix 50 年：Ken Thompson 的密码</span>》的相关评论 </h2>
+<ol class="comment-list">
+<li id="comment-2035007" class="comment even thread-even depth-1">
+<article id="div-comment-2035007" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/d103e874d3cb665f3d0c9b1ec2fda24c?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/d103e874d3cb665f3d0c9b1ec2fda24c?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn">madao756</b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/19996.html#comment-2035007"><time datetime="2019-11-03T19:06:50+08:00">2019年11月03日 19:06</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>这些人都太牛逼了</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/19996.html?replytocom=2035007#respond" data-commentid="2035007" data-postid="19996" data-belowelement="div-comment-2035007" data-respondelement="respond" data-replyto="回复给madao756" aria-label="回复给madao756">回复</a></div> </article>
+</li>
+<li id="comment-2035023" class="comment odd alt thread-odd thread-alt depth-1 parent">
+<article id="div-comment-2035023" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/7b8cef6a32515b07e666735f1f42b90b?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/7b8cef6a32515b07e666735f1f42b90b?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn">Ge Xiao</b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/19996.html#comment-2035023"><time datetime="2019-11-03T20:47:27+08:00">2019年11月03日 20:47</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>Ken 和 Rob Pike 现在已经不直接参与 Go 语言开发了。</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/19996.html?replytocom=2035023#respond" data-commentid="2035023" data-postid="19996" data-belowelement="div-comment-2035023" data-respondelement="respond" data-replyto="回复给Ge Xiao" aria-label="回复给Ge Xiao">回复</a></div> </article>
+<ol class="children">
+<li id="comment-2035437" class="comment even depth-2">
+<article id="div-comment-2035437" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/d89b0514cf4a50d0e53c5533fbe73e83?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/d89b0514cf4a50d0e53c5533fbe73e83?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn"><a href="https://mzh.io" class="url" rel="ugc external nofollow">mz</a></b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/19996.html#comment-2035437"><time datetime="2019-11-05T16:20:15+08:00">2019年11月05日 16:20</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>Ken 是明确退休了<br/>
+Rob 是半隐退的状态<br/>
+Russ 是Go的tech leader</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/19996.html?replytocom=2035437#respond" data-commentid="2035437" data-postid="19996" data-belowelement="div-comment-2035437" data-respondelement="respond" data-replyto="回复给mz" aria-label="回复给mz">回复</a></div> </article>
+</li>
+</ol>
+</li>
+<li id="comment-2035024" class="comment odd alt thread-even depth-1 parent">
+<article id="div-comment-2035024" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/f841bc76a962485a63023e69c22797ae?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/f841bc76a962485a63023e69c22797ae?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn"><a href="http://gholk.github.io" class="url" rel="ugc external nofollow">王鼎鈞</a></b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/19996.html#comment-2035024"><time datetime="2019-11-03T20:48:08+08:00">2019年11月03日 20:48</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>Peter J. Weinberger 打錯了吧？他應該是 awk 的 w 。</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/19996.html?replytocom=2035024#respond" data-commentid="2035024" data-postid="19996" data-belowelement="div-comment-2035024" data-respondelement="respond" data-replyto="回复给王鼎鈞" aria-label="回复给王鼎鈞">回复</a></div> </article>
+<ol class="children">
+<li id="comment-2035032" class="comment byuser comment-author-haoel bypostauthor even depth-2">
+<article id="div-comment-2035032" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/af2fbb7372dd5826e44d87e6ceccea40?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/af2fbb7372dd5826e44d87e6ceccea40?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn"><a href="https://coolshell.cn" class="url" rel="ugc">陈皓</a></b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/19996.html#comment-2035032"><time datetime="2019-11-03T23:57:48+08:00">2019年11月03日 23:57</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>我的锅，打错了，已修正！</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/19996.html?replytocom=2035032#respond" data-commentid="2035032" data-postid="19996" data-belowelement="div-comment-2035032" data-respondelement="respond" data-replyto="回复给陈皓" aria-label="回复给陈皓">回复</a></div> </article>
+</li>
+</ol>
+</li>
+<li id="comment-2035080" class="comment odd alt thread-odd thread-alt depth-1">
+<article id="div-comment-2035080" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/9e66ef9a7acbd0300293a132f5273fc3?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/9e66ef9a7acbd0300293a132f5273fc3?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn">望伊如西</b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/19996.html#comment-2035080"><time datetime="2019-11-04T09:59:19+08:00">2019年11月04日 09:59</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>高山仰止</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/19996.html?replytocom=2035080#respond" data-commentid="2035080" data-postid="19996" data-belowelement="div-comment-2035080" data-respondelement="respond" data-replyto="回复给望伊如西" aria-label="回复给望伊如西">回复</a></div> </article>
+</li>
+<li id="comment-2035174" class="comment even thread-even depth-1">
+<article id="div-comment-2035174" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/fd6ac38a293e1253c5877fd2664945a8?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/fd6ac38a293e1253c5877fd2664945a8?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn">laok</b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/19996.html#comment-2035174"><time datetime="2019-11-04T20:28:21+08:00">2019年11月04日 20:28</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>向经典致敬~！</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/19996.html?replytocom=2035174#respond" data-commentid="2035174" data-postid="19996" data-belowelement="div-comment-2035174" data-respondelement="respond" data-replyto="回复给laok" aria-label="回复给laok">回复</a></div> </article>
+</li>
+<li id="comment-2035521" class="comment odd alt thread-odd thread-alt depth-1">
+<article id="div-comment-2035521" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/5a15e709161f3b539f05844ed7de2c53?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/5a15e709161f3b539f05844ed7de2c53?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn">along</b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/19996.html#comment-2035521"><time datetime="2019-11-05T22:53:30+08:00">2019年11月05日 22:53</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>我真是孤耳寡闻,许多都没有听说过,谢谢分享!</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/19996.html?replytocom=2035521#respond" data-commentid="2035521" data-postid="19996" data-belowelement="div-comment-2035521" data-respondelement="respond" data-replyto="回复给along" aria-label="回复给along">回复</a></div> </article>
+</li>
+<li id="comment-2035731" class="pingback even thread-even depth-1">
+<div class="comment-body">
+Pingback： <a href="https://www.go2live.cn/program/go/gocn%e6%af%8f%e6%97%a5%e6%96%b0%e9%97%bb2019-11-05.html" class="url" rel="ugc external nofollow">GoCN每日新闻(2019-11-05) | 演道网</a> </div>
+</li>
+<li id="comment-2035829" class="comment odd alt thread-odd thread-alt depth-1">
+<article id="div-comment-2035829" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/0191453121803ca70a7376ba58063e9a?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/0191453121803ca70a7376ba58063e9a?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn">lijl</b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/19996.html#comment-2035829"><time datetime="2019-11-06T19:09:22+08:00">2019年11月06日 19:09</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>皓哥现在工作忙吗、顺利吗</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/19996.html?replytocom=2035829#respond" data-commentid="2035829" data-postid="19996" data-belowelement="div-comment-2035829" data-respondelement="respond" data-replyto="回复给lijl" aria-label="回复给lijl">回复</a></div> </article>
+</li>
+<li id="comment-2036266" class="comment even thread-even depth-1">
+<article id="div-comment-2036266" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/094c35d824b12ca60bde702b6ec1a0d8?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/094c35d824b12ca60bde702b6ec1a0d8?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn"><a href="https://ioerr.github.io/" class="url" rel="ugc external nofollow">Calon</a></b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/19996.html#comment-2036266"><time datetime="2019-11-08T08:48:04+08:00">2019年11月08日 08:48</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>tty::504:50::/:/bin/tty我</p>
+<p>多了一个我</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/19996.html?replytocom=2036266#respond" data-commentid="2036266" data-postid="19996" data-belowelement="div-comment-2036266" data-respondelement="respond" data-replyto="回复给Calon" aria-label="回复给Calon">回复</a></div> </article>
+</li>
+<li id="comment-2037904" class="comment odd alt thread-odd thread-alt depth-1">
+<article id="div-comment-2037904" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/ede0aad336bce8e01eef392d23857c69?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/ede0aad336bce8e01eef392d23857c69?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn"><a href="https://www.resotoutiao.com" class="url" rel="ugc external nofollow">热搜</a></b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/19996.html#comment-2037904"><time datetime="2019-11-15T01:44:45+08:00">2019年11月15日 01:44</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>文章不错非常喜欢，支持</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/19996.html?replytocom=2037904#respond" data-commentid="2037904" data-postid="19996" data-belowelement="div-comment-2037904" data-respondelement="respond" data-replyto="回复给热搜" aria-label="回复给热搜">回复</a></div> </article>
+</li>
+<li id="comment-2039081" class="comment even thread-even depth-1">
+<article id="div-comment-2039081" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/10348ed1b2738b583904435eac3d2119?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/10348ed1b2738b583904435eac3d2119?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn"><a href="https://icloudcone.com/" class="url" rel="ugc external nofollow">CloudCone</a></b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/19996.html#comment-2039081"><time datetime="2019-11-19T15:40:48+08:00">2019年11月19日 15:40</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>交换链接吗</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/19996.html?replytocom=2039081#respond" data-commentid="2039081" data-postid="19996" data-belowelement="div-comment-2039081" data-respondelement="respond" data-replyto="回复给CloudCone" aria-label="回复给CloudCone">回复</a></div> </article>
+</li>
+<li id="comment-2040006" class="comment odd alt thread-odd thread-alt depth-1">
+<article id="div-comment-2040006" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/c353e5d5af6fd8c1a3e4cd10e359d63a?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/c353e5d5af6fd8c1a3e4cd10e359d63a?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn"><a href="https://springboot.io" class="url" rel="ugc external nofollow">KevinBlandy</a></b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/19996.html#comment-2040006"><time datetime="2019-11-22T16:53:07+08:00">2019年11月22日 16:53</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>蛮有意思。如果以后量子计算平民化了，对于现有的加密算法，会是一种挑战吗？</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/19996.html?replytocom=2040006#respond" data-commentid="2040006" data-postid="19996" data-belowelement="div-comment-2040006" data-respondelement="respond" data-replyto="回复给KevinBlandy" aria-label="回复给KevinBlandy">回复</a></div> </article>
+</li>
+<li id="comment-2041140" class="comment even thread-even depth-1">
+<article id="div-comment-2041140" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/110e7d85cb34b7605ea088345eee9ece?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/110e7d85cb34b7605ea088345eee9ece?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn">细华</b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/19996.html#comment-2041140"><time datetime="2019-11-26T08:31:11+08:00">2019年11月26日 08:31</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>只想为你点个赞，觉得很棒，无条件的支持下。</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/19996.html?replytocom=2041140#respond" data-commentid="2041140" data-postid="19996" data-belowelement="div-comment-2041140" data-respondelement="respond" data-replyto="回复给细华" aria-label="回复给细华">回复</a></div> </article>
+</li>
+<li id="comment-2041814" class="comment odd alt thread-odd thread-alt depth-1">
+<article id="div-comment-2041814" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/dfbdb6de8947fb356ac2e19b2391c77d?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/dfbdb6de8947fb356ac2e19b2391c77d?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn">chrisxiao</b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/19996.html#comment-2041814"><time datetime="2019-11-28T12:32:16+08:00">2019年11月28日 12:32</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>文中 &#8220;也是与Dennis写的K&amp;C的C语言编程书中&#8221; 这里应该是 K&amp;R 吧</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/19996.html?replytocom=2041814#respond" data-commentid="2041814" data-postid="19996" data-belowelement="div-comment-2041814" data-respondelement="respond" data-replyto="回复给chrisxiao" aria-label="回复给chrisxiao">回复</a></div> </article>
+</li>
+<li id="comment-2042143" class="comment even thread-even depth-1">
+<article id="div-comment-2042143" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/e631b095a7ec027892060041713b3f39?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/e631b095a7ec027892060041713b3f39?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn"><a href="http://www.dashen.tech" class="url" rel="ugc external nofollow">fliter</a></b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/19996.html#comment-2042143"><time datetime="2019-11-29T13:53:47+08:00">2019年11月29日 13:53</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>继ken,dmr,rms后又知道了一位在黑客圈子能有三字母称号的大神,bwk&#8230;</p>
+<p>和他一起研究&#8221;旅行商人问题&#8221;的有一位叫Shen Lin的,看上去像是华人,但找不到其资料</p>
+<p><a href="http://www.dashen.tech/2019/03/07/%E6%98%9F%E9%99%A8-2019/" rel="nofollow ugc">http://www.dashen.tech/2019/03/07/%E6%98%9F%E9%99%A8-2019/</a></p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/19996.html?replytocom=2042143#respond" data-commentid="2042143" data-postid="19996" data-belowelement="div-comment-2042143" data-respondelement="respond" data-replyto="回复给fliter" aria-label="回复给fliter">回复</a></div> </article>
+</li>
+<li id="comment-2044459" class="comment odd alt thread-odd thread-alt depth-1">
+<article id="div-comment-2044459" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/ea73501c65318ff6268986710cb135fc?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/ea73501c65318ff6268986710cb135fc?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn"><a href="http://www.vsdaili.com" class="url" rel="ugc external nofollow">股票</a></b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/19996.html#comment-2044459"><time datetime="2019-12-06T16:00:01+08:00">2019年12月06日 16:00</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>很好的教程</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/19996.html?replytocom=2044459#respond" data-commentid="2044459" data-postid="19996" data-belowelement="div-comment-2044459" data-respondelement="respond" data-replyto="回复给股票" aria-label="回复给股票">回复</a></div> </article>
+</li>
+<li id="comment-2049158" class="comment even thread-even depth-1">
+<article id="div-comment-2049158" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/44348d50ceb6d692aa10315d491204a1?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/44348d50ceb6d692aa10315d491204a1?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn">Dong</b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/19996.html#comment-2049158"><time datetime="2019-12-22T07:23:17+08:00">2019年12月22日 07:23</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>也是与Dennis写的K&amp;C的C语言编程书中的“K” ，应该是K&amp;R，而不是K&amp;C，Dennis Ritchie。</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/19996.html?replytocom=2049158#respond" data-commentid="2049158" data-postid="19996" data-belowelement="div-comment-2049158" data-respondelement="respond" data-replyto="回复给Dong" aria-label="回复给Dong">回复</a></div> </article>
+</li>
+<li id="comment-2060525" class="comment odd alt thread-odd thread-alt depth-1 parent">
+<article id="div-comment-2060525" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/b5c66406942c22591fd90bcfe54eba26?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/b5c66406942c22591fd90bcfe54eba26?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn">Ilghar_kus</b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/19996.html#comment-2060525"><time datetime="2020-01-26T20:46:59+08:00">2020年01月26日 20:46</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>p/q2-q4! &#8230;<br/>
+国际象棋里应该是没有q这一列的？<br/>
+或许指的是b2-b4?</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/19996.html?replytocom=2060525#respond" data-commentid="2060525" data-postid="19996" data-belowelement="div-comment-2060525" data-respondelement="respond" data-replyto="回复给Ilghar_kus" aria-label="回复给Ilghar_kus">回复</a></div> </article>
+<ol class="children">
+<li id="comment-2136702" class="comment even depth-2">
+<article id="div-comment-2136702" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/edfdb07ae11a503b9355f49b187a60fe?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/edfdb07ae11a503b9355f49b187a60fe?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn">Fomalhaut</b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/19996.html#comment-2136702"><time datetime="2020-07-30T21:41:13+08:00">2020年07月30日 21:41</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>第一步走b4很少见吧。或许是d4？</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/19996.html?replytocom=2136702#respond" data-commentid="2136702" data-postid="19996" data-belowelement="div-comment-2136702" data-respondelement="respond" data-replyto="回复给Fomalhaut" aria-label="回复给Fomalhaut">回复</a></div> </article>
+</li>
+</ol>
+</li>
+<li id="comment-2061051" class="comment odd alt thread-even depth-1">
+<article id="div-comment-2061051" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/5bf4fa5e63e706feae606ce68b42eaa7?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/5bf4fa5e63e706feae606ce68b42eaa7?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn">zen</b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/19996.html#comment-2061051"><time datetime="2020-01-28T14:29:22+08:00">2020年01月28日 14:29</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>2.5千行，不是2.5万行</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/19996.html?replytocom=2061051#respond" data-commentid="2061051" data-postid="19996" data-belowelement="div-comment-2061051" data-respondelement="respond" data-replyto="回复给zen" aria-label="回复给zen">回复</a></div> </article>
+</li>
+<li id="comment-2080616" class="pingback even thread-odd thread-alt depth-1">
+<div class="comment-body">
+Pingback： <a href="https://adamdev.net/guru-in-the-art-of-unix-program/" class="url" rel="ugc external nofollow">《UNIX编程艺术》的人物 | Adam Dev Site</a> </div>
+</li>
+<li id="comment-2120982" class="comment odd alt thread-even depth-1">
+<article id="div-comment-2120982" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/b634b98d5d39d4f03f9cf3641a592d8d?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/b634b98d5d39d4f03f9cf3641a592d8d?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn">citizen4</b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/19996.html#comment-2120982"><time datetime="2020-06-18T20:32:44+08:00">2020年06月18日 20:32</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>“你可以浏览 Github 的 unix-history-repo 目录（注：本文给的这个链接不在master分支上），这个repo是40年前的代码，涵盖了从1970年创建时的2.5万行内核和26条命令到2017年为止广泛使用的2700万行系统。1.1GB的存储库包含大约一百万次提交和两千多次合并。通过这个链接你可以了解一下这个代码的历史！”</p>
+<p>40年前并没有git啊，commit提交是怎么生成的？好奇。。。</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/19996.html?replytocom=2120982#respond" data-commentid="2120982" data-postid="19996" data-belowelement="div-comment-2120982" data-respondelement="respond" data-replyto="回复给citizen4" aria-label="回复给citizen4">回复</a></div> </article>
+</li>
+<li id="comment-2129833" class="comment even thread-odd thread-alt depth-1">
+<article id="div-comment-2129833" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/bdf23c63251cdd962b0c527a5d7b9217?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/bdf23c63251cdd962b0c527a5d7b9217?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn">David Lin</b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/19996.html#comment-2129833"><time datetime="2020-07-10T18:21:10+08:00">2020年07月10日 18:21</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>膜拜大牛</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/19996.html?replytocom=2129833#respond" data-commentid="2129833" data-postid="19996" data-belowelement="div-comment-2129833" data-respondelement="respond" data-replyto="回复给David Lin" aria-label="回复给David Lin">回复</a></div> </article>
+</li>
+<li id="comment-2157924" class="comment odd alt thread-even depth-1">
+<article id="div-comment-2157924" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/589ffb5a7bac13c6126aea150cc6f66c?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/589ffb5a7bac13c6126aea150cc6f66c?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn"><a href="https://www.kunzejiaoyu.net/" class="url" rel="ugc external nofollow">深圳学历提升</a></b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/19996.html#comment-2157924"><time datetime="2020-09-30T14:39:09+08:00">2020年09月30日 14:39</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>非常有用的内容！收藏了</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/19996.html?replytocom=2157924#respond" data-commentid="2157924" data-postid="19996" data-belowelement="div-comment-2157924" data-respondelement="respond" data-replyto="回复给深圳学历提升" aria-label="回复给深圳学历提升">回复</a></div> </article>
+</li>
+<li id="comment-2168452" class="comment even thread-odd thread-alt depth-1">
+<article id="div-comment-2168452" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/6d830e0b44a8e3af57138c574be39d32?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/6d830e0b44a8e3af57138c574be39d32?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn"><a href="https://www.zikaobenke.cn/" class="url" rel="ugc external nofollow">广东自考</a></b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/19996.html#comment-2168452"><time datetime="2020-10-31T18:22:20+08:00">2020年10月31日 18:22</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>唉，所学知识太少还是要继续学习，进行前进啊</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/19996.html?replytocom=2168452#respond" data-commentid="2168452" data-postid="19996" data-belowelement="div-comment-2168452" data-respondelement="respond" data-replyto="回复给广东自考" aria-label="回复给广东自考">回复</a></div> </article>
+</li>
+<li id="comment-2195886" class="comment odd alt thread-even depth-1">
+<article id="div-comment-2195886" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/3872741b92be9f32092b1d9d44ad7ca4?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/3872741b92be9f32092b1d9d44ad7ca4?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn">Jason Wang</b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/19996.html#comment-2195886"><time datetime="2021-01-18T15:27:07+08:00">2021年01月18日 15:27</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>向天才致敬</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/19996.html?replytocom=2195886#respond" data-commentid="2195886" data-postid="19996" data-belowelement="div-comment-2195886" data-respondelement="respond" data-replyto="回复给Jason Wang" aria-label="回复给Jason Wang">回复</a></div> </article>
+</li>
+<li id="comment-2234190" class="comment even thread-odd thread-alt depth-1">
+<article id="div-comment-2234190" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/c908530bd0591ed7f49b6f96f65a6224?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/c908530bd0591ed7f49b6f96f65a6224?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn">炮二平五</b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/19996.html#comment-2234190"><time datetime="2021-04-18T00:23:55+08:00">2021年04月18日 00:23</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>这些人是精英中的精英，大牛中的大牛。</p>
+<p>当把他们发明创造的一大堆东西一股脑摆到我的眼前的时候，我承认：我晕了，我疯了，我郁闷了，消沉了。多少年也消化不了。</p>
+<p>在他们的基础上添加？也许吧， 不是说站在巨人身上才能看的更远吗</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/19996.html?replytocom=2234190#respond" data-commentid="2234190" data-postid="19996" data-belowelement="div-comment-2234190" data-respondelement="respond" data-replyto="回复给炮二平五" aria-label="回复给炮二平五">回复</a></div> </article>
+</li>
+<li id="comment-2328355" class="comment odd alt thread-even depth-1">
+<article id="div-comment-2328355" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/8c2c86de98a02e03bd934a794df1df13?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/8c2c86de98a02e03bd934a794df1df13?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn">gt</b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/19996.html#comment-2328355"><time datetime="2021-11-02T13:01:58+08:00">2021年11月02日 13:01</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>头发长了吧</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/19996.html?replytocom=2328355#respond" data-commentid="2328355" data-postid="19996" data-belowelement="div-comment-2328355" data-respondelement="respond" data-replyto="回复给gt" aria-label="回复给gt">回复</a></div> </article>
+</li>
+</ol>
+<div id="respond" class="comment-respond">
+<h3 id="reply-title" class="comment-reply-title">发表回复 <small><a rel="nofollow" id="cancel-comment-reply-link" href="/articles/19996.html#respond" style="display:none;">取消回复</a></small></h3><form action="https://coolshell.cn/wp-comments-post.php" method="post" id="commentform" class="comment-form" novalidate><p class="comment-notes"><span id="email-notes">您的电子邮箱地址不会被公开。</span> <span class="required-field-message">必填项已用<span class="required">*</span>标注</span></p><p class="comment-form-comment"><label for="comment">评论 <span class="required">*</span></label> <textarea id="comment" name="comment" cols="45" rows="8" maxlength="65525" required></textarea></p><p class="comment-form-author"><label for="author">显示名称 <span class="required">*</span></label> <input id="author" name="author" type="text" value size="30" maxlength="245" autocomplete="name" required /></p>
+<p class="comment-form-email"><label for="email">电子邮箱地址 <span class="required">*</span></label> <input id="email" name="email" type="email" value size="30" maxlength="100" aria-describedby="email-notes" autocomplete="email" required /></p>
+<p class="comment-form-url"><label for="url">网站地址</label> <input id="url" name="url" type="url" value size="30" maxlength="200" autocomplete="url" /></p>
+<p class="form-submit"><input name="submit" type="submit" id="submit" class="submit" value="发表评论" /> <input type="hidden" name="comment_post_ID" value="19996" id="comment_post_ID" />
+<input type="hidden" name="comment_parent" id="comment_parent" value="0" />
+</p><p style="display: none;"><input type="hidden" id="akismet_comment_nonce" name="akismet_comment_nonce" value="21cfff8fde" /></p><p style="display: none !important;"><label>&#916;<textarea name="ak_hp_textarea" cols="45" rows="8" maxlength="100"></textarea></label><input type="hidden" id="ak_js_1" name="ak_js" value="155" /><script type="ac7059d1b7f33cd34807b83e-text/javascript">document.getElementById( "ak_js_1" ).setAttribute( "value", ( new Date() ).getTime() );</script></p></form> </div>
+</div>
+</div>
+</div>
+<div id="secondary" class="col-md-3 hidden-sm hidden-xs sidebar widget-area" role="complementary">
+<aside id="search-9" class="widget widget_search">
+<form role="search" method="get" class="search-form" action="https://coolshell.cn/">
+<label>
+<span class="screen-reader-text">Search for:</span>
+<input type="search" class="search-field" placeholder="Search &hellip;" value name="s" title="Search for:" />
+</label>
+<button type="submit" class="search-submit"><span class="screen-reader-text">Search</span></button>
+</form>
+</aside><aside id="custom_html-3" class="widget_text widget widget_custom_html"><h4 class="widget-title">本站公告</h4><div class="textwidget custom-html-widget"><p align="center"><a class="twitter" href="https://twitter.com/haoel" target="_blank" rel="noopener"> Twitter @haoel </a></p>
+
+<p align="center">极客时间专栏<br><a href="http://gk.link/a/10sBp" target="_blank" rel="noopener"><img src="https://coolshell.cn/wp-content/uploads/2021/06/8311623409583_.pic_hd-1024x1024.jpg" height="200" weight="200" alt="极客时间专栏" title="极客时间专栏"></a></p>
+
+</div></aside>
+<aside id="recent-posts-4" class="widget widget_recent_entries">
+<h4 class="widget-title">最新文章</h4>
+<ul>
+<li>
+<a href="https://coolshell.cn/articles/22422.html">是微服务架构不香还是云不香？</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/22398.html">我看ChatGPT: 为啥谷歌掉了千亿美金</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/22367.html">聊聊 nostr 和 审查</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/22341.html">感染新冠的经历</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/22320.html">eBPF 介绍</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/22298.html">聊聊团队协同和协同工具</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/22263.html">从一次经历谈 TIME_WAIT 的那些事</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/22242.html">ETCD的内存问题</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/22173.html">“一把梭：REST API 全用 POST”</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/22157.html">谈谈公司对员工的监控</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/21708.html">网络数字身份认证术</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/21672.html">我做系统架构的一些原则</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/21649.html">源代码特洛伊木马攻击</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/21615.html">Go编程模式 ： 泛型编程</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/21589.html">如何做一个有质量的技术分享</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/21263.html">Go 编程模式：k8s Visitor 模式</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/21228.html">Go编程模式：Pipeline</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/21214.html">Go编程模式：委托和反转控制</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/21179.html">Go 编程模式：Go Generation</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/21164.html">Go编程模式：Map-Reduce</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/21146.html">Go 编程模式：Functional Options</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/21140.html">Go 编程模式：错误处理</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/21128.html">Go编程模式：切片，接口，时间和性能</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/21113.html">百度为什么掉队了</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/20977.html">程序员如何把控自己的职业</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/21003.html">计时攻击 Timing Attacks</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/20845.html">Rust语言的编程范式</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/20793.html">与程序员相关的CPU缓存知识</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/20765.html">MegaEase的远程工作文化</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/20533.html">使用简单的逻辑方法进行独立思考</a>
+</li>
+</ul>
+</aside><aside id="views-6" class="widget widget_views"><h4 class="widget-title">全站热门</h4><ul>
+<li><a href="https://coolshell.cn/articles/4990.html" title="程序员技术练级攻略 - 10,239,318 人阅读">程序员技术练级攻略</a></li><li><a href="https://coolshell.cn/articles/3961.html" title="&ldquo;火柴棍式&rdquo;程序员面试题 - 2,356,389 人阅读">&ldquo;火柴棍式&rdquo;程序员面试题</a></li><li><a href="https://coolshell.cn/articles/5426.html" title="简明 Vim 练级攻略 - 1,325,308 人阅读">简明 Vim 练级攻略</a></li><li><a href="https://coolshell.cn/articles/9308.html" title="&ldquo;作环保的程序员，从不用百度开始&rdquo; - 589,321 人阅读">&ldquo;作环保的程序员，从不用百度开始&rdquo;</a></li><li><a href="https://coolshell.cn/articles/11564.html" title="TCP 的那些事儿（上） - 488,704 人阅读">TCP 的那些事儿（上）</a></li><li><a href="https://coolshell.cn/articles/9070.html" title="AWK 简明教程 - 453,309 人阅读">AWK 简明教程</a></li><li><a href="https://coolshell.cn/articles/7186.html" title="做个环保主义的程序员 - 447,300 人阅读">做个环保主义的程序员</a></li><li><a href="https://coolshell.cn/articles/10688.html" title="编程能力与编程年龄 - 416,704 人阅读">编程能力与编程年龄</a></li><li><a href="https://coolshell.cn/articles/10590.html" title="二维码的生成细节和原理 - 393,826 人阅读">二维码的生成细节和原理</a></li><li><a href="https://coolshell.cn/articles/9104.html" title="sed 简明教程 - 380,300 人阅读">sed 简明教程</a></li><li><a href="https://coolshell.cn/articles/4102.html" title="如何学好C语言 - 368,392 人阅读">如何学好C语言</a></li><li><a href="https://coolshell.cn/articles/19464.html" title="如何超过大多数人 - 314,108 人阅读">如何超过大多数人</a></li><li><a href="https://coolshell.cn/articles/17583.html" title="技术人员的发展之路 - 308,346 人阅读">技术人员的发展之路</a></li><li><a href="https://coolshell.cn/articles/9606.html" title="疫苗：Java HashMap的死循环 - 305,404 人阅读">疫苗：Java HashMap的死循环</a></li><li><a href="https://coolshell.cn/articles/6470.html" title="由12306.cn谈谈网站性能技术 - 298,934 人阅读">由12306.cn谈谈网站性能技术</a></li><li><a href="https://coolshell.cn/articles/8883.html" title="应该知道的Linux技巧 - 296,745 人阅读">应该知道的Linux技巧</a></li><li><a href="https://coolshell.cn/articles/17416.html" title="缓存更新的套路 - 293,607 人阅读">缓存更新的套路</a></li><li><a href="https://coolshell.cn/articles/10910.html" title="分布式系统的事务处理 - 284,609 人阅读">分布式系统的事务处理</a></li><li><a href="https://coolshell.cn/articles/11609.html" title="TCP 的那些事儿（下） - 284,357 人阅读">TCP 的那些事儿（下）</a></li><li><a href="https://coolshell.cn/articles/2250.html" title="&ldquo;21天教你学会C++&rdquo; - 278,590 人阅读">&ldquo;21天教你学会C++&rdquo;</a></li><li><a href="https://coolshell.cn/articles/8239.html" title="无锁队列的实现 - 274,276 人阅读">无锁队列的实现</a></li><li><a href="https://coolshell.cn/articles/20276.html" title="别让自己&ldquo;墙&rdquo;了自己 - 271,198 人阅读">别让自己&ldquo;墙&rdquo;了自己</a></li><li><a href="https://coolshell.cn/articles/10739.html" title="Lua简明教程 - 269,332 人阅读">Lua简明教程</a></li><li><a href="https://coolshell.cn/articles/7490.html" title="性能调优攻略 - 257,249 人阅读">性能调优攻略</a></li><li><a href="https://coolshell.cn/articles/1846.html" title="MySQL性能优化的最佳20+条经验 - 255,744 人阅读">MySQL性能优化的最佳20+条经验</a></li><li><a href="https://coolshell.cn/articles/4758.html" title="如何写出无法维护的代码 - 254,088 人阅读">如何写出无法维护的代码</a></li><li><a href="https://coolshell.cn/articles/914.html" title="6个变态的C语言Hello World程序 - 251,860 人阅读">6个变态的C语言Hello World程序</a></li><li><a href="https://coolshell.cn/articles/17010.html" title="Docker基础技术：Linux Namespace（上） - 241,773 人阅读">Docker基础技术：Linux Namespace（上）</a></li><li><a href="https://coolshell.cn/articles/7829.html" title="28个Unix/Linux的命令行神器 - 241,197 人阅读">28个Unix/Linux的命令行神器</a></li><li><a href="https://coolshell.cn/articles/11312.html" title="无插件Vim编程技巧 - 222,786 人阅读">无插件Vim编程技巧</a></li></ul>
+</aside><aside id="categories-367921425" class="widget widget_categories"><h4 class="widget-title">分类</h4>
+<ul>
+<li class="cat-item cat-item-195"><a href="https://coolshell.cn/category/itnews">业界新闻</a> (33)
+</li>
+<li class="cat-item cat-item-509"><a href="https://coolshell.cn/category/%e4%bc%81%e4%b8%9a%e5%ba%94%e7%94%a8">企业应用</a> (2)
+</li>
+<li class="cat-item cat-item-9"><a href="https://coolshell.cn/category/technews">技术新闻</a> (38)
+</li>
+<li class="cat-item cat-item-550"><a href="https://coolshell.cn/category/%e6%8a%80%e6%9c%af%e7%ae%a1%e7%90%86">技术管理</a> (19)
+</li>
+<li class="cat-item cat-item-12"><a href="https://coolshell.cn/category/techarticle">技术读物</a> (125)
+</li>
+<li class="cat-item cat-item-18"><a href="https://coolshell.cn/category/operatingsystem">操作系统</a> (97)
+<ul class="children">
+<li class="cat-item cat-item-20"><a href="https://coolshell.cn/category/operatingsystem/unixlinux">Unix/Linux</a> (81)
+</li>
+<li class="cat-item cat-item-19"><a href="https://coolshell.cn/category/operatingsystem/mswindows">Windows</a> (12)
+</li>
+</ul>
+</li>
+<li class="cat-item cat-item-105"><a href="https://coolshell.cn/category/datebase">数据库</a> (11)
+</li>
+<li class="cat-item cat-item-10"><a href="https://coolshell.cn/category/misc">杂项资源</a> (295)
+</li>
+<li class="cat-item cat-item-15"><a href="https://coolshell.cn/category/process">流程方法</a> (48)
+</li>
+<li class="cat-item cat-item-23"><a href="https://coolshell.cn/category/progdesign">程序设计</a> (110)
+</li>
+<li class="cat-item cat-item-602"><a href="https://coolshell.cn/category/%e7%b3%bb%e7%bb%9f%e6%9e%b6%e6%9e%84">系统架构</a> (15)
+</li>
+<li class="cat-item cat-item-1"><a href="https://coolshell.cn/category/tools">编程工具</a> (67)
+</li>
+<li class="cat-item cat-item-3"><a href="https://coolshell.cn/category/proglanguage">编程语言</a> (326)
+<ul class="children">
+<li class="cat-item cat-item-189"><a href="https://coolshell.cn/category/proglanguage/dotnet">.NET编程</a> (3)
+</li>
+<li class="cat-item cat-item-8"><a href="https://coolshell.cn/category/proglanguage/ajaxdev">Ajax开发</a> (9)
+</li>
+<li class="cat-item cat-item-5"><a href="https://coolshell.cn/category/proglanguage/cplusplus">C/C++语言</a> (74)
+</li>
+<li class="cat-item cat-item-186"><a href="https://coolshell.cn/category/proglanguage/erlang">Erlang</a> (1)
+</li>
+<li class="cat-item cat-item-819"><a href="https://coolshell.cn/category/proglanguage/go-%e8%af%ad%e8%a8%80">Go 语言</a> (15)
+</li>
+<li class="cat-item cat-item-4"><a href="https://coolshell.cn/category/proglanguage/javadev">Java语言</a> (32)
+</li>
+<li class="cat-item cat-item-11"><a href="https://coolshell.cn/category/proglanguage/phpdev">PHP脚本</a> (11)
+</li>
+<li class="cat-item cat-item-33"><a href="https://coolshell.cn/category/proglanguage/pythondev">Python</a> (23)
+</li>
+<li class="cat-item cat-item-100"><a href="https://coolshell.cn/category/proglanguage/rubydev">Ruby</a> (5)
+</li>
+<li class="cat-item cat-item-860"><a href="https://coolshell.cn/category/proglanguage/rust-%e8%af%ad%e8%a8%80">Rust 语言</a> (1)
+</li>
+<li class="cat-item cat-item-7"><a href="https://coolshell.cn/category/proglanguage/webdev">Web开发</a> (106)
+</li>
+</ul>
+</li>
+<li class="cat-item cat-item-6"><a href="https://coolshell.cn/category/netsecurity">网络安全</a> (36)
+</li>
+<li class="cat-item cat-item-39"><a href="https://coolshell.cn/category/career">职场生涯</a> (40)
+</li>
+<li class="cat-item cat-item-271"><a href="https://coolshell.cn/category/funny">趣味问题</a> (19)
+</li>
+<li class="cat-item cat-item-52"><a href="https://coolshell.cn/category/story">轶事趣闻</a> (147)
+</li>
+</ul>
+</aside><aside id="tag_cloud-4" class="widget widget_tag_cloud"><h4 class="widget-title">标签</h4><div class="tagcloud"><a href="https://coolshell.cn/tag/agile" class="tag-cloud-link tag-link-17 tag-link-position-1" style="font-size: 11.559322033898pt;" aria-label="agile (15个项目)">agile</a>
+<a href="https://coolshell.cn/tag/ajax" class="tag-cloud-link tag-link-34 tag-link-position-2" style="font-size: 10.135593220339pt;" aria-label="AJAX (11个项目)">AJAX</a>
+<a href="https://coolshell.cn/tag/algorithm" class="tag-cloud-link tag-link-76 tag-link-position-3" style="font-size: 14.28813559322pt;" aria-label="Algorithm (26个项目)">Algorithm</a>
+<a href="https://coolshell.cn/tag/android" class="tag-cloud-link tag-link-145 tag-link-position-4" style="font-size: 10.135593220339pt;" aria-label="Android (11个项目)">Android</a>
+<a href="https://coolshell.cn/tag/bash" class="tag-cloud-link tag-link-190 tag-link-position-5" style="font-size: 9.1864406779661pt;" aria-label="Bash (9个项目)">Bash</a>
+<a href="https://coolshell.cn/tag/c" class="tag-cloud-link tag-link-59 tag-link-position-6" style="font-size: 20.694915254237pt;" aria-label="C++ (93个项目)">C++</a>
+<a href="https://coolshell.cn/tag/coding" class="tag-cloud-link tag-link-135 tag-link-position-7" style="font-size: 14.28813559322pt;" aria-label="Coding (26个项目)">Coding</a>
+<a href="https://coolshell.cn/tag/css" class="tag-cloud-link tag-link-96 tag-link-position-8" style="font-size: 13.457627118644pt;" aria-label="CSS (22个项目)">CSS</a>
+<a href="https://coolshell.cn/tag/design" class="tag-cloud-link tag-link-71 tag-link-position-9" style="font-size: 13.932203389831pt;" aria-label="Design (24个项目)">Design</a>
+<a href="https://coolshell.cn/tag/design-pattern" class="tag-cloud-link tag-link-25 tag-link-position-10" style="font-size: 9.6610169491525pt;" aria-label="design pattern (10个项目)">design pattern</a>
+<a href="https://coolshell.cn/tag/ebook" class="tag-cloud-link tag-link-101 tag-link-position-11" style="font-size: 11.559322033898pt;" aria-label="ebook (15个项目)">ebook</a>
+<a href="https://coolshell.cn/tag/flash" class="tag-cloud-link tag-link-98 tag-link-position-12" style="font-size: 8pt;" aria-label="Flash (7个项目)">Flash</a>
+<a href="https://coolshell.cn/tag/game" class="tag-cloud-link tag-link-125 tag-link-position-13" style="font-size: 9.1864406779661pt;" aria-label="Game (9个项目)">Game</a>
+<a href="https://coolshell.cn/tag/go" class="tag-cloud-link tag-link-238 tag-link-position-14" style="font-size: 13.220338983051pt;" aria-label="Go (21个项目)">Go</a>
+<a href="https://coolshell.cn/tag/golang" class="tag-cloud-link tag-link-237 tag-link-position-15" style="font-size: 10.966101694915pt;" aria-label="golang (13个项目)">golang</a>
+<a href="https://coolshell.cn/tag/google" class="tag-cloud-link tag-link-32 tag-link-position-16" style="font-size: 15.474576271186pt;" aria-label="Google (33个项目)">Google</a>
+<a href="https://coolshell.cn/tag/html" class="tag-cloud-link tag-link-38 tag-link-position-17" style="font-size: 15.593220338983pt;" aria-label="HTML (34个项目)">HTML</a>
+<a href="https://coolshell.cn/tag/ie" class="tag-cloud-link tag-link-175 tag-link-position-18" style="font-size: 9.6610169491525pt;" aria-label="IE (10个项目)">IE</a>
+<a href="https://coolshell.cn/tag/java" class="tag-cloud-link tag-link-13 tag-link-position-19" style="font-size: 17.610169491525pt;" aria-label="Java (50个项目)">Java</a>
+<a href="https://coolshell.cn/tag/javascript" class="tag-cloud-link tag-link-114 tag-link-position-20" style="font-size: 17.966101694915pt;" aria-label="Javascript (54个项目)">Javascript</a>
+<a href="https://coolshell.cn/tag/jquery" class="tag-cloud-link tag-link-191 tag-link-position-21" style="font-size: 10.135593220339pt;" aria-label="jQuery (11个项目)">jQuery</a>
+<a href="https://coolshell.cn/tag/linux" class="tag-cloud-link tag-link-37 tag-link-position-22" style="font-size: 19.389830508475pt;" aria-label="Linux (71个项目)">Linux</a>
+<a href="https://coolshell.cn/tag/mysql" class="tag-cloud-link tag-link-106 tag-link-position-23" style="font-size: 8pt;" aria-label="MySQL (7个项目)">MySQL</a>
+<a href="https://coolshell.cn/tag/oop" class="tag-cloud-link tag-link-245 tag-link-position-24" style="font-size: 8.5932203389831pt;" aria-label="OOP (8个项目)">OOP</a>
+<a href="https://coolshell.cn/tag/password" class="tag-cloud-link tag-link-319 tag-link-position-25" style="font-size: 8.5932203389831pt;" aria-label="password (8个项目)">password</a>
+<a href="https://coolshell.cn/tag/performance" class="tag-cloud-link tag-link-120 tag-link-position-26" style="font-size: 12.271186440678pt;" aria-label="Performance (17个项目)">Performance</a>
+<a href="https://coolshell.cn/tag/php" class="tag-cloud-link tag-link-35 tag-link-position-27" style="font-size: 14.050847457627pt;" aria-label="PHP (25个项目)">PHP</a>
+<a href="https://coolshell.cn/tag/programmer" class="tag-cloud-link tag-link-70 tag-link-position-28" style="font-size: 21.881355932203pt;" aria-label="Programmer (116个项目)">Programmer</a>
+<a href="https://coolshell.cn/tag/programming" class="tag-cloud-link tag-link-499 tag-link-position-29" style="font-size: 10.135593220339pt;" aria-label="Programming (11个项目)">Programming</a>
+<a href="https://coolshell.cn/tag/programming-language" class="tag-cloud-link tag-link-115 tag-link-position-30" style="font-size: 10.491525423729pt;" aria-label="programming language (12个项目)">programming language</a>
+<a href="https://coolshell.cn/tag/puzzle" class="tag-cloud-link tag-link-514 tag-link-position-31" style="font-size: 10.135593220339pt;" aria-label="Puzzle (11个项目)">Puzzle</a>
+<a href="https://coolshell.cn/tag/pythondev" class="tag-cloud-link tag-link-791 tag-link-position-32" style="font-size: 15pt;" aria-label="Python (30个项目)">Python</a>
+<a href="https://coolshell.cn/tag/ruby" class="tag-cloud-link tag-link-69 tag-link-position-33" style="font-size: 9.6610169491525pt;" aria-label="Ruby (10个项目)">Ruby</a>
+<a href="https://coolshell.cn/tag/sql" class="tag-cloud-link tag-link-131 tag-link-position-34" style="font-size: 9.6610169491525pt;" aria-label="SQL (10个项目)">SQL</a>
+<a href="https://coolshell.cn/tag/tdd" class="tag-cloud-link tag-link-485 tag-link-position-35" style="font-size: 8.5932203389831pt;" aria-label="TDD (8个项目)">TDD</a>
+<a href="https://coolshell.cn/tag/ui" class="tag-cloud-link tag-link-47 tag-link-position-36" style="font-size: 10.491525423729pt;" aria-label="UI (12个项目)">UI</a>
+<a href="https://coolshell.cn/tag/unix" class="tag-cloud-link tag-link-21 tag-link-position-37" style="font-size: 15.949152542373pt;" aria-label="Unix (36个项目)">Unix</a>
+<a href="https://coolshell.cn/tag/vim" class="tag-cloud-link tag-link-50 tag-link-position-38" style="font-size: 12.745762711864pt;" aria-label="vim (19个项目)">vim</a>
+<a href="https://coolshell.cn/tag/web" class="tag-cloud-link tag-link-30 tag-link-position-39" style="font-size: 16.661016949153pt;" aria-label="Web (42个项目)">Web</a>
+<a href="https://coolshell.cn/tag/windows" class="tag-cloud-link tag-link-49 tag-link-position-40" style="font-size: 12.271186440678pt;" aria-label="Windows (17个项目)">Windows</a>
+<a href="https://coolshell.cn/tag/xml" class="tag-cloud-link tag-link-104 tag-link-position-41" style="font-size: 8.5932203389831pt;" aria-label="XML (8个项目)">XML</a>
+<a href="https://coolshell.cn/tag/%e5%ae%89%e5%85%a8" class="tag-cloud-link tag-link-318 tag-link-position-42" style="font-size: 13.694915254237pt;" aria-label="安全 (23个项目)">安全</a>
+<a href="https://coolshell.cn/tag/%e7%a8%8b%e5%ba%8f%e5%91%98" class="tag-cloud-link tag-link-58 tag-link-position-43" style="font-size: 22pt;" aria-label="程序员 (119个项目)">程序员</a>
+<a href="https://coolshell.cn/tag/%e7%ae%97%e6%b3%95" class="tag-cloud-link tag-link-77 tag-link-position-44" style="font-size: 9.6610169491525pt;" aria-label="算法 (10个项目)">算法</a>
+<a href="https://coolshell.cn/tag/interview" class="tag-cloud-link tag-link-164 tag-link-position-45" style="font-size: 11.915254237288pt;" aria-label="面试 (16个项目)">面试</a></div>
+</aside><aside id="archives-5" class="widget widget_archive"><h4 class="widget-title">归档</h4>
+<ul>
+<li><a href="https://coolshell.cn/articles/date/2023/05">2023年5月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2023/02">2023年2月</a>&nbsp;(2)</li>
+<li><a href="https://coolshell.cn/articles/date/2022/12">2022年12月</a>&nbsp;(2)</li>
+<li><a href="https://coolshell.cn/articles/date/2022/10">2022年10月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2022/07">2022年7月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2022/05">2022年5月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2022/02">2022年2月</a>&nbsp;(2)</li>
+<li><a href="https://coolshell.cn/articles/date/2022/01">2022年1月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2021/12">2021年12月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2021/11">2021年11月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2021/09">2021年9月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2021/07">2021年7月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2020/12">2020年12月</a>&nbsp;(9)</li>
+<li><a href="https://coolshell.cn/articles/date/2020/08">2020年8月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2020/07">2020年7月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2020/04">2020年4月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2020/03">2020年3月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2020/01">2020年1月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2019/12">2019年12月</a>&nbsp;(2)</li>
+<li><a href="https://coolshell.cn/articles/date/2019/11">2019年11月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2019/10">2019年10月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2019/07">2019年7月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2019/06">2019年6月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2019/05">2019年5月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2019/04">2019年4月</a>&nbsp;(2)</li>
+<li><a href="https://coolshell.cn/articles/date/2019/03">2019年3月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2019/02">2019年2月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2018/12">2018年12月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2018/05">2018年5月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2018/01">2018年1月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2017/10">2017年10月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2017/09">2017年9月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2017/08">2017年8月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2017/07">2017年7月</a>&nbsp;(3)</li>
+<li><a href="https://coolshell.cn/articles/date/2017/06">2017年6月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2017/04">2017年4月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2017/03">2017年3月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2017/02">2017年2月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2017/01">2017年1月</a>&nbsp;(2)</li>
+<li><a href="https://coolshell.cn/articles/date/2016/12">2016年12月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2016/10">2016年10月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2016/09">2016年9月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2016/08">2016年8月</a>&nbsp;(2)</li>
+<li><a href="https://coolshell.cn/articles/date/2016/07">2016年7月</a>&nbsp;(3)</li>
+<li><a href="https://coolshell.cn/articles/date/2015/12">2015年12月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2015/09">2015年9月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2015/08">2015年8月</a>&nbsp;(2)</li>
+<li><a href="https://coolshell.cn/articles/date/2015/04">2015年4月</a>&nbsp;(4)</li>
+<li><a href="https://coolshell.cn/articles/date/2014/12">2014年12月</a>&nbsp;(3)</li>
+<li><a href="https://coolshell.cn/articles/date/2014/11">2014年11月</a>&nbsp;(2)</li>
+<li><a href="https://coolshell.cn/articles/date/2014/10">2014年10月</a>&nbsp;(2)</li>
+<li><a href="https://coolshell.cn/articles/date/2014/09">2014年9月</a>&nbsp;(2)</li>
+<li><a href="https://coolshell.cn/articles/date/2014/08">2014年8月</a>&nbsp;(2)</li>
+<li><a href="https://coolshell.cn/articles/date/2014/06">2014年6月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2014/05">2014年5月</a>&nbsp;(4)</li>
+<li><a href="https://coolshell.cn/articles/date/2014/04">2014年4月</a>&nbsp;(4)</li>
+<li><a href="https://coolshell.cn/articles/date/2014/03">2014年3月</a>&nbsp;(5)</li>
+<li><a href="https://coolshell.cn/articles/date/2014/02">2014年2月</a>&nbsp;(3)</li>
+<li><a href="https://coolshell.cn/articles/date/2014/01">2014年1月</a>&nbsp;(2)</li>
+<li><a href="https://coolshell.cn/articles/date/2013/12">2013年12月</a>&nbsp;(3)</li>
+<li><a href="https://coolshell.cn/articles/date/2013/11">2013年11月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2013/10">2013年10月</a>&nbsp;(6)</li>
+<li><a href="https://coolshell.cn/articles/date/2013/08">2013年8月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2013/07">2013年7月</a>&nbsp;(8)</li>
+<li><a href="https://coolshell.cn/articles/date/2013/06">2013年6月</a>&nbsp;(2)</li>
+<li><a href="https://coolshell.cn/articles/date/2013/05">2013年5月</a>&nbsp;(3)</li>
+<li><a href="https://coolshell.cn/articles/date/2013/04">2013年4月</a>&nbsp;(3)</li>
+<li><a href="https://coolshell.cn/articles/date/2013/03">2013年3月</a>&nbsp;(3)</li>
+<li><a href="https://coolshell.cn/articles/date/2013/02">2013年2月</a>&nbsp;(5)</li>
+<li><a href="https://coolshell.cn/articles/date/2013/01">2013年1月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2012/12">2012年12月</a>&nbsp;(4)</li>
+<li><a href="https://coolshell.cn/articles/date/2012/11">2012年11月</a>&nbsp;(4)</li>
+<li><a href="https://coolshell.cn/articles/date/2012/10">2012年10月</a>&nbsp;(3)</li>
+<li><a href="https://coolshell.cn/articles/date/2012/09">2012年9月</a>&nbsp;(4)</li>
+<li><a href="https://coolshell.cn/articles/date/2012/08">2012年8月</a>&nbsp;(8)</li>
+<li><a href="https://coolshell.cn/articles/date/2012/07">2012年7月</a>&nbsp;(4)</li>
+<li><a href="https://coolshell.cn/articles/date/2012/06">2012年6月</a>&nbsp;(7)</li>
+<li><a href="https://coolshell.cn/articles/date/2012/05">2012年5月</a>&nbsp;(6)</li>
+<li><a href="https://coolshell.cn/articles/date/2012/04">2012年4月</a>&nbsp;(6)</li>
+<li><a href="https://coolshell.cn/articles/date/2012/03">2012年3月</a>&nbsp;(6)</li>
+<li><a href="https://coolshell.cn/articles/date/2012/02">2012年2月</a>&nbsp;(3)</li>
+<li><a href="https://coolshell.cn/articles/date/2012/01">2012年1月</a>&nbsp;(6)</li>
+<li><a href="https://coolshell.cn/articles/date/2011/12">2011年12月</a>&nbsp;(5)</li>
+<li><a href="https://coolshell.cn/articles/date/2011/11">2011年11月</a>&nbsp;(9)</li>
+<li><a href="https://coolshell.cn/articles/date/2011/10">2011年10月</a>&nbsp;(6)</li>
+<li><a href="https://coolshell.cn/articles/date/2011/09">2011年9月</a>&nbsp;(5)</li>
+<li><a href="https://coolshell.cn/articles/date/2011/08">2011年8月</a>&nbsp;(14)</li>
+<li><a href="https://coolshell.cn/articles/date/2011/07">2011年7月</a>&nbsp;(6)</li>
+<li><a href="https://coolshell.cn/articles/date/2011/06">2011年6月</a>&nbsp;(12)</li>
+<li><a href="https://coolshell.cn/articles/date/2011/05">2011年5月</a>&nbsp;(5)</li>
+<li><a href="https://coolshell.cn/articles/date/2011/04">2011年4月</a>&nbsp;(18)</li>
+<li><a href="https://coolshell.cn/articles/date/2011/03">2011年3月</a>&nbsp;(16)</li>
+<li><a href="https://coolshell.cn/articles/date/2011/02">2011年2月</a>&nbsp;(16)</li>
+<li><a href="https://coolshell.cn/articles/date/2011/01">2011年1月</a>&nbsp;(18)</li>
+<li><a href="https://coolshell.cn/articles/date/2010/12">2010年12月</a>&nbsp;(11)</li>
+<li><a href="https://coolshell.cn/articles/date/2010/11">2010年11月</a>&nbsp;(11)</li>
+<li><a href="https://coolshell.cn/articles/date/2010/10">2010年10月</a>&nbsp;(19)</li>
+<li><a href="https://coolshell.cn/articles/date/2010/09">2010年9月</a>&nbsp;(15)</li>
+<li><a href="https://coolshell.cn/articles/date/2010/08">2010年8月</a>&nbsp;(10)</li>
+<li><a href="https://coolshell.cn/articles/date/2010/07">2010年7月</a>&nbsp;(20)</li>
+<li><a href="https://coolshell.cn/articles/date/2010/06">2010年6月</a>&nbsp;(9)</li>
+<li><a href="https://coolshell.cn/articles/date/2010/05">2010年5月</a>&nbsp;(13)</li>
+<li><a href="https://coolshell.cn/articles/date/2010/04">2010年4月</a>&nbsp;(12)</li>
+<li><a href="https://coolshell.cn/articles/date/2010/03">2010年3月</a>&nbsp;(11)</li>
+<li><a href="https://coolshell.cn/articles/date/2010/02">2010年2月</a>&nbsp;(7)</li>
+<li><a href="https://coolshell.cn/articles/date/2010/01">2010年1月</a>&nbsp;(9)</li>
+<li><a href="https://coolshell.cn/articles/date/2009/12">2009年12月</a>&nbsp;(22)</li>
+<li><a href="https://coolshell.cn/articles/date/2009/11">2009年11月</a>&nbsp;(27)</li>
+<li><a href="https://coolshell.cn/articles/date/2009/10">2009年10月</a>&nbsp;(17)</li>
+<li><a href="https://coolshell.cn/articles/date/2009/09">2009年9月</a>&nbsp;(14)</li>
+<li><a href="https://coolshell.cn/articles/date/2009/08">2009年8月</a>&nbsp;(21)</li>
+<li><a href="https://coolshell.cn/articles/date/2009/07">2009年7月</a>&nbsp;(18)</li>
+<li><a href="https://coolshell.cn/articles/date/2009/06">2009年6月</a>&nbsp;(19)</li>
+<li><a href="https://coolshell.cn/articles/date/2009/05">2009年5月</a>&nbsp;(27)</li>
+<li><a href="https://coolshell.cn/articles/date/2009/04">2009年4月</a>&nbsp;(53)</li>
+<li><a href="https://coolshell.cn/articles/date/2009/03">2009年3月</a>&nbsp;(43)</li>
+<li><a href="https://coolshell.cn/articles/date/2008/10">2008年10月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2007/12">2007年12月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2006/11">2006年11月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2004/06">2004年6月</a>&nbsp;(1)</li>
+</ul>
+</aside><aside id="custom_html-8" class="widget_text widget widget_custom_html"><h4 class="widget-title">友情链接</h4><div class="textwidget custom-html-widget"><ul class="blogroll">
+<li><a href="http://blog.csdn.net/haoel" target="_blank" onclick="if (!window.__cfRLUnblockHandlers) return false; pageTracker._trackPageview('/outgoing/blog.csdn.net/haoel?referer=http://coolshell.cn');" rel="noopener" data-cf-modified-ac7059d1b7f33cd34807b83e->陈皓的博客</a></li>
+<li><a href="http://ifeve.com/" target="_blank" title="促进并发编程的研究和推广" onclick="if (!window.__cfRLUnblockHandlers) return false; pageTracker._trackPageview('/outgoing/ifeve.com/?referer=http://coolshell.cn');" rel="noopener" data-cf-modified-ac7059d1b7f33cd34807b83e->并发编程</a></li>
+<li><a href="http://www.raychase.net/" target="_blank" title="一个啰嗦的程序员" onclick="if (!window.__cfRLUnblockHandlers) return false; pageTracker._trackPageview('/outgoing/www.raychase.net/?referer=http://coolshell.cn');" rel="noopener" data-cf-modified-ac7059d1b7f33cd34807b83e->四火的唠叨</a></li>
+<li><a href="http://www.cnblogs.com/weidagang2046/" target="_blank" title="Just for Fun" onclick="if (!window.__cfRLUnblockHandlers) return false; pageTracker._trackPageview('/outgoing/http://www.cnblogs.com/weidagang2046/?referer=http://coolshell.cn/');" rel="noopener" data-cf-modified-ac7059d1b7f33cd34807b83e->Todd Wei的Blog</a></li>
+<li><a href="http://www.hellogcc.org/" target="_blank" title="致力于讨论和学习GNU Toolchain方面的工作组" onclick="if (!window.__cfRLUnblockHandlers) return false; pageTracker._trackPageview('/outgoing/www.hellogcc.org//?referer=http://coolshell.cn/');" rel="noopener" data-cf-modified-ac7059d1b7f33cd34807b83e->开源开发工具技术博客</a></li>
+<li><a href="http://www.cppfans.org/" target="_blank" title="记录我们点滴学习工作生活" onclick="if (!window.__cfRLUnblockHandlers) return false; pageTracker._trackPageview('/outgoing/http://www.cppfans.org/?referer=http://coolshell.cn/');" rel="noopener" data-cf-modified-ac7059d1b7f33cd34807b83e->C++爱好者博客</a></li>
+<li><a href="https://HelloACM.com/" target="_blank" title="Smart Ideas, Smart Algorithms" onclick="if (!window.__cfRLUnblockHandlers) return false; pageTracker._trackPageview('/outgoing/http://HelloACM.com/?referer=http://coolshell.cn/');" rel="noopener" data-cf-modified-ac7059d1b7f33cd34807b83e->ACMer</a></li>
+</ul>
+</div></aside><aside id="meta-5" class="widget widget_meta"><h4 class="widget-title">其他操作</h4>
+<ul>
+<li><a href="https://coolshell.cn/wp-login.php?action=register">注册</a></li> <li><a href="https://coolshell.cn/wp-login.php">登录</a></li>
+<li><a href="https://coolshell.cn/feed">条目feed</a></li>
+<li><a href="https://coolshell.cn/comments/feed">评论feed</a></li>
+<li><a href="https://cn.wordpress.org/">WordPress.org</a></li>
+</ul>
+</aside></div>
+</div> 
+</div>
+<script type="ac7059d1b7f33cd34807b83e-text/javascript">
+	var _gaq = _gaq || [];
+	_gaq.push(['_setAccount', 'UA-7486123-1']);
+_gaq.push(['_trackPageview']);
+
+	(function() {
+		var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+		ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+		var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+	})();
+</script>
+</div>
+<footer id="colophon" class="site-footer" role="contentinfo">
+<div class="row site-info">
+CoolShell.cn &copy; 2023
+<span class="sep"> | </span>
+Powered by <a href="https://wordpress.org/">WordPress</a>
+<span class="sep"> | </span>
+Based on Theme: Nisarg by <a href="http://www.falgunidesai.com/" rel="designer">Falguni Desai</a>.
+<p><a href="http://www.beian.miit.gov.cn" target="_target">京ICP备18054967号-1</a></p>
+</div>
+</footer>
+</div>
+<script type="ac7059d1b7f33cd34807b83e-text/javascript" id="wp-postratings-js-extra">
+/* <![CDATA[ */
+var ratingsL10n = {"plugin_url":"https:\/\/coolshell.cn\/wp-content\/plugins\/wp-postratings","ajax_url":"https:\/\/coolshell.cn\/wp-admin\/admin-ajax.php","text_wait":"Please rate only 1 item at a time.","image":"stars_crystal","image_ext":"gif","max":"5","show_loading":"1","show_fading":"1","custom":"0"};
+var ratings_mouseover_image=new Image();ratings_mouseover_image.src="https://coolshell.cn/wp-content/plugins/wp-postratings/images/stars_crystal/rating_over.gif";;
+/* ]]> */
+</script>
+<script type="ac7059d1b7f33cd34807b83e-text/javascript" src="https://coolshell.cn/wp-content/plugins/wp-postratings/js/postratings-js.js?ver=1.90.1" id="wp-postratings-js"></script>
+<script type="ac7059d1b7f33cd34807b83e-text/javascript" id="wp-postviews-cache-js-extra">
+/* <![CDATA[ */
+var viewsCacheL10n = {"admin_ajax_url":"https:\/\/coolshell.cn\/wp-admin\/admin-ajax.php","nonce":"4731639b7a","post_id":"19996"};
+/* ]]> */
+</script>
+<script type="ac7059d1b7f33cd34807b83e-text/javascript" src="https://coolshell.cn/wp-content/plugins/wp-postviews/postviews-cache.js?ver=1.68" id="wp-postviews-cache-js"></script>
+<script type="ac7059d1b7f33cd34807b83e-text/javascript" src="https://coolshell.cn/wp-content/themes/MyNisarg/js/bootstrap.js?ver=6.2" id="bootstrap-js"></script>
+<script type="ac7059d1b7f33cd34807b83e-text/javascript" src="https://coolshell.cn/wp-content/themes/MyNisarg/js/skip-link-focus-fix.js?ver=20130115" id="nisarg-skip-link-focus-fix-js"></script>
+<script type="ac7059d1b7f33cd34807b83e-text/javascript" src="https://coolshell.cn/wp-content/themes/MyNisarg/js/nisarg.js?ver=6.2" id="nisarg-js-js"></script>
+<script type="ac7059d1b7f33cd34807b83e-text/javascript" src="https://coolshell.cn/wp-includes/js/comment-reply.min.js?ver=6.2" id="comment-reply-js"></script>
+<script type="ac7059d1b7f33cd34807b83e-text/javascript" id="q2w3_fixed_widget-js-extra">
+/* <![CDATA[ */
+var q2w3_sidebar_options = [{"use_sticky_position":false,"margin_top":50,"margin_bottom":0,"stop_elements_selectors":"","screen_max_width":0,"screen_max_height":0,"widgets":[]}];
+/* ]]> */
+</script>
+<script type="ac7059d1b7f33cd34807b83e-text/javascript" src="https://coolshell.cn/wp-content/plugins/q2w3-fixed-widget/js/frontend.min.js?ver=6.2.3" id="q2w3_fixed_widget-js"></script>
+<script type="ac7059d1b7f33cd34807b83e-text/javascript" src="https://coolshell.cn/wp-content/plugins/enlighter/cache/enlighterjs.min.js?ver=0cuVQBPCj0viGB0" id="enlighterjs-js"></script>
+<script type="ac7059d1b7f33cd34807b83e-text/javascript" id="enlighterjs-js-after">
+!function(e,n){if("undefined"!=typeof EnlighterJS){var o={"selectors":{"block":"pre.EnlighterJSRAW","inline":"code.EnlighterJSRAW"},"options":{"indent":2,"ampersandCleanup":true,"linehover":true,"rawcodeDbclick":true,"textOverflow":"scroll","linenumbers":true,"theme":"wpcustom","language":"generic","retainCssClasses":false,"collapse":false,"toolbarOuter":"","toolbarTop":"{BTN_RAW}{BTN_COPY}{BTN_WINDOW}{BTN_WEBSITE}","toolbarBottom":""}};(e.EnlighterJSINIT=function(){EnlighterJS.init(o.selectors.block,o.selectors.inline,o.options)})()}else{(n&&(n.error||n.log)||function(){})("Error: EnlighterJS resources not loaded yet!")}}(window,console);
+</script>
+<script defer type="ac7059d1b7f33cd34807b83e-text/javascript" src="https://coolshell.cn/wp-content/plugins/akismet/_inc/akismet-frontend.js?ver=1683523750" id="akismet-frontend-js"></script>
+<script type="ac7059d1b7f33cd34807b83e-text/javascript">
+        jQuery(document).ready(function ($) {
+
+            for (let i = 0; i < document.forms.length; ++i) {
+                let form = document.forms[i];
+				if ($(form).attr("method") != "get") { $(form).append('<input type="hidden" name="HLY_NVGfRIyiO" value="A*FRUYw" />'); }
+if ($(form).attr("method") != "get") { $(form).append('<input type="hidden" name="rfNmPJFxZlE" value="PcJd0F3kneCMpW" />'); }
+            }
+
+            $(document).on('submit', 'form', function () {
+				if ($(this).attr("method") != "get") { $(this).append('<input type="hidden" name="HLY_NVGfRIyiO" value="A*FRUYw" />'); }
+if ($(this).attr("method") != "get") { $(this).append('<input type="hidden" name="rfNmPJFxZlE" value="PcJd0F3kneCMpW" />'); }
+                return true;
+            });
+
+            jQuery.ajaxSetup({
+                beforeSend: function (e, data) {
+
+                    if (data.type !== 'POST') return;
+
+                    if (typeof data.data === 'object' && data.data !== null) {
+						data.data.append("HLY_NVGfRIyiO", "A*FRUYw");
+data.data.append("rfNmPJFxZlE", "PcJd0F3kneCMpW");
+                    }
+                    else {
+                        data.data = data.data + '&HLY_NVGfRIyiO=A*FRUYw&rfNmPJFxZlE=PcJd0F3kneCMpW';
+                    }
+                }
+            });
+
+        });
+    </script>
+<script src="/cdn-cgi/scripts/7d0fa10a/cloudflare-static/rocket-loader.min.js" data-cf-settings="ac7059d1b7f33cd34807b83e-|49" defer></script></body>
+</html>
+<script type="ac7059d1b7f33cd34807b83e-text/javascript" src="https://cdn.jsdelivr.net/gh/haoel/anti-baidu/js/anti-baidu-latest.min.js" charset="UTF-8"></script>
+
+
+

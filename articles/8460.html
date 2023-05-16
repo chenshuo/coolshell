@@ -1,0 +1,1626 @@
+<!DOCTYPE html>
+<!--[if IE 8]>
+<html id="ie8" dir="ltr" lang="zh-CN"
+	prefix="og: https://ogp.me/ns#" >
+<![endif]-->
+<!--[if !(IE 8) ]><!-->
+<html dir="ltr" lang="zh-CN" prefix="og: https://ogp.me/ns#">
+<!--<![endif]-->
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width" />
+<link rel="profile" href="https://gmpg.org/xfn/11" />
+<link rel="pingback" href="https://coolshell.cn/xmlrpc.php" />
+<link rel="shortcut icon" href="/favicon.png">
+<title>Go 语言简介（上）— 语法 | 酷 壳 - CoolShell</title>
+
+<meta name="robots" content="max-image-preview:large" />
+<meta name="keywords" content="go,golang,go 语言,程序设计,编程语言" />
+<link rel="canonical" href="https://coolshell.cn/articles/8460.html" />
+<meta name="generator" content="All in One SEO (AIOSEO) 4.3.6.1 " />
+<meta property="og:locale" content="zh_CN" />
+<meta property="og:site_name" content="酷 壳 - CoolShell" />
+<meta property="og:type" content="activity" />
+<meta property="og:title" content="Go 语言简介（上）— 语法 | 酷 壳 - CoolShell" />
+<meta property="og:url" content="https://coolshell.cn/articles/8460.html" />
+<meta property="og:image" content="https://coolshell.cn/wp-content/uploads/2012/11/go2.jpg" />
+<meta property="og:image:secure_url" content="https://coolshell.cn/wp-content/uploads/2012/11/go2.jpg" />
+<meta property="og:image:width" content="435" />
+<meta property="og:image:height" content="255" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="Go 语言简介（上）— 语法 | 酷 壳 - CoolShell" />
+<meta name="twitter:image" content="https://coolshell.cn/wp-content/uploads/2012/11/go2.jpg" />
+<script type="application/ld+json" class="aioseo-schema">
+			{"@context":"https:\/\/schema.org","@graph":[{"@type":"Article","@id":"https:\/\/coolshell.cn\/articles\/8460.html#article","name":"Go \u8bed\u8a00\u7b80\u4ecb\uff08\u4e0a\uff09\u2014 \u8bed\u6cd5 | \u9177 \u58f3 - CoolShell","headline":"Go \u8bed\u8a00\u7b80\u4ecb\uff08\u4e0a\uff09\u2014 \u8bed\u6cd5","author":{"@id":"https:\/\/coolshell.cn\/articles\/author\/haoel#author"},"publisher":{"@id":"https:\/\/coolshell.cn\/#organization"},"image":{"@type":"ImageObject","url":"https:\/\/coolshell.cn\/wp-content\/uploads\/2012\/11\/go2.jpg","@id":"https:\/\/coolshell.cn\/#articleImage","width":435,"height":255},"datePublished":"2012-11-06T00:27:48+08:00","dateModified":"2020-07-06T09:52:01+08:00","inLanguage":"zh-CN","commentCount":135,"mainEntityOfPage":{"@id":"https:\/\/coolshell.cn\/articles\/8460.html#webpage"},"isPartOf":{"@id":"https:\/\/coolshell.cn\/articles\/8460.html#webpage"},"articleSection":"Go \u8bed\u8a00, \u7a0b\u5e8f\u8bbe\u8ba1, \u7f16\u7a0b\u8bed\u8a00, Go, golang"},{"@type":"BreadcrumbList","@id":"https:\/\/coolshell.cn\/articles\/8460.html#breadcrumblist","itemListElement":[{"@type":"ListItem","@id":"https:\/\/coolshell.cn\/#listItem","position":1,"item":{"@type":"WebPage","@id":"https:\/\/coolshell.cn\/","name":"\u4e3b\u9801","description":"\u4eab\u53d7\u7f16\u7a0b\u548c\u6280\u672f\u6240\u5e26\u6765\u7684\u5feb\u4e50 \u2013 https:\/\/coolshell.cn","url":"https:\/\/coolshell.cn\/"}}]},{"@type":"Organization","@id":"https:\/\/coolshell.cn\/#organization","name":"\u9177\u58f3-CoolShell","url":"https:\/\/coolshell.cn\/","logo":{"@type":"ImageObject","url":"https:\/\/coolshell.cn\/wp-content\/uploads\/2020\/04\/mini.logo_.png","@id":"https:\/\/coolshell.cn\/#organizationLogo","width":306,"height":306},"image":{"@id":"https:\/\/coolshell.cn\/#organizationLogo"}},{"@type":"Person","@id":"https:\/\/coolshell.cn\/articles\/author\/haoel#author","url":"https:\/\/coolshell.cn\/articles\/author\/haoel","name":"\u9648\u7693","image":{"@type":"ImageObject","@id":"https:\/\/coolshell.cn\/articles\/8460.html#authorImage","url":"https:\/\/secure.gravatar.com\/avatar\/af2fbb7372dd5826e44d87e6ceccea40?s=96&d=mm&r=g","width":96,"height":96,"caption":"\u9648\u7693"}},{"@type":"WebPage","@id":"https:\/\/coolshell.cn\/articles\/8460.html#webpage","url":"https:\/\/coolshell.cn\/articles\/8460.html","name":"Go \u8bed\u8a00\u7b80\u4ecb\uff08\u4e0a\uff09\u2014 \u8bed\u6cd5 | \u9177 \u58f3 - CoolShell","inLanguage":"zh-CN","isPartOf":{"@id":"https:\/\/coolshell.cn\/#website"},"breadcrumb":{"@id":"https:\/\/coolshell.cn\/articles\/8460.html#breadcrumblist"},"author":{"@id":"https:\/\/coolshell.cn\/articles\/author\/haoel#author"},"creator":{"@id":"https:\/\/coolshell.cn\/articles\/author\/haoel#author"},"datePublished":"2012-11-06T00:27:48+08:00","dateModified":"2020-07-06T09:52:01+08:00"},{"@type":"WebSite","@id":"https:\/\/coolshell.cn\/#website","url":"https:\/\/coolshell.cn\/","name":"\u9177 \u58f3 - CoolShell","description":"\u4eab\u53d7\u7f16\u7a0b\u548c\u6280\u672f\u6240\u5e26\u6765\u7684\u5feb\u4e50 - Coding Your Ambition","inLanguage":"zh-CN","publisher":{"@id":"https:\/\/coolshell.cn\/#organization"}}]}
+		</script>
+<script type="292c18e0b4ac1921b092deb2-text/javascript">
+			window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+			ga('create', "UA-7486123-1", { 'cookieDomain': 'coolshell.cn' } );
+			ga('send', 'pageview');
+		</script>
+<script async src="https://www.google-analytics.com/analytics.js" type="292c18e0b4ac1921b092deb2-text/javascript"></script>
+
+<link rel="dns-prefetch" href="//fonts.googleapis.com" />
+<link rel="alternate" type="application/rss+xml" title="酷 壳 - CoolShell &raquo; Feed" href="https://coolshell.cn/feed" />
+<link rel="alternate" type="application/rss+xml" title="酷 壳 - CoolShell &raquo; 评论Feed" href="https://coolshell.cn/comments/feed" />
+<link rel="alternate" type="application/rss+xml" title="酷 壳 - CoolShell &raquo; Go 语言简介（上）— 语法评论Feed" href="https://coolshell.cn/articles/8460.html/feed" />
+<script type="292c18e0b4ac1921b092deb2-text/javascript">
+window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/14.0.0\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/14.0.0\/svg\/","svgExt":".svg","source":{"concatemoji":"https:\/\/coolshell.cn\/wp-includes\/js\/wp-emoji-release.min.js?ver=6.2"}};
+/*! This file is auto-generated */
+!function(e,a,t){var n,r,o,i=a.createElement("canvas"),p=i.getContext&&i.getContext("2d");function s(e,t){p.clearRect(0,0,i.width,i.height),p.fillText(e,0,0);e=i.toDataURL();return p.clearRect(0,0,i.width,i.height),p.fillText(t,0,0),e===i.toDataURL()}function c(e){var t=a.createElement("script");t.src=e,t.defer=t.type="text/javascript",a.getElementsByTagName("head")[0].appendChild(t)}for(o=Array("flag","emoji"),t.supports={everything:!0,everythingExceptFlag:!0},r=0;r<o.length;r++)t.supports[o[r]]=function(e){if(p&&p.fillText)switch(p.textBaseline="top",p.font="600 32px Arial",e){case"flag":return s("\ud83c\udff3\ufe0f\u200d\u26a7\ufe0f","\ud83c\udff3\ufe0f\u200b\u26a7\ufe0f")?!1:!s("\ud83c\uddfa\ud83c\uddf3","\ud83c\uddfa\u200b\ud83c\uddf3")&&!s("\ud83c\udff4\udb40\udc67\udb40\udc62\udb40\udc65\udb40\udc6e\udb40\udc67\udb40\udc7f","\ud83c\udff4\u200b\udb40\udc67\u200b\udb40\udc62\u200b\udb40\udc65\u200b\udb40\udc6e\u200b\udb40\udc67\u200b\udb40\udc7f");case"emoji":return!s("\ud83e\udef1\ud83c\udffb\u200d\ud83e\udef2\ud83c\udfff","\ud83e\udef1\ud83c\udffb\u200b\ud83e\udef2\ud83c\udfff")}return!1}(o[r]),t.supports.everything=t.supports.everything&&t.supports[o[r]],"flag"!==o[r]&&(t.supports.everythingExceptFlag=t.supports.everythingExceptFlag&&t.supports[o[r]]);t.supports.everythingExceptFlag=t.supports.everythingExceptFlag&&!t.supports.flag,t.DOMReady=!1,t.readyCallback=function(){t.DOMReady=!0},t.supports.everything||(n=function(){t.readyCallback()},a.addEventListener?(a.addEventListener("DOMContentLoaded",n,!1),e.addEventListener("load",n,!1)):(e.attachEvent("onload",n),a.attachEvent("onreadystatechange",function(){"complete"===a.readyState&&t.readyCallback()})),(e=t.source||{}).concatemoji?c(e.concatemoji):e.wpemoji&&e.twemoji&&(c(e.twemoji),c(e.wpemoji)))}(window,document,window._wpemojiSettings);
+</script>
+<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 0.07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+<link rel="stylesheet" id="series_font-css" href="https://coolshell.cn/wp-content/plugins/simple-post-series/inc/icomoon/style.css?ver=2.4" type="text/css" media="all" />
+<link rel="stylesheet" id="wp-block-library-css" href="https://coolshell.cn/wp-content/plugins/gutenberg/build/block-library/style.css?ver=15.7.0" type="text/css" media="all" />
+<link rel="stylesheet" id="classic-theme-styles-css" href="https://coolshell.cn/wp-includes/css/classic-themes.min.css?ver=6.2" type="text/css" media="all" />
+<style id="global-styles-inline-css" type="text/css">
+body{--wp--preset--color--black: #000000;--wp--preset--color--cyan-bluish-gray: #abb8c3;--wp--preset--color--white: #ffffff;--wp--preset--color--pale-pink: #f78da7;--wp--preset--color--vivid-red: #cf2e2e;--wp--preset--color--luminous-vivid-orange: #ff6900;--wp--preset--color--luminous-vivid-amber: #fcb900;--wp--preset--color--light-green-cyan: #7bdcb5;--wp--preset--color--vivid-green-cyan: #00d084;--wp--preset--color--pale-cyan-blue: #8ed1fc;--wp--preset--color--vivid-cyan-blue: #0693e3;--wp--preset--color--vivid-purple: #9b51e0;--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple: linear-gradient(135deg,rgba(6,147,227,1) 0%,rgb(155,81,224) 100%);--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan: linear-gradient(135deg,rgb(122,220,180) 0%,rgb(0,208,130) 100%);--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange: linear-gradient(135deg,rgba(252,185,0,1) 0%,rgba(255,105,0,1) 100%);--wp--preset--gradient--luminous-vivid-orange-to-vivid-red: linear-gradient(135deg,rgba(255,105,0,1) 0%,rgb(207,46,46) 100%);--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray: linear-gradient(135deg,rgb(238,238,238) 0%,rgb(169,184,195) 100%);--wp--preset--gradient--cool-to-warm-spectrum: linear-gradient(135deg,rgb(74,234,220) 0%,rgb(151,120,209) 20%,rgb(207,42,186) 40%,rgb(238,44,130) 60%,rgb(251,105,98) 80%,rgb(254,248,76) 100%);--wp--preset--gradient--blush-light-purple: linear-gradient(135deg,rgb(255,206,236) 0%,rgb(152,150,240) 100%);--wp--preset--gradient--blush-bordeaux: linear-gradient(135deg,rgb(254,205,165) 0%,rgb(254,45,45) 50%,rgb(107,0,62) 100%);--wp--preset--gradient--luminous-dusk: linear-gradient(135deg,rgb(255,203,112) 0%,rgb(199,81,192) 50%,rgb(65,88,208) 100%);--wp--preset--gradient--pale-ocean: linear-gradient(135deg,rgb(255,245,203) 0%,rgb(182,227,212) 50%,rgb(51,167,181) 100%);--wp--preset--gradient--electric-grass: linear-gradient(135deg,rgb(202,248,128) 0%,rgb(113,206,126) 100%);--wp--preset--gradient--midnight: linear-gradient(135deg,rgb(2,3,129) 0%,rgb(40,116,252) 100%);--wp--preset--font-size--small: 13px;--wp--preset--font-size--medium: 20px;--wp--preset--font-size--large: 36px;--wp--preset--font-size--x-large: 42px;--wp--preset--spacing--20: 0.44rem;--wp--preset--spacing--30: 0.67rem;--wp--preset--spacing--40: 1rem;--wp--preset--spacing--50: 1.5rem;--wp--preset--spacing--60: 2.25rem;--wp--preset--spacing--70: 3.38rem;--wp--preset--spacing--80: 5.06rem;--wp--preset--shadow--natural: 6px 6px 9px rgba(0, 0, 0, 0.2);--wp--preset--shadow--deep: 12px 12px 50px rgba(0, 0, 0, 0.4);--wp--preset--shadow--sharp: 6px 6px 0px rgba(0, 0, 0, 0.2);--wp--preset--shadow--outlined: 6px 6px 0px -3px rgba(255, 255, 255, 1), 6px 6px rgba(0, 0, 0, 1);--wp--preset--shadow--crisp: 6px 6px 0px rgba(0, 0, 0, 1);}:where(.is-layout-flex){gap: 0.5em;}body .is-layout-flow > .alignleft{float: left;margin-inline-start: 0;margin-inline-end: 2em;}body .is-layout-flow > .alignright{float: right;margin-inline-start: 2em;margin-inline-end: 0;}body .is-layout-flow > .aligncenter{margin-left: auto !important;margin-right: auto !important;}body .is-layout-constrained > .alignleft{float: left;margin-inline-start: 0;margin-inline-end: 2em;}body .is-layout-constrained > .alignright{float: right;margin-inline-start: 2em;margin-inline-end: 0;}body .is-layout-constrained > .aligncenter{margin-left: auto !important;margin-right: auto !important;}body .is-layout-constrained > :where(:not(.alignleft):not(.alignright):not(.alignfull)){max-width: var(--wp--style--global--content-size);margin-left: auto !important;margin-right: auto !important;}body .is-layout-constrained > .alignwide{max-width: var(--wp--style--global--wide-size);}body .is-layout-flex{display: flex;}body .is-layout-flex{flex-wrap: wrap;align-items: center;}body .is-layout-flex > *{margin: 0;}body .is-layout-grid{display: grid;}body .is-layout-grid > *{margin: 0;}:where(.wp-block-columns.is-layout-flex){gap: 2em;}.has-black-color{color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-color{color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-color{color: var(--wp--preset--color--white) !important;}.has-pale-pink-color{color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-color{color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-color{color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-color{color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-color{color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-color{color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-color{color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-color{color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-color{color: var(--wp--preset--color--vivid-purple) !important;}.has-black-background-color{background-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-background-color{background-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-background-color{background-color: var(--wp--preset--color--white) !important;}.has-pale-pink-background-color{background-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-background-color{background-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-background-color{background-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-background-color{background-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-background-color{background-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-background-color{background-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-background-color{background-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-background-color{background-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-background-color{background-color: var(--wp--preset--color--vivid-purple) !important;}.has-black-border-color{border-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-border-color{border-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-border-color{border-color: var(--wp--preset--color--white) !important;}.has-pale-pink-border-color{border-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-border-color{border-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-border-color{border-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-border-color{border-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-border-color{border-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-border-color{border-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-border-color{border-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-border-color{border-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-border-color{border-color: var(--wp--preset--color--vivid-purple) !important;}.has-vivid-cyan-blue-to-vivid-purple-gradient-background{background: var(--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple) !important;}.has-light-green-cyan-to-vivid-green-cyan-gradient-background{background: var(--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan) !important;}.has-luminous-vivid-amber-to-luminous-vivid-orange-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange) !important;}.has-luminous-vivid-orange-to-vivid-red-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-orange-to-vivid-red) !important;}.has-very-light-gray-to-cyan-bluish-gray-gradient-background{background: var(--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray) !important;}.has-cool-to-warm-spectrum-gradient-background{background: var(--wp--preset--gradient--cool-to-warm-spectrum) !important;}.has-blush-light-purple-gradient-background{background: var(--wp--preset--gradient--blush-light-purple) !important;}.has-blush-bordeaux-gradient-background{background: var(--wp--preset--gradient--blush-bordeaux) !important;}.has-luminous-dusk-gradient-background{background: var(--wp--preset--gradient--luminous-dusk) !important;}.has-pale-ocean-gradient-background{background: var(--wp--preset--gradient--pale-ocean) !important;}.has-electric-grass-gradient-background{background: var(--wp--preset--gradient--electric-grass) !important;}.has-midnight-gradient-background{background: var(--wp--preset--gradient--midnight) !important;}.has-small-font-size{font-size: var(--wp--preset--font-size--small) !important;}.has-medium-font-size{font-size: var(--wp--preset--font-size--medium) !important;}.has-large-font-size{font-size: var(--wp--preset--font-size--large) !important;}.has-x-large-font-size{font-size: var(--wp--preset--font-size--x-large) !important;}
+:where(.wp-block-columns.is-layout-flex){gap: 2em;}
+.wp-block-pullquote{font-size: 1.5em;line-height: 1.6;}
+.wp-block-navigation a:where(:not(.wp-element-button)){color: inherit;}
+</style>
+<link rel="stylesheet" id="wp-postratings-css" href="https://coolshell.cn/wp-content/plugins/wp-postratings/css/postratings-css.css?ver=1.90.1" type="text/css" media="all" />
+<link rel="stylesheet" id="wp-pagenavi-css" href="https://coolshell.cn/wp-content/plugins/wp-pagenavi/pagenavi-css.css?ver=2.70" type="text/css" media="all" />
+<link rel="stylesheet" id="ez-toc-css" href="https://coolshell.cn/wp-content/plugins/easy-table-of-contents/assets/css/screen.min.css?ver=2.0.48" type="text/css" media="all" />
+<style id="ez-toc-inline-css" type="text/css">
+div#ez-toc-container p.ez-toc-title {font-size: 120%;}div#ez-toc-container p.ez-toc-title {font-weight: 500;}div#ez-toc-container ul li {font-size: 95%;}div#ez-toc-container nav ul ul li ul li {font-size: %!important;}
+.ez-toc-container-direction {direction: ltr;}.ez-toc-counter ul{counter-reset: item;}.ez-toc-counter nav ul li a::before {content: counters(item, ".", decimal) ". ";display: inline-block;counter-increment: item;flex-grow: 0;flex-shrink: 0;margin-right: .2em; float: left;}.ez-toc-widget-direction {direction: ltr;}.ez-toc-widget-container ul{counter-reset: item;}.ez-toc-widget-container nav ul li a::before {content: counters(item, ".", decimal) ". ";display: inline-block;counter-increment: item;flex-grow: 0;flex-shrink: 0;margin-right: .2em; float: left;}
+</style>
+<link rel="stylesheet" id="bootstrap-css" href="https://coolshell.cn/wp-content/themes/MyNisarg/css/bootstrap.css?ver=6.2" type="text/css" media="all" />
+<link rel="stylesheet" id="nisarg-style-css" href="https://coolshell.cn/wp-content/themes/MyNisarg/style.css?ver=6.2" type="text/css" media="all" />
+<style id="nisarg-style-inline-css" type="text/css">
+	/* Color Scheme */
+
+	/* Accent Color */
+
+	a:active,
+	a:hover,
+	a:focus {
+	    color: #009688;
+	}
+
+	.navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus {
+		color: #009688;
+	}
+
+	
+	.navbar-default .navbar-nav > .active > a, .navbar-default .navbar-nav > .active > a:hover, .navbar-default .navbar-nav > .active > a:focus {
+		color: #009688;			
+	}
+
+	@media (min-width: 768px){
+		.navbar-default .navbar-nav > .active > a, .navbar-default .navbar-nav > .active > a:hover, .navbar-default .navbar-nav > .active > a:focus {
+			border-top: 4px solid #009688;
+		}		
+	}
+
+	.dropdown-menu > .active > a, .dropdown-menu > .active > a:hover, .dropdown-menu > .active > a:focus {	    
+	    background-color: #009688;
+	}
+
+
+	.navbar-default .navbar-nav > .open > a, .navbar-default .navbar-nav > .open > a:hover, .navbar-default .navbar-nav > .open > a:focus {
+		color: #009688;
+	}
+
+	.navbar-default .navbar-nav > li > .dropdown-menu > li > a:hover,
+	.navbar-default .navbar-nav > li > .dropdown-menu > li > a:focus {
+		color: #fff;
+		background-color: #009688;
+	}
+
+	.navbar-default .navbar-nav .open .dropdown-menu > .active > a, .navbar-default .navbar-nav .open .dropdown-menu > .active > a:hover, .navbar-default .navbar-nav .open .dropdown-menu > .active > a:focus {
+		background-color: #fff;
+		color: #009688;
+	}
+
+	@media (max-width: 767px) {
+		.navbar-default .navbar-nav .open .dropdown-menu > li > a:hover {
+			background-color: #009688;
+			color: #fff;
+		}
+	}
+
+	.sticky-post{
+	    background: #009688;
+	    color:white;
+	}
+	
+	.entry-title a:hover,
+	.entry-title a:focus{
+	    color: #009688;
+	}
+
+	.entry-header .entry-meta::after{
+	    background: #009688;
+	}
+
+	.fa {
+		color: #009688;
+	}
+
+	.btn-default{
+		border-bottom: 1px solid #009688;
+	}
+
+	.btn-default:hover, .btn-default:focus{
+	    border-bottom: 1px solid #009688;
+	    background-color: #009688;
+	}
+
+	.nav-previous:hover, .nav-next:hover{
+	    border: 1px solid #009688;
+	    background-color: #009688;
+	}
+
+	.next-post a:hover,.prev-post a:hover{
+	    color: #009688;
+	}
+
+	.posts-navigation .next-post a:hover .fa, .posts-navigation .prev-post a:hover .fa{
+	    color: #009688;
+	}
+
+
+	#secondary .widget-title::after{
+		background-color: #009688;
+	    content: "";
+	    position: absolute;
+	    width: 75px;
+	    display: block;
+	    height: 4px;    
+	    bottom: -15px;
+	}
+
+	#secondary .widget a:hover,
+	#secondary .widget a:focus{
+		color: #009688;
+	}
+
+	#secondary .widget_calendar tbody a {
+	    background-color: #009688;
+	    color: #fff;
+	    padding: 0.2em;
+	}
+
+	#secondary .widget_calendar tbody a:hover{
+	    background-color: #009688;
+	    color: #fff;
+	    padding: 0.2em;
+	}	
+
+</style>
+<link rel="stylesheet" id="font-awesome-css" href="https://coolshell.cn/wp-content/themes/MyNisarg/font-awesome/css/font-awesome.min.css?ver=6.2" type="text/css" media="all" />
+<link rel="stylesheet" id="nisarggooglefonts-css" href="//fonts.googleapis.com/css?family=Lato:400,300italic,700|Source+Sans+Pro:400,400italic" type="text/css" media="all" />
+<link rel="stylesheet" id="enlighterjs-css" href="https://coolshell.cn/wp-content/plugins/enlighter/cache/enlighterjs.min.css?ver=0cuVQBPCj0viGB0" type="text/css" media="all" />
+<script type="292c18e0b4ac1921b092deb2-text/javascript" src="https://coolshell.cn/wp-includes/js/jquery/jquery.min.js?ver=3.6.3" id="jquery-core-js"></script>
+<script type="292c18e0b4ac1921b092deb2-text/javascript" src="https://coolshell.cn/wp-includes/js/jquery/jquery-migrate.min.js?ver=3.4.0" id="jquery-migrate-js"></script>
+<script type="292c18e0b4ac1921b092deb2-text/javascript" src="https://coolshell.cn/wp-content/plugins/simple-post-series/autohide.js?ver=2.4" id="series-js"></script>
+<script type="292c18e0b4ac1921b092deb2-text/javascript" id="ez-toc-scroll-scriptjs-js-after">
+jQuery(document).ready(function(){document.querySelectorAll(".ez-toc-section").forEach(t=>{t.setAttribute("ez-toc-data-id","#"+decodeURI(t.getAttribute("id")))}),jQuery("a.ez-toc-link").click(function(){let t=jQuery(this).attr("href"),e=jQuery("#wpadminbar"),i=0;30>30&&(i=30),e.length&&(i+=e.height()),jQuery('[ez-toc-data-id="'+decodeURI(t)+'"]').length>0&&(i=jQuery('[ez-toc-data-id="'+decodeURI(t)+'"]').offset().top-i),jQuery("html, body").animate({scrollTop:i},500)})});
+</script>
+<!--[if lt IE 9]>
+<script type='text/javascript' src='https://coolshell.cn/wp-content/themes/MyNisarg/js/html5shiv.js?ver=3.7.3' id='html5shiv-js'></script>
+<![endif]-->
+<link rel="https://api.w.org/" href="https://coolshell.cn/wp-json/" /><link rel="alternate" type="application/json" href="https://coolshell.cn/wp-json/wp/v2/posts/8460" /><link rel="EditURI" type="application/rsd+xml" title="RSD" href="https://coolshell.cn/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="https://coolshell.cn/wp-includes/wlwmanifest.xml" />
+<meta name="generator" content="WordPress 6.2" />
+<link rel="shortlink" href="https://coolshell.cn/?p=8460" />
+<link rel="alternate" type="application/json+oembed" href="https://coolshell.cn/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fcoolshell.cn%2Farticles%2F8460.html" />
+<link rel="alternate" type="text/xml+oembed" href="https://coolshell.cn/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fcoolshell.cn%2Farticles%2F8460.html&#038;format=xml" />
+<script type="292c18e0b4ac1921b092deb2-text/javascript">
+	window._wp_rp_static_base_url = 'https://wprp.zemanta.com/static/';
+	window._wp_rp_wp_ajax_url = "https://coolshell.cn/wp-admin/admin-ajax.php";
+	window._wp_rp_plugin_version = '3.6.4';
+	window._wp_rp_post_id = '8460';
+	window._wp_rp_num_rel_posts = '6';
+	window._wp_rp_thumbnails = true;
+	window._wp_rp_post_title = 'Go+%E8%AF%AD%E8%A8%80%E7%AE%80%E4%BB%8B%EF%BC%88%E4%B8%8A%EF%BC%89%E2%80%94+%E8%AF%AD%E6%B3%95';
+	window._wp_rp_post_tags = ['golang', 'go', '%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1', 'go+%E8%AF%AD%E8%A8%80', '%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80', '3', 'alt', 'a1', 'main', 'int', 'pi', '30', '2', 'lena', '5', '12', 'a3', 'string', '4', 'javascript'];
+	window._wp_rp_promoted_content = true;
+</script>
+<link rel="stylesheet" href="https://coolshell.cn/wp-content/plugins/wordpress-23-related-posts-plugin/static/themes/vertical-m.css?version=3.6.4" />
+<style type="text/css">
+        .site-header { background: #1d2b2d; }
+</style>
+</head>
+<body class="post-template-default single single-post postid-8460 single-format-standard group-blog">
+<link rel="stylesheet" id="nisarg-style-css" href="https://coolshell.cn/wp-content/themes/MyNisarg/style.css" type="text/css" media="all">
+<div id="page" class="hfeed site">
+<header id="masthead" role="banner">
+<nav class="navbar navbar-default navbar-fixed-top navbar-left" role="navigation">
+
+<div class="container" id="navigation_menu">
+<div class="navbar-header">
+<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+<span class="sr-only">Toggle navigation</span>
+<span class="icon-bar"></span>
+<span class="icon-bar"></span>
+<span class="icon-bar"></span>
+</button>
+<a class="navbar-brand" href="https://coolshell.cn/"><div class="coolshell_logo"></div>酷 壳 &#8211; CoolShell</a>
+</div>
+<div class="collapse navbar-collapse navbar-ex1-collapse"><ul id="menu-coolshell" class="nav navbar-nav"><li id="menu-item-17405" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-17405"><a title="首页" href="https://coolshell.cn/">首页</a></li>
+<li id="menu-item-17406" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-17406"><a title="推荐文章" href="https://coolshell.cn/featured">推荐文章</a></li>
+<li id="menu-item-17407" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-17407"><a title="本站插件" href="https://coolshell.cn/plugins">本站插件</a></li>
+<li id="menu-item-17408" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-17408"><a title="留言小本" href="https://coolshell.cn/guestbook">留言小本</a></li>
+<li id="menu-item-17409" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-17409"><a title="关于酷壳" href="https://coolshell.cn/about">关于酷壳</a></li>
+<li id="menu-item-17410" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-17410"><a title="关于陈皓" href="https://coolshell.cn/haoel">关于陈皓</a></li>
+<li id="menu-item-17582" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-17582"><a title="RSS" href="https://coolshell.cn/feed">RSS</a></li>
+</ul></div>
+</div>
+</nav>
+<div id="cc_spacer"></div>
+<div class="site-header">
+<div class="pull-right">
+<a title="把这个链接拖到你的Chrome收藏夹工具栏中" href="javascript:(function(){function c(){var e=document.createElement(&quot;link&quot;);e.setAttribute(&quot;type&quot;,&quot;text/css&quot;);e.setAttribute(&quot;rel&quot;,&quot;stylesheet&quot;);e.setAttribute(&quot;href&quot;,f);e.setAttribute(&quot;class&quot;,l);document.body.appendChild(e)}function h(){var e=document.getElementsByClassName(l);for(var t=0;t<e.length;t++){document.body.removeChild(e[t])}}function p(){var e=document.createElement(&quot;div&quot;);e.setAttribute(&quot;class&quot;,a);document.body.appendChild(e);setTimeout(function(){document.body.removeChild(e)},100)}function d(e){return{height:e.offsetHeight,width:e.offsetWidth}}function v(i){var s=d(i);return s.height>e&&s.height<n&&s.width>t&&s.width<r}function m(e){var t=e;var n=0;while(!!t){n+=t.offsetTop;t=t.offsetParent}return n}function g(){var e=document.documentElement;if(!!window.innerWidth){return window.innerHeight}else if(e&&!isNaN(e.clientHeight)){return e.clientHeight}return 0}function y(){if(window.pageYOffset){return window.pageYOffset}return Math.max(document.documentElement.scrollTop,document.body.scrollTop)}function E(e){var t=m(e);return t>=w&&t<=b+w}function S(){var e=document.createElement(&quot;audio&quot;);e.setAttribute(&quot;class&quot;,l);e.src=i;e.loop=false;e.addEventListener(&quot;canplay&quot;,function(){setTimeout(function(){x(k)},500);setTimeout(function(){N();p();for(var e=0;e<O.length;e++){T(O[e])}},15500)},true);e.addEventListener(&quot;ended&quot;,function(){N();h()},true);e.innerHTML=&quot; <p>If you are reading this, it is because your browser does not support the audio element. We recommend that you get a new browser.</p> <p>&quot;;document.body.appendChild(e);e.play()}function x(e){e.className+=&quot; &quot;+s+&quot; &quot;+o}function T(e){e.className+=&quot; &quot;+s+&quot; &quot;+u[Math.floor(Math.random()*u.length)]}function N(){var e=document.getElementsByClassName(s);var t=new RegExp(&quot;\\b&quot;+s+&quot;\\b&quot;);for(var n=0;n<e.length;){e[n].className=e[n].className.replace(t,&quot;&quot;)}}var e=30;var t=30;var n=350;var r=350;var i=&quot;//s3.amazonaws.com/moovweb-marketing/playground/harlem-shake.mp3&quot;;var s=&quot;mw-harlem_shake_me&quot;;var o=&quot;im_first&quot;;var u=[&quot;im_drunk&quot;,&quot;im_baked&quot;,&quot;im_trippin&quot;,&quot;im_blown&quot;];var a=&quot;mw-strobe_light&quot;;var f=&quot;//s3.amazonaws.com/moovweb-marketing/playground/harlem-shake-style.css&quot;;var l=&quot;mw_added_css&quot;;var b=g();var w=y();var C=document.getElementsByTagName(&quot;*&quot;);var k=null;for(var L=0;L<C.length;L++){var A=C[L];if(v(A)){if(E(A)){k=A;break}}}if(A===null){console.warn(&quot;Could not find a node of the right size. Please try a different page.&quot;);return}c();S();var O=[];for(var L=0;L<C.length;L++){var A=C[L];if(v(A)){O.push(A)}}})()    ">High一下!</a>
+</div>
+<div class="site-branding">
+<a class="home-link" href="https://coolshell.cn/" title="酷 壳 &#8211; CoolShell" rel="home">
+<h1 class="site-title">酷 壳 &#8211; CoolShell</h1>
+<h2 class="site-description">享受编程和技术所带来的快乐 &#8211; Coding Your Ambition</h2>
+</a>
+</div>
+</div>
+</header>
+<div class="container">
+<div class="row">
+<div class="col-md-9 nav-searchbox hidden-lg hidden-md visible-sm-* visible-xs-*">
+<form role="search" method="get" class="search-form" action="https://coolshell.cn/">
+<label>
+<span class="screen-reader-text">Search for:</span>
+<input type="search" class="search-field" placeholder="Search …" value name="s" title="Search for:">
+</label>
+<button type="submit" class="search-submit"><span class="screen-reader-text">Search</span></button>
+</form>
+</div>
+</div>
+</div>
+<div id="content" class="site-content">
+<div class="container">
+<div class="row">
+<div id="primary" class="col-md-9 content-area">
+<main id="main" role="main">
+<article id="post-8460" class="post-content post-8460 post type-post status-publish format-standard hentry category-go- category-progdesign category-proglanguage tag-go tag-golang">
+<header class="entry-header">
+<span class="screen-reader-text">Go 语言简介（上）— 语法</span>
+<h1 class="entry-title">Go 语言简介（上）— 语法</h1>
+<div class="entry-meta">
+<h5 class="entry-date"><i class="fa fa-calendar-o"></i> <a href="https://coolshell.cn/articles/8460.html" title="08:27" rel="bookmark"><time class="entry-date" datetime="2012-11-06T08:27:48+08:00" pubdate>2012年11月06日 </time></a><span class="byline"><span class="sep"></span><i class="fa fa-user"></i>
+<span class="author vcard"><a class="url fn n" href="https://coolshell.cn/articles/author/haoel" title="View all posts by 陈皓" rel="author">陈皓</a></span></span> <i class="fa fa-comments-o"></i><span class="screen-reader-text">评论 </span> <a href="https://coolshell.cn/articles/8460.html#comments" class="comments-link">135 条评论</a> <i class="fa fa-users" style="margin-left:10px;"></i> 171,337 人阅读</h5>
+</div>
+</header>
+<div class="entry-content">
+<p><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3415450859608158" crossorigin="anonymous" type="292c18e0b4ac1921b092deb2-text/javascript"></script>周末天气不好，只能宅在家里，于是就顺便看了一下Go语言，觉得比较有意思，所以写篇文章介绍一下。<strong>我想写一篇你可以在乘坐地铁或公交车上下班时就可以初步了解一门语言的文章</strong>。所以，下面的文章主要是以代码和注释为主。只需要你对C语言，Unix，Python有一点基础，我相信你会在30分钟左右读完并对Go语言有一些初步了解的。</p>
+<p><img decoding="async" class="aligncenter size-full wp-image-8485" title="go" src="https://coolshell.cn/wp-content/uploads/2012/11/go2.jpg" alt width="435" height="255" srcset="https://coolshell.cn/wp-content/uploads/2012/11/go2.jpg 435w, https://coolshell.cn/wp-content/uploads/2012/11/go2-300x176.jpg 300w" sizes="(max-width: 435px) 100vw, 435px" /></p>
+<div id="ez-toc-container" class="ez-toc-v2_0_48 counter-hierarchy ez-toc-counter ez-toc-grey ez-toc-container-direction">
+<div class="ez-toc-title-container">
+<p class="ez-toc-title">目录</p>
+<span class="ez-toc-title-toggle"></span></div>
+<nav><ul class="ez-toc-list ez-toc-list-level-1 "><li class="ez-toc-page-1 ez-toc-heading-level-4"><a class="ez-toc-link ez-toc-heading-1" href="#Hello_World" title="Hello World">Hello World</a></li><li class="ez-toc-page-1 ez-toc-heading-level-4"><a class="ez-toc-link ez-toc-heading-2" href="#%E8%BF%90%E8%A1%8C" title="运行">运行</a></li><li class="ez-toc-page-1 ez-toc-heading-level-4"><a class="ez-toc-link ez-toc-heading-3" href="#%E8%87%AA%E5%B7%B1%E7%9A%84package" title="自己的package">自己的package</a></li><li class="ez-toc-page-1 ez-toc-heading-level-4"><a class="ez-toc-link ez-toc-heading-4" href="#fmt%E8%BE%93%E5%87%BA%E6%A0%BC%E5%BC%8F" title="fmt输出格式">fmt输出格式</a></li><li class="ez-toc-page-1 ez-toc-heading-level-4"><a class="ez-toc-link ez-toc-heading-5" href="#%E5%8F%98%E9%87%8F%E5%92%8C%E5%B8%B8%E9%87%8F" title="变量和常量">变量和常量</a></li><li class="ez-toc-page-1 ez-toc-heading-level-4"><a class="ez-toc-link ez-toc-heading-6" href="#%E6%95%B0%E7%BB%84" title="数组">数组</a></li><li class="ez-toc-page-1 ez-toc-heading-level-4"><a class="ez-toc-link ez-toc-heading-7" href="#%E6%95%B0%E7%BB%84%E7%9A%84%E5%88%87%E7%89%87%E6%93%8D%E4%BD%9C" title="数组的切片操作">数组的切片操作</a></li><li class="ez-toc-page-1 ez-toc-heading-level-4"><a class="ez-toc-link ez-toc-heading-8" href="#%E5%88%86%E6%94%AF%E5%BE%AA%E7%8E%AF%E8%AF%AD%E5%8F%A5" title="分支循环语句">分支循环语句</a></li><li class="ez-toc-page-1 ez-toc-heading-level-4"><a class="ez-toc-link ez-toc-heading-9" href="#%E5%85%B3%E4%BA%8E%E5%88%86%E5%8F%B7" title="关于分号">关于分号</a></li><li class="ez-toc-page-1 ez-toc-heading-level-4"><a class="ez-toc-link ez-toc-heading-10" href="#map" title="map">map</a></li><li class="ez-toc-page-1 ez-toc-heading-level-4"><a class="ez-toc-link ez-toc-heading-11" href="#%E6%8C%87%E9%92%88" title="指针">指针</a></li><li class="ez-toc-page-1 ez-toc-heading-level-4"><a class="ez-toc-link ez-toc-heading-12" href="#%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D" title="内存分配 ">内存分配 </a></li><li class="ez-toc-page-1 ez-toc-heading-level-4"><a class="ez-toc-link ez-toc-heading-13" href="#%E5%87%BD%E6%95%B0" title="函数">函数</a></li><li class="ez-toc-page-1 ez-toc-heading-level-4"><a class="ez-toc-link ez-toc-heading-14" href="#%E7%BB%93%E6%9E%84%E4%BD%93" title="结构体">结构体</a></li><li class="ez-toc-page-1 ez-toc-heading-level-4"><a class="ez-toc-link ez-toc-heading-15" href="#%E7%BB%93%E6%9E%84%E4%BD%93%E6%96%B9%E6%B3%95" title="结构体方法">结构体方法</a></li><li class="ez-toc-page-1 ez-toc-heading-level-4"><a class="ez-toc-link ez-toc-heading-16" href="#%E6%8E%A5%E5%8F%A3%E5%92%8C%E5%A4%9A%E6%80%81" title="接口和多态">接口和多态</a></li><li class="ez-toc-page-1 ez-toc-heading-level-4"><a class="ez-toc-link ez-toc-heading-17" href="#%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86_%E2%80%93_Error%E6%8E%A5%E5%8F%A3" title="错误处理 &#8211; Error接口">错误处理 &#8211; Error接口</a></li><li class="ez-toc-page-1 ez-toc-heading-level-4"><a class="ez-toc-link ez-toc-heading-18" href="#%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86_%E2%80%93_Defer" title="错误处理 &#8211; Defer">错误处理 &#8211; Defer</a></li><li class="ez-toc-page-1 ez-toc-heading-level-4"><a class="ez-toc-link ez-toc-heading-19" href="#%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86_%E2%80%93_PanicRecover" title="错误处理 &#8211; Panic/Recover">错误处理 &#8211; Panic/Recover</a></li></ul></nav></div>
+<h4><span class="ez-toc-section" id="Hello_World"></span>Hello World<span class="ez-toc-section-end"></span></h4>
+<pre class="EnlighterJSRAW" data-enlighter-language="golang">//文件名：hello.go
+package main //声明本文件的package名
+
+import &quot;fmt&quot; //import语言的fmt库——用于输出
+
+func main() {
+    fmt.Println(&quot;hello world&quot;)
+}</pre>
+<p><span id="more-8460"></span></p>
+<h4><span class="ez-toc-section" id="%E8%BF%90%E8%A1%8C"></span>运行<span class="ez-toc-section-end"></span></h4>
+<p>你可以有两种运行方式，</p>
+<pre class="EnlighterJSRAW" data-enlighter-language="shell">#解释执行（实际是编译成a.out再执行）
+$go run hello.go
+hello world
+
+#编译执行
+$go build hello.go
+
+$ls
+hello hello.go
+
+$./hello
+hello world</pre>
+<h4><span class="ez-toc-section" id="%E8%87%AA%E5%B7%B1%E7%9A%84package"></span>自己的package<span class="ez-toc-section-end"></span></h4>
+<p>你可以使用GOPATH环境变量，或是使用相对路径来import你自己的package。</p>
+<p>Go的规约是这样的：</p>
+<p style="padding-left: 30px;">1）<strong>在import中，你可以使用相对路径，如 ./或 ../ 来引用你的package</strong></p>
+<p style="padding-left: 30px;">2）<strong>如果没有使用相对路径，那么，go会去找$GOPATH/src/目录。</strong></p>
+<pre class="EnlighterJSRAW" data-enlighter-language="golang">//使用相对路径
+import &quot;./haoel&quot;  //import当前目录里haoel子目录里的所有的go文件
+</pre>
+<pre class="EnlighterJSRAW" data-enlighter-language="golang">//使用GOPATH路径
+import &quot;haoel&quot;  //import 环境变量 $GOPATH/src/haoel子目录里的所有的go文件
+</pre>
+<h4><span class="ez-toc-section" id="fmt%E8%BE%93%E5%87%BA%E6%A0%BC%E5%BC%8F"></span>fmt输出格式<span class="ez-toc-section-end"></span></h4>
+<p>fmt包和libc里的那堆使用printf， scanf，fprintf，fscanf 很相似。下面的东西对于C程序员不会陌生。</p>
+<p>注意：Println不支持，Printf才支持%式的输出：</p>
+<pre class="EnlighterJSRAW" data-enlighter-language="golang">package main
+
+import &quot;fmt&quot;
+import &quot;math&quot;
+
+func main() {
+    fmt.Println(&quot;hello world&quot;)
+
+    fmt.Printf(&quot;%t\n&quot;, 1==2)
+    fmt.Printf(&quot;二进制：%b\n&quot;, 255)
+    fmt.Printf(&quot;八进制：%o\n&quot;, 255)
+    fmt.Printf(&quot;十六进制：%X\n&quot;, 255)
+    fmt.Printf(&quot;十进制：%d\n&quot;, 255)
+    fmt.Printf(&quot;浮点数：%f\n&quot;, math.Pi)
+    fmt.Printf(&quot;字符串：%s\n&quot;, &quot;hello world&quot;)
+}</pre>
+<p>当然，也可以使用如\n\t\r这样的和C语言一样的控制字符</p>
+<h4><span class="ez-toc-section" id="%E5%8F%98%E9%87%8F%E5%92%8C%E5%B8%B8%E9%87%8F"></span>变量和常量<span class="ez-toc-section-end"></span></h4>
+<p>变量的声明很像 javascript，使用 var关键字。注意：<strong>go是静态类型的语言</strong>，下面是代码：</p>
+<pre class="EnlighterJSRAW" data-enlighter-language="golang">//声明初始化一个变量
+var  x int = 100
+var str string = &quot;hello world&quot;&lt;/pre&gt;
+//声明初始化多个变量
+var  i, j, k int = 1, 2, 3
+
+//不用指明类型，通过初始化值来推导
+var b = true //bool型
+</pre>
+<p>还有一种定义变量的方式（这让我想到了Pascal语言，但完全不一样）</p>
+<pre class="EnlighterJSRAW" data-enlighter-language="golang">x := 100 //等价于 var x int = 100;
+</pre>
+<p>常量很简单，使用const关键字：</p>
+<pre class="EnlighterJSRAW" data-enlighter-language="golang">const s string = &quot;hello world&quot;
+const pi float32 = 3.1415926
+</pre>
+<h4><span class="ez-toc-section" id="%E6%95%B0%E7%BB%84"></span>数组<span class="ez-toc-section-end"></span></h4>
+<p>直接看代码（注意其中的for语句，和C很相似吧，就是没有括号了）</p>
+<pre class="EnlighterJSRAW" data-enlighter-language="golang">func main() {
+    var a [5]int
+    fmt.Println(&quot;array a:&quot;, a)
+
+    a[1] = 10
+    a[3] = 30
+    fmt.Println(&quot;assign:&quot;, a)
+
+    fmt.Println(&quot;len:&quot;, len(a))
+
+    b := [5]int{1, 2, 3, 4, 5}
+    fmt.Println(&quot;init:&quot;, b)
+
+    var c [2][3]int
+    for i := 0; i &lt; 2; i++ {
+        for j := 0; j &lt; 3; j++ {
+            c[i][j] = i + j
+        }
+    }
+    fmt.Println(&quot;2d: &quot;, c)
+}
+</pre>
+<p>运行结果：</p>
+<pre class="EnlighterJSRAW" data-enlighter-language="shell">
+array a: [0 0 0 0 0]
+assign: [0 10 0 30 0]
+len: 5
+init: [1 2 3 4 5]
+2d:  [[0 1 2] [1 2 3]]
+
+</pre>
+<h4><span class="ez-toc-section" id="%E6%95%B0%E7%BB%84%E7%9A%84%E5%88%87%E7%89%87%E6%93%8D%E4%BD%9C"></span>数组的切片操作<span class="ez-toc-section-end"></span></h4>
+<p>这个很Python了。</p>
+<pre class="EnlighterJSRAW" data-enlighter-language="golang">
+a := [5]int{1, 2, 3, 4, 5}
+
+b := a[2:4] // a[2] 和 a[3]，但不包括a[4]
+fmt.Println(b)
+
+b = a[:4] // 从 a[0]到a[4]，但不包括a[4]
+fmt.Println(b)
+
+b = a[2:] // 从 a[2]到a[4]，且包括a[2]
+fmt.Println(b)
+
+</pre>
+<p><strong>但是，我们要记住，Golang的切片是共享内存的，也就是说，没有数据的复制，只是记录从哪切到哪的信息。</strong></p>
+<h4><span class="ez-toc-section" id="%E5%88%86%E6%94%AF%E5%BE%AA%E7%8E%AF%E8%AF%AD%E5%8F%A5"></span>分支循环语句<span class="ez-toc-section-end"></span></h4>
+<p><strong>if语句</strong></p>
+<p>注意：if 语句没有圆括号，而必需要有花括号</p>
+<pre class="EnlighterJSRAW" data-enlighter-language="golang">//if 语句
+if x % 2 == 0 {
+    //...
+}
+//if - else
+if x % 2 == 0 {
+    //偶数...
+} else {
+    //奇数...
+}
+
+//多分支
+if num &lt; 0 {
+    //负数
+} else if num == 0 {
+    //零
+} else {
+    //正数
+}
+</pre>
+<p><strong>switch 语句</strong></p>
+<p>注意：switch语句没有break，还可以使用逗号case多个值</p>
+<pre class="EnlighterJSRAW" data-enlighter-language="golang">switch i {
+    case 1:
+        fmt.Println(&quot;one&quot;)
+    case 2:
+        fmt.Println(&quot;two&quot;)
+    case 3:
+        fmt.Println(&quot;three&quot;)
+    case 4,5,6:
+        fmt.Println(&quot;four, five, six&quot;)
+    default:
+        fmt.Println(&quot;invalid value!&quot;)
+}
+</pre>
+<p><strong>for 语句</strong></p>
+<p>前面你已见过了，下面再来看看for的三种形式：（注意：Go语言中没有while）</p>
+<pre class="EnlighterJSRAW" data-enlighter-language="golang">//经典的for语句 init; condition; post
+for i := 0; i&lt;10; i++{
+     fmt.Println(i)
+}
+
+//精简的for语句 condition
+i := 1
+for i&lt;10 {
+    fmt.Println(i)
+    i++
+}
+
+//死循环的for语句 相当于for(;;)
+i :=1
+for {
+    if i&gt;10 {
+        break
+    }
+    i++
+}
+</pre>
+<h4><span class="ez-toc-section" id="%E5%85%B3%E4%BA%8E%E5%88%86%E5%8F%B7"></span>关于分号<span class="ez-toc-section-end"></span></h4>
+<p>从上面的代码我们可以看到代码里没有分号。其实，<strong>和C一样，Go的正式的语法使用分号来终止语句。和C不同的是，这些分号由词法分析器在扫描源代码过程中使用简单的规则自动插入分号，因此输入源代码多数时候就不需要分号了</strong>。</p>
+<p>规则是这样的：如果在一个新行前方的最后一个标记是一个标识符（包括像<code>int</code>和<code>float64</code>这样的单词）、一个基本的如数值这样的文字、或以下标记中的一个时，会自动插入分号：</p>
+<pre>break continue fallthrough return ++ -- ) }</pre>
+<p>通常Go程序仅在<code>for</code>循环语句中使用分号，以此来分开初始化器、条件和增量单元。如果你在一行中写多个语句，也需要用分号分开。</p>
+<p><strong>注意</strong>：<strong>无论任何时候，你都不应该将一个控制结构（(<code>if</code>、<code>for</code>、<code>switch</code>或<code>select</code>）的左大括号放在下一行。如果这样做，将会在大括号的前方插入一个分号，这可能导致出现不想要的结果</strong>。</p>
+<h4><span class="ez-toc-section" id="map"></span>map<span class="ez-toc-section-end"></span></h4>
+<p>map在别的语言里可能叫哈希表或叫dict，下面是和map的相关操作的代码，代码很容易懂</p>
+<pre class="EnlighterJSRAW" data-enlighter-language="golang">func main(){
+    m := make(map[string]int) //使用make创建一个空的map
+
+    m[&quot;one&quot;] = 1
+    m[&quot;two&quot;] = 2
+    m[&quot;three&quot;] = 3
+
+    fmt.Println(m) //输出 map[three:3 two:2 one:1] (顺序在运行时可能不一样)
+    fmt.Println(len(m)) //输出 3
+
+    v := m[&quot;two&quot;] //从map里取值
+    fmt.Println(v) // 输出 2
+
+    delete(m, &quot;two&quot;)
+    fmt.Println(m) //输出 map[three:3 one:1]
+
+    m1 := map[string]int{&quot;one&quot;: 1, &quot;two&quot;: 2, &quot;three&quot;: 3}
+    fmt.Println(m1) //输出 map[two:2 three:3 one:1] (顺序在运行时可能不一样)
+
+    for key, val := range m1{
+        fmt.Printf(&quot;%s =&gt; %d \n&quot;, key, val)
+        /*输出：(顺序在运行时可能不一样)
+            three =&gt; 3
+            one =&gt; 1
+            two =&gt; 2*/
+    }
+}
+</pre>
+<h4><span class="ez-toc-section" id="%E6%8C%87%E9%92%88"></span>指针<span class="ez-toc-section-end"></span></h4>
+<p>Go语言一样有指针，看代码</p>
+<pre class="EnlighterJSRAW" data-enlighter-language="golang">
+var i int = 1
+var pInt *int = &amp;i
+//输出：i=1     pInt=0xf8400371b0       *pInt=1
+fmt.Printf(&quot;i=%d\tpInt=%p\t*pInt=%d\n&quot;, i, pInt, *pInt)
+
+*pInt = 2
+//输出：i=2     pInt=0xf8400371b0       *pInt=2
+fmt.Printf(&quot;i=%d\tpInt=%p\t*pInt=%d\n&quot;, i, pInt, *pInt)
+
+i = 3
+//输出：i=3     pInt=0xf8400371b0       *pInt=3
+fmt.Printf(&quot;i=%d\tpInt=%p\t*pInt=%d\n&quot;, i, pInt, *pInt)
+
+</pre>
+<p>Go具有两个分配内存的机制，分别是内建的函数new和make。他们所做的事不同，所应用到的类型也不同，这可能引起混淆，但规则却很简单。</p>
+<h4><span class="ez-toc-section" id="%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D"></span><strong>内存分配 </strong><span class="ez-toc-section-end"></span></h4>
+<p><strong>new</strong> 是一个分配内存的内建函数，但不同于其他语言中同名的new所作的工作，<strong>它只是将内存清零，而不是初始化内存</strong>。new(T)为一个类型为T的新项目分配了值为零的存储空间并返回其地址，也就是一个类型为*T的值。用Go的术语来说，就是<strong>它返回了一个指向新分配的类型为T的零值的指针</strong>。</p>
+<p><code><strong>make</strong>(T, </code><em>args</em><code>)</code>函数的目的与<code>new(T)</code>不同。它仅用于创建切片、map和chan（消息管道），并返回类型<code>T</code>（不是<code>*T</code>）的一个<strong>被初始化了的</strong>（不是<strong>零</strong>）实例。这种差别的出现是由于这三种类型实质上是对在使用前必须进行初始化的数据结构的引用。例如，切片是一个具有三项内容的描述符，包括指向数据（在一个数组内部）的指针、长度以及容量，在这三项内容被初始化之前，切片值为<code>nil</code>。对于切片、映射和信道，<code>make</code>初始化了其内部的数据结构并准备了将要使用的值。如：</p>
+<p>下面的代码分配了一个整型数组，长度为10，容量为100，并返回前10个数组的切片</p>
+<pre class="EnlighterJSRAW" data-enlighter-language="golang">make([]int, 10, 100)</pre>
+<p>以下示例说明了<code>new</code>和<code>make</code>的不同。</p>
+<pre class="EnlighterJSRAW" data-enlighter-language="golang">var p *[]int = new([]int)   // 为切片结构分配内存；*p == nil；很少使用
+var v  []int = make([]int, 10) // 切片v现在是对一个新的有10个整数的数组的引用
+
+// 不必要地使问题复杂化：
+var p *[]int = new([]int)
+fmt.Println(p) //输出：&amp;[]
+*p = make([]int, 10, 10)
+fmt.Println(p) //输出：&amp;[0 0 0 0 0 0 0 0 0 0]
+fmt.Println((*p)[2]) //输出： 0
+
+// 习惯用法:
+v := make([]int, 10)
+fmt.Println(v) //输出：[0 0 0 0 0 0 0 0 0 0]
+</pre>
+<h4><span class="ez-toc-section" id="%E5%87%BD%E6%95%B0"></span>函数<span class="ez-toc-section-end"></span></h4>
+<p>老实说，我对Go语言这种反过来声明变量类型和函数返回值的做法有点不满（保持和C一样的不可以吗? 呵呵）</p>
+<pre class="EnlighterJSRAW" data-enlighter-language="golang">package main
+import &quot;fmt&quot;
+
+func max(a int, b int) int { //注意参数和返回值是怎么声明的
+
+    if a &gt; b {
+        return a
+    }
+    return b
+}
+
+func main(){
+    fmt.Println(max(4, 5))
+}
+
+</pre>
+<p><strong>函数返回多个值</strong></p>
+<p>Go中很多Package 都会返回两个值，一个是正常值，一个是错误，如下所示：</p>
+<pre class="EnlighterJSRAW" data-enlighter-language="golang">package main
+import &quot;fmt&quot;
+
+func main(){
+    v, e := multi_ret(&quot;one&quot;)
+    fmt.Println(v,e) //输出 1 true
+
+    v, e = multi_ret(&quot;four&quot;)
+    fmt.Println(v,e) //输出 0 false
+
+    //通常的用法(注意分号后有e)
+    if v, e = multi_ret(&quot;four&quot;); e {
+        // 正常返回
+    }else{
+        // 出错返回
+    }
+}
+
+func multi_ret(key string) (int, bool){
+    m := map[string]int{&quot;one&quot;: 1, &quot;two&quot;: 2, &quot;three&quot;: 3}
+
+    var err bool
+    var val int
+
+    val, err = m[key]
+
+    return val, err
+}
+</pre>
+<p><strong>函数不定参数</strong></p>
+<p>例子很清楚了，我就不多说了</p>
+<pre class="EnlighterJSRAW" data-enlighter-language="golang">func sum(nums ...int) {
+    fmt.Print(nums, &quot; &quot;)  //输出如 [1, 2, 3] 之类的数组
+    total := 0
+    for _, num := range nums { //要的是值而不是下标
+        total += num
+    }
+    fmt.Println(total)
+}
+func main() {
+    sum(1, 2)
+    sum(1, 2, 3)
+
+    //传数组
+    nums := []int{1, 2, 3, 4}
+    sum(nums...)
+}</pre>
+<p><strong>函数闭包</strong></p>
+<p>nextNum这个函数返回了一个匿名函数，这个匿名函数记住了nextNum中i+j的值，并改变了i,j的值，于是形成了一个闭包的用法</p>
+<pre class="EnlighterJSRAW" data-enlighter-language="golang">func nextNum() func() int {
+    i,j := 1,1
+    return func() int {
+        var tmp = i+j
+        i, j = j, tmp
+        return tmp
+    }
+}
+//main函数中是对nextNum的调用，其主要是打出下一个斐波拉契数
+func main(){
+    nextNumFunc := nextNum()
+    for i:=0; i&lt;10; i++ {
+        fmt.Println(nextNumFunc())
+    }
+}
+</pre>
+<p><strong>函数的递归</strong></p>
+<p>和c基本是一样的</p>
+<pre class="EnlighterJSRAW" data-enlighter-language="golang">func fact(n int) int {
+    if n == 0 {
+        return 1
+    }
+    return n * fact(n-1)
+}
+
+func main() {
+    fmt.Println(fact(7))
+}</pre>
+<h4><span class="ez-toc-section" id="%E7%BB%93%E6%9E%84%E4%BD%93"></span>结构体<span class="ez-toc-section-end"></span></h4>
+<p>Go的结构体和C的基本上一样，不过在初始化时有些不一样，Go支持带名字的初始化。</p>
+<pre class="EnlighterJSRAW" data-enlighter-language="golang">type Person struct {
+    name string
+    age  int
+    email string
+}
+
+func main() {
+    //初始化
+    person := Person{&quot;Tom&quot;, 30, &quot;<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="9ce8f3f1dcfbf1fdf5f0b2fff3f1">[email&#160;protected]</a>&quot;}
+    person = Person{name:&quot;Tom&quot;, age: 30, email:&quot;<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="acd8c3c1eccbc1cdc5c082cfc3c1">[email&#160;protected]</a>&quot;}
+
+    fmt.Println(person) //输出 {Tom 30 <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="c2b6adaf82a5afa3abaeeca1adaf">[email&#160;protected]</a>}
+
+    pPerson := &amp;person
+
+    fmt.Println(pPerson) //输出 &amp;{Tom 30 <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="f4809b99b49399959d98da979b99">[email&#160;protected]</a>}
+
+    pPerson.age = 40
+    person.name = &quot;Jerry&quot;
+    fmt.Println(person) //输出 {Jerry 40 <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="f1859e9cb1969c90989ddf929e9c">[email&#160;protected]</a>}
+}
+</pre>
+<h4><span class="ez-toc-section" id="%E7%BB%93%E6%9E%84%E4%BD%93%E6%96%B9%E6%B3%95"></span>结构体方法<span class="ez-toc-section-end"></span></h4>
+<p>不多说了，看代码吧。</p>
+<p>注意：Go语言中没有public, protected, private的关键字，所以，<strong>如果你想让一个方法可以被别的包访问的话，你需要把这个方法的第一个字母大写。这是一种约定</strong>。</p>
+<pre class="EnlighterJSRAW" data-enlighter-language="golang">type rect struct {
+    width, height int
+}
+
+func (r *rect) area() int { //求面积
+    return r.width * r.height
+}
+
+func (r *rect) perimeter() int{ //求周长
+    return 2*(r.width + r.height)
+}
+
+func main() {
+    r := rect{width: 10, height: 15}
+
+    fmt.Println(&quot;面积: &quot;, r.area())
+    fmt.Println(&quot;周长: &quot;, r.perimeter())
+
+    rp := &amp;r
+    fmt.Println(&quot;面积: &quot;, rp.area())
+    fmt.Println(&quot;周长: &quot;, rp.perimeter())
+}
+</pre>
+<h4><span class="ez-toc-section" id="%E6%8E%A5%E5%8F%A3%E5%92%8C%E5%A4%9A%E6%80%81"></span>接口和多态<span class="ez-toc-section-end"></span></h4>
+<p>接口意味着多态，下面是一个经典的例子，不用多说了，自己看代码吧。</p>
+<pre class="EnlighterJSRAW" data-enlighter-language="golang">//---------- 接 口 --------//
+type shape interface {
+    area() float64 //计算面积
+    perimeter() float64 //计算周长
+}
+
+//--------- 长方形 ----------//
+type rect struct {
+    width, height float64
+}
+
+func (r *rect) area() float64 { //面积
+    return r.width * r.height
+}
+
+func (r *rect) perimeter() float64 { //周长
+    return 2*(r.width + r.height)
+}
+
+//----------- 圆  形 ----------//
+type circle struct {
+    radius float64
+}
+
+func (c *circle) area() float64 { //面积
+    return math.Pi * c.radius * c.radius
+}
+
+func (c *circle) perimeter() float64 { //周长
+    return 2 * math.Pi * c.radius
+}
+
+// ----------- 接口的使用 -----------//
+func interface_test() {
+    r := rect {width:2.9, height:4.8}
+    c := circle {radius:4.3}
+
+    s := []shape{&amp;r, &amp;c} //通过指针实现
+
+    for _, sh := range s {
+        fmt.Println(sh)
+        fmt.Println(sh.area())
+        fmt.Println(sh.perimeter())
+    }
+}
+</pre>
+<h4><span class="ez-toc-section" id="%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86_%E2%80%93_Error%E6%8E%A5%E5%8F%A3"></span>错误处理 &#8211; Error接口<span class="ez-toc-section-end"></span></h4>
+<p>函数错误返回可能是C/C++时最让人纠结的东西的，Go的多值返回可以让我们更容易的返回错误，其可以在返回一个常规的返回值之外，还能轻易地返回一个详细的错误描述。通常情况下，错误的类型是error，它有一个内建的接口。</p>
+<pre class="EnlighterJSRAW" data-enlighter-language="golang">type error interface {
+    Error() string
+}</pre>
+<p>还是看个示例吧：</p>
+<pre class="EnlighterJSRAW" data-enlighter-language="golang">package main
+
+import &quot;fmt&quot;
+import &quot;errors&quot;
+
+//自定义的出错结构
+type myError struct {
+    arg  int
+    errMsg string
+}
+//实现Error接口
+func (e *myError) Error() string {
+    return fmt.Sprintf(&quot;%d - %s&quot;, e.arg, e.errMsg)
+}
+
+//两种出错
+func error_test(arg int) (int, error) {
+    if arg &lt; 0  {
+         return -1, errors.New(&quot;Bad Arguments - negtive!&quot;)
+     }else if arg &gt;256 {
+        return -1, &amp;myError{arg, &quot;Bad Arguments - too large!&quot;}
+    }
+    return arg*arg, nil
+}
+
+//相关的测试
+func main() {
+    for _, i := range []int{-1, 4, 1000} {
+        if r, e := error_test(i); e != nil {
+            fmt.Println(&quot;failed:&quot;, e)
+        } else {
+            fmt.Println(&quot;success:&quot;, r)
+        }
+    }
+}</pre>
+<p>程序运行后输出：</p>
+<pre class="EnlighterJSRAW" data-enlighter-language="shell">failed: Bad Arguments - negtive!
+success: 16
+failed: 1000 - Bad Arguments - too large!
+</pre>
+<h4><span class="ez-toc-section" id="%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86_%E2%80%93_Defer"></span>错误处理 &#8211; Defer<span class="ez-toc-section-end"></span></h4>
+<p>下面的程序对于每一个熟悉C语言的人来说都不陌生（有资源泄露的问题），C++使用RAII来解决这种问题。</p>
+<pre class="EnlighterJSRAW" data-enlighter-language="golang">func CopyFile(dstName, srcName string) (written int64, err error) {
+    src, err := os.Open(srcName)
+    if err != nil {
+        return
+    }
+
+    dst, err := os.Create(dstName)
+    if err != nil {
+        return
+    }
+
+    written, err = io.Copy(dst, src)
+    dst.Close()
+    src.Close()
+    return
+}</pre>
+<p>Go语言引入了Defer来确保那些被打开的文件能被关闭。如下所示：（这种解决方式还是比较优雅的）</p>
+<p>&lt;</p>
+<p>pre class=&#8221;EnlighterJSRAW&#8221; data-enlighter-language=&#8221;golang&#8221; data-enlighter-highlight=&#8221;6,12&#8243;><br/>
+func CopyFile(dstName, srcName string) (written int64, err error) {<br/>
+src, err := os.Open(srcName)<br/>
+if err != nil {<br/>
+return<br/>
+}<br/>
+defer src.Close()</p>
+<pre><code>dst, err := os.Create(dstName)
+if err != nil {
+    return
+}
+defer dst.Close()
+
+return io.Copy(dst, src)
+</code></pre>
+<p>}[/c]</p>
+<p>Go的defer语句预设一个函数调用（延期的函数），该调用在函数执行defer返回时立刻运行。该方法显得不同常规，但却是处理上述情况很有效，无论函数怎样返回，都必须进行资源释放。</p>
+<p>我们再来看一个defer函数的示例：</p>
+<pre class="EnlighterJSRAW" data-enlighter-language="golang">for i := 0; i &lt; 5; i++ {
+    defer fmt.Printf(&quot;%d &quot;, i)
+}</pre>
+<p>被延期的函数以后进先出（LIFO）的顺行执行，因此以上代码在返回时将打印4 3 2 1 0。</p>
+<p>总之，我个人觉得defer的函数行为有点怪异，我现在还没有完全搞清楚。</p>
+<h4><span class="ez-toc-section" id="%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86_%E2%80%93_PanicRecover"></span>错误处理 &#8211; Panic/Recover<span class="ez-toc-section-end"></span></h4>
+<p>对于不可恢复的错误，Go提供了一个内建的panic函数，它将创建一个运行时错误并使程序停止（相当暴力）。该函数接收一个任意类型（往往是字符串）作为程序死亡时要打印的东西。当编译器在函数的结尾处检查到一个panic时，就会停止进行常规的return语句检查。</p>
+<p>下面的仅仅是一个示例。实际的库函数应避免panic。如果问题可以容忍，最好是让事情继续下去而不是终止整个程序。</p>
+<pre class="EnlighterJSRAW" data-enlighter-language="golang">var user = os.Getenv(&quot;USER&quot;)
+
+func init() {
+    if user == &quot;&quot; {
+        panic(&quot;no value for $USER&quot;)
+    }
+}</pre>
+<p>当panic被调用时，它将立即停止当前函数的执行并开始逐级解开函数堆栈，同时运行所有被defer的函数。如果这种解开达到堆栈的顶端，程序就死亡了。但是，也可以使用内建的recover函数来重新获得Go程的控制权并恢复正常的执行。 对recover的调用会通知解开堆栈并返回传递到panic的参量。由于仅在解开期间运行的代码处在被defer的函数之内，recover仅在被延期的函数内部才是有用的。</p>
+<p>你可以简单地理解为recover就是用来捕捉Painc的，防止程序一下子就挂掉了。</p>
+<p>下面是一个例程，很简单了，不解释了</p>
+<pre class="EnlighterJSRAW" data-enlighter-language="golang">func g(i int) {
+    if i&gt;1 {
+        fmt.Println(&quot;Panic!&quot;)
+        panic(fmt.Sprintf(&quot;%v&quot;, i))
+    }
+
+}
+
+func f() {
+    defer func() {
+        if r := recover(); r != nil {
+            fmt.Println(&quot;Recovered in f&quot;, r)
+        }
+    }()
+
+    for i := 0; i &lt; 4; i++ {
+        fmt.Println(&quot;Calling g with &quot;, i)
+        g(i)
+        fmt.Println(&quot;Returned normally from g.&quot;)
+     }
+}
+
+func main() {
+    f()
+    fmt.Println(&quot;Returned normally from f.&quot;)
+}</pre>
+<p>运行结果如下：（我们可以看到Painc后的for循环就没有往下执行了，但是main的程序还在往下走）</p>
+<pre class="EnlighterJSRAW" data-enlighter-language="shell">Calling g with  0
+Returned normally from g.
+Calling g with  1
+Returned normally from g.
+Calling g with  2
+Panic!
+Recovered in f 2
+Returned normally from f.
+</pre>
+<p>你习惯这种编程方式吗？我觉得有点诡异。呵呵。</p>
+<p>好了，上面是是一Go语言相关的编程语法的介绍，我没有事无巨细，只是让你了解一下Go语言是长什么样的。<strong>当然，这还没完，请期待下篇——Go语言的特性</strong>。</p>
+<div style="margin-top: 15px; font-size: 16px;color: #cc0000;">
+<p align="center"><strong>（转载本站文章请注明作者和出处 <a href="https://coolshell.cn/">酷 壳 &#8211; CoolShell</a> ，请勿用于任何商业用途）</strong></p>
+</div>
+<div class="wp_rp_wrap  wp_rp_vertical_m" id="wp_rp_first"><div class="wp_rp_content"><h3 class="related_post_title">相关文章</h3><ul class="related_post wp_rp"><li><a href="https://coolshell.cn/articles/21615.html" class="wp_rp_thumbnail"><img src="https://coolshell.cn/wp-content/uploads/2021/09/go-generics-150x150.png" alt="Go编程模式 ： 泛型编程" width="150" height="150" /></a><a href="https://coolshell.cn/articles/21615.html" class="wp_rp_title">Go编程模式 ： 泛型编程</a></li><li><a href="https://coolshell.cn/articles/21263.html" class="wp_rp_thumbnail"><img src="https://coolshell.cn/wp-content/uploads/2020/12/go.k8s-150x150.png" alt="Go 编程模式：k8s Visitor 模式" width="150" height="150" /></a><a href="https://coolshell.cn/articles/21263.html" class="wp_rp_title">Go 编程模式：k8s Visitor 模式</a></li><li><a href="https://coolshell.cn/articles/21228.html" class="wp_rp_thumbnail"><img src="https://coolshell.cn/wp-content/uploads/2020/12/go.line_.-150x150.png" alt="Go编程模式：Pipeline" width="150" height="150" /></a><a href="https://coolshell.cn/articles/21228.html" class="wp_rp_title">Go编程模式：Pipeline</a></li><li><a href="https://coolshell.cn/articles/21214.html" class="wp_rp_thumbnail"><img src="https://coolshell.cn/wp-content/uploads/2020/12/go.pair_-150x150.png" alt="Go编程模式：委托和反转控制" width="150" height="150" /></a><a href="https://coolshell.cn/articles/21214.html" class="wp_rp_title">Go编程模式：委托和反转控制</a></li><li><a href="https://coolshell.cn/articles/21179.html" class="wp_rp_thumbnail"><img src="https://coolshell.cn/wp-content/uploads/2020/12/go.generate-150x150.png" alt="Go 编程模式：Go Generation" width="150" height="150" /></a><a href="https://coolshell.cn/articles/21179.html" class="wp_rp_title">Go 编程模式：Go Generation</a></li><li><a href="https://coolshell.cn/articles/21164.html" class="wp_rp_thumbnail"><img src="https://coolshell.cn/wp-content/uploads/2020/12/go.map_.reduce-150x150.png" alt="Go编程模式：Map-Reduce" width="150" height="150" /></a><a href="https://coolshell.cn/articles/21164.html" class="wp_rp_title">Go编程模式：Map-Reduce</a></li></ul></div></div>
+<div id="post-ratings-8460" class="post-ratings" itemscope itemtype="https://schema.org/Article" data-nonce="2f4dec62f1"><img id="rating_8460_1" src="https://coolshell.cn/wp-content/plugins/wp-postratings/images/stars_crystal/rating_on.gif" alt="好烂啊" title="好烂啊" onmouseover="if (!window.__cfRLUnblockHandlers) return false; current_rating(8460, 1, '好烂啊');" onmouseout="if (!window.__cfRLUnblockHandlers) return false; ratings_off(4.4, 5, 0);" onclick="if (!window.__cfRLUnblockHandlers) return false; rate_post();" onkeypress="if (!window.__cfRLUnblockHandlers) return false; rate_post();" style="cursor: pointer; border: 0px;" data-cf-modified-292c18e0b4ac1921b092deb2- /><img id="rating_8460_2" src="https://coolshell.cn/wp-content/plugins/wp-postratings/images/stars_crystal/rating_on.gif" alt="有点差" title="有点差" onmouseover="if (!window.__cfRLUnblockHandlers) return false; current_rating(8460, 2, '有点差');" onmouseout="if (!window.__cfRLUnblockHandlers) return false; ratings_off(4.4, 5, 0);" onclick="if (!window.__cfRLUnblockHandlers) return false; rate_post();" onkeypress="if (!window.__cfRLUnblockHandlers) return false; rate_post();" style="cursor: pointer; border: 0px;" data-cf-modified-292c18e0b4ac1921b092deb2- /><img id="rating_8460_3" src="https://coolshell.cn/wp-content/plugins/wp-postratings/images/stars_crystal/rating_on.gif" alt="凑合看看" title="凑合看看" onmouseover="if (!window.__cfRLUnblockHandlers) return false; current_rating(8460, 3, '凑合看看');" onmouseout="if (!window.__cfRLUnblockHandlers) return false; ratings_off(4.4, 5, 0);" onclick="if (!window.__cfRLUnblockHandlers) return false; rate_post();" onkeypress="if (!window.__cfRLUnblockHandlers) return false; rate_post();" style="cursor: pointer; border: 0px;" data-cf-modified-292c18e0b4ac1921b092deb2- /><img id="rating_8460_4" src="https://coolshell.cn/wp-content/plugins/wp-postratings/images/stars_crystal/rating_on.gif" alt="还不错" title="还不错" onmouseover="if (!window.__cfRLUnblockHandlers) return false; current_rating(8460, 4, '还不错');" onmouseout="if (!window.__cfRLUnblockHandlers) return false; ratings_off(4.4, 5, 0);" onclick="if (!window.__cfRLUnblockHandlers) return false; rate_post();" onkeypress="if (!window.__cfRLUnblockHandlers) return false; rate_post();" style="cursor: pointer; border: 0px;" data-cf-modified-292c18e0b4ac1921b092deb2- /><img id="rating_8460_5" src="https://coolshell.cn/wp-content/plugins/wp-postratings/images/stars_crystal/rating_half.gif" alt="很精彩" title="很精彩" onmouseover="if (!window.__cfRLUnblockHandlers) return false; current_rating(8460, 5, '很精彩');" onmouseout="if (!window.__cfRLUnblockHandlers) return false; ratings_off(4.4, 5, 0);" onclick="if (!window.__cfRLUnblockHandlers) return false; rate_post();" onkeypress="if (!window.__cfRLUnblockHandlers) return false; rate_post();" style="cursor: pointer; border: 0px;" data-cf-modified-292c18e0b4ac1921b092deb2- /> (<strong>39</strong> 人打了分，平均分： <strong>4.38</strong> )<br/><span class="post-ratings-text" id="ratings_8460_text"></span><meta itemprop="name" content="Go 语言简介（上）— 语法" /><meta itemprop="headline" content="Go 语言简介（上）— 语法" /><meta itemprop="description" content="周末天气不好，只能宅在家里，于是就顺便看了一下Go语言，觉得比较有意思，所以写篇文章介绍一下。我想写一篇你可以在乘坐地铁或公交车上下班时就可以初步了解一门语言的文章。所以，下面的文章主要是以代码和注释为主。只需要你对C语言，Unix，Python有一点基础，我相信你会在30分钟左右读完并对Go语言有一些初步了解的。
+
+
+
+Hello World
+
+
+//文件名：hello.go
+package m..." /><meta itemprop="datePublished" content="2012-11-06T08:27:48+08:00" /><meta itemprop="dateModified" content="2020-07-06T17:52:01+08:00" /><meta itemprop="url" content="https://coolshell.cn/articles/8460.html" /><meta itemprop="author" content="陈皓" /><meta itemprop="mainEntityOfPage" content="https://coolshell.cn/articles/8460.html" /><div style="display: none;" itemprop="publisher" itemscope itemtype="https://schema.org/Organization"><meta itemprop="name" content="酷 壳 - CoolShell" /><meta itemprop="url" content="https://coolshell.cn" /><div itemprop="logo" itemscope itemtype="https://schema.org/ImageObject"><meta itemprop="url" content /></div></div><div style="display: none;" itemprop="aggregateRating" itemscope itemtype="https://schema.org/AggregateRating"><meta itemprop="bestRating" content="5" /><meta itemprop="worstRating" content="1" /><meta itemprop="ratingValue" content="4.38" /><meta itemprop="ratingCount" content="39" /></div></div><div id="post-ratings-8460-loading" class="post-ratings-loading"><img src="https://coolshell.cn/wp-content/plugins/wp-postratings/images/loading.gif" width="16" height="16" class="post-ratings-image" />Loading...</div>
+</div>
+<footer class="entry-footer">
+<hr><div class="row"><div class="col-md-6 cattegories"><span class="cat-links"><i class="fa fa-folder-open"></i>
+<a href="https://coolshell.cn/category/proglanguage/go-%e8%af%ad%e8%a8%80" rel="category tag">Go 语言</a>, <a href="https://coolshell.cn/category/progdesign" rel="category tag">程序设计</a>, <a href="https://coolshell.cn/category/proglanguage" rel="category tag">编程语言</a></span></div><div class="col-md-6 tags"><span class="tags-links"><i class="fa fa-tags"></i> <a href="https://coolshell.cn/tag/go" rel="tag">Go</a>, <a href="https://coolshell.cn/tag/golang" rel="tag">golang</a></span></div></div> </footer>
+</article>
+
+<div id="related_posts">
+<div class="wp_rp_wrap  wp_rp_vertical_m"><div class="wp_rp_content"><h3 class="related_post_title">相关文章</h3><ul class="related_post wp_rp"><li><a href="https://coolshell.cn/articles/21615.html" class="wp_rp_thumbnail"><img src="https://coolshell.cn/wp-content/uploads/2021/09/go-generics-150x150.png" alt="Go编程模式 ： 泛型编程" width="150" height="150" /></a><a href="https://coolshell.cn/articles/21615.html" class="wp_rp_title">Go编程模式 ： 泛型编程</a></li><li><a href="https://coolshell.cn/articles/21263.html" class="wp_rp_thumbnail"><img src="https://coolshell.cn/wp-content/uploads/2020/12/go.k8s-150x150.png" alt="Go 编程模式：k8s Visitor 模式" width="150" height="150" /></a><a href="https://coolshell.cn/articles/21263.html" class="wp_rp_title">Go 编程模式：k8s Visitor 模式</a></li><li><a href="https://coolshell.cn/articles/21228.html" class="wp_rp_thumbnail"><img src="https://coolshell.cn/wp-content/uploads/2020/12/go.line_.-150x150.png" alt="Go编程模式：Pipeline" width="150" height="150" /></a><a href="https://coolshell.cn/articles/21228.html" class="wp_rp_title">Go编程模式：Pipeline</a></li><li><a href="https://coolshell.cn/articles/21214.html" class="wp_rp_thumbnail"><img src="https://coolshell.cn/wp-content/uploads/2020/12/go.pair_-150x150.png" alt="Go编程模式：委托和反转控制" width="150" height="150" /></a><a href="https://coolshell.cn/articles/21214.html" class="wp_rp_title">Go编程模式：委托和反转控制</a></li><li><a href="https://coolshell.cn/articles/21179.html" class="wp_rp_thumbnail"><img src="https://coolshell.cn/wp-content/uploads/2020/12/go.generate-150x150.png" alt="Go 编程模式：Go Generation" width="150" height="150" /></a><a href="https://coolshell.cn/articles/21179.html" class="wp_rp_title">Go 编程模式：Go Generation</a></li><li><a href="https://coolshell.cn/articles/21164.html" class="wp_rp_thumbnail"><img src="https://coolshell.cn/wp-content/uploads/2020/12/go.map_.reduce-150x150.png" alt="Go编程模式：Map-Reduce" width="150" height="150" /></a><a href="https://coolshell.cn/articles/21164.html" class="wp_rp_title">Go编程模式：Map-Reduce</a></li></ul></div></div>
+</div><div class="fixed"></div> 
+</main>
+<div class="post-navigation">
+<nav class="navigation" role="navigation">
+<h2 class="screen-reader-text">Post navigation</h2>
+<div class="nav-links">
+<div class="row">
+
+<div class="col-md-6 next-post">
+<a class href="https://coolshell.cn/articles/8489.html"><span class="next-prev-text"><i class="fa fa-angle-left"></i>
+上一篇</span><br>Go 语言简介（下）— 特性</a>
+</div>
+
+<div class="col-md-6 prev-post">
+<a class href="https://coolshell.cn/articles/8422.html"><span class="next-prev-text">下一篇 <i class="fa fa-angle-right"></i>
+</span><br>TF-IDF模型的概率解释</a>
+</div>
+</div>
+</div>
+</nav>
+</div>
+<div class="post-comments">
+<div id="comments" class="comments-area">
+<h2 class="comments-title">
+《<span>Go 语言简介（上）— 语法</span>》的相关评论 </h2>
+<ol class="comment-list">
+<li id="comment-1317241" class="pingback even thread-even depth-1">
+<div class="comment-body">
+Pingback： <a href="https://zend-bbxyard.rhcloud.com/blog/2014/02/%e8%bd%acawk-%e7%ae%80%e6%98%8e%e6%95%99%e7%a8%8b/" class="url" rel="ugc external nofollow">[转]AWK 简明教程 | bbxyard</a> </div>
+</li>
+<li id="comment-1409283" class="pingback odd alt thread-odd thread-alt depth-1">
+<div class="comment-body">
+Pingback： <a href="http://www.tuluobo.com/articles/108.html" class="url" rel="ugc external nofollow">5-8年共语言将超越java，成为语言排行榜第一 | 秃萝卜——TuLuobo.com站点</a> </div>
+</li>
+<li id="comment-1433119" class="comment even thread-even depth-1">
+<article id="div-comment-1433119" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/5796a601c1efe1af01e5d3881cf91961?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/5796a601c1efe1af01e5d3881cf91961?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn">故城</b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/8460.html/comment-page-3#comment-1433119"><time datetime="2014-04-18T19:22:48+08:00">2014年04月18日 19:22</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>耗子蜀黍阿里现在用go应用在哪些场景啊？</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/8460.html/comment-page-3?replytocom=1433119#respond" data-commentid="1433119" data-postid="8460" data-belowelement="div-comment-1433119" data-respondelement="respond" data-replyto="回复给故城" aria-label="回复给故城">回复</a></div> </article>
+</li>
+<li id="comment-1446140" class="comment odd alt thread-odd thread-alt depth-1">
+<article id="div-comment-1446140" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/c40cb540178da068b4cc1ea2aa56cefa?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/c40cb540178da068b4cc1ea2aa56cefa?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn">枫杰</b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/8460.html/comment-page-3#comment-1446140"><time datetime="2014-04-25T15:45:37+08:00">2014年04月25日 15:45</time></a> </div>
+</footer>
+<div class="comment-content">
+<p><a href="#comment-1185297" rel="nofollow">@惠盈盈 </a><br/>
+你的两句defer，显然后面那句defer没有被运行，因为前面已经return 1了，后面的代码执行不了<br/>
+因此实际上只有一次defer</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/8460.html/comment-page-3?replytocom=1446140#respond" data-commentid="1446140" data-postid="8460" data-belowelement="div-comment-1446140" data-respondelement="respond" data-replyto="回复给枫杰" aria-label="回复给枫杰">回复</a></div> </article>
+</li>
+<li id="comment-1447643" class="pingback even thread-even depth-1">
+<div class="comment-body">
+Pingback： <a href="http://blog.ithomer.net/2013/11/simple-awk-tutorial/" class="url" rel="ugc external nofollow">IT-Homer 博客 &raquo; awk 简明教程</a> </div>
+</li>
+<li id="comment-1469452" class="pingback odd alt thread-odd thread-alt depth-1">
+<div class="comment-body">
+Pingback： <a href="http://www.ourgarden.cn/linux%e4%b8%8b%e7%9a%84%e4%b8%89%e5%a4%a7%e6%96%87%e6%9c%ac%e5%a4%84%e7%90%86%e5%b7%a5%e5%85%b7%ef%bc%9agrep%e3%80%81sed%e5%92%8cawk%ef%bc%88%e4%b8%89%ef%bc%89-awk/" class="url" rel="ugc external nofollow">linux下的三大文本处理工具：grep、sed和awk（三）——awk | 草帽的后花园</a> </div>
+</li>
+<li id="comment-1483920" class="pingback even thread-even depth-1">
+<div class="comment-body">
+Pingback： <a href="http://blog.foolbird.net/4380.html" class="url" rel="ugc external nofollow">AWK简明教程 | Maker&#039;s blog</a> </div>
+</li>
+<li id="comment-1489890" class="pingback odd alt thread-odd thread-alt depth-1">
+<div class="comment-body">
+Pingback： <a href="http://blog.makaidong.com/29358.html" class="url" rel="ugc external nofollow">Lua简明教程 &#8211; 马开东博客</a> </div>
+</li>
+<li id="comment-1493404" class="pingback even thread-even depth-1">
+<div class="comment-body">
+Pingback： <a href="http://www.leoncode.com/archives/148" class="url" rel="ugc external nofollow">go语言 | Leon的代码世界</a> </div>
+</li>
+<li id="comment-1493464" class="pingback odd alt thread-odd thread-alt depth-1">
+<div class="comment-body">
+Pingback： <a href="http://skynetdoc.com/?p=127" class="url" rel="ugc external nofollow">go开始 | skynetdoc</a> </div>
+</li>
+<li id="comment-1638584" class="pingback even thread-even depth-1">
+<div class="comment-body">
+Pingback： <a href="http://www.tuluobo.com/2014/02/02/60" class="url" rel="ugc external nofollow">秃萝卜——一名程序猿</a> </div>
+</li>
+<li id="comment-1681345" class="comment odd alt thread-odd thread-alt depth-1">
+<article id="div-comment-1681345" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/697cb9fd4571c280de158cb433da223a?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/697cb9fd4571c280de158cb433da223a?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn">Nixus</b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/8460.html/comment-page-3#comment-1681345"><time datetime="2015-03-27T09:57:49+08:00">2015年03月27日 09:57</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>想请问陈老师两个问题：想成为一个优秀的程序员，必须要会或精通C/C++和Unix吗？为什么？</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/8460.html/comment-page-3?replytocom=1681345#respond" data-commentid="1681345" data-postid="8460" data-belowelement="div-comment-1681345" data-respondelement="respond" data-replyto="回复给Nixus" aria-label="回复给Nixus">回复</a></div> </article>
+</li>
+<li id="comment-1695732" class="comment even thread-even depth-1">
+<article id="div-comment-1695732" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/656c5da4c213f24f4863b6bef71f5016?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/656c5da4c213f24f4863b6bef71f5016?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn"><a href="http://vimer.me" class="url" rel="ugc external nofollow">疯哥</a></b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/8460.html/comment-page-3#comment-1695732"><time datetime="2015-04-23T15:01:46+08:00">2015年04月23日 15:01</time></a> </div>
+</footer>
+<div class="comment-content">
+<p><a href="#comment-1681345" rel="nofollow">@Nixus </a><br/>
+因为C是所有语言的基础，涉及到内存的操作，而unix更适合让你去了解操作系统</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/8460.html/comment-page-3?replytocom=1695732#respond" data-commentid="1695732" data-postid="8460" data-belowelement="div-comment-1695732" data-respondelement="respond" data-replyto="回复给疯哥" aria-label="回复给疯哥">回复</a></div> </article>
+</li>
+<li id="comment-1722172" class="pingback odd alt thread-odd thread-alt depth-1">
+<div class="comment-body">
+Pingback： <a href="http://www.molloc.com/archives/468" class="url" rel="ugc external nofollow">AWK 简明教程 | 求知若饥，虚心若愚</a> </div>
+</li>
+<li id="comment-1762375" class="pingback even thread-even depth-1">
+<div class="comment-body">
+Pingback： <a href="http://www.hezhizhong.com/awk-%e7%ae%80%e6%98%8e%e6%95%99%e7%a8%8b/" class="url" rel="ugc external nofollow">AWK 简明教程-致中和共</a> </div>
+</li>
+<li id="comment-1806558" class="pingback odd alt thread-odd thread-alt depth-1">
+<div class="comment-body">
+Pingback： <a href="http://www.zhangweijie.net/?p=2228" class="url" rel="ugc external nofollow">维摩诘</a> </div>
+</li>
+<li id="comment-1810136" class="comment even thread-even depth-1">
+<article id="div-comment-1810136" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/22147a4b9bb949f46fb9a1c1308c78b9?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/22147a4b9bb949f46fb9a1c1308c78b9?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn">salt</b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/8460.html/comment-page-3#comment-1810136"><time datetime="2016-02-23T15:09:54+08:00">2016年02月23日 15:09</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>defer在error的情况下return了，不会被执行，还是会资源泄露，希望耗子哥抽时间改一下</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/8460.html/comment-page-3?replytocom=1810136#respond" data-commentid="1810136" data-postid="8460" data-belowelement="div-comment-1810136" data-respondelement="respond" data-replyto="回复给salt" aria-label="回复给salt">回复</a></div> </article>
+</li>
+<li id="comment-1812199" class="pingback odd alt thread-odd thread-alt depth-1">
+<div class="comment-body">
+Pingback： <a href="http://www.virtclouds.com/183.html" class="url" rel="ugc external nofollow">Linux命令—AWK 简明教程 | virtclouds</a> </div>
+</li>
+<li id="comment-1816184" class="pingback even thread-even depth-1">
+<div class="comment-body">
+Pingback： <a href="http://www.superman2014.com/2016/03/31/%e6%88%91%e4%b9%9f%e5%bc%80%e5%a7%8b%e5%ad%a6%e4%b9%a0go%e4%ba%86/" class="url" rel="ugc external nofollow">我也开始学习Go了 &#8211; 日光溪流</a> </div>
+</li>
+<li id="comment-1825396" class="pingback odd alt thread-odd thread-alt depth-1">
+<div class="comment-body">
+Pingback： <a href="http://www.codeba.cc/lua%e7%ae%80%e6%98%8e%e6%95%99%e7%a8%8b-codeba-cc.html" class="url" rel="ugc external nofollow">Lua简明教程 | Codeba.cc | Codeba</a> </div>
+</li>
+<li id="comment-1869323" class="pingback even thread-even depth-1">
+<div class="comment-body">
+Pingback： <a href="http://blog.17haha.net/772/" class="url" rel="ugc external nofollow">AWK 简明教程 &#8211; 17haha-blog</a> </div>
+</li>
+<li id="comment-1891950" class="pingback odd alt thread-odd thread-alt depth-1">
+<div class="comment-body">
+Pingback： <a href="http://www.appao.top/awk-%e7%ae%80%e6%98%8e%e6%95%99%e7%a8%8b.html" class="url" rel="ugc external nofollow">AWK 简明教程-运维博客</a> </div>
+</li>
+<li id="comment-1904454" class="pingback even thread-even depth-1">
+<div class="comment-body">
+Pingback： <a href="http://blog.bg7ezy.com/2016/12/01/awk-%e7%ae%80%e6%98%8e%e6%95%99%e7%a8%8b-%e9%85%b7-%e5%a3%b3-coolshell-cn/" class="url" rel="ugc external nofollow">AWK 简明教程 | 酷 壳 &#8211; CoolShell.cn &#8211; Bg7ezy&#039;s Blog</a> </div>
+</li>
+<li id="comment-1906582" class="pingback odd alt thread-odd thread-alt depth-1">
+<div class="comment-body">
+Pingback： <a href="http://swiftshadow.cc/%e8%bd%acawk-%e7%ae%80%e6%98%8e%e6%95%99%e7%a8%8b/" class="url" rel="ugc external nofollow">(转)AWK 简明教程 &#8211; 掠影</a> </div>
+</li>
+<li id="comment-1914756" class="pingback even thread-even depth-1">
+<div class="comment-body">
+Pingback： <a href="http://www.kayenre.com/go%e8%af%ad%e8%a8%80%e7%9a%84%e4%bf%ae%e9%a5%b0%e5%99%a8%e7%bc%96%e7%a8%8b/" class="url" rel="ugc external nofollow">Go语言的修饰器编程 &#8211; KAYENRE Technology</a> </div>
+</li>
+<li id="comment-1916997" class="pingback odd alt thread-odd thread-alt depth-1">
+<div class="comment-body">
+Pingback： <a href="https://0x1024.com/?p=52" class="url" rel="ugc external nofollow">Go语言的修饰器编程 &#8211; IT青年文摘</a> </div>
+</li>
+<li id="comment-1934744" class="pingback even thread-even depth-1">
+<div class="comment-body">
+Pingback： <a href="http://wp.huangshiyang.com/awk-%e7%ae%80%e6%98%8e%e6%95%99%e7%a8%8b" class="url" rel="ugc external nofollow">AWK 简明教程 &#8211; Huang Shiyang</a> </div>
+</li>
+<li id="comment-2108418" class="pingback odd alt thread-odd thread-alt depth-1">
+<div class="comment-body">
+Pingback： <a href="http://www.hongbaozixun.com/46571.html" class="url" rel="ugc external nofollow">Go语言、Docker 和新技术 - 微信红包网</a> </div>
+</li>
+<li id="comment-2128286" class="pingback even thread-even depth-1">
+<div class="comment-body">
+Pingback： <a href="https://coolshell.cn/articles/8489.html" class="url" rel="ugc">Go 语言简介（下）— 特性 | | 酷 壳 - CoolShell</a> </div>
+</li>
+<li id="comment-2187478" class="pingback odd alt thread-odd thread-alt depth-1">
+<div class="comment-body">
+Pingback： <a href="https://coolshell.cn/articles/21128.html" class="url" rel="ugc">Go编程模式：切片，接口，时间和性能 | 酷 壳 - CoolShell</a> </div>
+</li>
+<li id="comment-2199059" class="comment even thread-even depth-1">
+<article id="div-comment-2199059" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/79dea16e70052c32faa390f13f2750a6?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/79dea16e70052c32faa390f13f2750a6?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn">s</b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/8460.html/comment-page-3#comment-2199059"><time datetime="2021-01-27T17:03:41+08:00">2021年01月27日 17:03</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>单词拼错了<br/>
+错误处理 – Error接口<br/>
+19 行 negative</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/8460.html/comment-page-3?replytocom=2199059#respond" data-commentid="2199059" data-postid="8460" data-belowelement="div-comment-2199059" data-respondelement="respond" data-replyto="回复给s" aria-label="回复给s">回复</a></div> </article>
+</li>
+<li id="comment-2370813" class="pingback odd alt thread-odd thread-alt depth-1">
+<div class="comment-body">
+Pingback： <a href="https://www.seoos.net/9146.html" class="url" rel="ugc external nofollow">Lua简明教程 - SEOOS技术门户</a> </div>
+</li>
+</ol>
+<nav class="navigation comment-navigation" role="navigation">
+<h2 class="screen-reader-text">Comment navigation</h2>
+<div class="nav-links">
+<div id="commentnavi">
+<span class="pages"><i class="fa fa-comments"></i> 评论分页</span>
+<div id="commentpager">
+<a class="prev page-numbers" href="https://coolshell.cn/articles/8460.html/comment-page-2#comments">&laquo; 上一页</a>
+<a class="page-numbers" href="https://coolshell.cn/articles/8460.html/comment-page-1#comments">1</a>
+<a class="page-numbers" href="https://coolshell.cn/articles/8460.html/comment-page-2#comments">2</a>
+<span aria-current="page" class="page-numbers current">3</span> <span id="cp_post_id">8460</span>
+</div>
+<div class="fixed"></div>
+</div>
+</div>
+</nav>
+<div id="respond" class="comment-respond">
+<h3 id="reply-title" class="comment-reply-title">发表回复 <small><a rel="nofollow" id="cancel-comment-reply-link" href="/articles/8460.html#respond" style="display:none;">取消回复</a></small></h3><form action="https://coolshell.cn/wp-comments-post.php" method="post" id="commentform" class="comment-form" novalidate><p class="comment-notes"><span id="email-notes">您的电子邮箱地址不会被公开。</span> <span class="required-field-message">必填项已用<span class="required">*</span>标注</span></p><p class="comment-form-comment"><label for="comment">评论 <span class="required">*</span></label> <textarea id="comment" name="comment" cols="45" rows="8" maxlength="65525" required></textarea></p><p class="comment-form-author"><label for="author">显示名称 <span class="required">*</span></label> <input id="author" name="author" type="text" value size="30" maxlength="245" autocomplete="name" required /></p>
+<p class="comment-form-email"><label for="email">电子邮箱地址 <span class="required">*</span></label> <input id="email" name="email" type="email" value size="30" maxlength="100" aria-describedby="email-notes" autocomplete="email" required /></p>
+<p class="comment-form-url"><label for="url">网站地址</label> <input id="url" name="url" type="url" value size="30" maxlength="200" autocomplete="url" /></p>
+<p class="form-submit"><input name="submit" type="submit" id="submit" class="submit" value="发表评论" /> <input type="hidden" name="comment_post_ID" value="8460" id="comment_post_ID" />
+<input type="hidden" name="comment_parent" id="comment_parent" value="0" />
+</p><p style="display: none;"><input type="hidden" id="akismet_comment_nonce" name="akismet_comment_nonce" value="3c2ce15d18" /></p><p style="display: none !important;"><label>&#916;<textarea name="ak_hp_textarea" cols="45" rows="8" maxlength="100"></textarea></label><input type="hidden" id="ak_js_1" name="ak_js" value="33" /><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script type="292c18e0b4ac1921b092deb2-text/javascript">document.getElementById( "ak_js_1" ).setAttribute( "value", ( new Date() ).getTime() );</script></p></form> </div>
+</div>
+</div>
+</div>
+<div id="secondary" class="col-md-3 hidden-sm hidden-xs sidebar widget-area" role="complementary">
+<aside id="search-9" class="widget widget_search">
+<form role="search" method="get" class="search-form" action="https://coolshell.cn/">
+<label>
+<span class="screen-reader-text">Search for:</span>
+<input type="search" class="search-field" placeholder="Search &hellip;" value name="s" title="Search for:" />
+</label>
+<button type="submit" class="search-submit"><span class="screen-reader-text">Search</span></button>
+</form>
+</aside><aside id="custom_html-3" class="widget_text widget widget_custom_html"><h4 class="widget-title">本站公告</h4><div class="textwidget custom-html-widget"><p align="center"><a class="twitter" href="https://twitter.com/haoel" target="_blank" rel="noopener"> Twitter @haoel </a></p>
+
+<p align="center">极客时间专栏<br><a href="http://gk.link/a/10sBp" target="_blank" rel="noopener"><img src="https://coolshell.cn/wp-content/uploads/2021/06/8311623409583_.pic_hd-1024x1024.jpg" height="200" weight="200" alt="极客时间专栏" title="极客时间专栏"></a></p>
+
+</div></aside>
+<aside id="recent-posts-4" class="widget widget_recent_entries">
+<h4 class="widget-title">最新文章</h4>
+<ul>
+<li>
+<a href="https://coolshell.cn/articles/22422.html">是微服务架构不香还是云不香？</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/22398.html">我看ChatGPT: 为啥谷歌掉了千亿美金</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/22367.html">聊聊 nostr 和 审查</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/22341.html">感染新冠的经历</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/22320.html">eBPF 介绍</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/22298.html">聊聊团队协同和协同工具</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/22263.html">从一次经历谈 TIME_WAIT 的那些事</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/22242.html">ETCD的内存问题</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/22173.html">“一把梭：REST API 全用 POST”</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/22157.html">谈谈公司对员工的监控</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/21708.html">网络数字身份认证术</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/21672.html">我做系统架构的一些原则</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/21649.html">源代码特洛伊木马攻击</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/21615.html">Go编程模式 ： 泛型编程</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/21589.html">如何做一个有质量的技术分享</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/21263.html">Go 编程模式：k8s Visitor 模式</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/21228.html">Go编程模式：Pipeline</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/21214.html">Go编程模式：委托和反转控制</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/21179.html">Go 编程模式：Go Generation</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/21164.html">Go编程模式：Map-Reduce</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/21146.html">Go 编程模式：Functional Options</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/21140.html">Go 编程模式：错误处理</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/21128.html">Go编程模式：切片，接口，时间和性能</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/21113.html">百度为什么掉队了</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/20977.html">程序员如何把控自己的职业</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/21003.html">计时攻击 Timing Attacks</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/20845.html">Rust语言的编程范式</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/20793.html">与程序员相关的CPU缓存知识</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/20765.html">MegaEase的远程工作文化</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/20533.html">使用简单的逻辑方法进行独立思考</a>
+</li>
+</ul>
+</aside><aside id="views-6" class="widget widget_views"><h4 class="widget-title">全站热门</h4><ul>
+<li><a href="https://coolshell.cn/articles/4990.html" title="程序员技术练级攻略 - 10,239,243 人阅读">程序员技术练级攻略</a></li><li><a href="https://coolshell.cn/articles/3961.html" title="&ldquo;火柴棍式&rdquo;程序员面试题 - 2,356,333 人阅读">&ldquo;火柴棍式&rdquo;程序员面试题</a></li><li><a href="https://coolshell.cn/articles/5426.html" title="简明 Vim 练级攻略 - 1,325,234 人阅读">简明 Vim 练级攻略</a></li><li><a href="https://coolshell.cn/articles/9308.html" title="&ldquo;作环保的程序员，从不用百度开始&rdquo; - 589,218 人阅读">&ldquo;作环保的程序员，从不用百度开始&rdquo;</a></li><li><a href="https://coolshell.cn/articles/11564.html" title="TCP 的那些事儿（上） - 488,674 人阅读">TCP 的那些事儿（上）</a></li><li><a href="https://coolshell.cn/articles/9070.html" title="AWK 简明教程 - 453,301 人阅读">AWK 简明教程</a></li><li><a href="https://coolshell.cn/articles/7186.html" title="做个环保主义的程序员 - 447,229 人阅读">做个环保主义的程序员</a></li><li><a href="https://coolshell.cn/articles/10688.html" title="编程能力与编程年龄 - 416,626 人阅读">编程能力与编程年龄</a></li><li><a href="https://coolshell.cn/articles/10590.html" title="二维码的生成细节和原理 - 393,754 人阅读">二维码的生成细节和原理</a></li><li><a href="https://coolshell.cn/articles/9104.html" title="sed 简明教程 - 380,240 人阅读">sed 简明教程</a></li><li><a href="https://coolshell.cn/articles/4102.html" title="如何学好C语言 - 368,379 人阅读">如何学好C语言</a></li><li><a href="https://coolshell.cn/articles/19464.html" title="如何超过大多数人 - 314,037 人阅读">如何超过大多数人</a></li><li><a href="https://coolshell.cn/articles/17583.html" title="技术人员的发展之路 - 308,304 人阅读">技术人员的发展之路</a></li><li><a href="https://coolshell.cn/articles/9606.html" title="疫苗：Java HashMap的死循环 - 305,393 人阅读">疫苗：Java HashMap的死循环</a></li><li><a href="https://coolshell.cn/articles/6470.html" title="由12306.cn谈谈网站性能技术 - 298,923 人阅读">由12306.cn谈谈网站性能技术</a></li><li><a href="https://coolshell.cn/articles/8883.html" title="应该知道的Linux技巧 - 296,731 人阅读">应该知道的Linux技巧</a></li><li><a href="https://coolshell.cn/articles/17416.html" title="缓存更新的套路 - 293,598 人阅读">缓存更新的套路</a></li><li><a href="https://coolshell.cn/articles/10910.html" title="分布式系统的事务处理 - 284,600 人阅读">分布式系统的事务处理</a></li><li><a href="https://coolshell.cn/articles/11609.html" title="TCP 的那些事儿（下） - 284,345 人阅读">TCP 的那些事儿（下）</a></li><li><a href="https://coolshell.cn/articles/2250.html" title="&ldquo;21天教你学会C++&rdquo; - 278,582 人阅读">&ldquo;21天教你学会C++&rdquo;</a></li><li><a href="https://coolshell.cn/articles/8239.html" title="无锁队列的实现 - 274,266 人阅读">无锁队列的实现</a></li><li><a href="https://coolshell.cn/articles/20276.html" title="别让自己&ldquo;墙&rdquo;了自己 - 271,072 人阅读">别让自己&ldquo;墙&rdquo;了自己</a></li><li><a href="https://coolshell.cn/articles/10739.html" title="Lua简明教程 - 269,324 人阅读">Lua简明教程</a></li><li><a href="https://coolshell.cn/articles/7490.html" title="性能调优攻略 - 257,245 人阅读">性能调优攻略</a></li><li><a href="https://coolshell.cn/articles/1846.html" title="MySQL性能优化的最佳20+条经验 - 255,735 人阅读">MySQL性能优化的最佳20+条经验</a></li><li><a href="https://coolshell.cn/articles/4758.html" title="如何写出无法维护的代码 - 254,077 人阅读">如何写出无法维护的代码</a></li><li><a href="https://coolshell.cn/articles/914.html" title="6个变态的C语言Hello World程序 - 251,854 人阅读">6个变态的C语言Hello World程序</a></li><li><a href="https://coolshell.cn/articles/17010.html" title="Docker基础技术：Linux Namespace（上） - 241,765 人阅读">Docker基础技术：Linux Namespace（上）</a></li><li><a href="https://coolshell.cn/articles/7829.html" title="28个Unix/Linux的命令行神器 - 241,187 人阅读">28个Unix/Linux的命令行神器</a></li><li><a href="https://coolshell.cn/articles/11312.html" title="无插件Vim编程技巧 - 222,778 人阅读">无插件Vim编程技巧</a></li></ul>
+</aside><aside id="categories-367921425" class="widget widget_categories"><h4 class="widget-title">分类</h4>
+<ul>
+<li class="cat-item cat-item-195"><a href="https://coolshell.cn/category/itnews">业界新闻</a> (33)
+</li>
+<li class="cat-item cat-item-509"><a href="https://coolshell.cn/category/%e4%bc%81%e4%b8%9a%e5%ba%94%e7%94%a8">企业应用</a> (2)
+</li>
+<li class="cat-item cat-item-9"><a href="https://coolshell.cn/category/technews">技术新闻</a> (38)
+</li>
+<li class="cat-item cat-item-550"><a href="https://coolshell.cn/category/%e6%8a%80%e6%9c%af%e7%ae%a1%e7%90%86">技术管理</a> (19)
+</li>
+<li class="cat-item cat-item-12"><a href="https://coolshell.cn/category/techarticle">技术读物</a> (125)
+</li>
+<li class="cat-item cat-item-18"><a href="https://coolshell.cn/category/operatingsystem">操作系统</a> (97)
+<ul class="children">
+<li class="cat-item cat-item-20"><a href="https://coolshell.cn/category/operatingsystem/unixlinux">Unix/Linux</a> (81)
+</li>
+<li class="cat-item cat-item-19"><a href="https://coolshell.cn/category/operatingsystem/mswindows">Windows</a> (12)
+</li>
+</ul>
+</li>
+<li class="cat-item cat-item-105"><a href="https://coolshell.cn/category/datebase">数据库</a> (11)
+</li>
+<li class="cat-item cat-item-10"><a href="https://coolshell.cn/category/misc">杂项资源</a> (295)
+</li>
+<li class="cat-item cat-item-15"><a href="https://coolshell.cn/category/process">流程方法</a> (48)
+</li>
+<li class="cat-item cat-item-23"><a href="https://coolshell.cn/category/progdesign">程序设计</a> (110)
+</li>
+<li class="cat-item cat-item-602"><a href="https://coolshell.cn/category/%e7%b3%bb%e7%bb%9f%e6%9e%b6%e6%9e%84">系统架构</a> (15)
+</li>
+<li class="cat-item cat-item-1"><a href="https://coolshell.cn/category/tools">编程工具</a> (67)
+</li>
+<li class="cat-item cat-item-3"><a href="https://coolshell.cn/category/proglanguage">编程语言</a> (326)
+<ul class="children">
+<li class="cat-item cat-item-189"><a href="https://coolshell.cn/category/proglanguage/dotnet">.NET编程</a> (3)
+</li>
+<li class="cat-item cat-item-8"><a href="https://coolshell.cn/category/proglanguage/ajaxdev">Ajax开发</a> (9)
+</li>
+<li class="cat-item cat-item-5"><a href="https://coolshell.cn/category/proglanguage/cplusplus">C/C++语言</a> (74)
+</li>
+<li class="cat-item cat-item-186"><a href="https://coolshell.cn/category/proglanguage/erlang">Erlang</a> (1)
+</li>
+<li class="cat-item cat-item-819"><a href="https://coolshell.cn/category/proglanguage/go-%e8%af%ad%e8%a8%80">Go 语言</a> (15)
+</li>
+<li class="cat-item cat-item-4"><a href="https://coolshell.cn/category/proglanguage/javadev">Java语言</a> (32)
+</li>
+<li class="cat-item cat-item-11"><a href="https://coolshell.cn/category/proglanguage/phpdev">PHP脚本</a> (11)
+</li>
+<li class="cat-item cat-item-33"><a href="https://coolshell.cn/category/proglanguage/pythondev">Python</a> (23)
+</li>
+<li class="cat-item cat-item-100"><a href="https://coolshell.cn/category/proglanguage/rubydev">Ruby</a> (5)
+</li>
+<li class="cat-item cat-item-860"><a href="https://coolshell.cn/category/proglanguage/rust-%e8%af%ad%e8%a8%80">Rust 语言</a> (1)
+</li>
+<li class="cat-item cat-item-7"><a href="https://coolshell.cn/category/proglanguage/webdev">Web开发</a> (106)
+</li>
+</ul>
+</li>
+<li class="cat-item cat-item-6"><a href="https://coolshell.cn/category/netsecurity">网络安全</a> (36)
+</li>
+<li class="cat-item cat-item-39"><a href="https://coolshell.cn/category/career">职场生涯</a> (40)
+</li>
+<li class="cat-item cat-item-271"><a href="https://coolshell.cn/category/funny">趣味问题</a> (19)
+</li>
+<li class="cat-item cat-item-52"><a href="https://coolshell.cn/category/story">轶事趣闻</a> (147)
+</li>
+</ul>
+</aside><aside id="tag_cloud-4" class="widget widget_tag_cloud"><h4 class="widget-title">标签</h4><div class="tagcloud"><a href="https://coolshell.cn/tag/agile" class="tag-cloud-link tag-link-17 tag-link-position-1" style="font-size: 11.559322033898pt;" aria-label="agile (15个项目)">agile</a>
+<a href="https://coolshell.cn/tag/ajax" class="tag-cloud-link tag-link-34 tag-link-position-2" style="font-size: 10.135593220339pt;" aria-label="AJAX (11个项目)">AJAX</a>
+<a href="https://coolshell.cn/tag/algorithm" class="tag-cloud-link tag-link-76 tag-link-position-3" style="font-size: 14.28813559322pt;" aria-label="Algorithm (26个项目)">Algorithm</a>
+<a href="https://coolshell.cn/tag/android" class="tag-cloud-link tag-link-145 tag-link-position-4" style="font-size: 10.135593220339pt;" aria-label="Android (11个项目)">Android</a>
+<a href="https://coolshell.cn/tag/bash" class="tag-cloud-link tag-link-190 tag-link-position-5" style="font-size: 9.1864406779661pt;" aria-label="Bash (9个项目)">Bash</a>
+<a href="https://coolshell.cn/tag/c" class="tag-cloud-link tag-link-59 tag-link-position-6" style="font-size: 20.694915254237pt;" aria-label="C++ (93个项目)">C++</a>
+<a href="https://coolshell.cn/tag/coding" class="tag-cloud-link tag-link-135 tag-link-position-7" style="font-size: 14.28813559322pt;" aria-label="Coding (26个项目)">Coding</a>
+<a href="https://coolshell.cn/tag/css" class="tag-cloud-link tag-link-96 tag-link-position-8" style="font-size: 13.457627118644pt;" aria-label="CSS (22个项目)">CSS</a>
+<a href="https://coolshell.cn/tag/design" class="tag-cloud-link tag-link-71 tag-link-position-9" style="font-size: 13.932203389831pt;" aria-label="Design (24个项目)">Design</a>
+<a href="https://coolshell.cn/tag/design-pattern" class="tag-cloud-link tag-link-25 tag-link-position-10" style="font-size: 9.6610169491525pt;" aria-label="design pattern (10个项目)">design pattern</a>
+<a href="https://coolshell.cn/tag/ebook" class="tag-cloud-link tag-link-101 tag-link-position-11" style="font-size: 11.559322033898pt;" aria-label="ebook (15个项目)">ebook</a>
+<a href="https://coolshell.cn/tag/flash" class="tag-cloud-link tag-link-98 tag-link-position-12" style="font-size: 8pt;" aria-label="Flash (7个项目)">Flash</a>
+<a href="https://coolshell.cn/tag/game" class="tag-cloud-link tag-link-125 tag-link-position-13" style="font-size: 9.1864406779661pt;" aria-label="Game (9个项目)">Game</a>
+<a href="https://coolshell.cn/tag/go" class="tag-cloud-link tag-link-238 tag-link-position-14" style="font-size: 13.220338983051pt;" aria-label="Go (21个项目)">Go</a>
+<a href="https://coolshell.cn/tag/golang" class="tag-cloud-link tag-link-237 tag-link-position-15" style="font-size: 10.966101694915pt;" aria-label="golang (13个项目)">golang</a>
+<a href="https://coolshell.cn/tag/google" class="tag-cloud-link tag-link-32 tag-link-position-16" style="font-size: 15.474576271186pt;" aria-label="Google (33个项目)">Google</a>
+<a href="https://coolshell.cn/tag/html" class="tag-cloud-link tag-link-38 tag-link-position-17" style="font-size: 15.593220338983pt;" aria-label="HTML (34个项目)">HTML</a>
+<a href="https://coolshell.cn/tag/ie" class="tag-cloud-link tag-link-175 tag-link-position-18" style="font-size: 9.6610169491525pt;" aria-label="IE (10个项目)">IE</a>
+<a href="https://coolshell.cn/tag/java" class="tag-cloud-link tag-link-13 tag-link-position-19" style="font-size: 17.610169491525pt;" aria-label="Java (50个项目)">Java</a>
+<a href="https://coolshell.cn/tag/javascript" class="tag-cloud-link tag-link-114 tag-link-position-20" style="font-size: 17.966101694915pt;" aria-label="Javascript (54个项目)">Javascript</a>
+<a href="https://coolshell.cn/tag/jquery" class="tag-cloud-link tag-link-191 tag-link-position-21" style="font-size: 10.135593220339pt;" aria-label="jQuery (11个项目)">jQuery</a>
+<a href="https://coolshell.cn/tag/linux" class="tag-cloud-link tag-link-37 tag-link-position-22" style="font-size: 19.389830508475pt;" aria-label="Linux (71个项目)">Linux</a>
+<a href="https://coolshell.cn/tag/mysql" class="tag-cloud-link tag-link-106 tag-link-position-23" style="font-size: 8pt;" aria-label="MySQL (7个项目)">MySQL</a>
+<a href="https://coolshell.cn/tag/oop" class="tag-cloud-link tag-link-245 tag-link-position-24" style="font-size: 8.5932203389831pt;" aria-label="OOP (8个项目)">OOP</a>
+<a href="https://coolshell.cn/tag/password" class="tag-cloud-link tag-link-319 tag-link-position-25" style="font-size: 8.5932203389831pt;" aria-label="password (8个项目)">password</a>
+<a href="https://coolshell.cn/tag/performance" class="tag-cloud-link tag-link-120 tag-link-position-26" style="font-size: 12.271186440678pt;" aria-label="Performance (17个项目)">Performance</a>
+<a href="https://coolshell.cn/tag/php" class="tag-cloud-link tag-link-35 tag-link-position-27" style="font-size: 14.050847457627pt;" aria-label="PHP (25个项目)">PHP</a>
+<a href="https://coolshell.cn/tag/programmer" class="tag-cloud-link tag-link-70 tag-link-position-28" style="font-size: 21.881355932203pt;" aria-label="Programmer (116个项目)">Programmer</a>
+<a href="https://coolshell.cn/tag/programming" class="tag-cloud-link tag-link-499 tag-link-position-29" style="font-size: 10.135593220339pt;" aria-label="Programming (11个项目)">Programming</a>
+<a href="https://coolshell.cn/tag/programming-language" class="tag-cloud-link tag-link-115 tag-link-position-30" style="font-size: 10.491525423729pt;" aria-label="programming language (12个项目)">programming language</a>
+<a href="https://coolshell.cn/tag/puzzle" class="tag-cloud-link tag-link-514 tag-link-position-31" style="font-size: 10.135593220339pt;" aria-label="Puzzle (11个项目)">Puzzle</a>
+<a href="https://coolshell.cn/tag/pythondev" class="tag-cloud-link tag-link-791 tag-link-position-32" style="font-size: 15pt;" aria-label="Python (30个项目)">Python</a>
+<a href="https://coolshell.cn/tag/ruby" class="tag-cloud-link tag-link-69 tag-link-position-33" style="font-size: 9.6610169491525pt;" aria-label="Ruby (10个项目)">Ruby</a>
+<a href="https://coolshell.cn/tag/sql" class="tag-cloud-link tag-link-131 tag-link-position-34" style="font-size: 9.6610169491525pt;" aria-label="SQL (10个项目)">SQL</a>
+<a href="https://coolshell.cn/tag/tdd" class="tag-cloud-link tag-link-485 tag-link-position-35" style="font-size: 8.5932203389831pt;" aria-label="TDD (8个项目)">TDD</a>
+<a href="https://coolshell.cn/tag/ui" class="tag-cloud-link tag-link-47 tag-link-position-36" style="font-size: 10.491525423729pt;" aria-label="UI (12个项目)">UI</a>
+<a href="https://coolshell.cn/tag/unix" class="tag-cloud-link tag-link-21 tag-link-position-37" style="font-size: 15.949152542373pt;" aria-label="Unix (36个项目)">Unix</a>
+<a href="https://coolshell.cn/tag/vim" class="tag-cloud-link tag-link-50 tag-link-position-38" style="font-size: 12.745762711864pt;" aria-label="vim (19个项目)">vim</a>
+<a href="https://coolshell.cn/tag/web" class="tag-cloud-link tag-link-30 tag-link-position-39" style="font-size: 16.661016949153pt;" aria-label="Web (42个项目)">Web</a>
+<a href="https://coolshell.cn/tag/windows" class="tag-cloud-link tag-link-49 tag-link-position-40" style="font-size: 12.271186440678pt;" aria-label="Windows (17个项目)">Windows</a>
+<a href="https://coolshell.cn/tag/xml" class="tag-cloud-link tag-link-104 tag-link-position-41" style="font-size: 8.5932203389831pt;" aria-label="XML (8个项目)">XML</a>
+<a href="https://coolshell.cn/tag/%e5%ae%89%e5%85%a8" class="tag-cloud-link tag-link-318 tag-link-position-42" style="font-size: 13.694915254237pt;" aria-label="安全 (23个项目)">安全</a>
+<a href="https://coolshell.cn/tag/%e7%a8%8b%e5%ba%8f%e5%91%98" class="tag-cloud-link tag-link-58 tag-link-position-43" style="font-size: 22pt;" aria-label="程序员 (119个项目)">程序员</a>
+<a href="https://coolshell.cn/tag/%e7%ae%97%e6%b3%95" class="tag-cloud-link tag-link-77 tag-link-position-44" style="font-size: 9.6610169491525pt;" aria-label="算法 (10个项目)">算法</a>
+<a href="https://coolshell.cn/tag/interview" class="tag-cloud-link tag-link-164 tag-link-position-45" style="font-size: 11.915254237288pt;" aria-label="面试 (16个项目)">面试</a></div>
+</aside><aside id="archives-5" class="widget widget_archive"><h4 class="widget-title">归档</h4>
+<ul>
+<li><a href="https://coolshell.cn/articles/date/2023/05">2023年5月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2023/02">2023年2月</a>&nbsp;(2)</li>
+<li><a href="https://coolshell.cn/articles/date/2022/12">2022年12月</a>&nbsp;(2)</li>
+<li><a href="https://coolshell.cn/articles/date/2022/10">2022年10月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2022/07">2022年7月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2022/05">2022年5月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2022/02">2022年2月</a>&nbsp;(2)</li>
+<li><a href="https://coolshell.cn/articles/date/2022/01">2022年1月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2021/12">2021年12月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2021/11">2021年11月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2021/09">2021年9月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2021/07">2021年7月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2020/12">2020年12月</a>&nbsp;(9)</li>
+<li><a href="https://coolshell.cn/articles/date/2020/08">2020年8月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2020/07">2020年7月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2020/04">2020年4月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2020/03">2020年3月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2020/01">2020年1月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2019/12">2019年12月</a>&nbsp;(2)</li>
+<li><a href="https://coolshell.cn/articles/date/2019/11">2019年11月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2019/10">2019年10月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2019/07">2019年7月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2019/06">2019年6月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2019/05">2019年5月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2019/04">2019年4月</a>&nbsp;(2)</li>
+<li><a href="https://coolshell.cn/articles/date/2019/03">2019年3月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2019/02">2019年2月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2018/12">2018年12月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2018/05">2018年5月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2018/01">2018年1月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2017/10">2017年10月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2017/09">2017年9月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2017/08">2017年8月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2017/07">2017年7月</a>&nbsp;(3)</li>
+<li><a href="https://coolshell.cn/articles/date/2017/06">2017年6月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2017/04">2017年4月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2017/03">2017年3月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2017/02">2017年2月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2017/01">2017年1月</a>&nbsp;(2)</li>
+<li><a href="https://coolshell.cn/articles/date/2016/12">2016年12月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2016/10">2016年10月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2016/09">2016年9月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2016/08">2016年8月</a>&nbsp;(2)</li>
+<li><a href="https://coolshell.cn/articles/date/2016/07">2016年7月</a>&nbsp;(3)</li>
+<li><a href="https://coolshell.cn/articles/date/2015/12">2015年12月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2015/09">2015年9月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2015/08">2015年8月</a>&nbsp;(2)</li>
+<li><a href="https://coolshell.cn/articles/date/2015/04">2015年4月</a>&nbsp;(4)</li>
+<li><a href="https://coolshell.cn/articles/date/2014/12">2014年12月</a>&nbsp;(3)</li>
+<li><a href="https://coolshell.cn/articles/date/2014/11">2014年11月</a>&nbsp;(2)</li>
+<li><a href="https://coolshell.cn/articles/date/2014/10">2014年10月</a>&nbsp;(2)</li>
+<li><a href="https://coolshell.cn/articles/date/2014/09">2014年9月</a>&nbsp;(2)</li>
+<li><a href="https://coolshell.cn/articles/date/2014/08">2014年8月</a>&nbsp;(2)</li>
+<li><a href="https://coolshell.cn/articles/date/2014/06">2014年6月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2014/05">2014年5月</a>&nbsp;(4)</li>
+<li><a href="https://coolshell.cn/articles/date/2014/04">2014年4月</a>&nbsp;(4)</li>
+<li><a href="https://coolshell.cn/articles/date/2014/03">2014年3月</a>&nbsp;(5)</li>
+<li><a href="https://coolshell.cn/articles/date/2014/02">2014年2月</a>&nbsp;(3)</li>
+<li><a href="https://coolshell.cn/articles/date/2014/01">2014年1月</a>&nbsp;(2)</li>
+<li><a href="https://coolshell.cn/articles/date/2013/12">2013年12月</a>&nbsp;(3)</li>
+<li><a href="https://coolshell.cn/articles/date/2013/11">2013年11月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2013/10">2013年10月</a>&nbsp;(6)</li>
+<li><a href="https://coolshell.cn/articles/date/2013/08">2013年8月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2013/07">2013年7月</a>&nbsp;(8)</li>
+<li><a href="https://coolshell.cn/articles/date/2013/06">2013年6月</a>&nbsp;(2)</li>
+<li><a href="https://coolshell.cn/articles/date/2013/05">2013年5月</a>&nbsp;(3)</li>
+<li><a href="https://coolshell.cn/articles/date/2013/04">2013年4月</a>&nbsp;(3)</li>
+<li><a href="https://coolshell.cn/articles/date/2013/03">2013年3月</a>&nbsp;(3)</li>
+<li><a href="https://coolshell.cn/articles/date/2013/02">2013年2月</a>&nbsp;(5)</li>
+<li><a href="https://coolshell.cn/articles/date/2013/01">2013年1月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2012/12">2012年12月</a>&nbsp;(4)</li>
+<li><a href="https://coolshell.cn/articles/date/2012/11">2012年11月</a>&nbsp;(4)</li>
+<li><a href="https://coolshell.cn/articles/date/2012/10">2012年10月</a>&nbsp;(3)</li>
+<li><a href="https://coolshell.cn/articles/date/2012/09">2012年9月</a>&nbsp;(4)</li>
+<li><a href="https://coolshell.cn/articles/date/2012/08">2012年8月</a>&nbsp;(8)</li>
+<li><a href="https://coolshell.cn/articles/date/2012/07">2012年7月</a>&nbsp;(4)</li>
+<li><a href="https://coolshell.cn/articles/date/2012/06">2012年6月</a>&nbsp;(7)</li>
+<li><a href="https://coolshell.cn/articles/date/2012/05">2012年5月</a>&nbsp;(6)</li>
+<li><a href="https://coolshell.cn/articles/date/2012/04">2012年4月</a>&nbsp;(6)</li>
+<li><a href="https://coolshell.cn/articles/date/2012/03">2012年3月</a>&nbsp;(6)</li>
+<li><a href="https://coolshell.cn/articles/date/2012/02">2012年2月</a>&nbsp;(3)</li>
+<li><a href="https://coolshell.cn/articles/date/2012/01">2012年1月</a>&nbsp;(6)</li>
+<li><a href="https://coolshell.cn/articles/date/2011/12">2011年12月</a>&nbsp;(5)</li>
+<li><a href="https://coolshell.cn/articles/date/2011/11">2011年11月</a>&nbsp;(9)</li>
+<li><a href="https://coolshell.cn/articles/date/2011/10">2011年10月</a>&nbsp;(6)</li>
+<li><a href="https://coolshell.cn/articles/date/2011/09">2011年9月</a>&nbsp;(5)</li>
+<li><a href="https://coolshell.cn/articles/date/2011/08">2011年8月</a>&nbsp;(14)</li>
+<li><a href="https://coolshell.cn/articles/date/2011/07">2011年7月</a>&nbsp;(6)</li>
+<li><a href="https://coolshell.cn/articles/date/2011/06">2011年6月</a>&nbsp;(12)</li>
+<li><a href="https://coolshell.cn/articles/date/2011/05">2011年5月</a>&nbsp;(5)</li>
+<li><a href="https://coolshell.cn/articles/date/2011/04">2011年4月</a>&nbsp;(18)</li>
+<li><a href="https://coolshell.cn/articles/date/2011/03">2011年3月</a>&nbsp;(16)</li>
+<li><a href="https://coolshell.cn/articles/date/2011/02">2011年2月</a>&nbsp;(16)</li>
+<li><a href="https://coolshell.cn/articles/date/2011/01">2011年1月</a>&nbsp;(18)</li>
+<li><a href="https://coolshell.cn/articles/date/2010/12">2010年12月</a>&nbsp;(11)</li>
+<li><a href="https://coolshell.cn/articles/date/2010/11">2010年11月</a>&nbsp;(11)</li>
+<li><a href="https://coolshell.cn/articles/date/2010/10">2010年10月</a>&nbsp;(19)</li>
+<li><a href="https://coolshell.cn/articles/date/2010/09">2010年9月</a>&nbsp;(15)</li>
+<li><a href="https://coolshell.cn/articles/date/2010/08">2010年8月</a>&nbsp;(10)</li>
+<li><a href="https://coolshell.cn/articles/date/2010/07">2010年7月</a>&nbsp;(20)</li>
+<li><a href="https://coolshell.cn/articles/date/2010/06">2010年6月</a>&nbsp;(9)</li>
+<li><a href="https://coolshell.cn/articles/date/2010/05">2010年5月</a>&nbsp;(13)</li>
+<li><a href="https://coolshell.cn/articles/date/2010/04">2010年4月</a>&nbsp;(12)</li>
+<li><a href="https://coolshell.cn/articles/date/2010/03">2010年3月</a>&nbsp;(11)</li>
+<li><a href="https://coolshell.cn/articles/date/2010/02">2010年2月</a>&nbsp;(7)</li>
+<li><a href="https://coolshell.cn/articles/date/2010/01">2010年1月</a>&nbsp;(9)</li>
+<li><a href="https://coolshell.cn/articles/date/2009/12">2009年12月</a>&nbsp;(22)</li>
+<li><a href="https://coolshell.cn/articles/date/2009/11">2009年11月</a>&nbsp;(27)</li>
+<li><a href="https://coolshell.cn/articles/date/2009/10">2009年10月</a>&nbsp;(17)</li>
+<li><a href="https://coolshell.cn/articles/date/2009/09">2009年9月</a>&nbsp;(14)</li>
+<li><a href="https://coolshell.cn/articles/date/2009/08">2009年8月</a>&nbsp;(21)</li>
+<li><a href="https://coolshell.cn/articles/date/2009/07">2009年7月</a>&nbsp;(18)</li>
+<li><a href="https://coolshell.cn/articles/date/2009/06">2009年6月</a>&nbsp;(19)</li>
+<li><a href="https://coolshell.cn/articles/date/2009/05">2009年5月</a>&nbsp;(27)</li>
+<li><a href="https://coolshell.cn/articles/date/2009/04">2009年4月</a>&nbsp;(53)</li>
+<li><a href="https://coolshell.cn/articles/date/2009/03">2009年3月</a>&nbsp;(43)</li>
+<li><a href="https://coolshell.cn/articles/date/2008/10">2008年10月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2007/12">2007年12月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2006/11">2006年11月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2004/06">2004年6月</a>&nbsp;(1)</li>
+</ul>
+</aside><aside id="custom_html-8" class="widget_text widget widget_custom_html"><h4 class="widget-title">友情链接</h4><div class="textwidget custom-html-widget"><ul class="blogroll">
+<li><a href="http://blog.csdn.net/haoel" target="_blank" onclick="if (!window.__cfRLUnblockHandlers) return false; pageTracker._trackPageview('/outgoing/blog.csdn.net/haoel?referer=http://coolshell.cn');" rel="noopener" data-cf-modified-292c18e0b4ac1921b092deb2->陈皓的博客</a></li>
+<li><a href="http://ifeve.com/" target="_blank" title="促进并发编程的研究和推广" onclick="if (!window.__cfRLUnblockHandlers) return false; pageTracker._trackPageview('/outgoing/ifeve.com/?referer=http://coolshell.cn');" rel="noopener" data-cf-modified-292c18e0b4ac1921b092deb2->并发编程</a></li>
+<li><a href="http://www.raychase.net/" target="_blank" title="一个啰嗦的程序员" onclick="if (!window.__cfRLUnblockHandlers) return false; pageTracker._trackPageview('/outgoing/www.raychase.net/?referer=http://coolshell.cn');" rel="noopener" data-cf-modified-292c18e0b4ac1921b092deb2->四火的唠叨</a></li>
+<li><a href="http://www.cnblogs.com/weidagang2046/" target="_blank" title="Just for Fun" onclick="if (!window.__cfRLUnblockHandlers) return false; pageTracker._trackPageview('/outgoing/http://www.cnblogs.com/weidagang2046/?referer=http://coolshell.cn/');" rel="noopener" data-cf-modified-292c18e0b4ac1921b092deb2->Todd Wei的Blog</a></li>
+<li><a href="http://www.hellogcc.org/" target="_blank" title="致力于讨论和学习GNU Toolchain方面的工作组" onclick="if (!window.__cfRLUnblockHandlers) return false; pageTracker._trackPageview('/outgoing/www.hellogcc.org//?referer=http://coolshell.cn/');" rel="noopener" data-cf-modified-292c18e0b4ac1921b092deb2->开源开发工具技术博客</a></li>
+<li><a href="http://www.cppfans.org/" target="_blank" title="记录我们点滴学习工作生活" onclick="if (!window.__cfRLUnblockHandlers) return false; pageTracker._trackPageview('/outgoing/http://www.cppfans.org/?referer=http://coolshell.cn/');" rel="noopener" data-cf-modified-292c18e0b4ac1921b092deb2->C++爱好者博客</a></li>
+<li><a href="https://HelloACM.com/" target="_blank" title="Smart Ideas, Smart Algorithms" onclick="if (!window.__cfRLUnblockHandlers) return false; pageTracker._trackPageview('/outgoing/http://HelloACM.com/?referer=http://coolshell.cn/');" rel="noopener" data-cf-modified-292c18e0b4ac1921b092deb2->ACMer</a></li>
+</ul>
+</div></aside><aside id="meta-5" class="widget widget_meta"><h4 class="widget-title">其他操作</h4>
+<ul>
+<li><a href="https://coolshell.cn/wp-login.php?action=register">注册</a></li> <li><a href="https://coolshell.cn/wp-login.php">登录</a></li>
+<li><a href="https://coolshell.cn/feed">条目feed</a></li>
+<li><a href="https://coolshell.cn/comments/feed">评论feed</a></li>
+<li><a href="https://cn.wordpress.org/">WordPress.org</a></li>
+</ul>
+</aside></div>
+</div> 
+</div>
+<script type="292c18e0b4ac1921b092deb2-text/javascript">
+	var _gaq = _gaq || [];
+	_gaq.push(['_setAccount', 'UA-7486123-1']);
+_gaq.push(['_trackPageview']);
+
+	(function() {
+		var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+		ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+		var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+	})();
+</script>
+</div>
+<footer id="colophon" class="site-footer" role="contentinfo">
+<div class="row site-info">
+CoolShell.cn &copy; 2023
+<span class="sep"> | </span>
+Powered by <a href="https://wordpress.org/">WordPress</a>
+<span class="sep"> | </span>
+Based on Theme: Nisarg by <a href="http://www.falgunidesai.com/" rel="designer">Falguni Desai</a>.
+<p><a href="http://www.beian.miit.gov.cn" target="_target">京ICP备18054967号-1</a></p>
+</div>
+</footer>
+</div>
+<script type="292c18e0b4ac1921b092deb2-text/javascript" id="wp-postratings-js-extra">
+/* <![CDATA[ */
+var ratingsL10n = {"plugin_url":"https:\/\/coolshell.cn\/wp-content\/plugins\/wp-postratings","ajax_url":"https:\/\/coolshell.cn\/wp-admin\/admin-ajax.php","text_wait":"Please rate only 1 item at a time.","image":"stars_crystal","image_ext":"gif","max":"5","show_loading":"1","show_fading":"1","custom":"0"};
+var ratings_mouseover_image=new Image();ratings_mouseover_image.src="https://coolshell.cn/wp-content/plugins/wp-postratings/images/stars_crystal/rating_over.gif";;
+/* ]]> */
+</script>
+<script type="292c18e0b4ac1921b092deb2-text/javascript" src="https://coolshell.cn/wp-content/plugins/wp-postratings/js/postratings-js.js?ver=1.90.1" id="wp-postratings-js"></script>
+<script type="292c18e0b4ac1921b092deb2-text/javascript" id="wp-postviews-cache-js-extra">
+/* <![CDATA[ */
+var viewsCacheL10n = {"admin_ajax_url":"https:\/\/coolshell.cn\/wp-admin\/admin-ajax.php","nonce":"4731639b7a","post_id":"8460"};
+/* ]]> */
+</script>
+<script type="292c18e0b4ac1921b092deb2-text/javascript" src="https://coolshell.cn/wp-content/plugins/wp-postviews/postviews-cache.js?ver=1.68" id="wp-postviews-cache-js"></script>
+<script type="292c18e0b4ac1921b092deb2-text/javascript" src="https://coolshell.cn/wp-content/themes/MyNisarg/js/bootstrap.js?ver=6.2" id="bootstrap-js"></script>
+<script type="292c18e0b4ac1921b092deb2-text/javascript" src="https://coolshell.cn/wp-content/themes/MyNisarg/js/skip-link-focus-fix.js?ver=20130115" id="nisarg-skip-link-focus-fix-js"></script>
+<script type="292c18e0b4ac1921b092deb2-text/javascript" src="https://coolshell.cn/wp-content/themes/MyNisarg/js/nisarg.js?ver=6.2" id="nisarg-js-js"></script>
+<script type="292c18e0b4ac1921b092deb2-text/javascript" src="https://coolshell.cn/wp-includes/js/comment-reply.min.js?ver=6.2" id="comment-reply-js"></script>
+<script type="292c18e0b4ac1921b092deb2-text/javascript" id="q2w3_fixed_widget-js-extra">
+/* <![CDATA[ */
+var q2w3_sidebar_options = [{"use_sticky_position":false,"margin_top":50,"margin_bottom":0,"stop_elements_selectors":"","screen_max_width":0,"screen_max_height":0,"widgets":[]}];
+/* ]]> */
+</script>
+<script type="292c18e0b4ac1921b092deb2-text/javascript" src="https://coolshell.cn/wp-content/plugins/q2w3-fixed-widget/js/frontend.min.js?ver=6.2.3" id="q2w3_fixed_widget-js"></script>
+<script type="292c18e0b4ac1921b092deb2-text/javascript" src="https://coolshell.cn/wp-content/plugins/enlighter/cache/enlighterjs.min.js?ver=0cuVQBPCj0viGB0" id="enlighterjs-js"></script>
+<script type="292c18e0b4ac1921b092deb2-text/javascript" id="enlighterjs-js-after">
+!function(e,n){if("undefined"!=typeof EnlighterJS){var o={"selectors":{"block":"pre.EnlighterJSRAW","inline":"code.EnlighterJSRAW"},"options":{"indent":2,"ampersandCleanup":true,"linehover":true,"rawcodeDbclick":true,"textOverflow":"scroll","linenumbers":true,"theme":"wpcustom","language":"generic","retainCssClasses":false,"collapse":false,"toolbarOuter":"","toolbarTop":"{BTN_RAW}{BTN_COPY}{BTN_WINDOW}{BTN_WEBSITE}","toolbarBottom":""}};(e.EnlighterJSINIT=function(){EnlighterJS.init(o.selectors.block,o.selectors.inline,o.options)})()}else{(n&&(n.error||n.log)||function(){})("Error: EnlighterJS resources not loaded yet!")}}(window,console);
+</script>
+<script type="292c18e0b4ac1921b092deb2-text/javascript" src="https://coolshell.cn/wp-content/plugins/easy-table-of-contents/vendor/js-cookie/js.cookie.min.js?ver=2.2.1" id="ez-toc-js-cookie-js"></script>
+<script type="292c18e0b4ac1921b092deb2-text/javascript" src="https://coolshell.cn/wp-content/plugins/easy-table-of-contents/vendor/sticky-kit/jquery.sticky-kit.min.js?ver=1.9.2" id="ez-toc-jquery-sticky-kit-js"></script>
+<script type="292c18e0b4ac1921b092deb2-text/javascript" id="ez-toc-js-js-extra">
+/* <![CDATA[ */
+var ezTOC = {"smooth_scroll":"1","scroll_offset":"30","fallbackIcon":"<span style=\"display: flex;align-items: center;width: 35px;height: 30px;justify-content: center;direction:ltr;\"><svg style=\"fill: #999;color:#999\" xmlns=\"http:\/\/www.w3.org\/2000\/svg\" class=\"list-377408\" width=\"20px\" height=\"20px\" viewBox=\"0 0 24 24\" fill=\"none\"><path d=\"M6 6H4v2h2V6zm14 0H8v2h12V6zM4 11h2v2H4v-2zm16 0H8v2h12v-2zM4 16h2v2H4v-2zm16 0H8v2h12v-2z\" fill=\"currentColor\"><\/path><\/svg><svg style=\"fill: #999;color:#999\" class=\"arrow-unsorted-368013\" xmlns=\"http:\/\/www.w3.org\/2000\/svg\" width=\"10px\" height=\"10px\" viewBox=\"0 0 24 24\" version=\"1.2\" baseProfile=\"tiny\"><path d=\"M18.2 9.3l-6.2-6.3-6.2 6.3c-.2.2-.3.4-.3.7s.1.5.3.7c.2.2.4.3.7.3h11c.3 0 .5-.1.7-.3.2-.2.3-.5.3-.7s-.1-.5-.3-.7zM5.8 14.7l6.2 6.3 6.2-6.3c.2-.2.3-.5.3-.7s-.1-.5-.3-.7c-.2-.2-.4-.3-.7-.3h-11c-.3 0-.5.1-.7.3-.2.2-.3.5-.3.7s.1.5.3.7z\"\/><\/svg><\/span>"};
+/* ]]> */
+</script>
+<script type="292c18e0b4ac1921b092deb2-text/javascript" src="https://coolshell.cn/wp-content/plugins/easy-table-of-contents/assets/js/front.min.js?ver=2.0.48-1683606477" id="ez-toc-js-js"></script>
+<script defer type="292c18e0b4ac1921b092deb2-text/javascript" src="https://coolshell.cn/wp-content/plugins/akismet/_inc/akismet-frontend.js?ver=1683523750" id="akismet-frontend-js"></script>
+<script type="292c18e0b4ac1921b092deb2-text/javascript">
+        jQuery(document).ready(function ($) {
+
+            for (let i = 0; i < document.forms.length; ++i) {
+                let form = document.forms[i];
+				if ($(form).attr("method") != "get") { $(form).append('<input type="hidden" name="HLY_NVGfRIyiO" value="A*FRUYw" />'); }
+if ($(form).attr("method") != "get") { $(form).append('<input type="hidden" name="rfNmPJFxZlE" value="PcJd0F3kneCMpW" />'); }
+            }
+
+            $(document).on('submit', 'form', function () {
+				if ($(this).attr("method") != "get") { $(this).append('<input type="hidden" name="HLY_NVGfRIyiO" value="A*FRUYw" />'); }
+if ($(this).attr("method") != "get") { $(this).append('<input type="hidden" name="rfNmPJFxZlE" value="PcJd0F3kneCMpW" />'); }
+                return true;
+            });
+
+            jQuery.ajaxSetup({
+                beforeSend: function (e, data) {
+
+                    if (data.type !== 'POST') return;
+
+                    if (typeof data.data === 'object' && data.data !== null) {
+						data.data.append("HLY_NVGfRIyiO", "A*FRUYw");
+data.data.append("rfNmPJFxZlE", "PcJd0F3kneCMpW");
+                    }
+                    else {
+                        data.data = data.data + '&HLY_NVGfRIyiO=A*FRUYw&rfNmPJFxZlE=PcJd0F3kneCMpW';
+                    }
+                }
+            });
+
+        });
+    </script>
+<script src="/cdn-cgi/scripts/7d0fa10a/cloudflare-static/rocket-loader.min.js" data-cf-settings="292c18e0b4ac1921b092deb2-|49" defer></script></body>
+</html>
+<script type="292c18e0b4ac1921b092deb2-text/javascript" src="https://cdn.jsdelivr.net/gh/haoel/anti-baidu/js/anti-baidu-latest.min.js" charset="UTF-8"></script>
+
+
+

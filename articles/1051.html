@@ -1,0 +1,1442 @@
+<!DOCTYPE html>
+<!--[if IE 8]>
+<html id="ie8" dir="ltr" lang="zh-CN"
+	prefix="og: https://ogp.me/ns#" >
+<![endif]-->
+<!--[if !(IE 8) ]><!-->
+<html dir="ltr" lang="zh-CN" prefix="og: https://ogp.me/ns#">
+<!--<![endif]-->
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width" />
+<link rel="profile" href="https://gmpg.org/xfn/11" />
+<link rel="pingback" href="https://coolshell.cn/xmlrpc.php" />
+<link rel="shortcut icon" href="/favicon.png">
+<title>如何在Java中避免equals方法的隐藏陷阱 | 酷 壳 - CoolShell</title>
+
+<meta name="robots" content="max-image-preview:large" />
+<meta name="keywords" content="java,java语言,编程语言" />
+<link rel="canonical" href="https://coolshell.cn/articles/1051.html" />
+<meta name="generator" content="All in One SEO (AIOSEO) 4.3.6.1 " />
+<meta property="og:locale" content="zh_CN" />
+<meta property="og:site_name" content="酷 壳 - CoolShell" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="如何在Java中避免equals方法的隐藏陷阱 | 酷 壳 - CoolShell" />
+<meta property="og:url" content="https://coolshell.cn/articles/1051.html" />
+<meta property="og:image" content="https://coolshell.cn/wp-content/uploads/2020/04/mini.logo_.png" />
+<meta property="og:image:secure_url" content="https://coolshell.cn/wp-content/uploads/2020/04/mini.logo_.png" />
+<meta property="og:image:width" content="306" />
+<meta property="og:image:height" content="306" />
+<meta property="article:published_time" content="2009-06-18T03:14:41+00:00" />
+<meta property="article:modified_time" content="2009-06-18T04:03:18+00:00" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="如何在Java中避免equals方法的隐藏陷阱 | 酷 壳 - CoolShell" />
+<meta name="twitter:image" content="https://coolshell.cn/wp-content/uploads/2020/04/mini.logo_.png" />
+<script type="application/ld+json" class="aioseo-schema">
+			{"@context":"https:\/\/schema.org","@graph":[{"@type":"Article","@id":"https:\/\/coolshell.cn\/articles\/1051.html#article","name":"\u5982\u4f55\u5728Java\u4e2d\u907f\u514dequals\u65b9\u6cd5\u7684\u9690\u85cf\u9677\u9631 | \u9177 \u58f3 - CoolShell","headline":"\u5982\u4f55\u5728Java\u4e2d\u907f\u514dequals\u65b9\u6cd5\u7684\u9690\u85cf\u9677\u9631","author":{"@id":"https:\/\/coolshell.cn\/articles\/author\/neo#author"},"publisher":{"@id":"https:\/\/coolshell.cn\/#organization"},"image":{"@type":"ImageObject","url":"https:\/\/coolshell.cn\/wp-content\/uploads\/2020\/04\/mini.logo_.png","@id":"https:\/\/coolshell.cn\/#articleImage","width":306,"height":306},"datePublished":"2009-06-18T03:14:41+08:00","dateModified":"2009-06-18T04:03:18+08:00","inLanguage":"zh-CN","commentCount":27,"mainEntityOfPage":{"@id":"https:\/\/coolshell.cn\/articles\/1051.html#webpage"},"isPartOf":{"@id":"https:\/\/coolshell.cn\/articles\/1051.html#webpage"},"articleSection":"Java\u8bed\u8a00, \u7f16\u7a0b\u8bed\u8a00, Java"},{"@type":"BreadcrumbList","@id":"https:\/\/coolshell.cn\/articles\/1051.html#breadcrumblist","itemListElement":[{"@type":"ListItem","@id":"https:\/\/coolshell.cn\/#listItem","position":1,"item":{"@type":"WebPage","@id":"https:\/\/coolshell.cn\/","name":"\u4e3b\u9801","description":"\u4eab\u53d7\u7f16\u7a0b\u548c\u6280\u672f\u6240\u5e26\u6765\u7684\u5feb\u4e50 \u2013 https:\/\/coolshell.cn","url":"https:\/\/coolshell.cn\/"}}]},{"@type":"Organization","@id":"https:\/\/coolshell.cn\/#organization","name":"\u9177\u58f3-CoolShell","url":"https:\/\/coolshell.cn\/","logo":{"@type":"ImageObject","url":"https:\/\/coolshell.cn\/wp-content\/uploads\/2020\/04\/mini.logo_.png","@id":"https:\/\/coolshell.cn\/#organizationLogo","width":306,"height":306},"image":{"@id":"https:\/\/coolshell.cn\/#organizationLogo"}},{"@type":"Person","@id":"https:\/\/coolshell.cn\/articles\/author\/neo#author","url":"https:\/\/coolshell.cn\/articles\/author\/neo","name":"Neo","image":{"@type":"ImageObject","@id":"https:\/\/coolshell.cn\/articles\/1051.html#authorImage","url":"https:\/\/secure.gravatar.com\/avatar\/adbd7d1f9ec55c6accf6e2a41b5a919a?s=96&d=mm&r=g","width":96,"height":96,"caption":"Neo"}},{"@type":"WebPage","@id":"https:\/\/coolshell.cn\/articles\/1051.html#webpage","url":"https:\/\/coolshell.cn\/articles\/1051.html","name":"\u5982\u4f55\u5728Java\u4e2d\u907f\u514dequals\u65b9\u6cd5\u7684\u9690\u85cf\u9677\u9631 | \u9177 \u58f3 - CoolShell","inLanguage":"zh-CN","isPartOf":{"@id":"https:\/\/coolshell.cn\/#website"},"breadcrumb":{"@id":"https:\/\/coolshell.cn\/articles\/1051.html#breadcrumblist"},"author":{"@id":"https:\/\/coolshell.cn\/articles\/author\/neo#author"},"creator":{"@id":"https:\/\/coolshell.cn\/articles\/author\/neo#author"},"datePublished":"2009-06-18T03:14:41+08:00","dateModified":"2009-06-18T04:03:18+08:00"},{"@type":"WebSite","@id":"https:\/\/coolshell.cn\/#website","url":"https:\/\/coolshell.cn\/","name":"\u9177 \u58f3 - CoolShell","description":"\u4eab\u53d7\u7f16\u7a0b\u548c\u6280\u672f\u6240\u5e26\u6765\u7684\u5feb\u4e50 - Coding Your Ambition","inLanguage":"zh-CN","publisher":{"@id":"https:\/\/coolshell.cn\/#organization"}}]}
+		</script>
+<script type="e79c7100b5ac8aff1472eaec-text/javascript">
+			window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+			ga('create', "UA-7486123-1", { 'cookieDomain': 'coolshell.cn' } );
+			ga('send', 'pageview');
+		</script>
+<script async src="https://www.google-analytics.com/analytics.js" type="e79c7100b5ac8aff1472eaec-text/javascript"></script>
+
+<link rel="dns-prefetch" href="//fonts.googleapis.com" />
+<link rel="alternate" type="application/rss+xml" title="酷 壳 - CoolShell &raquo; Feed" href="https://coolshell.cn/feed" />
+<link rel="alternate" type="application/rss+xml" title="酷 壳 - CoolShell &raquo; 评论Feed" href="https://coolshell.cn/comments/feed" />
+<link rel="alternate" type="application/rss+xml" title="酷 壳 - CoolShell &raquo; 如何在Java中避免equals方法的隐藏陷阱评论Feed" href="https://coolshell.cn/articles/1051.html/feed" />
+<script type="e79c7100b5ac8aff1472eaec-text/javascript">
+window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/14.0.0\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/14.0.0\/svg\/","svgExt":".svg","source":{"concatemoji":"https:\/\/coolshell.cn\/wp-includes\/js\/wp-emoji-release.min.js?ver=6.2"}};
+/*! This file is auto-generated */
+!function(e,a,t){var n,r,o,i=a.createElement("canvas"),p=i.getContext&&i.getContext("2d");function s(e,t){p.clearRect(0,0,i.width,i.height),p.fillText(e,0,0);e=i.toDataURL();return p.clearRect(0,0,i.width,i.height),p.fillText(t,0,0),e===i.toDataURL()}function c(e){var t=a.createElement("script");t.src=e,t.defer=t.type="text/javascript",a.getElementsByTagName("head")[0].appendChild(t)}for(o=Array("flag","emoji"),t.supports={everything:!0,everythingExceptFlag:!0},r=0;r<o.length;r++)t.supports[o[r]]=function(e){if(p&&p.fillText)switch(p.textBaseline="top",p.font="600 32px Arial",e){case"flag":return s("\ud83c\udff3\ufe0f\u200d\u26a7\ufe0f","\ud83c\udff3\ufe0f\u200b\u26a7\ufe0f")?!1:!s("\ud83c\uddfa\ud83c\uddf3","\ud83c\uddfa\u200b\ud83c\uddf3")&&!s("\ud83c\udff4\udb40\udc67\udb40\udc62\udb40\udc65\udb40\udc6e\udb40\udc67\udb40\udc7f","\ud83c\udff4\u200b\udb40\udc67\u200b\udb40\udc62\u200b\udb40\udc65\u200b\udb40\udc6e\u200b\udb40\udc67\u200b\udb40\udc7f");case"emoji":return!s("\ud83e\udef1\ud83c\udffb\u200d\ud83e\udef2\ud83c\udfff","\ud83e\udef1\ud83c\udffb\u200b\ud83e\udef2\ud83c\udfff")}return!1}(o[r]),t.supports.everything=t.supports.everything&&t.supports[o[r]],"flag"!==o[r]&&(t.supports.everythingExceptFlag=t.supports.everythingExceptFlag&&t.supports[o[r]]);t.supports.everythingExceptFlag=t.supports.everythingExceptFlag&&!t.supports.flag,t.DOMReady=!1,t.readyCallback=function(){t.DOMReady=!0},t.supports.everything||(n=function(){t.readyCallback()},a.addEventListener?(a.addEventListener("DOMContentLoaded",n,!1),e.addEventListener("load",n,!1)):(e.attachEvent("onload",n),a.attachEvent("onreadystatechange",function(){"complete"===a.readyState&&t.readyCallback()})),(e=t.source||{}).concatemoji?c(e.concatemoji):e.wpemoji&&e.twemoji&&(c(e.twemoji),c(e.wpemoji)))}(window,document,window._wpemojiSettings);
+</script>
+<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 0.07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+<link rel="stylesheet" id="series_font-css" href="https://coolshell.cn/wp-content/plugins/simple-post-series/inc/icomoon/style.css?ver=2.4" type="text/css" media="all" />
+<link rel="stylesheet" id="wp-block-library-css" href="https://coolshell.cn/wp-content/plugins/gutenberg/build/block-library/style.css?ver=15.7.0" type="text/css" media="all" />
+<link rel="stylesheet" id="classic-theme-styles-css" href="https://coolshell.cn/wp-includes/css/classic-themes.min.css?ver=6.2" type="text/css" media="all" />
+<style id="global-styles-inline-css" type="text/css">
+body{--wp--preset--color--black: #000000;--wp--preset--color--cyan-bluish-gray: #abb8c3;--wp--preset--color--white: #ffffff;--wp--preset--color--pale-pink: #f78da7;--wp--preset--color--vivid-red: #cf2e2e;--wp--preset--color--luminous-vivid-orange: #ff6900;--wp--preset--color--luminous-vivid-amber: #fcb900;--wp--preset--color--light-green-cyan: #7bdcb5;--wp--preset--color--vivid-green-cyan: #00d084;--wp--preset--color--pale-cyan-blue: #8ed1fc;--wp--preset--color--vivid-cyan-blue: #0693e3;--wp--preset--color--vivid-purple: #9b51e0;--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple: linear-gradient(135deg,rgba(6,147,227,1) 0%,rgb(155,81,224) 100%);--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan: linear-gradient(135deg,rgb(122,220,180) 0%,rgb(0,208,130) 100%);--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange: linear-gradient(135deg,rgba(252,185,0,1) 0%,rgba(255,105,0,1) 100%);--wp--preset--gradient--luminous-vivid-orange-to-vivid-red: linear-gradient(135deg,rgba(255,105,0,1) 0%,rgb(207,46,46) 100%);--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray: linear-gradient(135deg,rgb(238,238,238) 0%,rgb(169,184,195) 100%);--wp--preset--gradient--cool-to-warm-spectrum: linear-gradient(135deg,rgb(74,234,220) 0%,rgb(151,120,209) 20%,rgb(207,42,186) 40%,rgb(238,44,130) 60%,rgb(251,105,98) 80%,rgb(254,248,76) 100%);--wp--preset--gradient--blush-light-purple: linear-gradient(135deg,rgb(255,206,236) 0%,rgb(152,150,240) 100%);--wp--preset--gradient--blush-bordeaux: linear-gradient(135deg,rgb(254,205,165) 0%,rgb(254,45,45) 50%,rgb(107,0,62) 100%);--wp--preset--gradient--luminous-dusk: linear-gradient(135deg,rgb(255,203,112) 0%,rgb(199,81,192) 50%,rgb(65,88,208) 100%);--wp--preset--gradient--pale-ocean: linear-gradient(135deg,rgb(255,245,203) 0%,rgb(182,227,212) 50%,rgb(51,167,181) 100%);--wp--preset--gradient--electric-grass: linear-gradient(135deg,rgb(202,248,128) 0%,rgb(113,206,126) 100%);--wp--preset--gradient--midnight: linear-gradient(135deg,rgb(2,3,129) 0%,rgb(40,116,252) 100%);--wp--preset--font-size--small: 13px;--wp--preset--font-size--medium: 20px;--wp--preset--font-size--large: 36px;--wp--preset--font-size--x-large: 42px;--wp--preset--spacing--20: 0.44rem;--wp--preset--spacing--30: 0.67rem;--wp--preset--spacing--40: 1rem;--wp--preset--spacing--50: 1.5rem;--wp--preset--spacing--60: 2.25rem;--wp--preset--spacing--70: 3.38rem;--wp--preset--spacing--80: 5.06rem;--wp--preset--shadow--natural: 6px 6px 9px rgba(0, 0, 0, 0.2);--wp--preset--shadow--deep: 12px 12px 50px rgba(0, 0, 0, 0.4);--wp--preset--shadow--sharp: 6px 6px 0px rgba(0, 0, 0, 0.2);--wp--preset--shadow--outlined: 6px 6px 0px -3px rgba(255, 255, 255, 1), 6px 6px rgba(0, 0, 0, 1);--wp--preset--shadow--crisp: 6px 6px 0px rgba(0, 0, 0, 1);}:where(.is-layout-flex){gap: 0.5em;}body .is-layout-flow > .alignleft{float: left;margin-inline-start: 0;margin-inline-end: 2em;}body .is-layout-flow > .alignright{float: right;margin-inline-start: 2em;margin-inline-end: 0;}body .is-layout-flow > .aligncenter{margin-left: auto !important;margin-right: auto !important;}body .is-layout-constrained > .alignleft{float: left;margin-inline-start: 0;margin-inline-end: 2em;}body .is-layout-constrained > .alignright{float: right;margin-inline-start: 2em;margin-inline-end: 0;}body .is-layout-constrained > .aligncenter{margin-left: auto !important;margin-right: auto !important;}body .is-layout-constrained > :where(:not(.alignleft):not(.alignright):not(.alignfull)){max-width: var(--wp--style--global--content-size);margin-left: auto !important;margin-right: auto !important;}body .is-layout-constrained > .alignwide{max-width: var(--wp--style--global--wide-size);}body .is-layout-flex{display: flex;}body .is-layout-flex{flex-wrap: wrap;align-items: center;}body .is-layout-flex > *{margin: 0;}body .is-layout-grid{display: grid;}body .is-layout-grid > *{margin: 0;}:where(.wp-block-columns.is-layout-flex){gap: 2em;}.has-black-color{color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-color{color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-color{color: var(--wp--preset--color--white) !important;}.has-pale-pink-color{color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-color{color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-color{color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-color{color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-color{color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-color{color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-color{color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-color{color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-color{color: var(--wp--preset--color--vivid-purple) !important;}.has-black-background-color{background-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-background-color{background-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-background-color{background-color: var(--wp--preset--color--white) !important;}.has-pale-pink-background-color{background-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-background-color{background-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-background-color{background-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-background-color{background-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-background-color{background-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-background-color{background-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-background-color{background-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-background-color{background-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-background-color{background-color: var(--wp--preset--color--vivid-purple) !important;}.has-black-border-color{border-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-border-color{border-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-border-color{border-color: var(--wp--preset--color--white) !important;}.has-pale-pink-border-color{border-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-border-color{border-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-border-color{border-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-border-color{border-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-border-color{border-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-border-color{border-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-border-color{border-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-border-color{border-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-border-color{border-color: var(--wp--preset--color--vivid-purple) !important;}.has-vivid-cyan-blue-to-vivid-purple-gradient-background{background: var(--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple) !important;}.has-light-green-cyan-to-vivid-green-cyan-gradient-background{background: var(--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan) !important;}.has-luminous-vivid-amber-to-luminous-vivid-orange-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange) !important;}.has-luminous-vivid-orange-to-vivid-red-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-orange-to-vivid-red) !important;}.has-very-light-gray-to-cyan-bluish-gray-gradient-background{background: var(--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray) !important;}.has-cool-to-warm-spectrum-gradient-background{background: var(--wp--preset--gradient--cool-to-warm-spectrum) !important;}.has-blush-light-purple-gradient-background{background: var(--wp--preset--gradient--blush-light-purple) !important;}.has-blush-bordeaux-gradient-background{background: var(--wp--preset--gradient--blush-bordeaux) !important;}.has-luminous-dusk-gradient-background{background: var(--wp--preset--gradient--luminous-dusk) !important;}.has-pale-ocean-gradient-background{background: var(--wp--preset--gradient--pale-ocean) !important;}.has-electric-grass-gradient-background{background: var(--wp--preset--gradient--electric-grass) !important;}.has-midnight-gradient-background{background: var(--wp--preset--gradient--midnight) !important;}.has-small-font-size{font-size: var(--wp--preset--font-size--small) !important;}.has-medium-font-size{font-size: var(--wp--preset--font-size--medium) !important;}.has-large-font-size{font-size: var(--wp--preset--font-size--large) !important;}.has-x-large-font-size{font-size: var(--wp--preset--font-size--x-large) !important;}
+:where(.wp-block-columns.is-layout-flex){gap: 2em;}
+.wp-block-pullquote{font-size: 1.5em;line-height: 1.6;}
+.wp-block-navigation a:where(:not(.wp-element-button)){color: inherit;}
+</style>
+<link rel="stylesheet" id="wp-postratings-css" href="https://coolshell.cn/wp-content/plugins/wp-postratings/css/postratings-css.css?ver=1.90.1" type="text/css" media="all" />
+<link rel="stylesheet" id="wp-pagenavi-css" href="https://coolshell.cn/wp-content/plugins/wp-pagenavi/pagenavi-css.css?ver=2.70" type="text/css" media="all" />
+<link rel="stylesheet" id="ez-toc-css" href="https://coolshell.cn/wp-content/plugins/easy-table-of-contents/assets/css/screen.min.css?ver=2.0.48" type="text/css" media="all" />
+<style id="ez-toc-inline-css" type="text/css">
+div#ez-toc-container p.ez-toc-title {font-size: 120%;}div#ez-toc-container p.ez-toc-title {font-weight: 500;}div#ez-toc-container ul li {font-size: 95%;}div#ez-toc-container nav ul ul li ul li {font-size: %!important;}
+.ez-toc-container-direction {direction: ltr;}.ez-toc-counter ul{counter-reset: item;}.ez-toc-counter nav ul li a::before {content: counters(item, ".", decimal) ". ";display: inline-block;counter-increment: item;flex-grow: 0;flex-shrink: 0;margin-right: .2em; float: left;}.ez-toc-widget-direction {direction: ltr;}.ez-toc-widget-container ul{counter-reset: item;}.ez-toc-widget-container nav ul li a::before {content: counters(item, ".", decimal) ". ";display: inline-block;counter-increment: item;flex-grow: 0;flex-shrink: 0;margin-right: .2em; float: left;}
+</style>
+<link rel="stylesheet" id="bootstrap-css" href="https://coolshell.cn/wp-content/themes/MyNisarg/css/bootstrap.css?ver=6.2" type="text/css" media="all" />
+<link rel="stylesheet" id="nisarg-style-css" href="https://coolshell.cn/wp-content/themes/MyNisarg/style.css?ver=6.2" type="text/css" media="all" />
+<style id="nisarg-style-inline-css" type="text/css">
+	/* Color Scheme */
+
+	/* Accent Color */
+
+	a:active,
+	a:hover,
+	a:focus {
+	    color: #009688;
+	}
+
+	.navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus {
+		color: #009688;
+	}
+
+	
+	.navbar-default .navbar-nav > .active > a, .navbar-default .navbar-nav > .active > a:hover, .navbar-default .navbar-nav > .active > a:focus {
+		color: #009688;			
+	}
+
+	@media (min-width: 768px){
+		.navbar-default .navbar-nav > .active > a, .navbar-default .navbar-nav > .active > a:hover, .navbar-default .navbar-nav > .active > a:focus {
+			border-top: 4px solid #009688;
+		}		
+	}
+
+	.dropdown-menu > .active > a, .dropdown-menu > .active > a:hover, .dropdown-menu > .active > a:focus {	    
+	    background-color: #009688;
+	}
+
+
+	.navbar-default .navbar-nav > .open > a, .navbar-default .navbar-nav > .open > a:hover, .navbar-default .navbar-nav > .open > a:focus {
+		color: #009688;
+	}
+
+	.navbar-default .navbar-nav > li > .dropdown-menu > li > a:hover,
+	.navbar-default .navbar-nav > li > .dropdown-menu > li > a:focus {
+		color: #fff;
+		background-color: #009688;
+	}
+
+	.navbar-default .navbar-nav .open .dropdown-menu > .active > a, .navbar-default .navbar-nav .open .dropdown-menu > .active > a:hover, .navbar-default .navbar-nav .open .dropdown-menu > .active > a:focus {
+		background-color: #fff;
+		color: #009688;
+	}
+
+	@media (max-width: 767px) {
+		.navbar-default .navbar-nav .open .dropdown-menu > li > a:hover {
+			background-color: #009688;
+			color: #fff;
+		}
+	}
+
+	.sticky-post{
+	    background: #009688;
+	    color:white;
+	}
+	
+	.entry-title a:hover,
+	.entry-title a:focus{
+	    color: #009688;
+	}
+
+	.entry-header .entry-meta::after{
+	    background: #009688;
+	}
+
+	.fa {
+		color: #009688;
+	}
+
+	.btn-default{
+		border-bottom: 1px solid #009688;
+	}
+
+	.btn-default:hover, .btn-default:focus{
+	    border-bottom: 1px solid #009688;
+	    background-color: #009688;
+	}
+
+	.nav-previous:hover, .nav-next:hover{
+	    border: 1px solid #009688;
+	    background-color: #009688;
+	}
+
+	.next-post a:hover,.prev-post a:hover{
+	    color: #009688;
+	}
+
+	.posts-navigation .next-post a:hover .fa, .posts-navigation .prev-post a:hover .fa{
+	    color: #009688;
+	}
+
+
+	#secondary .widget-title::after{
+		background-color: #009688;
+	    content: "";
+	    position: absolute;
+	    width: 75px;
+	    display: block;
+	    height: 4px;    
+	    bottom: -15px;
+	}
+
+	#secondary .widget a:hover,
+	#secondary .widget a:focus{
+		color: #009688;
+	}
+
+	#secondary .widget_calendar tbody a {
+	    background-color: #009688;
+	    color: #fff;
+	    padding: 0.2em;
+	}
+
+	#secondary .widget_calendar tbody a:hover{
+	    background-color: #009688;
+	    color: #fff;
+	    padding: 0.2em;
+	}	
+
+</style>
+<link rel="stylesheet" id="font-awesome-css" href="https://coolshell.cn/wp-content/themes/MyNisarg/font-awesome/css/font-awesome.min.css?ver=6.2" type="text/css" media="all" />
+<link rel="stylesheet" id="nisarggooglefonts-css" href="//fonts.googleapis.com/css?family=Lato:400,300italic,700|Source+Sans+Pro:400,400italic" type="text/css" media="all" />
+<link rel="stylesheet" id="enlighterjs-css" href="https://coolshell.cn/wp-content/plugins/enlighter/cache/enlighterjs.min.css?ver=0cuVQBPCj0viGB0" type="text/css" media="all" />
+<script type="e79c7100b5ac8aff1472eaec-text/javascript" src="https://coolshell.cn/wp-includes/js/jquery/jquery.min.js?ver=3.6.3" id="jquery-core-js"></script>
+<script type="e79c7100b5ac8aff1472eaec-text/javascript" src="https://coolshell.cn/wp-includes/js/jquery/jquery-migrate.min.js?ver=3.4.0" id="jquery-migrate-js"></script>
+<script type="e79c7100b5ac8aff1472eaec-text/javascript" src="https://coolshell.cn/wp-content/plugins/simple-post-series/autohide.js?ver=2.4" id="series-js"></script>
+<script type="e79c7100b5ac8aff1472eaec-text/javascript" id="ez-toc-scroll-scriptjs-js-after">
+jQuery(document).ready(function(){document.querySelectorAll(".ez-toc-section").forEach(t=>{t.setAttribute("ez-toc-data-id","#"+decodeURI(t.getAttribute("id")))}),jQuery("a.ez-toc-link").click(function(){let t=jQuery(this).attr("href"),e=jQuery("#wpadminbar"),i=0;30>30&&(i=30),e.length&&(i+=e.height()),jQuery('[ez-toc-data-id="'+decodeURI(t)+'"]').length>0&&(i=jQuery('[ez-toc-data-id="'+decodeURI(t)+'"]').offset().top-i),jQuery("html, body").animate({scrollTop:i},500)})});
+</script>
+<!--[if lt IE 9]>
+<script type='text/javascript' src='https://coolshell.cn/wp-content/themes/MyNisarg/js/html5shiv.js?ver=3.7.3' id='html5shiv-js'></script>
+<![endif]-->
+<link rel="https://api.w.org/" href="https://coolshell.cn/wp-json/" /><link rel="alternate" type="application/json" href="https://coolshell.cn/wp-json/wp/v2/posts/1051" /><link rel="EditURI" type="application/rsd+xml" title="RSD" href="https://coolshell.cn/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="https://coolshell.cn/wp-includes/wlwmanifest.xml" />
+<meta name="generator" content="WordPress 6.2" />
+<link rel="shortlink" href="https://coolshell.cn/?p=1051" />
+<link rel="alternate" type="application/json+oembed" href="https://coolshell.cn/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fcoolshell.cn%2Farticles%2F1051.html" />
+<link rel="alternate" type="text/xml+oembed" href="https://coolshell.cn/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fcoolshell.cn%2Farticles%2F1051.html&#038;format=xml" />
+<script type="e79c7100b5ac8aff1472eaec-text/javascript">
+	window._wp_rp_static_base_url = 'https://wprp.zemanta.com/static/';
+	window._wp_rp_wp_ajax_url = "https://coolshell.cn/wp-admin/admin-ajax.php";
+	window._wp_rp_plugin_version = '3.6.4';
+	window._wp_rp_post_id = '1051';
+	window._wp_rp_num_rel_posts = '6';
+	window._wp_rp_thumbnails = true;
+	window._wp_rp_post_title = '%E5%A6%82%E4%BD%95%E5%9C%A8Java%E4%B8%AD%E9%81%BF%E5%85%8Dequals%E6%96%B9%E6%B3%95%E7%9A%84%E9%9A%90%E8%97%8F%E9%99%B7%E9%98%B1';
+	window._wp_rp_post_tags = ['java', 'java%E8%AF%AD%E8%A8%80', '%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80', 'java', 'int', 'return', 'p1', 'privat', 'fail', 'equal', 'public', 'wrong', 'print', 'final', 'defin', 'p2', 'class', 'point'];
+	window._wp_rp_promoted_content = true;
+</script>
+<link rel="stylesheet" href="https://coolshell.cn/wp-content/plugins/wordpress-23-related-posts-plugin/static/themes/vertical-m.css?version=3.6.4" />
+<style type="text/css">
+        .site-header { background: #1d2b2d; }
+</style>
+</head>
+<body class="post-template-default single single-post postid-1051 single-format-standard group-blog">
+<link rel="stylesheet" id="nisarg-style-css" href="https://coolshell.cn/wp-content/themes/MyNisarg/style.css" type="text/css" media="all">
+<div id="page" class="hfeed site">
+<header id="masthead" role="banner">
+<nav class="navbar navbar-default navbar-fixed-top navbar-left" role="navigation">
+
+<div class="container" id="navigation_menu">
+<div class="navbar-header">
+<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+<span class="sr-only">Toggle navigation</span>
+<span class="icon-bar"></span>
+<span class="icon-bar"></span>
+<span class="icon-bar"></span>
+</button>
+<a class="navbar-brand" href="https://coolshell.cn/"><div class="coolshell_logo"></div>酷 壳 &#8211; CoolShell</a>
+</div>
+<div class="collapse navbar-collapse navbar-ex1-collapse"><ul id="menu-coolshell" class="nav navbar-nav"><li id="menu-item-17405" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-17405"><a title="首页" href="https://coolshell.cn/">首页</a></li>
+<li id="menu-item-17406" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-17406"><a title="推荐文章" href="https://coolshell.cn/featured">推荐文章</a></li>
+<li id="menu-item-17407" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-17407"><a title="本站插件" href="https://coolshell.cn/plugins">本站插件</a></li>
+<li id="menu-item-17408" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-17408"><a title="留言小本" href="https://coolshell.cn/guestbook">留言小本</a></li>
+<li id="menu-item-17409" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-17409"><a title="关于酷壳" href="https://coolshell.cn/about">关于酷壳</a></li>
+<li id="menu-item-17410" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-17410"><a title="关于陈皓" href="https://coolshell.cn/haoel">关于陈皓</a></li>
+<li id="menu-item-17582" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-17582"><a title="RSS" href="https://coolshell.cn/feed">RSS</a></li>
+</ul></div>
+</div>
+</nav>
+<div id="cc_spacer"></div>
+<div class="site-header">
+<div class="pull-right">
+<a title="把这个链接拖到你的Chrome收藏夹工具栏中" href="javascript:(function(){function c(){var e=document.createElement(&quot;link&quot;);e.setAttribute(&quot;type&quot;,&quot;text/css&quot;);e.setAttribute(&quot;rel&quot;,&quot;stylesheet&quot;);e.setAttribute(&quot;href&quot;,f);e.setAttribute(&quot;class&quot;,l);document.body.appendChild(e)}function h(){var e=document.getElementsByClassName(l);for(var t=0;t<e.length;t++){document.body.removeChild(e[t])}}function p(){var e=document.createElement(&quot;div&quot;);e.setAttribute(&quot;class&quot;,a);document.body.appendChild(e);setTimeout(function(){document.body.removeChild(e)},100)}function d(e){return{height:e.offsetHeight,width:e.offsetWidth}}function v(i){var s=d(i);return s.height>e&&s.height<n&&s.width>t&&s.width<r}function m(e){var t=e;var n=0;while(!!t){n+=t.offsetTop;t=t.offsetParent}return n}function g(){var e=document.documentElement;if(!!window.innerWidth){return window.innerHeight}else if(e&&!isNaN(e.clientHeight)){return e.clientHeight}return 0}function y(){if(window.pageYOffset){return window.pageYOffset}return Math.max(document.documentElement.scrollTop,document.body.scrollTop)}function E(e){var t=m(e);return t>=w&&t<=b+w}function S(){var e=document.createElement(&quot;audio&quot;);e.setAttribute(&quot;class&quot;,l);e.src=i;e.loop=false;e.addEventListener(&quot;canplay&quot;,function(){setTimeout(function(){x(k)},500);setTimeout(function(){N();p();for(var e=0;e<O.length;e++){T(O[e])}},15500)},true);e.addEventListener(&quot;ended&quot;,function(){N();h()},true);e.innerHTML=&quot; <p>If you are reading this, it is because your browser does not support the audio element. We recommend that you get a new browser.</p> <p>&quot;;document.body.appendChild(e);e.play()}function x(e){e.className+=&quot; &quot;+s+&quot; &quot;+o}function T(e){e.className+=&quot; &quot;+s+&quot; &quot;+u[Math.floor(Math.random()*u.length)]}function N(){var e=document.getElementsByClassName(s);var t=new RegExp(&quot;\\b&quot;+s+&quot;\\b&quot;);for(var n=0;n<e.length;){e[n].className=e[n].className.replace(t,&quot;&quot;)}}var e=30;var t=30;var n=350;var r=350;var i=&quot;//s3.amazonaws.com/moovweb-marketing/playground/harlem-shake.mp3&quot;;var s=&quot;mw-harlem_shake_me&quot;;var o=&quot;im_first&quot;;var u=[&quot;im_drunk&quot;,&quot;im_baked&quot;,&quot;im_trippin&quot;,&quot;im_blown&quot;];var a=&quot;mw-strobe_light&quot;;var f=&quot;//s3.amazonaws.com/moovweb-marketing/playground/harlem-shake-style.css&quot;;var l=&quot;mw_added_css&quot;;var b=g();var w=y();var C=document.getElementsByTagName(&quot;*&quot;);var k=null;for(var L=0;L<C.length;L++){var A=C[L];if(v(A)){if(E(A)){k=A;break}}}if(A===null){console.warn(&quot;Could not find a node of the right size. Please try a different page.&quot;);return}c();S();var O=[];for(var L=0;L<C.length;L++){var A=C[L];if(v(A)){O.push(A)}}})()    ">High一下!</a>
+</div>
+<div class="site-branding">
+<a class="home-link" href="https://coolshell.cn/" title="酷 壳 &#8211; CoolShell" rel="home">
+<h1 class="site-title">酷 壳 &#8211; CoolShell</h1>
+<h2 class="site-description">享受编程和技术所带来的快乐 &#8211; Coding Your Ambition</h2>
+</a>
+</div>
+</div>
+</header>
+<div class="container">
+<div class="row">
+<div class="col-md-9 nav-searchbox hidden-lg hidden-md visible-sm-* visible-xs-*">
+<form role="search" method="get" class="search-form" action="https://coolshell.cn/">
+<label>
+<span class="screen-reader-text">Search for:</span>
+<input type="search" class="search-field" placeholder="Search …" value name="s" title="Search for:">
+</label>
+<button type="submit" class="search-submit"><span class="screen-reader-text">Search</span></button>
+</form>
+</div>
+</div>
+</div>
+<div id="content" class="site-content">
+<div class="container">
+<div class="row">
+<div id="primary" class="col-md-9 content-area">
+<main id="main" role="main">
+<article id="post-1051" class="post-content post-1051 post type-post status-publish format-standard hentry category-javadev category-proglanguage tag-java">
+<header class="entry-header">
+<span class="screen-reader-text">如何在Java中避免equals方法的隐藏陷阱</span>
+<h1 class="entry-title">如何在Java中避免equals方法的隐藏陷阱</h1>
+<div class="entry-meta">
+<h5 class="entry-date"><i class="fa fa-calendar-o"></i> <a href="https://coolshell.cn/articles/1051.html" title="11:14" rel="bookmark"><time class="entry-date" datetime="2009-06-18T11:14:41+08:00" pubdate>2009年06月18日 </time></a><span class="byline"><span class="sep"></span><i class="fa fa-user"></i>
+<span class="author vcard"><a class="url fn n" href="https://coolshell.cn/articles/author/neo" title="View all posts by Neo" rel="author">Neo</a></span></span> <i class="fa fa-comments-o"></i><span class="screen-reader-text">评论 </span> <a href="https://coolshell.cn/articles/1051.html#comments" class="comments-link">27 条评论</a> <i class="fa fa-users" style="margin-left:10px;"></i> 21,747 人阅读</h5>
+</div>
+</header>
+<div class="entry-content">
+<p><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3415450859608158" crossorigin="anonymous" type="e79c7100b5ac8aff1472eaec-text/javascript"></script><strong>译者注</strong> :你可能会觉得Java很简单，Object的equals实现也会非常简单，但是事实并不是你想象的这样，耐心的读完本文，你会发现你对Java了解的是如此的少。如果这篇文章是一份Java程序员的入职笔试，那么不知道有多少人会掉落到这样的陷阱中。原文转自<a href="http://www.artima.com/lejava/articles/equality.html">http://www.artima.com/lejava/articles/equality.html</a> 三位作者都是不同领域的大拿，有兴趣的读者可以从上面这个连接直接去阅读原文。</p>
+<p><strong>摘要</strong><br/>
+本文描述重载equals方法的技术，这种技术即使是具现类的子类增加了字段也能保证equal语义的正确性。<br/>
+在《Effective Java》的第8项中，Josh Bloch描述了当继承类作为面向对象语言中的等价关系的基础问题，要保证派生类的equal正确性语义所会面对的困难。Bloch这样写到：</p>
+<blockquote><p><strong>除非你忘记了面向对象抽象的好处，否则在当你继承一个新类或在类中增加了一个值组件时你无法同时保证equal的语义依然正确</strong></p></blockquote>
+<p><span id="more-1051"></span></p>
+<p>在《Programming in Scala》中的第28章演示了一种方法，这种方法允许即使继承了新类，增加了新的值组件，equal的语义仍然能得到保证。虽然在这本书中这项技术是在使用Scala类环境中，但是这项技术同样可以应用于Java定义的类中。在本文中的描述来自于Programming in Scala中的文字描述，但是代码被我从scala翻译成了Java</p>
+<p>　</p>
+<div id="ez-toc-container" class="ez-toc-v2_0_48 counter-hierarchy ez-toc-counter ez-toc-grey ez-toc-container-direction">
+<div class="ez-toc-title-container">
+<p class="ez-toc-title">目录</p>
+<span class="ez-toc-title-toggle"></span></div>
+<nav><ul class="ez-toc-list ez-toc-list-level-1 "><li class="ez-toc-page-1 ez-toc-heading-level-4"><a class="ez-toc-link ez-toc-heading-1" href="#%E5%B8%B8%E8%A7%81%E7%9A%84%E7%AD%89%E4%BB%B7%E6%96%B9%E6%B3%95%E9%99%B7%E9%98%B1" title="常见的等价方法陷阱">常见的等价方法陷阱</a></li><li class="ez-toc-page-1 ez-toc-heading-level-4"><a class="ez-toc-link ez-toc-heading-2" href="#%E9%99%B7%E9%98%B11%EF%BC%9A%E5%AE%9A%E4%B9%89%E9%94%99%E8%AF%AFequals%E6%96%B9%E6%B3%95%E7%AD%BE%E5%90%8Dsignature" title="陷阱1：定义错误equals方法签名(signature)">陷阱1：定义错误equals方法签名(signature)</a></li><li class="ez-toc-page-1 ez-toc-heading-level-4"><a class="ez-toc-link ez-toc-heading-3" href="#%E9%99%B7%E9%98%B12%EF%BC%9A%E9%87%8D%E8%BD%BD%E4%BA%86equals%E7%9A%84%E4%BD%86%E6%B2%A1%E6%9C%89%E5%90%8C%E6%97%B6%E9%87%8D%E8%BD%BDhashCode%E7%9A%84%E6%96%B9%E6%B3%95" title="陷阱2：重载了equals的但没有同时重载hashCode的方法">陷阱2：重载了equals的但没有同时重载hashCode的方法</a></li><li class="ez-toc-page-1 ez-toc-heading-level-4"><a class="ez-toc-link ez-toc-heading-4" href="#%E9%99%B7%E9%98%B13%EF%BC%9A%E5%BB%BA%E7%AB%8B%E5%9C%A8%E4%BC%9A%E5%8F%98%E5%8C%96%E5%AD%97%E6%AE%B5%E4%B8%8A%E7%9A%84equals%E5%AE%9A%E4%B9%89" title="陷阱3：建立在会变化字段上的equals定义">陷阱3：建立在会变化字段上的equals定义</a></li><li class="ez-toc-page-1 ez-toc-heading-level-4"><a class="ez-toc-link ez-toc-heading-5" href="#%E9%99%B7%E9%98%B14%EF%BC%9A%E4%B8%8D%E6%BB%A1%E8%B6%B3%E7%AD%89%E4%BB%B7%E5%85%B3%E7%B3%BB%E7%9A%84equals%E9%94%99%E8%AF%AF%E5%AE%9A%E4%B9%89" title="陷阱4：不满足等价关系的equals错误定义">陷阱4：不满足等价关系的equals错误定义</a></li><li class="ez-toc-page-1 ez-toc-heading-level-4"><a class="ez-toc-link ez-toc-heading-6" href="#canEqual_%E6%96%B9%E6%B3%95" title="canEqual 方法">canEqual 方法</a></li></ul></nav></div>
+<h4><span class="ez-toc-section" id="%E5%B8%B8%E8%A7%81%E7%9A%84%E7%AD%89%E4%BB%B7%E6%96%B9%E6%B3%95%E9%99%B7%E9%98%B1"></span>常见的等价方法陷阱<span class="ez-toc-section-end"></span></h4>
+<p>java.lang.Object 类定义了equals这个方法，它的子类可以通过重载来覆盖它。不幸的是，在面向对象中写出正确的equals方法是非常困难的。事实上，在研究了大量的Java代码后，2007 paper的作者得出了如下的一个结论：</p>
+<blockquote><p>几乎所有的equals方法的实现都是错误的！</p></blockquote>
+<p>这个问题是因为等价是和很多其他的事物相关联。例如其中之一，一个的类型C的错误等价方法可能意味着你无法将这个类型C的对象可信赖的放入到容器中。比如说，你有两个元素elem1和elem2他们都是类型C的对象，并且他们是相等，即elem1.equals(elm2)返回ture。但是，只要这个equals方法是错误的实现，那么你就有可能会看见如下的一些行为：</p>
+<pre class="brush: java">Set hashSet&lt;C&gt; = new java.util.HashSet&lt;C&gt;();
+hashSet.add(elem1);
+hashSet.contains(elem2);    // returns false!</pre>
+<p>当equals重载时，这里有4个会引发equals行为不一致的常见陷阱：</p>
+<ol>
+<li>定义了错误的equals方法签名(signature) Defining equals with the wrong signature.</li>
+<li>重载了equals的但没有同时重载hashCode的方法。 Changing equals without also changing hashCode.</li>
+<li>建立在会变化字域上的equals定义。 Defining equals in terms of mutable fields.</li>
+<li>不满足等价关系的equals错误定义 Failing to define equals as an equivalence relation.</li>
+</ol>
+<p>在剩下的章节中我们将依次讨论这4中陷阱。</p>
+<p>　</p>
+<h4><span class="ez-toc-section" id="%E9%99%B7%E9%98%B11%EF%BC%9A%E5%AE%9A%E4%B9%89%E9%94%99%E8%AF%AFequals%E6%96%B9%E6%B3%95%E7%AD%BE%E5%90%8Dsignature"></span>陷阱1：定义错误equals方法签名(signature)<span class="ez-toc-section-end"></span></h4>
+<p>考虑为下面这个简单类Point增加一个等价性方法：</p>
+<pre class="brush: java">public class Point {
+
+    private final int x;
+    private final int y;
+
+    public Point(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    // ...
+}</pre>
+<p>看上去非常明显，但是按照这种方式来定义equals就是错误的。</p>
+<pre class="brush: java">// An utterly wrong definition of equals
+public boolean equals(Point other) {
+  return (this.getX() == other.getX() &amp;&amp; this.getY() == other.getY());
+}</pre>
+<p>这个方法有什么问题呢？初看起来，它工作的非常完美：</p>
+<pre class="brush: java">Point p1 = new Point(1, 2);
+Point p2 = new Point(1, 2);
+
+Point q = new Point(2, 3);
+
+System.out.println(p1.equals(p2)); // prints true
+
+System.out.println(p1.equals(q)); // prints false</pre>
+<p>然而，当我们一旦把这个Point类的实例放入到一个容器中问题就出现了：</p>
+<pre class="brush: java">import java.util.HashSet;
+
+HashSet&lt;Point&gt; coll = new HashSet&lt;Point&gt;();
+coll.add(p1);
+
+System.out.println(coll.contains(p2)); // prints false</pre>
+<p>为什么coll中没有包含p2呢？甚至是p1也被加到集合里面，p1和p2是是等价的对象吗？在下面的程序中，我们可以找到其中的一些原因，定义p2a是一个指向p2的对象，但是p2a的类型是Object而非Point类型：</p>
+<pre class="brush: java">Object p2a = p2;</pre>
+<p>现在我们重复第一个比较，但是不再使用p2而是p2a,我们将会得到如下的结果：</p>
+<pre class="brush: java">System.out.println(p1.equals(p2a)); // prints false</pre>
+<p>到底是那里出了了问题？事实上，之前所给出的equals版本并没有覆盖Object类的equals方法，因为他的类型不同。下面是Object的equals方法的定义</p>
+<pre class="brush: java">public boolean equals(Object other)</pre>
+<p>因为Point类中的equals方法使用的是以Point类而非Object类做为参数，因此它并没有覆盖Object中的equals方法。而是一种变化了的重载。在Java中重载被解析为静态的参数类型而非运行期的类型，因此当静态参数类型是Point,Point的equals方法就被调用。然而当静态参数类型是Object时，Object类的equals就被调用。因为这个方法并没有被覆盖，因此它仍然是实现成比较对象标示。这就是为什么虽然p1和p2a具有同样的x,y值，&#8221;p1.equals(p2a)&#8221;仍然返回了false。这也是会什么HasSet的contains方法返回false的原因，因为这个方法操作的是泛型，他调用的是一般化的Object上equals方法而非Point类上变化了的重载方法equals</p>
+<p>一个更好但不完美的equals方法定义如下：</p>
+<pre class="brush: java">// A better definition, but still not perfect
+@Override public boolean equals(Object other) {
+    boolean result = false;
+    if (other instanceof Point) {
+        Point that = (Point) other;
+        result = (this.getX() == that.getX() &amp;&amp; this.getY() == that.getY());
+    }
+    return result;
+}</pre>
+<p>现在equals有了正确的类型，它使用了一个Object类型的参数和一个返回布尔型的结果。这个方法的实现使用instanceof操作和做了一个造型。它首先检查这个对象是否是一个Point类，如果是，他就比较两个点的坐标并返回结果，否则返回false。</p>
+<p>　</p>
+<h4><span class="ez-toc-section" id="%E9%99%B7%E9%98%B12%EF%BC%9A%E9%87%8D%E8%BD%BD%E4%BA%86equals%E7%9A%84%E4%BD%86%E6%B2%A1%E6%9C%89%E5%90%8C%E6%97%B6%E9%87%8D%E8%BD%BDhashCode%E7%9A%84%E6%96%B9%E6%B3%95"></span>陷阱2：重载了equals的但没有同时重载hashCode的方法<span class="ez-toc-section-end"></span></h4>
+<p>如果你使用上一个定义的Point类进行p1和p2a的反复比较，你都会得到你预期的true的结果。但是如果你将这个类对象放入到HashSet.contains()方法中测试，你就有可能仍然得到false的结果：</p>
+<pre class="brush: java">Point p1 = new Point(1, 2);
+Point p2 = new Point(1, 2);
+
+HashSet&lt;Point&gt; coll = new HashSet&lt;Point&gt;();
+coll.add(p1);
+
+System.out.println(coll.contains(p2)); // 打印 false (有可能)</pre>
+<p>事实上，这个个结果不是100%的false，你也可能有返回ture的经历。如果你得到的结果是true的话，那么你试试其他的坐标值，最终你一定会得到一个在集合中不包含的结果。导致这个结果的原因是Point重载了equals却没有重载hashCode。<br/>
+注意上面例子的的容器是一个HashSet，这就意味着容器中的元素根据他们的哈希码被被放入到&#8221;哈希桶 hash buckets&#8221;中。contains方法首先根据哈希码在哈希桶中查找，然后让桶中的所有元素和所给的参数进行比较。现在，虽然最后一个Point类的版本重定义了equals方法，但是它并没有同时重定义hashCode。因此，hashCode仍然是Object类的那个版本，即：所分配对象的一个地址的变换。所以p1和p2的哈希码理所当然的不同了，甚至是即时这两个点的坐标完全相同。不同的哈希码导致他们具有极高的可能性被放入到集合中不同的哈希桶中。contains方法将会去找p2的哈希码对应哈希桶中的匹配元素。但是大多数情况下，p1一定是在另外一个桶中，因此，p2永远找不到p1进行匹配。当然p2和p2也可能偶尔会被放入到一个桶中，在这种情况下，contains的结果就为true了。</p>
+<p>最新一个Point类实现的问题是，它的实现违背了作为Object类的定义的hashCode的语义。</p>
+<blockquote><p><strong><br/>
+如果两个对象根据equals(Object)方法是相等的，那么在这两个对象上调用hashCode方法应该产生同样的值<br/>
+</strong></p></blockquote>
+<p>事实上，在Java中，hashCode和equals需要一起被重定义是众所周知的。此外，hashCode只可以依赖于equals依赖的域来产生值。对于Point这个类来说，下面的的hashCode定义是一个非常合适的定义。</p>
+<pre class="brush: java">public class Point {
+
+    private final int x;
+    private final int y;
+
+    public Point(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    @Override public boolean equals(Object other) {
+        boolean result = false;
+        if (other instanceof Point) {
+            Point that = (Point) other;
+            result = (this.getX() == that.getX() &amp;&amp; this.getY() == that.getY());
+        }
+        return result;
+    }
+<span style="color: #339966;">
+    @Override public int hashCode() {
+        return (41 * (41 + getX()) + getY());
+    }
+</span>
+}</pre>
+<p>这只是hashCode一个可能的实现。x域加上常量41后的结果再乘与41并将结果在加上y域的值。这样做就可以以低成本的运行时间和低成本代码大小得到一个哈希码的合理的分布(<strong>译者注：</strong>性价比相对较高的做法)。<br/>
+增加hashCode方法重载修正了定义类似Point类等价性的问题。然而，关于类的等价性仍然有其他的问题点待发现。</p>
+<p>　</p>
+<h4><span class="ez-toc-section" id="%E9%99%B7%E9%98%B13%EF%BC%9A%E5%BB%BA%E7%AB%8B%E5%9C%A8%E4%BC%9A%E5%8F%98%E5%8C%96%E5%AD%97%E6%AE%B5%E4%B8%8A%E7%9A%84equals%E5%AE%9A%E4%B9%89"></span>陷阱3：建立在会变化字段上的equals定义<span class="ez-toc-section-end"></span></h4>
+<p>让我们在Point类做一个非常微小的变化</p>
+<pre class="brush: java">public class Point {
+<span style="color: #339966;">
+    private int x;
+    private int y;
+</span>
+    public Point(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
+<span style="color: #339966;">
+    public void setX(int x) { // Problematic
+        this.x = x;
+    }
+
+    public void setY(int y) {
+        this.y = y;
+    }
+</span>
+    @Override public boolean equals(Object other) {
+        boolean result = false;
+        if (other instanceof Point) {
+            Point that = (Point) other;
+            result = (this.getX() == that.getX() &amp;&amp; this.getY() == that.getY());
+        }
+        return result;
+    }
+
+    @Override public int hashCode() {
+        return (41 * (41 + getX()) + getY());
+    }
+}</pre>
+<p>唯一的不同是x和y域不再是final，并且两个set方法被增加到类中来，并允许客户改变x和y的值。equals和hashCode这个方法的定义现在是基于在这两个会发生变化的域上，因此当他们的域的值改变时，结果也就跟着改变。因此一旦你将这个point对象放入到集合中你将会看到非常神奇的效果。</p>
+<pre class="brush: java">Point p = new Point(1, 2);
+
+HashSet&lt;Point&gt; coll = new HashSet&lt;Point&gt;();
+coll.add(p);
+
+System.out.println(coll.contains(p)); // 打印 true</pre>
+<p>现在如果你改变p中的一个域，这个集合中还会包含point吗，我们将拭目以待。</p>
+<pre class="brush: java">p.setX(p.getX() + 1);
+
+System.out.println(coll.contains(p)); // (有可能)打印 false</pre>
+<p>看起来非常的奇怪。p去那里去了？如果你通过集合的迭代器来检查p是否包含，你将会得到更奇怪的结果。</p>
+<pre class="brush: java">Iterator&lt;Point&gt; it = coll.iterator();
+boolean containedP = false;
+while (it.hasNext()) {
+    Point nextP = it.next();
+    if (nextP.equals(p)) {
+        containedP = true;
+        break;
+    }
+}
+
+System.out.println(containedP); // 打印 true</pre>
+<p>结果是，集合中不包含p，但是p在集合的元素中！到底发生了什么！当然，所有的这一切都是在x域的修改后才发生的，p最终的的hashCode是在集合coll错误的哈希桶中。即，原始哈希桶不再有其新值对应的哈希码。换句话说，p已经在集合coll的是视野范围之外，虽然他仍然属于coll的元素。</p>
+<p>从这个例子所得到的教训是，当equals和hashCode依赖于会变化的状态时，那么就会给用户带来问题。如果这样的对象被放入到集合中，用户必须小心，不要修改这些这些对象所依赖的状态，这是一个小陷阱。如果你需要根据对象当前的状态进行比较的话，你应该不要再重定义equals，应该起其他的方法名字而不是equals。对于我们的Point类的最后的定义，我们最好省略掉hashCode的重载，并将比较的方法名命名为equalsContents，或其他不同于equals的名字。那么Point将会继承原来默认的equals和hashCode的实现，因此当我们修改了x域后p依然会呆在其原来在容器中应该在位置。</p>
+<p>　</p>
+<h4><span class="ez-toc-section" id="%E9%99%B7%E9%98%B14%EF%BC%9A%E4%B8%8D%E6%BB%A1%E8%B6%B3%E7%AD%89%E4%BB%B7%E5%85%B3%E7%B3%BB%E7%9A%84equals%E9%94%99%E8%AF%AF%E5%AE%9A%E4%B9%89"></span>陷阱4：不满足等价关系的equals错误定义<span class="ez-toc-section-end"></span></h4>
+<p>Object中的equals的规范阐述了equals方法必须实现在非null对象上的等价关系：</p>
+<ul>
+<li>自反原则：对于任何非null值X,表达式x.equals(x)总返回true。</li>
+<li>等价性：对于任何非空值x和y，那么当且仅当y.equals(x)返回真时，x.equals(y)返回真。</li>
+<li>传递性：对于任何非空值x,y,和z，如果x.equals(y)返回真，且y.equals(z)也返回真，那么x.equals(z)也应该返回真。</li>
+<li>一致性：对于非空x,y，多次调用x.equals(y)应该一致的返回真或假。提供给equals方法比较使用的信息不应该包含改过的信息。</li>
+<li>对于任何非空值x,x.equals(null)应该总返回false.</li>
+</ul>
+<p>Point类的equals定义已经被开发成了足够满足equals规范的定义。然而，当考虑到继承的时候，事情就开始变得非常复杂起来。比如说有一个Point的子类ColoredPoint，它比Point多增加了一个类型是Color的color域。假设Color被定义为一个枚举类型：</p>
+<pre class="brush: java">public enum Color {
+    RED, ORANGE, YELLOW, GREEN, BLUE, INDIGO, VIOLET;
+}</pre>
+<p>ColoredPoint重载了equals方法，并考虑到新加入color域，代码如下：</p>
+<pre class="brush: java">public class ColoredPoint extends Point { // Problem: equals not symmetric
+
+    private final Color color;
+
+    public ColoredPoint(int x, int y, Color color) {
+        super(x, y);
+        this.color = color;
+    }
+
+    @Override public boolean equals(Object other) {
+        boolean result = false;
+        if (other instanceof ColoredPoint) {
+            ColoredPoint that = (ColoredPoint) other;
+            result = (this.color.equals(that.color) &amp;&amp; super.equals(that));
+        }
+        return result;
+    }
+}</pre>
+<p>这是很多程序员都有可能写成的代码。注意在本例中，类ColoredPointed不需要重载hashCode，因为新的ColoredPoint类上的equals定义，严格的重载了Point上equals的定义。hashCode的规范仍然是有效，如果两个着色点(colored point)相等，其坐标必定相等，因此它的hashCode也保证了具有同样的值。</p>
+<p>对于ColoredPoint类自身对象的比较是没有问题的，但是如果使用ColoredPoint和Point混合进行比较就要出现问题。</p>
+<pre class="brush: java">Point p = new Point(1, 2);
+
+ColoredPoint cp = new ColoredPoint(1, 2, Color.RED);
+
+System.out.println(p.equals(cp)); // 打印真 true
+
+System.out.println(cp.equals(p)); // 打印假 false</pre>
+<p>&#8220;p等价于cp&#8221;的比较这个调用的是定义在Point类上的equals方法。这个方法只考虑两个点的坐标。因此比较返回真。在另外一方面，“cp等价于p”的比较这个调用的是定义在ColoredPoint类上的equals方法，返回的结果却是false，这是因为p不是ColoredPoint，所以equals这个定义违背了对称性。</p>
+<p>违背对称性对于集合来说将导致不可以预期的后果，例如：</p>
+<pre class="brush: java">Set&lt;Point&gt; hashSet1 = new java.util.HashSet&lt;Point&gt;();
+hashSet1.add(p);
+System.out.println(hashSet1.contains(cp));    // 打印 false
+
+Set&lt;Point&gt; hashSet2 = new java.util.HashSet&lt;Point&gt;();
+hashSet2.add(cp);
+System.out.println(hashSet2.contains(p));    // 打印 true</pre>
+<p>因此虽然p和cp是等价的，但是contains测试中一个返回成功，另外一个却返回失败。<br/>
+你如何修改equals的定义，才能使得这个方法满足对称性？本质上说有两种方法，你可以使得这种关系变得更一般化或更严格。更一般化的意思是这一对对象，a和b，被用于进行对比，无论是a比b还是b比a 都返回true，下面是代码：</p>
+<pre class="brush: java">public class ColoredPoint extends Point { // Problem: equals not transitive
+
+    private final Color color;
+
+    public ColoredPoint(int x, int y, Color color) {
+        super(x, y);
+        this.color = color;
+    }
+
+    @Override public boolean equals(Object other) {
+        boolean result = false;
+        if (other instanceof ColoredPoint) {
+            ColoredPoint that = (ColoredPoint) other;
+            result = (this.color.equals(that.color) &amp;&amp; super.equals(that));
+        }
+        else if (other instanceof Point) {
+            Point that = (Point) other;
+            result = that.equals(this);
+        }
+        return result;
+    }
+}</pre>
+<p>在ColoredPoint中的equals的新定义比老定义中检查了更多的情况:如果对象是一个Point对象而不是ColoredPoint，方法就转变为Point类的equals方法调用。这个所希望达到的效果就是equals的对称性，不管&#8221;cp.equals(p)&#8221;还是&#8221;p.equals(cp)&#8221;的结果都是true。然而这种方法，equals的规范还是被破坏了，现在的问题是这个新等价性不满足传递性。考虑下面的一段代码实例，定义了一个点和这个点上上两种不同颜色点：</p>
+<pre class="brush: java">ColoredPoint redP = new ColoredPoint(1, 2, Color.RED);
+ColoredPoint blueP = new ColoredPoint(1, 2, Color.BLUE);</pre>
+<p>redP等价于p，p等价于blueP</p>
+<pre class="brush: java">System.out.println(redP.equals(p)); // prints true
+
+System.out.println(p.equals(blueP)); // prints true</pre>
+<p>然而，对比redP和blueP的结果是false:</p>
+<pre class="brush: java">System.out.println(redP.equals(blueP)); // 打印 false</pre>
+<p>因此，equals的传递性就被违背了。<br/>
+使equals的关系更一般化似乎会将我们带入到死胡同。我们应该采用更严格化的方法。一种更严格化的equals方法是认为不同类的对象是不同的。这个可以通过修改Point类和ColoredPoint类的equals方法来达到。你能增加额外的比较来检查是否运行态的这个Point类和那个Point类是同一个类，就像如下所示的代码一样：</p>
+<pre class="brush: java">// A technically valid, but unsatisfying, equals method
+public class Point {
+
+    private final int x;
+    private final int y;
+
+    public Point(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    @Override public boolean equals(Object other) {
+        boolean result = false;
+        if (other instanceof Point) {
+            Point that = (Point) other;
+            result = (this.getX() == that.getX() &amp;&amp; this.getY() == that.getY()
+                    <span style="color: #339966;">&amp;&amp; this.getClass().equals(that.getClass())</span>);
+        }
+        return result;
+    }
+
+    @Override public int hashCode() {
+        return (41 * (41 + getX()) + getY());
+    }
+}</pre>
+<p>你现在可以将ColoredPoint类的equals实现用回刚才那个不满足对称性要的equals实现了。</p>
+<pre class="brush: java">public class ColoredPoint extends Point { // 不再违反对称性需求
+
+    private final Color color;
+
+    public ColoredPoint(int x, int y, Color color) {
+        super(x, y);
+        this.color = color;
+    }
+
+    @Override public boolean equals(Object other) {
+        boolean result = false;
+        if (other instanceof ColoredPoint) {
+            ColoredPoint that = (ColoredPoint) other;
+            result = (this.color.equals(that.color) &amp;&amp; super.equals(that));
+        }
+        return result;
+    }
+}</pre>
+<p>这里，Point类的实例只有当和另外一个对象是同样类，并且有同样的坐标时候，他们才被认为是相等的，即意味着 .getClass()返回的是同样的值。这个新定义的等价关系满足了对称性和传递性因为对于比较对象是不同的类时结果总是false。所以着色点(colored point)永远不会等于点(point)。通常这看起来非常合理，但是这里也存在着另外一种争论——这样的比较过于严格了。</p>
+<p>考虑我们如下这种稍微的迂回的方式来定义我们的坐标点(1,2)</p>
+<pre class="brush: java">Point pAnon = new Point(1, 1) {
+    @Override public int getY() {
+        return 2;
+    }
+};</pre>
+<p>pAnon等于p吗？答案是假，因为p和pAnon的java.lang.Class对象不同。p是Point，而pAnon是Point的一个匿名派生类。但是，非常清晰的是pAnon的确是在坐标1，2上的另外一个点。所以将他们认为是不同的点是没有理由的。</p>
+<p>　</p>
+<h4><span class="ez-toc-section" id="canEqual_%E6%96%B9%E6%B3%95"></span>canEqual 方法<span class="ez-toc-section-end"></span></h4>
+<p>到此，我们看其来似乎是遇到阻碍了，存在着一种正常的方式不仅可以在不同类继承层次上定义等价性，并且保证其等价的规范性吗？事实上，的确存在这样的一种方法，但是这就要求除了重定义equals和hashCode外还要另外的定义一个方法。基本思路就是在重载equals(和hashCode)的同时，它应该也要要明确的声明这个类的对象永远不等价于其他的实现了不同等价方法的超类的对象。为了达到这个目标，我们对每一个重载了equals的类新增一个方法canEqual方法。这个方法的方法签名是：</p>
+<pre class="brush: java">public boolean canEqual(Object other)</pre>
+<p>如果other 对象是canEquals(重)定义那个类的实例时，那么这个方法应该返回真，否则返回false。这个方法由equals方法调用，并保证了两个对象是可以相互比较的。下面Point类的新的也是最终的实现：</p>
+<pre class="brush: java">public class Point {
+
+    private final int x;
+    private final int y;
+
+    public Point(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    @Override public boolean equals(Object other) {
+        boolean result = false;
+        if (other instanceof Point) {
+            Point that = (Point) other;
+            result =<span style="color: #339966;">(that.canEqual(this) &amp;&amp; </span>this.getX() == that.getX() &amp;&amp; this.getY() == that.getY());
+        }
+        return result;
+    }
+
+    @Override public int hashCode() {
+        return (41 * (41 + getX()) + getY());
+    }
+<span style="color: #339966;">
+    public boolean canEqual(Object other) {
+        return (other instanceof Point);
+    }
+</span>
+}</pre>
+<p>这个版本的Point类的equals方法中包含了一个额外的需求，通过canEquals方法来决定另外一个对象是否是是满足可以比较的对象。在Point中的canEqual宣称了所有的Point类实例都能被比较。</p>
+<p>下面是ColoredPoint相应的实现</p>
+<pre class="brush: java">public class ColoredPoint extends Point { // 不再违背对称性
+
+    private final Color color;
+
+    public ColoredPoint(int x, int y, Color color) {
+        super(x, y);
+        this.color = color;
+    }
+
+    @Override public boolean equals(Object other) {
+        boolean result = false;
+        if (other instanceof ColoredPoint) {
+            ColoredPoint that = (ColoredPoint) other;
+            result = <span style="color: #339966;">(that.canEqual(this) &amp;&amp; </span>this.color.equals(that.color) &amp;&amp; super.equals(that));
+        }
+        return result;
+    }
+
+    @Override public int hashCode() {
+        return (41 * super.hashCode() + color.hashCode());
+    }
+<span style="color: #339966;">
+    @Override public boolean canEqual(Object other) {
+        return (other instanceof ColoredPoint);
+    }
+</span>}</pre>
+<p>在上显示的新版本的Point类和ColoredPoint类定义保证了等价的规范。等价是对称和可传递的。比较一个Point和ColoredPoint类总是返回false。因为点p和着色点cp,“p.equals(cp)返回的是假。并且，因为cp.canEqual(p)总返回false。相反的比较，cp.equals(p)同样也返回false，由于p不是一个ColoredPoint，所以在ColoredPoint的equals方法体内的第一个instanceof检查就失败了。</p>
+<p>另外一个方面，不同的Point子类的实例却是可以比较的，同样没有重定义等价性方法的类也是可以比较的。对于这个新类的定义，p和pAnon的比较将总返回true。下面是一些例子：</p>
+<pre class="brush: java">Point p = new Point(1, 2);
+
+ColoredPoint cp = new ColoredPoint(1, 2, Color.INDIGO);
+
+Point pAnon = new Point(1, 1) {
+    @Override public int getY() {
+        return 2;
+    }
+};
+
+Set&lt;Point&gt; coll = new java.util.HashSet&lt;Point&gt;();
+coll.add(p);
+
+System.out.println(coll.contains(p)); // 打印 true
+
+System.out.println(coll.contains(cp)); // 打印 false
+
+System.out.println(coll.contains(pAnon)); // 打印 true</pre>
+<p>这些例子显示了如果父类在equals的实现定义并调用了canEquals，那么开发人员实现的子类就能决定这个子类是否可以和它父类的实例进行比较。例如ColoredPoint，因为它以&#8221;一个着色点永远不可以等于普通不带颜色的点重载了&#8221; canEqual，所以他们就不能比较。但是因为pAnon引用的匿名子类没有重载canEqual,因此它的实例就可以和Point的实例进行对比。</p>
+<p>canEqual方法的一个潜在的争论是它是否违背了Liskov替换准则(LSP)。例如，通过比较运行态的类来实现的比较技术(<strong>译者注：</strong> canEqual的前一版本，使用.getClass()的那个版本)，将导致不能定义出一个子类，这个子类的实例可以和其父类进行比较，因此就违背了LSP。这是因为，LSP原则是这样的，在任何你能使用父类的地方你都可以使用子类去替换它。在之前例子中，虽然cp的x,y坐标匹配那些在集合中的点，然而&#8221;coll.contains(cp)&#8221;仍然返回false，这看起来似乎违背得了LSP准则，因为你不能这里能使用Point的地方使用一个ColoredPointed。但是我们认为这种解释是错误的，因为LSP原则并没有要求子类和父类的行为一致，而仅要求其行为能一种方式满足父类的规范。</p>
+<p>通过比较运行态的类来编写equals方法(<strong>译者注：</strong> canEqual的前一版本，使用.getClass()的那个版本)的问题并不是违背LSP准则的问题，但是它也没有为你指明一种创建派生类的实例能和父类实例进行对比的的方法。例如，我们使用这种运行态比较的技术在之前的&#8221;coll.contains(pAnon)&#8221;将会返回false，并且这并不是我们希望的。相反我们希望“coll.contains(cp)”返回false，因为通过在ColoredPoint中重载的equals，我基本上可以说，一个在坐标1，2上着色点和一个坐标1，2上的普通点并不是一回事。然而，在最后的例子中，我们能传递Point两种不同的子类实例到集合中contains方法，并且我们能得到两个不同的答案，并且这两个答案都正确。</p>
+<p><strong>&#8211;全文完&#8211;</strong></p>
+<div style="margin-top: 15px; font-size: 16px;color: #cc0000;">
+<p align="center"><strong>（转载本站文章请注明作者和出处 <a href="https://coolshell.cn/">酷 壳 &#8211; CoolShell</a> ，请勿用于任何商业用途）</strong></p>
+</div>
+<div class="wp_rp_wrap  wp_rp_vertical_m" id="wp_rp_first"><div class="wp_rp_content"><h3 class="related_post_title">相关文章</h3><ul class="related_post wp_rp"><li><a href="https://coolshell.cn/articles/20845.html" class="wp_rp_thumbnail"><img src="https://coolshell.cn/wp-content/uploads/2020/03/rust-social-wide-150x150.jpg" alt="Rust语言的编程范式" width="150" height="150" /></a><a href="https://coolshell.cn/articles/20845.html" class="wp_rp_title">Rust语言的编程范式</a></li><li><a href="https://coolshell.cn/articles/18360.html" class="wp_rp_thumbnail"><img src="https://coolshell.cn/wp-content/uploads/2018/05/300x262-150x150.jpg" alt="程序员练级攻略（2018)  与我的专栏" width="150" height="150" /></a><a href="https://coolshell.cn/articles/18360.html" class="wp_rp_title">程序员练级攻略（2018) 与我的专栏</a></li><li><a href="https://coolshell.cn/articles/11541.html" class="wp_rp_thumbnail"><img src="https://coolshell.cn/wp-content/plugins/wordpress-23-related-posts-plugin/static/thumbs/24.jpg" alt="面向GC的Java编程" width="150" height="150" /></a><a href="https://coolshell.cn/articles/11541.html" class="wp_rp_title">面向GC的Java编程</a></li><li><a href="https://coolshell.cn/articles/11454.html" class="wp_rp_thumbnail"><img src="https://coolshell.cn/wp-content/plugins/wordpress-23-related-posts-plugin/static/thumbs/17.jpg" alt="从LongAdder看更高效的无锁实现" width="150" height="150" /></a><a href="https://coolshell.cn/articles/11454.html" class="wp_rp_title">从LongAdder看更高效的无锁实现</a></li><li><a href="https://coolshell.cn/articles/11175.html" class="wp_rp_thumbnail"><img src="https://coolshell.cn/wp-content/uploads/2014/03/cow-copy-150x150.jpg" alt="Java中的CopyOnWrite容器" width="150" height="150" /></a><a href="https://coolshell.cn/articles/11175.html" class="wp_rp_title">Java中的CopyOnWrite容器</a></li><li><a href="https://coolshell.cn/articles/9703.html" class="wp_rp_thumbnail"><img src="https://coolshell.cn/wp-content/uploads/2013/05/图1-3-150x150.jpg" alt="无锁HashMap的原理与实现" width="150" height="150" /></a><a href="https://coolshell.cn/articles/9703.html" class="wp_rp_title">无锁HashMap的原理与实现</a></li></ul></div></div>
+<div id="post-ratings-1051" class="post-ratings" itemscope itemtype="https://schema.org/Article" data-nonce="0f5ba2c23b"><img id="rating_1051_1" src="https://coolshell.cn/wp-content/plugins/wp-postratings/images/stars_crystal/rating_on.gif" alt="好烂啊" title="好烂啊" onmouseover="if (!window.__cfRLUnblockHandlers) return false; current_rating(1051, 1, '好烂啊');" onmouseout="if (!window.__cfRLUnblockHandlers) return false; ratings_off(3.8, 4, 0);" onclick="if (!window.__cfRLUnblockHandlers) return false; rate_post();" onkeypress="if (!window.__cfRLUnblockHandlers) return false; rate_post();" style="cursor: pointer; border: 0px;" data-cf-modified-e79c7100b5ac8aff1472eaec- /><img id="rating_1051_2" src="https://coolshell.cn/wp-content/plugins/wp-postratings/images/stars_crystal/rating_on.gif" alt="有点差" title="有点差" onmouseover="if (!window.__cfRLUnblockHandlers) return false; current_rating(1051, 2, '有点差');" onmouseout="if (!window.__cfRLUnblockHandlers) return false; ratings_off(3.8, 4, 0);" onclick="if (!window.__cfRLUnblockHandlers) return false; rate_post();" onkeypress="if (!window.__cfRLUnblockHandlers) return false; rate_post();" style="cursor: pointer; border: 0px;" data-cf-modified-e79c7100b5ac8aff1472eaec- /><img id="rating_1051_3" src="https://coolshell.cn/wp-content/plugins/wp-postratings/images/stars_crystal/rating_on.gif" alt="凑合看看" title="凑合看看" onmouseover="if (!window.__cfRLUnblockHandlers) return false; current_rating(1051, 3, '凑合看看');" onmouseout="if (!window.__cfRLUnblockHandlers) return false; ratings_off(3.8, 4, 0);" onclick="if (!window.__cfRLUnblockHandlers) return false; rate_post();" onkeypress="if (!window.__cfRLUnblockHandlers) return false; rate_post();" style="cursor: pointer; border: 0px;" data-cf-modified-e79c7100b5ac8aff1472eaec- /><img id="rating_1051_4" src="https://coolshell.cn/wp-content/plugins/wp-postratings/images/stars_crystal/rating_half.gif" alt="还不错" title="还不错" onmouseover="if (!window.__cfRLUnblockHandlers) return false; current_rating(1051, 4, '还不错');" onmouseout="if (!window.__cfRLUnblockHandlers) return false; ratings_off(3.8, 4, 0);" onclick="if (!window.__cfRLUnblockHandlers) return false; rate_post();" onkeypress="if (!window.__cfRLUnblockHandlers) return false; rate_post();" style="cursor: pointer; border: 0px;" data-cf-modified-e79c7100b5ac8aff1472eaec- /><img id="rating_1051_5" src="https://coolshell.cn/wp-content/plugins/wp-postratings/images/stars_crystal/rating_off.gif" alt="很精彩" title="很精彩" onmouseover="if (!window.__cfRLUnblockHandlers) return false; current_rating(1051, 5, '很精彩');" onmouseout="if (!window.__cfRLUnblockHandlers) return false; ratings_off(3.8, 4, 0);" onclick="if (!window.__cfRLUnblockHandlers) return false; rate_post();" onkeypress="if (!window.__cfRLUnblockHandlers) return false; rate_post();" style="cursor: pointer; border: 0px;" data-cf-modified-e79c7100b5ac8aff1472eaec- /> (<strong>12</strong> 人打了分，平均分： <strong>3.83</strong> )<br/><span class="post-ratings-text" id="ratings_1051_text"></span><meta itemprop="name" content="如何在Java中避免equals方法的隐藏陷阱" /><meta itemprop="headline" content="如何在Java中避免equals方法的隐藏陷阱" /><meta itemprop="description" content="译者注 :你可能会觉得Java很简单，Object的equals实现也会非常简单，但是事实并不是你想象的这样，耐心的读完本文，你会发现你对Java了解的是如此的少。如果这篇文章是一份Java程序员的入职笔试，那么不知道有多少人会掉落到这样的陷阱中。原文转自http://www.artima.com/lejava/articles/equality.html 三位作者都是不同领域的大拿，有兴趣的读者..." /><meta itemprop="datePublished" content="2009-06-18T11:14:41+08:00" /><meta itemprop="dateModified" content="2009-06-18T12:03:18+08:00" /><meta itemprop="url" content="https://coolshell.cn/articles/1051.html" /><meta itemprop="author" content="Neo" /><meta itemprop="mainEntityOfPage" content="https://coolshell.cn/articles/1051.html" /><div style="display: none;" itemprop="publisher" itemscope itemtype="https://schema.org/Organization"><meta itemprop="name" content="酷 壳 - CoolShell" /><meta itemprop="url" content="https://coolshell.cn" /><div itemprop="logo" itemscope itemtype="https://schema.org/ImageObject"><meta itemprop="url" content /></div></div><div style="display: none;" itemprop="aggregateRating" itemscope itemtype="https://schema.org/AggregateRating"><meta itemprop="bestRating" content="5" /><meta itemprop="worstRating" content="1" /><meta itemprop="ratingValue" content="3.83" /><meta itemprop="ratingCount" content="12" /></div></div><div id="post-ratings-1051-loading" class="post-ratings-loading"><img src="https://coolshell.cn/wp-content/plugins/wp-postratings/images/loading.gif" width="16" height="16" class="post-ratings-image" />Loading...</div>
+</div>
+<footer class="entry-footer">
+<hr><div class="row"><div class="col-md-6 cattegories"><span class="cat-links"><i class="fa fa-folder-open"></i>
+<a href="https://coolshell.cn/category/proglanguage/javadev" rel="category tag">Java语言</a>, <a href="https://coolshell.cn/category/proglanguage" rel="category tag">编程语言</a></span></div><div class="col-md-6 tags"><span class="tags-links"><i class="fa fa-tags"></i> <a href="https://coolshell.cn/tag/java" rel="tag">Java</a></span></div></div> </footer>
+</article>
+
+<div id="related_posts">
+<div class="wp_rp_wrap  wp_rp_vertical_m"><div class="wp_rp_content"><h3 class="related_post_title">相关文章</h3><ul class="related_post wp_rp"><li><a href="https://coolshell.cn/articles/20845.html" class="wp_rp_thumbnail"><img src="https://coolshell.cn/wp-content/uploads/2020/03/rust-social-wide-150x150.jpg" alt="Rust语言的编程范式" width="150" height="150" /></a><a href="https://coolshell.cn/articles/20845.html" class="wp_rp_title">Rust语言的编程范式</a></li><li><a href="https://coolshell.cn/articles/18360.html" class="wp_rp_thumbnail"><img src="https://coolshell.cn/wp-content/uploads/2018/05/300x262-150x150.jpg" alt="程序员练级攻略（2018)  与我的专栏" width="150" height="150" /></a><a href="https://coolshell.cn/articles/18360.html" class="wp_rp_title">程序员练级攻略（2018) 与我的专栏</a></li><li><a href="https://coolshell.cn/articles/11541.html" class="wp_rp_thumbnail"><img src="https://coolshell.cn/wp-content/plugins/wordpress-23-related-posts-plugin/static/thumbs/24.jpg" alt="面向GC的Java编程" width="150" height="150" /></a><a href="https://coolshell.cn/articles/11541.html" class="wp_rp_title">面向GC的Java编程</a></li><li><a href="https://coolshell.cn/articles/11454.html" class="wp_rp_thumbnail"><img src="https://coolshell.cn/wp-content/plugins/wordpress-23-related-posts-plugin/static/thumbs/17.jpg" alt="从LongAdder看更高效的无锁实现" width="150" height="150" /></a><a href="https://coolshell.cn/articles/11454.html" class="wp_rp_title">从LongAdder看更高效的无锁实现</a></li><li><a href="https://coolshell.cn/articles/11175.html" class="wp_rp_thumbnail"><img src="https://coolshell.cn/wp-content/uploads/2014/03/cow-copy-150x150.jpg" alt="Java中的CopyOnWrite容器" width="150" height="150" /></a><a href="https://coolshell.cn/articles/11175.html" class="wp_rp_title">Java中的CopyOnWrite容器</a></li><li><a href="https://coolshell.cn/articles/9703.html" class="wp_rp_thumbnail"><img src="https://coolshell.cn/wp-content/uploads/2013/05/图1-3-150x150.jpg" alt="无锁HashMap的原理与实现" width="150" height="150" /></a><a href="https://coolshell.cn/articles/9703.html" class="wp_rp_title">无锁HashMap的原理与实现</a></li></ul></div></div>
+</div><div class="fixed"></div> 
+</main>
+<div class="post-navigation">
+<nav class="navigation" role="navigation">
+<h2 class="screen-reader-text">Post navigation</h2>
+<div class="nav-links">
+<div class="row">
+
+<div class="col-md-6 next-post">
+<a class href="https://coolshell.cn/articles/1042.html"><span class="next-prev-text"><i class="fa fa-angle-left"></i>
+上一篇</span><br>Linux/Unix 新手和专家教程</a>
+</div>
+
+<div class="col-md-6 prev-post">
+<a class href="https://coolshell.cn/articles/1044.html"><span class="next-prev-text">下一篇 <i class="fa fa-angle-right"></i>
+</span><br>高级Unix命令</a>
+</div>
+</div>
+</div>
+</nav>
+</div>
+<div class="post-comments">
+<div id="comments" class="comments-area">
+<h2 class="comments-title">
+《<span>如何在Java中避免equals方法的隐藏陷阱</span>》的相关评论 </h2>
+<ol class="comment-list">
+<li id="comment-247" class="comment even thread-even depth-1">
+<article id="div-comment-247" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/8a2f343f6a153bc2ddcf81aae32484ba?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/8a2f343f6a153bc2ddcf81aae32484ba?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn"><a href="http://www.abettor.org/" class="url" rel="ugc external nofollow">abettor</a></b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/1051.html#comment-247"><time datetime="2009-06-18T13:27:41+08:00">2009年06月18日 13:27</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>以前还真从来没有遇到这种问题呢，博主这么一提出来，确实下了我一身冷汗啊！幸亏以前的项目里没有拿自己定义的类作为key往Map里放过，也没有过对自己的类做等值比较。<br/>
+按照博主的分析，以后还真要注意呢！</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/1051.html?replytocom=247#respond" data-commentid="247" data-postid="1051" data-belowelement="div-comment-247" data-respondelement="respond" data-replyto="回复给abettor" aria-label="回复给abettor">回复</a></div> </article>
+</li>
+<li id="comment-248" class="comment odd alt thread-odd thread-alt depth-1 parent">
+<article id="div-comment-248" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/bacd99e669ab831c656dc95c732087fb?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/bacd99e669ab831c656dc95c732087fb?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn"><a href="http://www.yeeyan.com/space/show/tsaizb" class="url" rel="ugc external nofollow">tsaizb</a></b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/1051.html#comment-248"><time datetime="2009-06-18T19:16:24+08:00">2009年06月18日 19:16</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>撞车了啊<br/>
+我给 51cto 做的一篇翻译：http://developer.51cto.com/art/200906/128507.htm</p>
+<p>酷壳有很多不错的文章，订阅先，保持关注ing :P</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/1051.html?replytocom=248#respond" data-commentid="248" data-postid="1051" data-belowelement="div-comment-248" data-respondelement="respond" data-replyto="回复给tsaizb" aria-label="回复给tsaizb">回复</a></div> </article>
+<ol class="children">
+<li id="comment-249" class="comment byuser comment-author-neo bypostauthor even depth-2">
+<article id="div-comment-249" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/adbd7d1f9ec55c6accf6e2a41b5a919a?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/adbd7d1f9ec55c6accf6e2a41b5a919a?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn">Neo</b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/1051.html#comment-249"><time datetime="2009-06-18T20:11:12+08:00">2009年06月18日 20:11</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>哈哈，果然撞车了，我在译之前还在网上搜了一下。呵呵。你翻译的挺好。</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/1051.html?replytocom=249#respond" data-commentid="249" data-postid="1051" data-belowelement="div-comment-249" data-respondelement="respond" data-replyto="回复给Neo" aria-label="回复给Neo">回复</a></div> </article>
+</li>
+</ol>
+</li>
+<li id="comment-258" class="comment odd alt thread-even depth-1">
+<article id="div-comment-258" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/bc47af293e4b435848446f9c980e0d86?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/bc47af293e4b435848446f9c980e0d86?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn"><a href="http://www.daniel-journey.com" class="url" rel="ugc external nofollow">Daniel Hu</a></b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/1051.html#comment-258"><time datetime="2009-06-21T19:17:47+08:00">2009年06月21日 19:17</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>Effective Java 也有关于Object.equals的描述，有不少内容Effective Java 中都有提高</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/1051.html?replytocom=258#respond" data-commentid="258" data-postid="1051" data-belowelement="div-comment-258" data-respondelement="respond" data-replyto="回复给Daniel Hu" aria-label="回复给Daniel Hu">回复</a></div> </article>
+</li>
+<li id="comment-5347" class="pingback even thread-odd thread-alt depth-1">
+<div class="comment-body">
+Pingback： <a href="http://darxin.wordpress.com/2010/02/27/0001-3/" class="url" rel="ugc external nofollow">继承关系下的equals改写 &laquo; Darxin&#39;s Blog</a> </div>
+</li>
+<li id="comment-118207" class="comment odd alt thread-even depth-1">
+<article id="div-comment-118207" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/e644b35c617b89c8aad906e047c928c2?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/e644b35c617b89c8aad906e047c928c2?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn">子子孩子们</b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/1051.html#comment-118207"><time datetime="2011-12-30T01:18:51+08:00">2011年12月30日 01:18</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>子类是通过重写（override)来覆盖而非 重载来覆盖啊！</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/1051.html?replytocom=118207#respond" data-commentid="118207" data-postid="1051" data-belowelement="div-comment-118207" data-respondelement="respond" data-replyto="回复给子子孩子们" aria-label="回复给子子孩子们">回复</a></div> </article>
+</li>
+<li id="comment-298833" class="comment even thread-odd thread-alt depth-1">
+<article id="div-comment-298833" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/99ad3085e3b9708a2fa0ba9c882cd2d8?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/99ad3085e3b9708a2fa0ba9c882cd2d8?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn">samkee</b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/1051.html#comment-298833"><time datetime="2013-02-27T13:12:00+08:00">2013年02月27日 13:12</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>很深刻地重新认识equals方法，感谢。</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/1051.html?replytocom=298833#respond" data-commentid="298833" data-postid="1051" data-belowelement="div-comment-298833" data-respondelement="respond" data-replyto="回复给samkee" aria-label="回复给samkee">回复</a></div> </article>
+</li>
+<li id="comment-314125" class="pingback odd alt thread-even depth-1">
+<div class="comment-body">
+Pingback： <a href="http://xlinblog.sinaapp.com/?p=5334" class="url" rel="ugc external nofollow">实例分析Java Class的文件结构 | 奇言妙事-文学奇谈小小说阅读xlinblog.sinaapp.com</a> </div>
+</li>
+<li id="comment-329721" class="pingback even thread-odd thread-alt depth-1">
+<div class="comment-body">
+Pingback： <a href="http://guanmian.net/?p=411" class="url" rel="ugc external nofollow">Technical Heartbeat #3 | Steve Guan</a> </div>
+</li>
+<li id="comment-370266" class="pingback odd alt thread-even depth-1">
+<div class="comment-body">
+Pingback： <a href="http://www.520lily.com/html/837.html" class="url" rel="ugc external nofollow">实例分析Java Class的文件结构 | 午后小憩</a> </div>
+</li>
+<li id="comment-1342347" class="pingback even thread-odd thread-alt depth-1">
+<div class="comment-body">
+Pingback： <a href="http://demo.zengine.info/?p=733" class="url" rel="ugc external nofollow">Java中的CopyOnWrite容器 | zengine</a> </div>
+</li>
+<li id="comment-1345655" class="pingback odd alt thread-even depth-1">
+<div class="comment-body">
+Pingback： <a href="http://www.xdhcn.com/?p=961" class="url" rel="ugc external nofollow">Java中的CopyOnWrite容器 | 星达红</a> </div>
+</li>
+<li id="comment-1448471" class="comment even thread-odd thread-alt depth-1">
+<article id="div-comment-1448471" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/5981d676509cae32a2e4d7abbed80817?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/5981d676509cae32a2e4d7abbed80817?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn">winner</b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/1051.html#comment-1448471"><time datetime="2014-04-28T15:25:23+08:00">2014年04月28日 15:25</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>对equals方法有又了新的认识，语言处处都是坑 啊。</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/1051.html?replytocom=1448471#respond" data-commentid="1448471" data-postid="1051" data-belowelement="div-comment-1448471" data-respondelement="respond" data-replyto="回复给winner" aria-label="回复给winner">回复</a></div> </article>
+</li>
+<li id="comment-1497921" class="pingback odd alt thread-even depth-1">
+<div class="comment-body">
+Pingback： <a href="http://guanmian.net/?p=3073" class="url" rel="ugc external nofollow">一个程序员的自我修养 | Steve Guan</a> </div>
+</li>
+<li id="comment-1510552" class="pingback even thread-odd thread-alt depth-1">
+<div class="comment-body">
+Pingback： <a href="http://www.makaidong.com/blog/30219.html" class="url" rel="ugc external nofollow">Java中的CopyOnWrite容器 &#8211; 马开东博客</a> </div>
+</li>
+<li id="comment-1670434" class="pingback odd alt thread-even depth-1">
+<div class="comment-body">
+Pingback： <a href="http://www.chawenti.com/articles/29435.html" class="url" rel="ugc external nofollow">Java里的equals总结 &#8211; yetuweiba | 查问题</a> </div>
+</li>
+<li id="comment-1670438" class="pingback even thread-odd thread-alt depth-1">
+<div class="comment-body">
+Pingback： <a href="http://www.codeceo.com/article/java%e4%b8%adequals%e4%bd%bf%e7%94%a8%e6%80%bb%e7%bb%93.html" class="url" rel="ugc external nofollow">Java中Equals使用总结 &#8211; 码农网</a> </div>
+</li>
+<li id="comment-1670441" class="pingback odd alt thread-even depth-1">
+<div class="comment-body">
+Pingback： <a href="http://www.jkeabc.com/p/546360.html" class="url" rel="ugc external nofollow">Java里的equals总结 &#8211; 剑客|关注科技互联网</a> </div>
+</li>
+<li id="comment-1670447" class="pingback even thread-odd thread-alt depth-1">
+<div class="comment-body">
+Pingback： <a href="http://www.jkeabc.com/p/546418.html" class="url" rel="ugc external nofollow">Java中Equals使用总结 &#8211; 剑客|关注科技互联网</a> </div>
+</li>
+<li id="comment-1670936" class="pingback odd alt thread-even depth-1">
+<div class="comment-body">
+Pingback： <a href="http://techmi.cn/archives/java%e4%b8%adequals%e4%bd%bf%e7%94%a8%e6%80%bb%e7%bb%93.html" class="url" rel="ugc external nofollow">Java中Equals使用总结 | 技术迷</a> </div>
+</li>
+<li id="comment-1684211" class="pingback even thread-odd thread-alt depth-1">
+<div class="comment-body">
+Pingback： <a href="http://www.17epub.com/2015/04/java%e4%b8%adequals%e4%bd%bf%e7%94%a8%e6%80%bb%e7%bb%93/" class="url" rel="ugc external nofollow">Java中Equals使用总结 | cnJason工作空间</a> </div>
+</li>
+<li id="comment-1685315" class="pingback odd alt thread-even depth-1">
+<div class="comment-body">
+Pingback： <a href="http://www.178linux.com/archives/2397" class="url" rel="ugc external nofollow">如何在Java中避免equals方法的隐藏陷阱 &#8211; 运维部落</a> </div>
+</li>
+<li id="comment-1705809" class="pingback even thread-odd thread-alt depth-1">
+<div class="comment-body">
+Pingback： <a href="http://liangjiabin.com/blog/2015/05/object-equality.html" class="url" rel="ugc external nofollow">对象相等性——如何给自定义对象添加equals和hashCode方法 | 梁佳宾的网络日志</a> </div>
+</li>
+<li id="comment-1890204" class="pingback odd alt thread-even depth-1">
+<div class="comment-body">
+Pingback： <a href="http://www.geekinway.com/?p=896" class="url" rel="ugc external nofollow">Java中equals方法和hashCode方法详解 &#8211; Mineor-</a> </div>
+</li>
+<li id="comment-1917460" class="pingback even thread-odd thread-alt depth-1">
+<div class="comment-body">
+Pingback： <a href="http://www.codeba.cc/java%e4%b8%adequals%e4%bd%bf%e7%94%a8%e6%96%b9%e6%b3%95%e6%b1%87%e6%80%bb.html" class="url" rel="ugc external nofollow">Java中Equals使用方法汇总 | Codeba</a> </div>
+</li>
+<li id="comment-1921933" class="pingback odd alt thread-even depth-1">
+<div class="comment-body">
+Pingback： <a href="http://www.linux00.com/archives/976" class="url" rel="ugc external nofollow">如何在Java中避免equals方法的隐藏陷阱 | 每天学一点Linux</a> </div>
+</li>
+<li id="comment-1932737" class="pingback even thread-odd thread-alt depth-1">
+<div class="comment-body">
+Pingback： <a href="https://photo.yuedy.com/archives/16098" class="url" rel="ugc external nofollow">Java中Equals使用方法汇总 &#8211; x</a> </div>
+</li>
+</ol>
+<div id="respond" class="comment-respond">
+<h3 id="reply-title" class="comment-reply-title">发表回复 <small><a rel="nofollow" id="cancel-comment-reply-link" href="/articles/1051.html#respond" style="display:none;">取消回复</a></small></h3><form action="https://coolshell.cn/wp-comments-post.php" method="post" id="commentform" class="comment-form" novalidate><p class="comment-notes"><span id="email-notes">您的电子邮箱地址不会被公开。</span> <span class="required-field-message">必填项已用<span class="required">*</span>标注</span></p><p class="comment-form-comment"><label for="comment">评论 <span class="required">*</span></label> <textarea id="comment" name="comment" cols="45" rows="8" maxlength="65525" required></textarea></p><p class="comment-form-author"><label for="author">显示名称 <span class="required">*</span></label> <input id="author" name="author" type="text" value size="30" maxlength="245" autocomplete="name" required /></p>
+<p class="comment-form-email"><label for="email">电子邮箱地址 <span class="required">*</span></label> <input id="email" name="email" type="email" value size="30" maxlength="100" aria-describedby="email-notes" autocomplete="email" required /></p>
+<p class="comment-form-url"><label for="url">网站地址</label> <input id="url" name="url" type="url" value size="30" maxlength="200" autocomplete="url" /></p>
+<p class="form-submit"><input name="submit" type="submit" id="submit" class="submit" value="发表评论" /> <input type="hidden" name="comment_post_ID" value="1051" id="comment_post_ID" />
+<input type="hidden" name="comment_parent" id="comment_parent" value="0" />
+</p><p style="display: none;"><input type="hidden" id="akismet_comment_nonce" name="akismet_comment_nonce" value="a780c09ae4" /></p><p style="display: none !important;"><label>&#916;<textarea name="ak_hp_textarea" cols="45" rows="8" maxlength="100"></textarea></label><input type="hidden" id="ak_js_1" name="ak_js" value="36" /><script type="e79c7100b5ac8aff1472eaec-text/javascript">document.getElementById( "ak_js_1" ).setAttribute( "value", ( new Date() ).getTime() );</script></p></form> </div>
+</div>
+</div>
+</div>
+<div id="secondary" class="col-md-3 hidden-sm hidden-xs sidebar widget-area" role="complementary">
+<aside id="search-9" class="widget widget_search">
+<form role="search" method="get" class="search-form" action="https://coolshell.cn/">
+<label>
+<span class="screen-reader-text">Search for:</span>
+<input type="search" class="search-field" placeholder="Search &hellip;" value name="s" title="Search for:" />
+</label>
+<button type="submit" class="search-submit"><span class="screen-reader-text">Search</span></button>
+</form>
+</aside><aside id="custom_html-3" class="widget_text widget widget_custom_html"><h4 class="widget-title">本站公告</h4><div class="textwidget custom-html-widget"><p align="center"><a class="twitter" href="https://twitter.com/haoel" target="_blank" rel="noopener"> Twitter @haoel </a></p>
+
+<p align="center">极客时间专栏<br><a href="http://gk.link/a/10sBp" target="_blank" rel="noopener"><img src="https://coolshell.cn/wp-content/uploads/2021/06/8311623409583_.pic_hd-1024x1024.jpg" height="200" weight="200" alt="极客时间专栏" title="极客时间专栏"></a></p>
+
+</div></aside>
+<aside id="recent-posts-4" class="widget widget_recent_entries">
+<h4 class="widget-title">最新文章</h4>
+<ul>
+<li>
+<a href="https://coolshell.cn/articles/22422.html">是微服务架构不香还是云不香？</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/22398.html">我看ChatGPT: 为啥谷歌掉了千亿美金</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/22367.html">聊聊 nostr 和 审查</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/22341.html">感染新冠的经历</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/22320.html">eBPF 介绍</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/22298.html">聊聊团队协同和协同工具</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/22263.html">从一次经历谈 TIME_WAIT 的那些事</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/22242.html">ETCD的内存问题</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/22173.html">“一把梭：REST API 全用 POST”</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/22157.html">谈谈公司对员工的监控</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/21708.html">网络数字身份认证术</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/21672.html">我做系统架构的一些原则</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/21649.html">源代码特洛伊木马攻击</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/21615.html">Go编程模式 ： 泛型编程</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/21589.html">如何做一个有质量的技术分享</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/21263.html">Go 编程模式：k8s Visitor 模式</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/21228.html">Go编程模式：Pipeline</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/21214.html">Go编程模式：委托和反转控制</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/21179.html">Go 编程模式：Go Generation</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/21164.html">Go编程模式：Map-Reduce</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/21146.html">Go 编程模式：Functional Options</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/21140.html">Go 编程模式：错误处理</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/21128.html">Go编程模式：切片，接口，时间和性能</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/21113.html">百度为什么掉队了</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/20977.html">程序员如何把控自己的职业</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/21003.html">计时攻击 Timing Attacks</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/20845.html">Rust语言的编程范式</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/20793.html">与程序员相关的CPU缓存知识</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/20765.html">MegaEase的远程工作文化</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/20533.html">使用简单的逻辑方法进行独立思考</a>
+</li>
+</ul>
+</aside><aside id="views-6" class="widget widget_views"><h4 class="widget-title">全站热门</h4><ul>
+<li><a href="https://coolshell.cn/articles/4990.html" title="程序员技术练级攻略 - 10,239,381 人阅读">程序员技术练级攻略</a></li><li><a href="https://coolshell.cn/articles/3961.html" title="&ldquo;火柴棍式&rdquo;程序员面试题 - 2,356,393 人阅读">&ldquo;火柴棍式&rdquo;程序员面试题</a></li><li><a href="https://coolshell.cn/articles/5426.html" title="简明 Vim 练级攻略 - 1,325,334 人阅读">简明 Vim 练级攻略</a></li><li><a href="https://coolshell.cn/articles/9308.html" title="&ldquo;作环保的程序员，从不用百度开始&rdquo; - 589,352 人阅读">&ldquo;作环保的程序员，从不用百度开始&rdquo;</a></li><li><a href="https://coolshell.cn/articles/11564.html" title="TCP 的那些事儿（上） - 488,726 人阅读">TCP 的那些事儿（上）</a></li><li><a href="https://coolshell.cn/articles/9070.html" title="AWK 简明教程 - 453,317 人阅读">AWK 简明教程</a></li><li><a href="https://coolshell.cn/articles/7186.html" title="做个环保主义的程序员 - 447,307 人阅读">做个环保主义的程序员</a></li><li><a href="https://coolshell.cn/articles/10688.html" title="编程能力与编程年龄 - 416,721 人阅读">编程能力与编程年龄</a></li><li><a href="https://coolshell.cn/articles/10590.html" title="二维码的生成细节和原理 - 393,832 人阅读">二维码的生成细节和原理</a></li><li><a href="https://coolshell.cn/articles/9104.html" title="sed 简明教程 - 380,315 人阅读">sed 简明教程</a></li><li><a href="https://coolshell.cn/articles/4102.html" title="如何学好C语言 - 368,395 人阅读">如何学好C语言</a></li><li><a href="https://coolshell.cn/articles/19464.html" title="如何超过大多数人 - 314,150 人阅读">如何超过大多数人</a></li><li><a href="https://coolshell.cn/articles/17583.html" title="技术人员的发展之路 - 308,370 人阅读">技术人员的发展之路</a></li><li><a href="https://coolshell.cn/articles/9606.html" title="疫苗：Java HashMap的死循环 - 305,430 人阅读">疫苗：Java HashMap的死循环</a></li><li><a href="https://coolshell.cn/articles/6470.html" title="由12306.cn谈谈网站性能技术 - 298,938 人阅读">由12306.cn谈谈网站性能技术</a></li><li><a href="https://coolshell.cn/articles/8883.html" title="应该知道的Linux技巧 - 296,782 人阅读">应该知道的Linux技巧</a></li><li><a href="https://coolshell.cn/articles/17416.html" title="缓存更新的套路 - 293,607 人阅读">缓存更新的套路</a></li><li><a href="https://coolshell.cn/articles/10910.html" title="分布式系统的事务处理 - 284,611 人阅读">分布式系统的事务处理</a></li><li><a href="https://coolshell.cn/articles/11609.html" title="TCP 的那些事儿（下） - 284,359 人阅读">TCP 的那些事儿（下）</a></li><li><a href="https://coolshell.cn/articles/2250.html" title="&ldquo;21天教你学会C++&rdquo; - 278,597 人阅读">&ldquo;21天教你学会C++&rdquo;</a></li><li><a href="https://coolshell.cn/articles/8239.html" title="无锁队列的实现 - 274,280 人阅读">无锁队列的实现</a></li><li><a href="https://coolshell.cn/articles/20276.html" title="别让自己&ldquo;墙&rdquo;了自己 - 271,262 人阅读">别让自己&ldquo;墙&rdquo;了自己</a></li><li><a href="https://coolshell.cn/articles/10739.html" title="Lua简明教程 - 269,333 人阅读">Lua简明教程</a></li><li><a href="https://coolshell.cn/articles/7490.html" title="性能调优攻略 - 257,249 人阅读">性能调优攻略</a></li><li><a href="https://coolshell.cn/articles/1846.html" title="MySQL性能优化的最佳20+条经验 - 255,746 人阅读">MySQL性能优化的最佳20+条经验</a></li><li><a href="https://coolshell.cn/articles/4758.html" title="如何写出无法维护的代码 - 254,093 人阅读">如何写出无法维护的代码</a></li><li><a href="https://coolshell.cn/articles/914.html" title="6个变态的C语言Hello World程序 - 251,862 人阅读">6个变态的C语言Hello World程序</a></li><li><a href="https://coolshell.cn/articles/17010.html" title="Docker基础技术：Linux Namespace（上） - 241,781 人阅读">Docker基础技术：Linux Namespace（上）</a></li><li><a href="https://coolshell.cn/articles/7829.html" title="28个Unix/Linux的命令行神器 - 241,198 人阅读">28个Unix/Linux的命令行神器</a></li><li><a href="https://coolshell.cn/articles/11312.html" title="无插件Vim编程技巧 - 222,788 人阅读">无插件Vim编程技巧</a></li></ul>
+</aside><aside id="categories-367921425" class="widget widget_categories"><h4 class="widget-title">分类</h4>
+<ul>
+<li class="cat-item cat-item-195"><a href="https://coolshell.cn/category/itnews">业界新闻</a> (33)
+</li>
+<li class="cat-item cat-item-509"><a href="https://coolshell.cn/category/%e4%bc%81%e4%b8%9a%e5%ba%94%e7%94%a8">企业应用</a> (2)
+</li>
+<li class="cat-item cat-item-9"><a href="https://coolshell.cn/category/technews">技术新闻</a> (38)
+</li>
+<li class="cat-item cat-item-550"><a href="https://coolshell.cn/category/%e6%8a%80%e6%9c%af%e7%ae%a1%e7%90%86">技术管理</a> (19)
+</li>
+<li class="cat-item cat-item-12"><a href="https://coolshell.cn/category/techarticle">技术读物</a> (125)
+</li>
+<li class="cat-item cat-item-18"><a href="https://coolshell.cn/category/operatingsystem">操作系统</a> (97)
+<ul class="children">
+<li class="cat-item cat-item-20"><a href="https://coolshell.cn/category/operatingsystem/unixlinux">Unix/Linux</a> (81)
+</li>
+<li class="cat-item cat-item-19"><a href="https://coolshell.cn/category/operatingsystem/mswindows">Windows</a> (12)
+</li>
+</ul>
+</li>
+<li class="cat-item cat-item-105"><a href="https://coolshell.cn/category/datebase">数据库</a> (11)
+</li>
+<li class="cat-item cat-item-10"><a href="https://coolshell.cn/category/misc">杂项资源</a> (295)
+</li>
+<li class="cat-item cat-item-15"><a href="https://coolshell.cn/category/process">流程方法</a> (48)
+</li>
+<li class="cat-item cat-item-23"><a href="https://coolshell.cn/category/progdesign">程序设计</a> (110)
+</li>
+<li class="cat-item cat-item-602"><a href="https://coolshell.cn/category/%e7%b3%bb%e7%bb%9f%e6%9e%b6%e6%9e%84">系统架构</a> (15)
+</li>
+<li class="cat-item cat-item-1"><a href="https://coolshell.cn/category/tools">编程工具</a> (67)
+</li>
+<li class="cat-item cat-item-3"><a href="https://coolshell.cn/category/proglanguage">编程语言</a> (326)
+<ul class="children">
+<li class="cat-item cat-item-189"><a href="https://coolshell.cn/category/proglanguage/dotnet">.NET编程</a> (3)
+</li>
+<li class="cat-item cat-item-8"><a href="https://coolshell.cn/category/proglanguage/ajaxdev">Ajax开发</a> (9)
+</li>
+<li class="cat-item cat-item-5"><a href="https://coolshell.cn/category/proglanguage/cplusplus">C/C++语言</a> (74)
+</li>
+<li class="cat-item cat-item-186"><a href="https://coolshell.cn/category/proglanguage/erlang">Erlang</a> (1)
+</li>
+<li class="cat-item cat-item-819"><a href="https://coolshell.cn/category/proglanguage/go-%e8%af%ad%e8%a8%80">Go 语言</a> (15)
+</li>
+<li class="cat-item cat-item-4"><a href="https://coolshell.cn/category/proglanguage/javadev">Java语言</a> (32)
+</li>
+<li class="cat-item cat-item-11"><a href="https://coolshell.cn/category/proglanguage/phpdev">PHP脚本</a> (11)
+</li>
+<li class="cat-item cat-item-33"><a href="https://coolshell.cn/category/proglanguage/pythondev">Python</a> (23)
+</li>
+<li class="cat-item cat-item-100"><a href="https://coolshell.cn/category/proglanguage/rubydev">Ruby</a> (5)
+</li>
+<li class="cat-item cat-item-860"><a href="https://coolshell.cn/category/proglanguage/rust-%e8%af%ad%e8%a8%80">Rust 语言</a> (1)
+</li>
+<li class="cat-item cat-item-7"><a href="https://coolshell.cn/category/proglanguage/webdev">Web开发</a> (106)
+</li>
+</ul>
+</li>
+<li class="cat-item cat-item-6"><a href="https://coolshell.cn/category/netsecurity">网络安全</a> (36)
+</li>
+<li class="cat-item cat-item-39"><a href="https://coolshell.cn/category/career">职场生涯</a> (40)
+</li>
+<li class="cat-item cat-item-271"><a href="https://coolshell.cn/category/funny">趣味问题</a> (19)
+</li>
+<li class="cat-item cat-item-52"><a href="https://coolshell.cn/category/story">轶事趣闻</a> (147)
+</li>
+</ul>
+</aside><aside id="tag_cloud-4" class="widget widget_tag_cloud"><h4 class="widget-title">标签</h4><div class="tagcloud"><a href="https://coolshell.cn/tag/agile" class="tag-cloud-link tag-link-17 tag-link-position-1" style="font-size: 11.559322033898pt;" aria-label="agile (15个项目)">agile</a>
+<a href="https://coolshell.cn/tag/ajax" class="tag-cloud-link tag-link-34 tag-link-position-2" style="font-size: 10.135593220339pt;" aria-label="AJAX (11个项目)">AJAX</a>
+<a href="https://coolshell.cn/tag/algorithm" class="tag-cloud-link tag-link-76 tag-link-position-3" style="font-size: 14.28813559322pt;" aria-label="Algorithm (26个项目)">Algorithm</a>
+<a href="https://coolshell.cn/tag/android" class="tag-cloud-link tag-link-145 tag-link-position-4" style="font-size: 10.135593220339pt;" aria-label="Android (11个项目)">Android</a>
+<a href="https://coolshell.cn/tag/bash" class="tag-cloud-link tag-link-190 tag-link-position-5" style="font-size: 9.1864406779661pt;" aria-label="Bash (9个项目)">Bash</a>
+<a href="https://coolshell.cn/tag/c" class="tag-cloud-link tag-link-59 tag-link-position-6" style="font-size: 20.694915254237pt;" aria-label="C++ (93个项目)">C++</a>
+<a href="https://coolshell.cn/tag/coding" class="tag-cloud-link tag-link-135 tag-link-position-7" style="font-size: 14.28813559322pt;" aria-label="Coding (26个项目)">Coding</a>
+<a href="https://coolshell.cn/tag/css" class="tag-cloud-link tag-link-96 tag-link-position-8" style="font-size: 13.457627118644pt;" aria-label="CSS (22个项目)">CSS</a>
+<a href="https://coolshell.cn/tag/design" class="tag-cloud-link tag-link-71 tag-link-position-9" style="font-size: 13.932203389831pt;" aria-label="Design (24个项目)">Design</a>
+<a href="https://coolshell.cn/tag/design-pattern" class="tag-cloud-link tag-link-25 tag-link-position-10" style="font-size: 9.6610169491525pt;" aria-label="design pattern (10个项目)">design pattern</a>
+<a href="https://coolshell.cn/tag/ebook" class="tag-cloud-link tag-link-101 tag-link-position-11" style="font-size: 11.559322033898pt;" aria-label="ebook (15个项目)">ebook</a>
+<a href="https://coolshell.cn/tag/flash" class="tag-cloud-link tag-link-98 tag-link-position-12" style="font-size: 8pt;" aria-label="Flash (7个项目)">Flash</a>
+<a href="https://coolshell.cn/tag/game" class="tag-cloud-link tag-link-125 tag-link-position-13" style="font-size: 9.1864406779661pt;" aria-label="Game (9个项目)">Game</a>
+<a href="https://coolshell.cn/tag/go" class="tag-cloud-link tag-link-238 tag-link-position-14" style="font-size: 13.220338983051pt;" aria-label="Go (21个项目)">Go</a>
+<a href="https://coolshell.cn/tag/golang" class="tag-cloud-link tag-link-237 tag-link-position-15" style="font-size: 10.966101694915pt;" aria-label="golang (13个项目)">golang</a>
+<a href="https://coolshell.cn/tag/google" class="tag-cloud-link tag-link-32 tag-link-position-16" style="font-size: 15.474576271186pt;" aria-label="Google (33个项目)">Google</a>
+<a href="https://coolshell.cn/tag/html" class="tag-cloud-link tag-link-38 tag-link-position-17" style="font-size: 15.593220338983pt;" aria-label="HTML (34个项目)">HTML</a>
+<a href="https://coolshell.cn/tag/ie" class="tag-cloud-link tag-link-175 tag-link-position-18" style="font-size: 9.6610169491525pt;" aria-label="IE (10个项目)">IE</a>
+<a href="https://coolshell.cn/tag/java" class="tag-cloud-link tag-link-13 tag-link-position-19" style="font-size: 17.610169491525pt;" aria-label="Java (50个项目)">Java</a>
+<a href="https://coolshell.cn/tag/javascript" class="tag-cloud-link tag-link-114 tag-link-position-20" style="font-size: 17.966101694915pt;" aria-label="Javascript (54个项目)">Javascript</a>
+<a href="https://coolshell.cn/tag/jquery" class="tag-cloud-link tag-link-191 tag-link-position-21" style="font-size: 10.135593220339pt;" aria-label="jQuery (11个项目)">jQuery</a>
+<a href="https://coolshell.cn/tag/linux" class="tag-cloud-link tag-link-37 tag-link-position-22" style="font-size: 19.389830508475pt;" aria-label="Linux (71个项目)">Linux</a>
+<a href="https://coolshell.cn/tag/mysql" class="tag-cloud-link tag-link-106 tag-link-position-23" style="font-size: 8pt;" aria-label="MySQL (7个项目)">MySQL</a>
+<a href="https://coolshell.cn/tag/oop" class="tag-cloud-link tag-link-245 tag-link-position-24" style="font-size: 8.5932203389831pt;" aria-label="OOP (8个项目)">OOP</a>
+<a href="https://coolshell.cn/tag/password" class="tag-cloud-link tag-link-319 tag-link-position-25" style="font-size: 8.5932203389831pt;" aria-label="password (8个项目)">password</a>
+<a href="https://coolshell.cn/tag/performance" class="tag-cloud-link tag-link-120 tag-link-position-26" style="font-size: 12.271186440678pt;" aria-label="Performance (17个项目)">Performance</a>
+<a href="https://coolshell.cn/tag/php" class="tag-cloud-link tag-link-35 tag-link-position-27" style="font-size: 14.050847457627pt;" aria-label="PHP (25个项目)">PHP</a>
+<a href="https://coolshell.cn/tag/programmer" class="tag-cloud-link tag-link-70 tag-link-position-28" style="font-size: 21.881355932203pt;" aria-label="Programmer (116个项目)">Programmer</a>
+<a href="https://coolshell.cn/tag/programming" class="tag-cloud-link tag-link-499 tag-link-position-29" style="font-size: 10.135593220339pt;" aria-label="Programming (11个项目)">Programming</a>
+<a href="https://coolshell.cn/tag/programming-language" class="tag-cloud-link tag-link-115 tag-link-position-30" style="font-size: 10.491525423729pt;" aria-label="programming language (12个项目)">programming language</a>
+<a href="https://coolshell.cn/tag/puzzle" class="tag-cloud-link tag-link-514 tag-link-position-31" style="font-size: 10.135593220339pt;" aria-label="Puzzle (11个项目)">Puzzle</a>
+<a href="https://coolshell.cn/tag/pythondev" class="tag-cloud-link tag-link-791 tag-link-position-32" style="font-size: 15pt;" aria-label="Python (30个项目)">Python</a>
+<a href="https://coolshell.cn/tag/ruby" class="tag-cloud-link tag-link-69 tag-link-position-33" style="font-size: 9.6610169491525pt;" aria-label="Ruby (10个项目)">Ruby</a>
+<a href="https://coolshell.cn/tag/sql" class="tag-cloud-link tag-link-131 tag-link-position-34" style="font-size: 9.6610169491525pt;" aria-label="SQL (10个项目)">SQL</a>
+<a href="https://coolshell.cn/tag/tdd" class="tag-cloud-link tag-link-485 tag-link-position-35" style="font-size: 8.5932203389831pt;" aria-label="TDD (8个项目)">TDD</a>
+<a href="https://coolshell.cn/tag/ui" class="tag-cloud-link tag-link-47 tag-link-position-36" style="font-size: 10.491525423729pt;" aria-label="UI (12个项目)">UI</a>
+<a href="https://coolshell.cn/tag/unix" class="tag-cloud-link tag-link-21 tag-link-position-37" style="font-size: 15.949152542373pt;" aria-label="Unix (36个项目)">Unix</a>
+<a href="https://coolshell.cn/tag/vim" class="tag-cloud-link tag-link-50 tag-link-position-38" style="font-size: 12.745762711864pt;" aria-label="vim (19个项目)">vim</a>
+<a href="https://coolshell.cn/tag/web" class="tag-cloud-link tag-link-30 tag-link-position-39" style="font-size: 16.661016949153pt;" aria-label="Web (42个项目)">Web</a>
+<a href="https://coolshell.cn/tag/windows" class="tag-cloud-link tag-link-49 tag-link-position-40" style="font-size: 12.271186440678pt;" aria-label="Windows (17个项目)">Windows</a>
+<a href="https://coolshell.cn/tag/xml" class="tag-cloud-link tag-link-104 tag-link-position-41" style="font-size: 8.5932203389831pt;" aria-label="XML (8个项目)">XML</a>
+<a href="https://coolshell.cn/tag/%e5%ae%89%e5%85%a8" class="tag-cloud-link tag-link-318 tag-link-position-42" style="font-size: 13.694915254237pt;" aria-label="安全 (23个项目)">安全</a>
+<a href="https://coolshell.cn/tag/%e7%a8%8b%e5%ba%8f%e5%91%98" class="tag-cloud-link tag-link-58 tag-link-position-43" style="font-size: 22pt;" aria-label="程序员 (119个项目)">程序员</a>
+<a href="https://coolshell.cn/tag/%e7%ae%97%e6%b3%95" class="tag-cloud-link tag-link-77 tag-link-position-44" style="font-size: 9.6610169491525pt;" aria-label="算法 (10个项目)">算法</a>
+<a href="https://coolshell.cn/tag/interview" class="tag-cloud-link tag-link-164 tag-link-position-45" style="font-size: 11.915254237288pt;" aria-label="面试 (16个项目)">面试</a></div>
+</aside><aside id="archives-5" class="widget widget_archive"><h4 class="widget-title">归档</h4>
+<ul>
+<li><a href="https://coolshell.cn/articles/date/2023/05">2023年5月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2023/02">2023年2月</a>&nbsp;(2)</li>
+<li><a href="https://coolshell.cn/articles/date/2022/12">2022年12月</a>&nbsp;(2)</li>
+<li><a href="https://coolshell.cn/articles/date/2022/10">2022年10月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2022/07">2022年7月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2022/05">2022年5月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2022/02">2022年2月</a>&nbsp;(2)</li>
+<li><a href="https://coolshell.cn/articles/date/2022/01">2022年1月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2021/12">2021年12月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2021/11">2021年11月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2021/09">2021年9月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2021/07">2021年7月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2020/12">2020年12月</a>&nbsp;(9)</li>
+<li><a href="https://coolshell.cn/articles/date/2020/08">2020年8月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2020/07">2020年7月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2020/04">2020年4月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2020/03">2020年3月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2020/01">2020年1月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2019/12">2019年12月</a>&nbsp;(2)</li>
+<li><a href="https://coolshell.cn/articles/date/2019/11">2019年11月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2019/10">2019年10月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2019/07">2019年7月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2019/06">2019年6月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2019/05">2019年5月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2019/04">2019年4月</a>&nbsp;(2)</li>
+<li><a href="https://coolshell.cn/articles/date/2019/03">2019年3月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2019/02">2019年2月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2018/12">2018年12月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2018/05">2018年5月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2018/01">2018年1月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2017/10">2017年10月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2017/09">2017年9月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2017/08">2017年8月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2017/07">2017年7月</a>&nbsp;(3)</li>
+<li><a href="https://coolshell.cn/articles/date/2017/06">2017年6月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2017/04">2017年4月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2017/03">2017年3月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2017/02">2017年2月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2017/01">2017年1月</a>&nbsp;(2)</li>
+<li><a href="https://coolshell.cn/articles/date/2016/12">2016年12月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2016/10">2016年10月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2016/09">2016年9月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2016/08">2016年8月</a>&nbsp;(2)</li>
+<li><a href="https://coolshell.cn/articles/date/2016/07">2016年7月</a>&nbsp;(3)</li>
+<li><a href="https://coolshell.cn/articles/date/2015/12">2015年12月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2015/09">2015年9月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2015/08">2015年8月</a>&nbsp;(2)</li>
+<li><a href="https://coolshell.cn/articles/date/2015/04">2015年4月</a>&nbsp;(4)</li>
+<li><a href="https://coolshell.cn/articles/date/2014/12">2014年12月</a>&nbsp;(3)</li>
+<li><a href="https://coolshell.cn/articles/date/2014/11">2014年11月</a>&nbsp;(2)</li>
+<li><a href="https://coolshell.cn/articles/date/2014/10">2014年10月</a>&nbsp;(2)</li>
+<li><a href="https://coolshell.cn/articles/date/2014/09">2014年9月</a>&nbsp;(2)</li>
+<li><a href="https://coolshell.cn/articles/date/2014/08">2014年8月</a>&nbsp;(2)</li>
+<li><a href="https://coolshell.cn/articles/date/2014/06">2014年6月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2014/05">2014年5月</a>&nbsp;(4)</li>
+<li><a href="https://coolshell.cn/articles/date/2014/04">2014年4月</a>&nbsp;(4)</li>
+<li><a href="https://coolshell.cn/articles/date/2014/03">2014年3月</a>&nbsp;(5)</li>
+<li><a href="https://coolshell.cn/articles/date/2014/02">2014年2月</a>&nbsp;(3)</li>
+<li><a href="https://coolshell.cn/articles/date/2014/01">2014年1月</a>&nbsp;(2)</li>
+<li><a href="https://coolshell.cn/articles/date/2013/12">2013年12月</a>&nbsp;(3)</li>
+<li><a href="https://coolshell.cn/articles/date/2013/11">2013年11月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2013/10">2013年10月</a>&nbsp;(6)</li>
+<li><a href="https://coolshell.cn/articles/date/2013/08">2013年8月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2013/07">2013年7月</a>&nbsp;(8)</li>
+<li><a href="https://coolshell.cn/articles/date/2013/06">2013年6月</a>&nbsp;(2)</li>
+<li><a href="https://coolshell.cn/articles/date/2013/05">2013年5月</a>&nbsp;(3)</li>
+<li><a href="https://coolshell.cn/articles/date/2013/04">2013年4月</a>&nbsp;(3)</li>
+<li><a href="https://coolshell.cn/articles/date/2013/03">2013年3月</a>&nbsp;(3)</li>
+<li><a href="https://coolshell.cn/articles/date/2013/02">2013年2月</a>&nbsp;(5)</li>
+<li><a href="https://coolshell.cn/articles/date/2013/01">2013年1月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2012/12">2012年12月</a>&nbsp;(4)</li>
+<li><a href="https://coolshell.cn/articles/date/2012/11">2012年11月</a>&nbsp;(4)</li>
+<li><a href="https://coolshell.cn/articles/date/2012/10">2012年10月</a>&nbsp;(3)</li>
+<li><a href="https://coolshell.cn/articles/date/2012/09">2012年9月</a>&nbsp;(4)</li>
+<li><a href="https://coolshell.cn/articles/date/2012/08">2012年8月</a>&nbsp;(8)</li>
+<li><a href="https://coolshell.cn/articles/date/2012/07">2012年7月</a>&nbsp;(4)</li>
+<li><a href="https://coolshell.cn/articles/date/2012/06">2012年6月</a>&nbsp;(7)</li>
+<li><a href="https://coolshell.cn/articles/date/2012/05">2012年5月</a>&nbsp;(6)</li>
+<li><a href="https://coolshell.cn/articles/date/2012/04">2012年4月</a>&nbsp;(6)</li>
+<li><a href="https://coolshell.cn/articles/date/2012/03">2012年3月</a>&nbsp;(6)</li>
+<li><a href="https://coolshell.cn/articles/date/2012/02">2012年2月</a>&nbsp;(3)</li>
+<li><a href="https://coolshell.cn/articles/date/2012/01">2012年1月</a>&nbsp;(6)</li>
+<li><a href="https://coolshell.cn/articles/date/2011/12">2011年12月</a>&nbsp;(5)</li>
+<li><a href="https://coolshell.cn/articles/date/2011/11">2011年11月</a>&nbsp;(9)</li>
+<li><a href="https://coolshell.cn/articles/date/2011/10">2011年10月</a>&nbsp;(6)</li>
+<li><a href="https://coolshell.cn/articles/date/2011/09">2011年9月</a>&nbsp;(5)</li>
+<li><a href="https://coolshell.cn/articles/date/2011/08">2011年8月</a>&nbsp;(14)</li>
+<li><a href="https://coolshell.cn/articles/date/2011/07">2011年7月</a>&nbsp;(6)</li>
+<li><a href="https://coolshell.cn/articles/date/2011/06">2011年6月</a>&nbsp;(12)</li>
+<li><a href="https://coolshell.cn/articles/date/2011/05">2011年5月</a>&nbsp;(5)</li>
+<li><a href="https://coolshell.cn/articles/date/2011/04">2011年4月</a>&nbsp;(18)</li>
+<li><a href="https://coolshell.cn/articles/date/2011/03">2011年3月</a>&nbsp;(16)</li>
+<li><a href="https://coolshell.cn/articles/date/2011/02">2011年2月</a>&nbsp;(16)</li>
+<li><a href="https://coolshell.cn/articles/date/2011/01">2011年1月</a>&nbsp;(18)</li>
+<li><a href="https://coolshell.cn/articles/date/2010/12">2010年12月</a>&nbsp;(11)</li>
+<li><a href="https://coolshell.cn/articles/date/2010/11">2010年11月</a>&nbsp;(11)</li>
+<li><a href="https://coolshell.cn/articles/date/2010/10">2010年10月</a>&nbsp;(19)</li>
+<li><a href="https://coolshell.cn/articles/date/2010/09">2010年9月</a>&nbsp;(15)</li>
+<li><a href="https://coolshell.cn/articles/date/2010/08">2010年8月</a>&nbsp;(10)</li>
+<li><a href="https://coolshell.cn/articles/date/2010/07">2010年7月</a>&nbsp;(20)</li>
+<li><a href="https://coolshell.cn/articles/date/2010/06">2010年6月</a>&nbsp;(9)</li>
+<li><a href="https://coolshell.cn/articles/date/2010/05">2010年5月</a>&nbsp;(13)</li>
+<li><a href="https://coolshell.cn/articles/date/2010/04">2010年4月</a>&nbsp;(12)</li>
+<li><a href="https://coolshell.cn/articles/date/2010/03">2010年3月</a>&nbsp;(11)</li>
+<li><a href="https://coolshell.cn/articles/date/2010/02">2010年2月</a>&nbsp;(7)</li>
+<li><a href="https://coolshell.cn/articles/date/2010/01">2010年1月</a>&nbsp;(9)</li>
+<li><a href="https://coolshell.cn/articles/date/2009/12">2009年12月</a>&nbsp;(22)</li>
+<li><a href="https://coolshell.cn/articles/date/2009/11">2009年11月</a>&nbsp;(27)</li>
+<li><a href="https://coolshell.cn/articles/date/2009/10">2009年10月</a>&nbsp;(17)</li>
+<li><a href="https://coolshell.cn/articles/date/2009/09">2009年9月</a>&nbsp;(14)</li>
+<li><a href="https://coolshell.cn/articles/date/2009/08">2009年8月</a>&nbsp;(21)</li>
+<li><a href="https://coolshell.cn/articles/date/2009/07">2009年7月</a>&nbsp;(18)</li>
+<li><a href="https://coolshell.cn/articles/date/2009/06">2009年6月</a>&nbsp;(19)</li>
+<li><a href="https://coolshell.cn/articles/date/2009/05">2009年5月</a>&nbsp;(27)</li>
+<li><a href="https://coolshell.cn/articles/date/2009/04">2009年4月</a>&nbsp;(53)</li>
+<li><a href="https://coolshell.cn/articles/date/2009/03">2009年3月</a>&nbsp;(43)</li>
+<li><a href="https://coolshell.cn/articles/date/2008/10">2008年10月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2007/12">2007年12月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2006/11">2006年11月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2004/06">2004年6月</a>&nbsp;(1)</li>
+</ul>
+</aside><aside id="custom_html-8" class="widget_text widget widget_custom_html"><h4 class="widget-title">友情链接</h4><div class="textwidget custom-html-widget"><ul class="blogroll">
+<li><a href="http://blog.csdn.net/haoel" target="_blank" onclick="if (!window.__cfRLUnblockHandlers) return false; pageTracker._trackPageview('/outgoing/blog.csdn.net/haoel?referer=http://coolshell.cn');" rel="noopener" data-cf-modified-e79c7100b5ac8aff1472eaec->陈皓的博客</a></li>
+<li><a href="http://ifeve.com/" target="_blank" title="促进并发编程的研究和推广" onclick="if (!window.__cfRLUnblockHandlers) return false; pageTracker._trackPageview('/outgoing/ifeve.com/?referer=http://coolshell.cn');" rel="noopener" data-cf-modified-e79c7100b5ac8aff1472eaec->并发编程</a></li>
+<li><a href="http://www.raychase.net/" target="_blank" title="一个啰嗦的程序员" onclick="if (!window.__cfRLUnblockHandlers) return false; pageTracker._trackPageview('/outgoing/www.raychase.net/?referer=http://coolshell.cn');" rel="noopener" data-cf-modified-e79c7100b5ac8aff1472eaec->四火的唠叨</a></li>
+<li><a href="http://www.cnblogs.com/weidagang2046/" target="_blank" title="Just for Fun" onclick="if (!window.__cfRLUnblockHandlers) return false; pageTracker._trackPageview('/outgoing/http://www.cnblogs.com/weidagang2046/?referer=http://coolshell.cn/');" rel="noopener" data-cf-modified-e79c7100b5ac8aff1472eaec->Todd Wei的Blog</a></li>
+<li><a href="http://www.hellogcc.org/" target="_blank" title="致力于讨论和学习GNU Toolchain方面的工作组" onclick="if (!window.__cfRLUnblockHandlers) return false; pageTracker._trackPageview('/outgoing/www.hellogcc.org//?referer=http://coolshell.cn/');" rel="noopener" data-cf-modified-e79c7100b5ac8aff1472eaec->开源开发工具技术博客</a></li>
+<li><a href="http://www.cppfans.org/" target="_blank" title="记录我们点滴学习工作生活" onclick="if (!window.__cfRLUnblockHandlers) return false; pageTracker._trackPageview('/outgoing/http://www.cppfans.org/?referer=http://coolshell.cn/');" rel="noopener" data-cf-modified-e79c7100b5ac8aff1472eaec->C++爱好者博客</a></li>
+<li><a href="https://HelloACM.com/" target="_blank" title="Smart Ideas, Smart Algorithms" onclick="if (!window.__cfRLUnblockHandlers) return false; pageTracker._trackPageview('/outgoing/http://HelloACM.com/?referer=http://coolshell.cn/');" rel="noopener" data-cf-modified-e79c7100b5ac8aff1472eaec->ACMer</a></li>
+</ul>
+</div></aside><aside id="meta-5" class="widget widget_meta"><h4 class="widget-title">其他操作</h4>
+<ul>
+<li><a href="https://coolshell.cn/wp-login.php?action=register">注册</a></li> <li><a href="https://coolshell.cn/wp-login.php">登录</a></li>
+<li><a href="https://coolshell.cn/feed">条目feed</a></li>
+<li><a href="https://coolshell.cn/comments/feed">评论feed</a></li>
+<li><a href="https://cn.wordpress.org/">WordPress.org</a></li>
+</ul>
+</aside></div>
+</div> 
+</div>
+<script type="e79c7100b5ac8aff1472eaec-text/javascript">
+	var _gaq = _gaq || [];
+	_gaq.push(['_setAccount', 'UA-7486123-1']);
+_gaq.push(['_trackPageview']);
+
+	(function() {
+		var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+		ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+		var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+	})();
+</script>
+</div>
+<footer id="colophon" class="site-footer" role="contentinfo">
+<div class="row site-info">
+CoolShell.cn &copy; 2023
+<span class="sep"> | </span>
+Powered by <a href="https://wordpress.org/">WordPress</a>
+<span class="sep"> | </span>
+Based on Theme: Nisarg by <a href="http://www.falgunidesai.com/" rel="designer">Falguni Desai</a>.
+<p><a href="http://www.beian.miit.gov.cn" target="_target">京ICP备18054967号-1</a></p>
+</div>
+</footer>
+</div>
+<script type="e79c7100b5ac8aff1472eaec-text/javascript" id="wp-postratings-js-extra">
+/* <![CDATA[ */
+var ratingsL10n = {"plugin_url":"https:\/\/coolshell.cn\/wp-content\/plugins\/wp-postratings","ajax_url":"https:\/\/coolshell.cn\/wp-admin\/admin-ajax.php","text_wait":"Please rate only 1 item at a time.","image":"stars_crystal","image_ext":"gif","max":"5","show_loading":"1","show_fading":"1","custom":"0"};
+var ratings_mouseover_image=new Image();ratings_mouseover_image.src="https://coolshell.cn/wp-content/plugins/wp-postratings/images/stars_crystal/rating_over.gif";;
+/* ]]> */
+</script>
+<script type="e79c7100b5ac8aff1472eaec-text/javascript" src="https://coolshell.cn/wp-content/plugins/wp-postratings/js/postratings-js.js?ver=1.90.1" id="wp-postratings-js"></script>
+<script type="e79c7100b5ac8aff1472eaec-text/javascript" id="wp-postviews-cache-js-extra">
+/* <![CDATA[ */
+var viewsCacheL10n = {"admin_ajax_url":"https:\/\/coolshell.cn\/wp-admin\/admin-ajax.php","nonce":"4731639b7a","post_id":"1051"};
+/* ]]> */
+</script>
+<script type="e79c7100b5ac8aff1472eaec-text/javascript" src="https://coolshell.cn/wp-content/plugins/wp-postviews/postviews-cache.js?ver=1.68" id="wp-postviews-cache-js"></script>
+<script type="e79c7100b5ac8aff1472eaec-text/javascript" src="https://coolshell.cn/wp-content/themes/MyNisarg/js/bootstrap.js?ver=6.2" id="bootstrap-js"></script>
+<script type="e79c7100b5ac8aff1472eaec-text/javascript" src="https://coolshell.cn/wp-content/themes/MyNisarg/js/skip-link-focus-fix.js?ver=20130115" id="nisarg-skip-link-focus-fix-js"></script>
+<script type="e79c7100b5ac8aff1472eaec-text/javascript" src="https://coolshell.cn/wp-content/themes/MyNisarg/js/nisarg.js?ver=6.2" id="nisarg-js-js"></script>
+<script type="e79c7100b5ac8aff1472eaec-text/javascript" src="https://coolshell.cn/wp-includes/js/comment-reply.min.js?ver=6.2" id="comment-reply-js"></script>
+<script type="e79c7100b5ac8aff1472eaec-text/javascript" id="q2w3_fixed_widget-js-extra">
+/* <![CDATA[ */
+var q2w3_sidebar_options = [{"use_sticky_position":false,"margin_top":50,"margin_bottom":0,"stop_elements_selectors":"","screen_max_width":0,"screen_max_height":0,"widgets":[]}];
+/* ]]> */
+</script>
+<script type="e79c7100b5ac8aff1472eaec-text/javascript" src="https://coolshell.cn/wp-content/plugins/q2w3-fixed-widget/js/frontend.min.js?ver=6.2.3" id="q2w3_fixed_widget-js"></script>
+<script type="e79c7100b5ac8aff1472eaec-text/javascript" src="https://coolshell.cn/wp-content/plugins/enlighter/cache/enlighterjs.min.js?ver=0cuVQBPCj0viGB0" id="enlighterjs-js"></script>
+<script type="e79c7100b5ac8aff1472eaec-text/javascript" id="enlighterjs-js-after">
+!function(e,n){if("undefined"!=typeof EnlighterJS){var o={"selectors":{"block":"pre.EnlighterJSRAW","inline":"code.EnlighterJSRAW"},"options":{"indent":2,"ampersandCleanup":true,"linehover":true,"rawcodeDbclick":true,"textOverflow":"scroll","linenumbers":true,"theme":"wpcustom","language":"generic","retainCssClasses":false,"collapse":false,"toolbarOuter":"","toolbarTop":"{BTN_RAW}{BTN_COPY}{BTN_WINDOW}{BTN_WEBSITE}","toolbarBottom":""}};(e.EnlighterJSINIT=function(){EnlighterJS.init(o.selectors.block,o.selectors.inline,o.options)})()}else{(n&&(n.error||n.log)||function(){})("Error: EnlighterJS resources not loaded yet!")}}(window,console);
+</script>
+<script type="e79c7100b5ac8aff1472eaec-text/javascript" src="https://coolshell.cn/wp-content/plugins/easy-table-of-contents/vendor/js-cookie/js.cookie.min.js?ver=2.2.1" id="ez-toc-js-cookie-js"></script>
+<script type="e79c7100b5ac8aff1472eaec-text/javascript" src="https://coolshell.cn/wp-content/plugins/easy-table-of-contents/vendor/sticky-kit/jquery.sticky-kit.min.js?ver=1.9.2" id="ez-toc-jquery-sticky-kit-js"></script>
+<script type="e79c7100b5ac8aff1472eaec-text/javascript" id="ez-toc-js-js-extra">
+/* <![CDATA[ */
+var ezTOC = {"smooth_scroll":"1","scroll_offset":"30","fallbackIcon":"<span style=\"display: flex;align-items: center;width: 35px;height: 30px;justify-content: center;direction:ltr;\"><svg style=\"fill: #999;color:#999\" xmlns=\"http:\/\/www.w3.org\/2000\/svg\" class=\"list-377408\" width=\"20px\" height=\"20px\" viewBox=\"0 0 24 24\" fill=\"none\"><path d=\"M6 6H4v2h2V6zm14 0H8v2h12V6zM4 11h2v2H4v-2zm16 0H8v2h12v-2zM4 16h2v2H4v-2zm16 0H8v2h12v-2z\" fill=\"currentColor\"><\/path><\/svg><svg style=\"fill: #999;color:#999\" class=\"arrow-unsorted-368013\" xmlns=\"http:\/\/www.w3.org\/2000\/svg\" width=\"10px\" height=\"10px\" viewBox=\"0 0 24 24\" version=\"1.2\" baseProfile=\"tiny\"><path d=\"M18.2 9.3l-6.2-6.3-6.2 6.3c-.2.2-.3.4-.3.7s.1.5.3.7c.2.2.4.3.7.3h11c.3 0 .5-.1.7-.3.2-.2.3-.5.3-.7s-.1-.5-.3-.7zM5.8 14.7l6.2 6.3 6.2-6.3c.2-.2.3-.5.3-.7s-.1-.5-.3-.7c-.2-.2-.4-.3-.7-.3h-11c-.3 0-.5.1-.7.3-.2.2-.3.5-.3.7s.1.5.3.7z\"\/><\/svg><\/span>"};
+/* ]]> */
+</script>
+<script type="e79c7100b5ac8aff1472eaec-text/javascript" src="https://coolshell.cn/wp-content/plugins/easy-table-of-contents/assets/js/front.min.js?ver=2.0.48-1683606477" id="ez-toc-js-js"></script>
+<script defer type="e79c7100b5ac8aff1472eaec-text/javascript" src="https://coolshell.cn/wp-content/plugins/akismet/_inc/akismet-frontend.js?ver=1683523750" id="akismet-frontend-js"></script>
+<script type="e79c7100b5ac8aff1472eaec-text/javascript">
+        jQuery(document).ready(function ($) {
+
+            for (let i = 0; i < document.forms.length; ++i) {
+                let form = document.forms[i];
+				if ($(form).attr("method") != "get") { $(form).append('<input type="hidden" name="HLY_NVGfRIyiO" value="A*FRUYw" />'); }
+if ($(form).attr("method") != "get") { $(form).append('<input type="hidden" name="rfNmPJFxZlE" value="PcJd0F3kneCMpW" />'); }
+            }
+
+            $(document).on('submit', 'form', function () {
+				if ($(this).attr("method") != "get") { $(this).append('<input type="hidden" name="HLY_NVGfRIyiO" value="A*FRUYw" />'); }
+if ($(this).attr("method") != "get") { $(this).append('<input type="hidden" name="rfNmPJFxZlE" value="PcJd0F3kneCMpW" />'); }
+                return true;
+            });
+
+            jQuery.ajaxSetup({
+                beforeSend: function (e, data) {
+
+                    if (data.type !== 'POST') return;
+
+                    if (typeof data.data === 'object' && data.data !== null) {
+						data.data.append("HLY_NVGfRIyiO", "A*FRUYw");
+data.data.append("rfNmPJFxZlE", "PcJd0F3kneCMpW");
+                    }
+                    else {
+                        data.data = data.data + '&HLY_NVGfRIyiO=A*FRUYw&rfNmPJFxZlE=PcJd0F3kneCMpW';
+                    }
+                }
+            });
+
+        });
+    </script>
+<script src="/cdn-cgi/scripts/7d0fa10a/cloudflare-static/rocket-loader.min.js" data-cf-settings="e79c7100b5ac8aff1472eaec-|49" defer></script></body>
+</html>
+<script type="e79c7100b5ac8aff1472eaec-text/javascript" src="https://cdn.jsdelivr.net/gh/haoel/anti-baidu/js/anti-baidu-latest.min.js" charset="UTF-8"></script>
+
+
+

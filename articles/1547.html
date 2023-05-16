@@ -1,0 +1,1855 @@
+<!DOCTYPE html>
+<!--[if IE 8]>
+<html id="ie8" dir="ltr" lang="zh-CN"
+	prefix="og: https://ogp.me/ns#" >
+<![endif]-->
+<!--[if !(IE 8) ]><!-->
+<html dir="ltr" lang="zh-CN" prefix="og: https://ogp.me/ns#">
+<!--<![endif]-->
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width" />
+<link rel="profile" href="https://gmpg.org/xfn/11" />
+<link rel="pingback" href="https://coolshell.cn/xmlrpc.php" />
+<link rel="shortcut icon" href="/favicon.png">
+<title>使用Flex Bison 和LLVM编写自己的编译器 | 酷 壳 - CoolShell</title>
+
+<meta name="robots" content="max-image-preview:large" />
+<meta name="keywords" content="编译原理,c/c++语言,程序设计" />
+<link rel="canonical" href="https://coolshell.cn/articles/1547.html" />
+<meta name="generator" content="All in One SEO (AIOSEO) 4.3.6.1 " />
+<meta property="og:locale" content="zh_CN" />
+<meta property="og:site_name" content="酷 壳 - CoolShell" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="使用Flex Bison 和LLVM编写自己的编译器 | 酷 壳 - CoolShell" />
+<meta property="og:url" content="https://coolshell.cn/articles/1547.html" />
+<meta property="og:image" content="https://gnuu.org/wp-content/uploads/2009/09/pipeline.png" />
+<meta property="og:image:secure_url" content="https://gnuu.org/wp-content/uploads/2009/09/pipeline.png" />
+<meta property="article:published_time" content="2009-10-12T04:47:18+00:00" />
+<meta property="article:modified_time" content="2009-10-13T00:54:50+00:00" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="使用Flex Bison 和LLVM编写自己的编译器 | 酷 壳 - CoolShell" />
+<meta name="twitter:image" content="http://gnuu.org/wp-content/uploads/2009/09/pipeline.png" />
+<script type="application/ld+json" class="aioseo-schema">
+			{"@context":"https:\/\/schema.org","@graph":[{"@type":"Article","@id":"https:\/\/coolshell.cn\/articles\/1547.html#article","name":"\u4f7f\u7528Flex Bison \u548cLLVM\u7f16\u5199\u81ea\u5df1\u7684\u7f16\u8bd1\u5668 | \u9177 \u58f3 - CoolShell","headline":"\u4f7f\u7528Flex Bison \u548cLLVM\u7f16\u5199\u81ea\u5df1\u7684\u7f16\u8bd1\u5668","author":{"@id":"https:\/\/coolshell.cn\/articles\/author\/neo#author"},"publisher":{"@id":"https:\/\/coolshell.cn\/#organization"},"image":{"@type":"ImageObject","url":"http:\/\/gnuu.org\/wp-content\/uploads\/2009\/09\/pipeline.png","@id":"https:\/\/coolshell.cn\/#articleImage"},"datePublished":"2009-10-12T04:47:18+08:00","dateModified":"2009-10-13T00:54:50+08:00","inLanguage":"zh-CN","commentCount":31,"mainEntityOfPage":{"@id":"https:\/\/coolshell.cn\/articles\/1547.html#webpage"},"isPartOf":{"@id":"https:\/\/coolshell.cn\/articles\/1547.html#webpage"},"articleSection":"C\/C++\u8bed\u8a00, \u7a0b\u5e8f\u8bbe\u8ba1, \u7f16\u8bd1\u539f\u7406"},{"@type":"BreadcrumbList","@id":"https:\/\/coolshell.cn\/articles\/1547.html#breadcrumblist","itemListElement":[{"@type":"ListItem","@id":"https:\/\/coolshell.cn\/#listItem","position":1,"item":{"@type":"WebPage","@id":"https:\/\/coolshell.cn\/","name":"\u4e3b\u9801","description":"\u4eab\u53d7\u7f16\u7a0b\u548c\u6280\u672f\u6240\u5e26\u6765\u7684\u5feb\u4e50 \u2013 https:\/\/coolshell.cn","url":"https:\/\/coolshell.cn\/"}}]},{"@type":"Organization","@id":"https:\/\/coolshell.cn\/#organization","name":"\u9177\u58f3-CoolShell","url":"https:\/\/coolshell.cn\/","logo":{"@type":"ImageObject","url":"https:\/\/coolshell.cn\/wp-content\/uploads\/2020\/04\/mini.logo_.png","@id":"https:\/\/coolshell.cn\/#organizationLogo","width":306,"height":306},"image":{"@id":"https:\/\/coolshell.cn\/#organizationLogo"}},{"@type":"Person","@id":"https:\/\/coolshell.cn\/articles\/author\/neo#author","url":"https:\/\/coolshell.cn\/articles\/author\/neo","name":"Neo","image":{"@type":"ImageObject","@id":"https:\/\/coolshell.cn\/articles\/1547.html#authorImage","url":"https:\/\/secure.gravatar.com\/avatar\/adbd7d1f9ec55c6accf6e2a41b5a919a?s=96&d=mm&r=g","width":96,"height":96,"caption":"Neo"}},{"@type":"WebPage","@id":"https:\/\/coolshell.cn\/articles\/1547.html#webpage","url":"https:\/\/coolshell.cn\/articles\/1547.html","name":"\u4f7f\u7528Flex Bison \u548cLLVM\u7f16\u5199\u81ea\u5df1\u7684\u7f16\u8bd1\u5668 | \u9177 \u58f3 - CoolShell","inLanguage":"zh-CN","isPartOf":{"@id":"https:\/\/coolshell.cn\/#website"},"breadcrumb":{"@id":"https:\/\/coolshell.cn\/articles\/1547.html#breadcrumblist"},"author":{"@id":"https:\/\/coolshell.cn\/articles\/author\/neo#author"},"creator":{"@id":"https:\/\/coolshell.cn\/articles\/author\/neo#author"},"datePublished":"2009-10-12T04:47:18+08:00","dateModified":"2009-10-13T00:54:50+08:00"},{"@type":"WebSite","@id":"https:\/\/coolshell.cn\/#website","url":"https:\/\/coolshell.cn\/","name":"\u9177 \u58f3 - CoolShell","description":"\u4eab\u53d7\u7f16\u7a0b\u548c\u6280\u672f\u6240\u5e26\u6765\u7684\u5feb\u4e50 - Coding Your Ambition","inLanguage":"zh-CN","publisher":{"@id":"https:\/\/coolshell.cn\/#organization"}}]}
+		</script>
+<script type="81c2880153fcf3b3d2d66766-text/javascript">
+			window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+			ga('create', "UA-7486123-1", { 'cookieDomain': 'coolshell.cn' } );
+			ga('send', 'pageview');
+		</script>
+<script async src="https://www.google-analytics.com/analytics.js" type="81c2880153fcf3b3d2d66766-text/javascript"></script>
+
+<link rel="dns-prefetch" href="//fonts.googleapis.com" />
+<link rel="alternate" type="application/rss+xml" title="酷 壳 - CoolShell &raquo; Feed" href="https://coolshell.cn/feed" />
+<link rel="alternate" type="application/rss+xml" title="酷 壳 - CoolShell &raquo; 评论Feed" href="https://coolshell.cn/comments/feed" />
+<link rel="alternate" type="application/rss+xml" title="酷 壳 - CoolShell &raquo; 使用Flex Bison 和LLVM编写自己的编译器评论Feed" href="https://coolshell.cn/articles/1547.html/feed" />
+<script type="81c2880153fcf3b3d2d66766-text/javascript">
+window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/14.0.0\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/14.0.0\/svg\/","svgExt":".svg","source":{"concatemoji":"https:\/\/coolshell.cn\/wp-includes\/js\/wp-emoji-release.min.js?ver=6.2"}};
+/*! This file is auto-generated */
+!function(e,a,t){var n,r,o,i=a.createElement("canvas"),p=i.getContext&&i.getContext("2d");function s(e,t){p.clearRect(0,0,i.width,i.height),p.fillText(e,0,0);e=i.toDataURL();return p.clearRect(0,0,i.width,i.height),p.fillText(t,0,0),e===i.toDataURL()}function c(e){var t=a.createElement("script");t.src=e,t.defer=t.type="text/javascript",a.getElementsByTagName("head")[0].appendChild(t)}for(o=Array("flag","emoji"),t.supports={everything:!0,everythingExceptFlag:!0},r=0;r<o.length;r++)t.supports[o[r]]=function(e){if(p&&p.fillText)switch(p.textBaseline="top",p.font="600 32px Arial",e){case"flag":return s("\ud83c\udff3\ufe0f\u200d\u26a7\ufe0f","\ud83c\udff3\ufe0f\u200b\u26a7\ufe0f")?!1:!s("\ud83c\uddfa\ud83c\uddf3","\ud83c\uddfa\u200b\ud83c\uddf3")&&!s("\ud83c\udff4\udb40\udc67\udb40\udc62\udb40\udc65\udb40\udc6e\udb40\udc67\udb40\udc7f","\ud83c\udff4\u200b\udb40\udc67\u200b\udb40\udc62\u200b\udb40\udc65\u200b\udb40\udc6e\u200b\udb40\udc67\u200b\udb40\udc7f");case"emoji":return!s("\ud83e\udef1\ud83c\udffb\u200d\ud83e\udef2\ud83c\udfff","\ud83e\udef1\ud83c\udffb\u200b\ud83e\udef2\ud83c\udfff")}return!1}(o[r]),t.supports.everything=t.supports.everything&&t.supports[o[r]],"flag"!==o[r]&&(t.supports.everythingExceptFlag=t.supports.everythingExceptFlag&&t.supports[o[r]]);t.supports.everythingExceptFlag=t.supports.everythingExceptFlag&&!t.supports.flag,t.DOMReady=!1,t.readyCallback=function(){t.DOMReady=!0},t.supports.everything||(n=function(){t.readyCallback()},a.addEventListener?(a.addEventListener("DOMContentLoaded",n,!1),e.addEventListener("load",n,!1)):(e.attachEvent("onload",n),a.attachEvent("onreadystatechange",function(){"complete"===a.readyState&&t.readyCallback()})),(e=t.source||{}).concatemoji?c(e.concatemoji):e.wpemoji&&e.twemoji&&(c(e.twemoji),c(e.wpemoji)))}(window,document,window._wpemojiSettings);
+</script>
+<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 0.07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+<link rel="stylesheet" id="series_font-css" href="https://coolshell.cn/wp-content/plugins/simple-post-series/inc/icomoon/style.css?ver=2.4" type="text/css" media="all" />
+<link rel="stylesheet" id="wp-block-library-css" href="https://coolshell.cn/wp-content/plugins/gutenberg/build/block-library/style.css?ver=15.7.0" type="text/css" media="all" />
+<link rel="stylesheet" id="classic-theme-styles-css" href="https://coolshell.cn/wp-includes/css/classic-themes.min.css?ver=6.2" type="text/css" media="all" />
+<style id="global-styles-inline-css" type="text/css">
+body{--wp--preset--color--black: #000000;--wp--preset--color--cyan-bluish-gray: #abb8c3;--wp--preset--color--white: #ffffff;--wp--preset--color--pale-pink: #f78da7;--wp--preset--color--vivid-red: #cf2e2e;--wp--preset--color--luminous-vivid-orange: #ff6900;--wp--preset--color--luminous-vivid-amber: #fcb900;--wp--preset--color--light-green-cyan: #7bdcb5;--wp--preset--color--vivid-green-cyan: #00d084;--wp--preset--color--pale-cyan-blue: #8ed1fc;--wp--preset--color--vivid-cyan-blue: #0693e3;--wp--preset--color--vivid-purple: #9b51e0;--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple: linear-gradient(135deg,rgba(6,147,227,1) 0%,rgb(155,81,224) 100%);--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan: linear-gradient(135deg,rgb(122,220,180) 0%,rgb(0,208,130) 100%);--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange: linear-gradient(135deg,rgba(252,185,0,1) 0%,rgba(255,105,0,1) 100%);--wp--preset--gradient--luminous-vivid-orange-to-vivid-red: linear-gradient(135deg,rgba(255,105,0,1) 0%,rgb(207,46,46) 100%);--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray: linear-gradient(135deg,rgb(238,238,238) 0%,rgb(169,184,195) 100%);--wp--preset--gradient--cool-to-warm-spectrum: linear-gradient(135deg,rgb(74,234,220) 0%,rgb(151,120,209) 20%,rgb(207,42,186) 40%,rgb(238,44,130) 60%,rgb(251,105,98) 80%,rgb(254,248,76) 100%);--wp--preset--gradient--blush-light-purple: linear-gradient(135deg,rgb(255,206,236) 0%,rgb(152,150,240) 100%);--wp--preset--gradient--blush-bordeaux: linear-gradient(135deg,rgb(254,205,165) 0%,rgb(254,45,45) 50%,rgb(107,0,62) 100%);--wp--preset--gradient--luminous-dusk: linear-gradient(135deg,rgb(255,203,112) 0%,rgb(199,81,192) 50%,rgb(65,88,208) 100%);--wp--preset--gradient--pale-ocean: linear-gradient(135deg,rgb(255,245,203) 0%,rgb(182,227,212) 50%,rgb(51,167,181) 100%);--wp--preset--gradient--electric-grass: linear-gradient(135deg,rgb(202,248,128) 0%,rgb(113,206,126) 100%);--wp--preset--gradient--midnight: linear-gradient(135deg,rgb(2,3,129) 0%,rgb(40,116,252) 100%);--wp--preset--font-size--small: 13px;--wp--preset--font-size--medium: 20px;--wp--preset--font-size--large: 36px;--wp--preset--font-size--x-large: 42px;--wp--preset--spacing--20: 0.44rem;--wp--preset--spacing--30: 0.67rem;--wp--preset--spacing--40: 1rem;--wp--preset--spacing--50: 1.5rem;--wp--preset--spacing--60: 2.25rem;--wp--preset--spacing--70: 3.38rem;--wp--preset--spacing--80: 5.06rem;--wp--preset--shadow--natural: 6px 6px 9px rgba(0, 0, 0, 0.2);--wp--preset--shadow--deep: 12px 12px 50px rgba(0, 0, 0, 0.4);--wp--preset--shadow--sharp: 6px 6px 0px rgba(0, 0, 0, 0.2);--wp--preset--shadow--outlined: 6px 6px 0px -3px rgba(255, 255, 255, 1), 6px 6px rgba(0, 0, 0, 1);--wp--preset--shadow--crisp: 6px 6px 0px rgba(0, 0, 0, 1);}:where(.is-layout-flex){gap: 0.5em;}body .is-layout-flow > .alignleft{float: left;margin-inline-start: 0;margin-inline-end: 2em;}body .is-layout-flow > .alignright{float: right;margin-inline-start: 2em;margin-inline-end: 0;}body .is-layout-flow > .aligncenter{margin-left: auto !important;margin-right: auto !important;}body .is-layout-constrained > .alignleft{float: left;margin-inline-start: 0;margin-inline-end: 2em;}body .is-layout-constrained > .alignright{float: right;margin-inline-start: 2em;margin-inline-end: 0;}body .is-layout-constrained > .aligncenter{margin-left: auto !important;margin-right: auto !important;}body .is-layout-constrained > :where(:not(.alignleft):not(.alignright):not(.alignfull)){max-width: var(--wp--style--global--content-size);margin-left: auto !important;margin-right: auto !important;}body .is-layout-constrained > .alignwide{max-width: var(--wp--style--global--wide-size);}body .is-layout-flex{display: flex;}body .is-layout-flex{flex-wrap: wrap;align-items: center;}body .is-layout-flex > *{margin: 0;}body .is-layout-grid{display: grid;}body .is-layout-grid > *{margin: 0;}:where(.wp-block-columns.is-layout-flex){gap: 2em;}.has-black-color{color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-color{color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-color{color: var(--wp--preset--color--white) !important;}.has-pale-pink-color{color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-color{color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-color{color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-color{color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-color{color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-color{color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-color{color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-color{color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-color{color: var(--wp--preset--color--vivid-purple) !important;}.has-black-background-color{background-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-background-color{background-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-background-color{background-color: var(--wp--preset--color--white) !important;}.has-pale-pink-background-color{background-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-background-color{background-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-background-color{background-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-background-color{background-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-background-color{background-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-background-color{background-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-background-color{background-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-background-color{background-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-background-color{background-color: var(--wp--preset--color--vivid-purple) !important;}.has-black-border-color{border-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-border-color{border-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-border-color{border-color: var(--wp--preset--color--white) !important;}.has-pale-pink-border-color{border-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-border-color{border-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-border-color{border-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-border-color{border-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-border-color{border-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-border-color{border-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-border-color{border-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-border-color{border-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-border-color{border-color: var(--wp--preset--color--vivid-purple) !important;}.has-vivid-cyan-blue-to-vivid-purple-gradient-background{background: var(--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple) !important;}.has-light-green-cyan-to-vivid-green-cyan-gradient-background{background: var(--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan) !important;}.has-luminous-vivid-amber-to-luminous-vivid-orange-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange) !important;}.has-luminous-vivid-orange-to-vivid-red-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-orange-to-vivid-red) !important;}.has-very-light-gray-to-cyan-bluish-gray-gradient-background{background: var(--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray) !important;}.has-cool-to-warm-spectrum-gradient-background{background: var(--wp--preset--gradient--cool-to-warm-spectrum) !important;}.has-blush-light-purple-gradient-background{background: var(--wp--preset--gradient--blush-light-purple) !important;}.has-blush-bordeaux-gradient-background{background: var(--wp--preset--gradient--blush-bordeaux) !important;}.has-luminous-dusk-gradient-background{background: var(--wp--preset--gradient--luminous-dusk) !important;}.has-pale-ocean-gradient-background{background: var(--wp--preset--gradient--pale-ocean) !important;}.has-electric-grass-gradient-background{background: var(--wp--preset--gradient--electric-grass) !important;}.has-midnight-gradient-background{background: var(--wp--preset--gradient--midnight) !important;}.has-small-font-size{font-size: var(--wp--preset--font-size--small) !important;}.has-medium-font-size{font-size: var(--wp--preset--font-size--medium) !important;}.has-large-font-size{font-size: var(--wp--preset--font-size--large) !important;}.has-x-large-font-size{font-size: var(--wp--preset--font-size--x-large) !important;}
+:where(.wp-block-columns.is-layout-flex){gap: 2em;}
+.wp-block-pullquote{font-size: 1.5em;line-height: 1.6;}
+.wp-block-navigation a:where(:not(.wp-element-button)){color: inherit;}
+</style>
+<link rel="stylesheet" id="wp-postratings-css" href="https://coolshell.cn/wp-content/plugins/wp-postratings/css/postratings-css.css?ver=1.90.1" type="text/css" media="all" />
+<link rel="stylesheet" id="wp-pagenavi-css" href="https://coolshell.cn/wp-content/plugins/wp-pagenavi/pagenavi-css.css?ver=2.70" type="text/css" media="all" />
+<link rel="stylesheet" id="ez-toc-css" href="https://coolshell.cn/wp-content/plugins/easy-table-of-contents/assets/css/screen.min.css?ver=2.0.48" type="text/css" media="all" />
+<style id="ez-toc-inline-css" type="text/css">
+div#ez-toc-container p.ez-toc-title {font-size: 120%;}div#ez-toc-container p.ez-toc-title {font-weight: 500;}div#ez-toc-container ul li {font-size: 95%;}div#ez-toc-container nav ul ul li ul li {font-size: %!important;}
+.ez-toc-container-direction {direction: ltr;}.ez-toc-counter ul{counter-reset: item;}.ez-toc-counter nav ul li a::before {content: counters(item, ".", decimal) ". ";display: inline-block;counter-increment: item;flex-grow: 0;flex-shrink: 0;margin-right: .2em; float: left;}.ez-toc-widget-direction {direction: ltr;}.ez-toc-widget-container ul{counter-reset: item;}.ez-toc-widget-container nav ul li a::before {content: counters(item, ".", decimal) ". ";display: inline-block;counter-increment: item;flex-grow: 0;flex-shrink: 0;margin-right: .2em; float: left;}
+</style>
+<link rel="stylesheet" id="bootstrap-css" href="https://coolshell.cn/wp-content/themes/MyNisarg/css/bootstrap.css?ver=6.2" type="text/css" media="all" />
+<link rel="stylesheet" id="nisarg-style-css" href="https://coolshell.cn/wp-content/themes/MyNisarg/style.css?ver=6.2" type="text/css" media="all" />
+<style id="nisarg-style-inline-css" type="text/css">
+	/* Color Scheme */
+
+	/* Accent Color */
+
+	a:active,
+	a:hover,
+	a:focus {
+	    color: #009688;
+	}
+
+	.navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus {
+		color: #009688;
+	}
+
+	
+	.navbar-default .navbar-nav > .active > a, .navbar-default .navbar-nav > .active > a:hover, .navbar-default .navbar-nav > .active > a:focus {
+		color: #009688;			
+	}
+
+	@media (min-width: 768px){
+		.navbar-default .navbar-nav > .active > a, .navbar-default .navbar-nav > .active > a:hover, .navbar-default .navbar-nav > .active > a:focus {
+			border-top: 4px solid #009688;
+		}		
+	}
+
+	.dropdown-menu > .active > a, .dropdown-menu > .active > a:hover, .dropdown-menu > .active > a:focus {	    
+	    background-color: #009688;
+	}
+
+
+	.navbar-default .navbar-nav > .open > a, .navbar-default .navbar-nav > .open > a:hover, .navbar-default .navbar-nav > .open > a:focus {
+		color: #009688;
+	}
+
+	.navbar-default .navbar-nav > li > .dropdown-menu > li > a:hover,
+	.navbar-default .navbar-nav > li > .dropdown-menu > li > a:focus {
+		color: #fff;
+		background-color: #009688;
+	}
+
+	.navbar-default .navbar-nav .open .dropdown-menu > .active > a, .navbar-default .navbar-nav .open .dropdown-menu > .active > a:hover, .navbar-default .navbar-nav .open .dropdown-menu > .active > a:focus {
+		background-color: #fff;
+		color: #009688;
+	}
+
+	@media (max-width: 767px) {
+		.navbar-default .navbar-nav .open .dropdown-menu > li > a:hover {
+			background-color: #009688;
+			color: #fff;
+		}
+	}
+
+	.sticky-post{
+	    background: #009688;
+	    color:white;
+	}
+	
+	.entry-title a:hover,
+	.entry-title a:focus{
+	    color: #009688;
+	}
+
+	.entry-header .entry-meta::after{
+	    background: #009688;
+	}
+
+	.fa {
+		color: #009688;
+	}
+
+	.btn-default{
+		border-bottom: 1px solid #009688;
+	}
+
+	.btn-default:hover, .btn-default:focus{
+	    border-bottom: 1px solid #009688;
+	    background-color: #009688;
+	}
+
+	.nav-previous:hover, .nav-next:hover{
+	    border: 1px solid #009688;
+	    background-color: #009688;
+	}
+
+	.next-post a:hover,.prev-post a:hover{
+	    color: #009688;
+	}
+
+	.posts-navigation .next-post a:hover .fa, .posts-navigation .prev-post a:hover .fa{
+	    color: #009688;
+	}
+
+
+	#secondary .widget-title::after{
+		background-color: #009688;
+	    content: "";
+	    position: absolute;
+	    width: 75px;
+	    display: block;
+	    height: 4px;    
+	    bottom: -15px;
+	}
+
+	#secondary .widget a:hover,
+	#secondary .widget a:focus{
+		color: #009688;
+	}
+
+	#secondary .widget_calendar tbody a {
+	    background-color: #009688;
+	    color: #fff;
+	    padding: 0.2em;
+	}
+
+	#secondary .widget_calendar tbody a:hover{
+	    background-color: #009688;
+	    color: #fff;
+	    padding: 0.2em;
+	}	
+
+</style>
+<link rel="stylesheet" id="font-awesome-css" href="https://coolshell.cn/wp-content/themes/MyNisarg/font-awesome/css/font-awesome.min.css?ver=6.2" type="text/css" media="all" />
+<link rel="stylesheet" id="nisarggooglefonts-css" href="//fonts.googleapis.com/css?family=Lato:400,300italic,700|Source+Sans+Pro:400,400italic" type="text/css" media="all" />
+<link rel="stylesheet" id="enlighterjs-css" href="https://coolshell.cn/wp-content/plugins/enlighter/cache/enlighterjs.min.css?ver=0cuVQBPCj0viGB0" type="text/css" media="all" />
+<script type="81c2880153fcf3b3d2d66766-text/javascript" src="https://coolshell.cn/wp-includes/js/jquery/jquery.min.js?ver=3.6.3" id="jquery-core-js"></script>
+<script type="81c2880153fcf3b3d2d66766-text/javascript" src="https://coolshell.cn/wp-includes/js/jquery/jquery-migrate.min.js?ver=3.4.0" id="jquery-migrate-js"></script>
+<script type="81c2880153fcf3b3d2d66766-text/javascript" src="https://coolshell.cn/wp-content/plugins/simple-post-series/autohide.js?ver=2.4" id="series-js"></script>
+<script type="81c2880153fcf3b3d2d66766-text/javascript" id="ez-toc-scroll-scriptjs-js-after">
+jQuery(document).ready(function(){document.querySelectorAll(".ez-toc-section").forEach(t=>{t.setAttribute("ez-toc-data-id","#"+decodeURI(t.getAttribute("id")))}),jQuery("a.ez-toc-link").click(function(){let t=jQuery(this).attr("href"),e=jQuery("#wpadminbar"),i=0;30>30&&(i=30),e.length&&(i+=e.height()),jQuery('[ez-toc-data-id="'+decodeURI(t)+'"]').length>0&&(i=jQuery('[ez-toc-data-id="'+decodeURI(t)+'"]').offset().top-i),jQuery("html, body").animate({scrollTop:i},500)})});
+</script>
+<!--[if lt IE 9]>
+<script type='text/javascript' src='https://coolshell.cn/wp-content/themes/MyNisarg/js/html5shiv.js?ver=3.7.3' id='html5shiv-js'></script>
+<![endif]-->
+<link rel="https://api.w.org/" href="https://coolshell.cn/wp-json/" /><link rel="alternate" type="application/json" href="https://coolshell.cn/wp-json/wp/v2/posts/1547" /><link rel="EditURI" type="application/rsd+xml" title="RSD" href="https://coolshell.cn/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="https://coolshell.cn/wp-includes/wlwmanifest.xml" />
+<meta name="generator" content="WordPress 6.2" />
+<link rel="shortlink" href="https://coolshell.cn/?p=1547" />
+<link rel="alternate" type="application/json+oembed" href="https://coolshell.cn/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fcoolshell.cn%2Farticles%2F1547.html" />
+<link rel="alternate" type="text/xml+oembed" href="https://coolshell.cn/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fcoolshell.cn%2Farticles%2F1547.html&#038;format=xml" />
+<script type="81c2880153fcf3b3d2d66766-text/javascript">
+	window._wp_rp_static_base_url = 'https://wprp.zemanta.com/static/';
+	window._wp_rp_wp_ajax_url = "https://coolshell.cn/wp-admin/admin-ajax.php";
+	window._wp_rp_plugin_version = '3.6.4';
+	window._wp_rp_post_id = '1547';
+	window._wp_rp_num_rel_posts = '6';
+	window._wp_rp_thumbnails = true;
+	window._wp_rp_post_title = '%E4%BD%BF%E7%94%A8Flex+Bison+%E5%92%8CLLVM%E7%BC%96%E5%86%99%E8%87%AA%E5%B7%B1%E7%9A%84%E7%BC%96%E8%AF%91%E5%99%A8';
+	window._wp_rp_post_tags = ['%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86', 'c%2Fc%2B%2B%E8%AF%AD%E8%A8%80', '%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1', 'int', 'return', 'tn', 'data', 'brace', 'pipelin', 'ol', 'bison', 'li', 'a', 'bracket', '5', 'flex'];
+	window._wp_rp_promoted_content = true;
+</script>
+<link rel="stylesheet" href="https://coolshell.cn/wp-content/plugins/wordpress-23-related-posts-plugin/static/themes/vertical-m.css?version=3.6.4" />
+<style type="text/css">
+        .site-header { background: #1d2b2d; }
+</style>
+</head>
+<body class="post-template-default single single-post postid-1547 single-format-standard group-blog">
+<link rel="stylesheet" id="nisarg-style-css" href="https://coolshell.cn/wp-content/themes/MyNisarg/style.css" type="text/css" media="all">
+<div id="page" class="hfeed site">
+<header id="masthead" role="banner">
+<nav class="navbar navbar-default navbar-fixed-top navbar-left" role="navigation">
+
+<div class="container" id="navigation_menu">
+<div class="navbar-header">
+<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+<span class="sr-only">Toggle navigation</span>
+<span class="icon-bar"></span>
+<span class="icon-bar"></span>
+<span class="icon-bar"></span>
+</button>
+<a class="navbar-brand" href="https://coolshell.cn/"><div class="coolshell_logo"></div>酷 壳 &#8211; CoolShell</a>
+</div>
+<div class="collapse navbar-collapse navbar-ex1-collapse"><ul id="menu-coolshell" class="nav navbar-nav"><li id="menu-item-17405" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-17405"><a title="首页" href="https://coolshell.cn/">首页</a></li>
+<li id="menu-item-17406" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-17406"><a title="推荐文章" href="https://coolshell.cn/featured">推荐文章</a></li>
+<li id="menu-item-17407" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-17407"><a title="本站插件" href="https://coolshell.cn/plugins">本站插件</a></li>
+<li id="menu-item-17408" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-17408"><a title="留言小本" href="https://coolshell.cn/guestbook">留言小本</a></li>
+<li id="menu-item-17409" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-17409"><a title="关于酷壳" href="https://coolshell.cn/about">关于酷壳</a></li>
+<li id="menu-item-17410" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-17410"><a title="关于陈皓" href="https://coolshell.cn/haoel">关于陈皓</a></li>
+<li id="menu-item-17582" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-17582"><a title="RSS" href="https://coolshell.cn/feed">RSS</a></li>
+</ul></div>
+</div>
+</nav>
+<div id="cc_spacer"></div>
+<div class="site-header">
+<div class="pull-right">
+<a title="把这个链接拖到你的Chrome收藏夹工具栏中" href="javascript:(function(){function c(){var e=document.createElement(&quot;link&quot;);e.setAttribute(&quot;type&quot;,&quot;text/css&quot;);e.setAttribute(&quot;rel&quot;,&quot;stylesheet&quot;);e.setAttribute(&quot;href&quot;,f);e.setAttribute(&quot;class&quot;,l);document.body.appendChild(e)}function h(){var e=document.getElementsByClassName(l);for(var t=0;t<e.length;t++){document.body.removeChild(e[t])}}function p(){var e=document.createElement(&quot;div&quot;);e.setAttribute(&quot;class&quot;,a);document.body.appendChild(e);setTimeout(function(){document.body.removeChild(e)},100)}function d(e){return{height:e.offsetHeight,width:e.offsetWidth}}function v(i){var s=d(i);return s.height>e&&s.height<n&&s.width>t&&s.width<r}function m(e){var t=e;var n=0;while(!!t){n+=t.offsetTop;t=t.offsetParent}return n}function g(){var e=document.documentElement;if(!!window.innerWidth){return window.innerHeight}else if(e&&!isNaN(e.clientHeight)){return e.clientHeight}return 0}function y(){if(window.pageYOffset){return window.pageYOffset}return Math.max(document.documentElement.scrollTop,document.body.scrollTop)}function E(e){var t=m(e);return t>=w&&t<=b+w}function S(){var e=document.createElement(&quot;audio&quot;);e.setAttribute(&quot;class&quot;,l);e.src=i;e.loop=false;e.addEventListener(&quot;canplay&quot;,function(){setTimeout(function(){x(k)},500);setTimeout(function(){N();p();for(var e=0;e<O.length;e++){T(O[e])}},15500)},true);e.addEventListener(&quot;ended&quot;,function(){N();h()},true);e.innerHTML=&quot; <p>If you are reading this, it is because your browser does not support the audio element. We recommend that you get a new browser.</p> <p>&quot;;document.body.appendChild(e);e.play()}function x(e){e.className+=&quot; &quot;+s+&quot; &quot;+o}function T(e){e.className+=&quot; &quot;+s+&quot; &quot;+u[Math.floor(Math.random()*u.length)]}function N(){var e=document.getElementsByClassName(s);var t=new RegExp(&quot;\\b&quot;+s+&quot;\\b&quot;);for(var n=0;n<e.length;){e[n].className=e[n].className.replace(t,&quot;&quot;)}}var e=30;var t=30;var n=350;var r=350;var i=&quot;//s3.amazonaws.com/moovweb-marketing/playground/harlem-shake.mp3&quot;;var s=&quot;mw-harlem_shake_me&quot;;var o=&quot;im_first&quot;;var u=[&quot;im_drunk&quot;,&quot;im_baked&quot;,&quot;im_trippin&quot;,&quot;im_blown&quot;];var a=&quot;mw-strobe_light&quot;;var f=&quot;//s3.amazonaws.com/moovweb-marketing/playground/harlem-shake-style.css&quot;;var l=&quot;mw_added_css&quot;;var b=g();var w=y();var C=document.getElementsByTagName(&quot;*&quot;);var k=null;for(var L=0;L<C.length;L++){var A=C[L];if(v(A)){if(E(A)){k=A;break}}}if(A===null){console.warn(&quot;Could not find a node of the right size. Please try a different page.&quot;);return}c();S();var O=[];for(var L=0;L<C.length;L++){var A=C[L];if(v(A)){O.push(A)}}})()    ">High一下!</a>
+</div>
+<div class="site-branding">
+<a class="home-link" href="https://coolshell.cn/" title="酷 壳 &#8211; CoolShell" rel="home">
+<h1 class="site-title">酷 壳 &#8211; CoolShell</h1>
+<h2 class="site-description">享受编程和技术所带来的快乐 &#8211; Coding Your Ambition</h2>
+</a>
+</div>
+</div>
+</header>
+<div class="container">
+<div class="row">
+<div class="col-md-9 nav-searchbox hidden-lg hidden-md visible-sm-* visible-xs-*">
+<form role="search" method="get" class="search-form" action="https://coolshell.cn/">
+<label>
+<span class="screen-reader-text">Search for:</span>
+<input type="search" class="search-field" placeholder="Search …" value name="s" title="Search for:">
+</label>
+<button type="submit" class="search-submit"><span class="screen-reader-text">Search</span></button>
+</form>
+</div>
+</div>
+</div>
+<div id="content" class="site-content">
+<div class="container">
+<div class="row">
+<div id="primary" class="col-md-9 content-area">
+<main id="main" role="main">
+<article id="post-1547" class="post-content post-1547 post type-post status-publish format-standard hentry category-cplusplus category-progdesign tag-213">
+<header class="entry-header">
+<span class="screen-reader-text">使用Flex Bison 和LLVM编写自己的编译器</span>
+<h1 class="entry-title">使用Flex Bison 和LLVM编写自己的编译器</h1>
+<div class="entry-meta">
+<h5 class="entry-date"><i class="fa fa-calendar-o"></i> <a href="https://coolshell.cn/articles/1547.html" title="12:47" rel="bookmark"><time class="entry-date" datetime="2009-10-12T12:47:18+08:00" pubdate>2009年10月12日 </time></a><span class="byline"><span class="sep"></span><i class="fa fa-user"></i>
+<span class="author vcard"><a class="url fn n" href="https://coolshell.cn/articles/author/neo" title="View all posts by Neo" rel="author">Neo</a></span></span> <i class="fa fa-comments-o"></i><span class="screen-reader-text">评论 </span> <a href="https://coolshell.cn/articles/1547.html#comments" class="comments-link">31 条评论</a> <i class="fa fa-users" style="margin-left:10px;"></i> 54,425 人阅读</h5>
+</div>
+</header>
+<div class="entry-content">
+<p><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3415450859608158" crossorigin="anonymous" type="81c2880153fcf3b3d2d66766-text/javascript"></script><strong>使用Flex Bison 和 LLVM编写你自己的编译器</strong><br/>
+原文出处：<a href="http://gnuu.org/2009/09/18/writing-your-own-toy-compiler/">http://gnuu.org/2009/09/18/writing-your-own-toy-compiler</a></p>
+<h2> 1、介绍</h2>
+<p>我总是对编译器和语言非常感兴趣，但是兴趣并不会让你走的更远。大量的编译器的设计概念可以搞的任何一个程序员迷失在这些概念之中。不用说，我也曾今尝试过，但是并没有取得太大的成功，我以前的尝试都停留在语义分析阶段。本文的灵感主要来源于我最近一次的尝试，并且在这一次中我取得一点成就。</p>
+<p>幸运的是，最近的几年，我参加了一些项目，这些项目给了我在建立编译器上很多有用的经验和观点。另外一件事是，我非常幸运得到<a href="http://llvm.org/">LLVM</a>的帮助。对于这个工具，我不知道改怎么去形容它，但是他给我的这个编译器的确带来非常大的帮助。<br/>
+<span id="more-1547"></span></p>
+<h3>1.1、你为什么要阅读本文</h3>
+<p>你也许想看看我正在做的事情，但是更有可能的是，你也是和我一样对编译器和语言非常感兴趣，并且也可能遇到了一些在探索的过程中遇到了一些难题，你可能正打算解决这些难题，但是却没有发现好的资源。本文的目标就是提供这些资源，并以一种手把手的方式教你从头到尾的去创建一个具有基本功能的语言编译器。</p>
+<p>在本文，我不会去解释一些编译器基本理论，所以你要在开始本文前去了解什么是<a href="https://en.wikipedia.org/wiki/Backus%E2%80%93Naur_Form">BNF语法</a>，什么是<a href="https://en.wikipedia.org/wiki/Abstract_syntax_tree">抽象语法树数据结构 AST data structure</a>，什么是基础<a href="https://en.wikipedia.org/wiki/Compiler">编译器流水线 complier pipline</a>。就是说，我会把本文描述的尽量简单。本文的目的就是以一种简单易懂的方式来介绍相关编译器资源的方式来帮助那些从来没有编译器经验的人。</p>
+<h3>1.2、达到的成果</h3>
+<p>如果你根据文章内容一步步来，你将会得到一个能定义函数，调用函数，定义变量，给变量赋值执行基本数学操作的语言。这门语言支持两种基本类型，double和integer类型。还有一些功能还未实现，因此，你可以通过自己去实现这些功能得到你满意的功能并且能为你理解编写一个编译器提供不少的帮助。</p>
+<p><h3>1.3 问题解答</h3>
+</p>
+<h4>1.3.1 我需要了解什么样的语言</h4>
+<p>我们使用的工具是基于C/C++的。LLVM是基于C++的，我们的这个语言也基于C++，因为C++具有很多面向对象的优点和可以被重用的STL。此外对于C，Lex和Bison都具有那些初看起来令人迷惑的语法，但是我将尽可能的去解释他。我们需要处理的语法非常小，最多就100行，因此它是比较容易理解的。</p>
+<h4>1.3.2 很复杂吗？</h4>
+<p>是或否，这里面有很多的东西你需要了解，甚至多的让人感觉到害怕，但是老实说，其实这些都非常简单，我们同样会使用很多工具分解这些层次的复杂性，并使得这些内容可管理。</p>
+<h4>1.3.3 完成它需要多长时间</h4>
+<p>我们将要完成的编译器花了我三天的时间。但是如果你按“follow me”的方式来完成这个编译器的话，你将会花费更少的时间。如果要全部理解这里面的内容可能会花去稍微长一点的时间，但是你至少应该在一个下午就将整个编译器运行起来。</p>
+<p>好，如果你已经准备好，我们开始吧。</p>
+<p><h2>2、准备开始</h2>
+</p>
+<h3>2.1 构成编译器的最基本的要素</h3>
+<p>一个编译器是由一组有三个到四个组件(还有一些子组件)构成，数据以管道的方式从一个组件输入并流向下一个组件。在我们这个编译器中，可能会用到一些稍微不同的工具。下面这个图展示了我们构造一个编译器的步骤，和每个步骤中将使用的工具。</p>
+<p><img decoding="async" alt="Compiler Pipeline" src="http://gnuu.org/wp-content/uploads/2009/09/pipeline.png" width="620" height="76" /> </p>
+<p>从上图你可以看到在Linking这一步是灰掉的。我们的语言将不支持编译器的连接(很多的语言都不支持编译器的连接)。在文法分析阶段，我们将使用开源工具Lex，即如今的<a href="http://flex.sourceforge.net/">Flex</a>，文法分析一般都伴随者语法分析，我们使用的语法分析工具将会是Yacc，或者说是<a href="http://www.gnu.org/software/bison/">Bison</a>，最后一旦语义分析完成，我们将遍历我们的抽象语法树，并生成我们的&#8221;bytecode 字节码&#8221;，或&#8221;机器码 matchine code&#8221;。做这一步，我们将使用<a href="http://llvm.org/">LLVM</a>，它能生成快速字节码，我们将使用LLVM的JIT(Just In Tinme)来在我们的机器上编译执行它</p>
+<p>总结一下，步骤如下：</p>
+<ol>
+<li><strong>文法分析用<em>Flex</em></strong>:将数据分隔成一个个的标记token (标示符identifiers，关键字keywords，数字numbers, 中括号brackets, 大括号braces, 等等etc.) </li>
+<li><strong>语法分析用<em>Bison</em></strong>: 在分析标记的时候生成抽象语法树. Bison 将会做掉几乎所有的这些工作, 我们定义好我们的抽象语法树就OK了. </li>
+<li><strong>组装用<em>LLVM</em></strong>: 这里我们将遍历我们的抽象语法树，并未每一个节点生成字节/机器码。 这听起来似乎很疯狂，但是这几乎就是<em>最简单的</em> 一步了. </li>
+</ol>
+<p>在我们开始下一步之前，你应该准备安装好Flex,Bison和LLVM。因为我们马上就要使用到它们。</p>
+<p><h3>2.2 定义我们的语法</h3>
+</p>
+<p>我们语法是我们语言中最核心的部分，我们的语法使用类似标准C的语法，因为这样的语法非常熟悉，而且简单。我们语法的一个典型的例子如下：</p>
+<pre data-enlighter-language="c" class="EnlighterJSRAW">int do_math(int a) {
+  int x = a * 5 + 3
+}
+
+do_math(10)
+</pre>
+<p>看起来很简单。它和C非常相似，但是它没有使用分号做语句的分隔，同时你也会注意到我们的语法中没有return语句。这就是你可以自己实现的部分。</p>
+<p>现在我们还没有任何机制来验证结果。我们将通过检查我们编译之后LLVM打印出的字节码验证我们程序的正确性。</p>
+<p><h2>3、 第一步，使用Flex进行文法分析 </h2>
+</p>
+<p>这是最简单的一步，给定语法之后，我们需要将我们的输入转换一系列内部标记token。如前所述，我们的语法具有非常基础的标记token:标示符identifier ，数字常量(整型和浮点型)，数学运算符号，括号，中括号，我们的文法定义文件称为token.l，它具有一些固定的语法。定义如下：</p>
+<pre>%{
+#include <string>
+#include "node.h"
+#include "parser.hpp"
+#define SAVE_TOKEN yylval.string = new std::string(yytext, yyleng)
+#define TOKEN(t) (yylval.token = t)
+extern "C" int yywrap() { }
+%}
+
+%%
+
+[ \t\n]                 ;
+[a-zA-Z_][a-zA-Z0-9_]*  SAVE_TOKEN; return TIDENTIFIER;
+[0-9]+\.[0-9]*          SAVE_TOKEN; return TDOUBLE;
+[0-9]+                  SAVE_TOKEN; return TINTEGER;
+"="                     return TOKEN(TEQUAL);
+"=="                    return TOKEN(TCEQ);
+"!="                    return TOKEN(TCNE);
+"<"                     return TOKEN(TCLT);
+"<="                    return TOKEN(TCLE);
+">"                     return TOKEN(TCGT);
+">="                    return TOKEN(TCGE);
+"("                     return TOKEN(TLPAREN);
+")"                     return TOKEN(TRPAREN);
+"{"                     return TOKEN(TLBRACE);
+"}"                     return TOKEN(TRBRACE);
+"."                     return TOKEN(TDOT);
+","                     return TOKEN(TCOMMA);
+"+"                     return TOKEN(TPLUS);
+"-"                     return TOKEN(TMINUS);
+"*"                     return TOKEN(TMUL);
+"/"                     return TOKEN(TDIV);
+.                       printf("Unknown token!\n"); yyterminate();
+
+%%
+</pre>
+<p>在第一节(译者注：即%{%}中定义的部分)声明了一些特定的C代码。由于Bison不会去访问我门的yytext变量，我们使用宏&#8221;SAVE_TOKEN&#8221;来保证标示符的文本和文本长度是安全的(而不是靠标记本身来保证)。第一个token告诉我们要忽略掉那些空白字符。你会注意到我们有些一些等价性比较的标记和其他。还有一些标记还没有实现，你可以非常自由的将这些标记加到你自己的编译器中去。</p>
+<p>现在我们在这里做的是定义这些标记和他们的符号名。符号(比如TIDENTFIER)将成为我们语法中的终结符。我们只是返回它，我们从未定义它，他们是在什么地方定义的？当然是在bison语法文件中。我们包含的parser.hpp头文件将会被bison所生成，并且里面的所有符号都将被生成，并被我们在这里使用。</p>
+<p>我们对这个token.l运行flex命令，并生成tokens.cpp文件，这个程序将会和我们的语法分析器一起编译并提供yylex()函数来识别这些标记。我们将在稍后运行这个命令，因为现在我们需要从bison那里生成头文件。</p>
+<p><h2>4、第2步 使用Bison进行语法分析</h2>
+</p>
+<p>这是我们工作中最富有挑战性的一部分。生成一个正确的无二义的语法并不是一项简单的工作，要经过很多实践努力。庆幸的是，我们例子中的语法是简单而完整的。在我们实现我们的语法之前，我们需要详细的讲解一下我们的设计。</p>
+<p><h3>4.1、设计AST(抽象语法树)</h3>
+</p>
+<p>语法分析的最终结果是抽象语法树AST，正如我们将看到的，Bison生成抽象语法树的最优工具；我们唯一需要做的事情就是将我们的代码插入到语法中去。</p>
+<p>文本形式字符串，例如&#8221;int x&#8221;代表了我们语言的文本形式，和这个类似，抽象语法树AST则代表了我们语言在内存中的表现形式一样(在语言在组装成而进程码之前)。正因如此，我们要在把这些插入在语法分析中的数据结构首先设计好。这个过程是非常直接的，因为我们为语法中的每个语义单元创建了一个结构。方法声明、方法调用，变量声明，引用，这些都构成了抽象语法树的节点。我们语言的抽象语法树的节点如下图：<br/>
+<img decoding="async" loading="lazy" border="0" alt="Our Toy Language AST" src="http://gnuu.org/wp-content/uploads/2009/09/ClassDiagram.png" width="640" height="505" /><br/>
+上图的C++代码如下：<br/>
+node.h文件</p>
+<pre data-enlighter-language="c" class="EnlighterJSRAW">#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &lt;llvm/Value.h&gt;
+
+class CodeGenContext;
+class NStatement;
+class NExpression;
+class NVariableDeclaration;
+
+typedef std::vector&lt;NStatement*&gt; StatementList;
+typedef std::vector&lt;NExpression*&gt; ExpressionList;
+typedef std::vector&lt;NVariableDeclaration*&gt; VariableList;
+
+class Node {
+public:
+    virtual ~Node() {}
+    virtual llvm::Value* codeGen(CodeGenContext&amp; context) { }
+};
+
+class NExpression : public Node {
+};
+
+class NStatement : public Node {
+};
+
+class NInteger : public NExpression {
+public:
+    long long value;
+    NInteger(long long value) : value(value) { }
+    virtual llvm::Value* codeGen(CodeGenContext&amp; context);
+};
+
+class NDouble : public NExpression {
+public:
+    double value;
+    NDouble(double value) : value(value) { }
+    virtual llvm::Value* codeGen(CodeGenContext&amp; context);
+};
+
+class NIdentifier : public NExpression {
+public:
+    std::string name;
+    NIdentifier(const std::string&amp; name) : name(name) { }
+    virtual llvm::Value* codeGen(CodeGenContext&amp; context);
+};
+
+class NMethodCall : public NExpression {
+public:
+    const NIdentifier&amp; id;
+    ExpressionList arguments;
+    NMethodCall(const NIdentifier&amp; id, ExpressionList&amp; arguments) :
+        id(id), arguments(arguments) { }
+    NMethodCall(const NIdentifier&amp; id) : id(id) { }
+    virtual llvm::Value* codeGen(CodeGenContext&amp; context);
+};
+
+class NBinaryOperator : public NExpression {
+public:
+    int op;
+    NExpression&amp; lhs;
+    NExpression&amp; rhs;
+    NBinaryOperator(NExpression&amp; lhs, int op, NExpression&amp; rhs) :
+        lhs(lhs), rhs(rhs), op(op) { }
+    virtual llvm::Value* codeGen(CodeGenContext&amp; context);
+};
+
+class NAssignment : public NExpression {
+public:
+    NIdentifier&amp; lhs;
+    NExpression&amp; rhs;
+    NAssignment(NIdentifier&amp; lhs, NExpression&amp; rhs) :
+        lhs(lhs), rhs(rhs) { }
+    virtual llvm::Value* codeGen(CodeGenContext&amp; context);
+};
+
+class NBlock : public NExpression {
+public:
+    StatementList statements;
+    NBlock() { }
+    virtual llvm::Value* codeGen(CodeGenContext&amp; context);
+};
+
+class NExpressionStatement : public NStatement {
+public:
+    NExpression&amp; expression;
+    NExpressionStatement(NExpression&amp; expression) :
+        expression(expression) { }
+    virtual llvm::Value* codeGen(CodeGenContext&amp; context);
+};
+
+class NVariableDeclaration : public NStatement {
+public:
+    const NIdentifier&amp; type;
+    NIdentifier&amp; id;
+    NExpression *assignmentExpr;
+    NVariableDeclaration(const NIdentifier&amp; type, NIdentifier&amp; id) :
+        type(type), id(id) { }
+    NVariableDeclaration(const NIdentifier&amp; type, NIdentifier&amp; id, NExpression *assignmentExpr) :
+        type(type), id(id), assignmentExpr(assignmentExpr) { }
+    virtual llvm::Value* codeGen(CodeGenContext&amp; context);
+};
+
+class NFunctionDeclaration : public NStatement {
+public:
+    const NIdentifier&amp; type;
+    const NIdentifier&amp; id;
+    VariableList arguments;
+    NBlock&amp; block;
+    NFunctionDeclaration(const NIdentifier&amp; type, const NIdentifier&amp; id,
+            const VariableList&amp; arguments, NBlock&amp; block) :
+        type(type), id(id), arguments(arguments), block(block) { }
+    virtual llvm::Value* codeGen(CodeGenContext&amp; context);
+};
+
+</pre>
+<p>非常的清晰明了，我们省略了getter和setter方法，这里只列出了共有成员；这些类也不需要影藏私有数据，并省略了codeGen方法。在我们导出AST成LLVM的字节码时，就需要使用到这个方法。</p>
+<p><h3>4.2、Bison介绍</h3>
+</p>
+<p>bison的语法定义文件同样是由这些标记构成的最复杂的部分。这并不是说技术上有多复杂，但是我也会花一些时间来讨论一下Bison的语法细节，好，现在让我们立刻来熟悉一下Bison的语法。我们将使用基于类似于BNF的语法，使用定义的好终结符和非终结符来组成我们有效的每一个语句和表达式(这些语句和表达式就代表我们之前定义的AST节点)。例如：</p>
+<pre>if_stmt : IF '(' condition ')' block { /* do stuff when this rule is encountered */ }
+        | IF '(' condition ')'       { ... }
+        ;
+</pre>
+<p>在上面例子中，我们定义了一个if语句(如果我们支持if语句话)，它和BNF不同之处在于，每个语法后面都跟了一系列动作(在'{&#8216;和&#8217;}&#8217;之间的内容)。这个动作将在此条语法被识别(译者注：归约)的时候被执行。这个过程将会递归地按从叶子符号到根节点符号的次序执行，在这个过程，每一个非终结符最终会被合并为一棵大的语法树。你将会看到的&#8217;$$&#8217;符号代表着当前树的跟节点(译者注：&#8217;$$&#8217;代表本条语法规则中冒号左边的部分的语义内容)。此外&#8217;$1&#8217;代表了本条规则叶子中的第一个符号(译者注：&#8217;$1&#8217;代表了本条语法规则冒号右边的内容，$1代表冒号右边的第一个符号的语义值)。在上面的例子中，当&#8217;condition&#8217;有效时我们将会把$3 赋值给$$。这个例子可以解释如何将我们AST和语法规则关联起来。我们将在每一条规则中通常赋值一个节点到$$，最后这些规则会合并成一个大的抽象语法树。Bison的部分是我们语言最复杂的部分，你需要花一点时间去理解它。此外到此为止，你还没有看到完整的代码。下面就是完整的Bison部分的代码：<br/>
+parser.y</p>
+<pre>%{
+    #include "node.h"
+    NBlock *programBlock; /* the top level root node of our final AST */
+
+    extern int yylex();
+    void yyerror(const char *s) { printf("ERROR: %s\n", s); }
+%}
+
+/* Represents the many different ways we can access our data */
+%union {
+    Node *node;
+    NBlock *block;
+    NExpression *expr;
+    NStatement *stmt;
+    NIdentifier *ident;
+    NVariableDeclaration *var_decl;
+    std::vector<nvariabledeclaration*> *varvec;
+    std::vector<nexpression*> *exprvec;
+    std::string *string;
+    int token;
+}
+
+/* Define our terminal symbols (tokens). This should
+   match our tokens.l lex file. We also define the node type
+   they represent.
+ */
+%token <string> TIDENTIFIER TINTEGER TDOUBLE
+%token <token> TCEQ TCNE TCLT TCLE TCGT TCGE TEQUAL
+%token <token> TLPAREN TRPAREN TLBRACE TRBRACE TCOMMA TDOT
+%token <token> TPLUS TMINUS TMUL TDIV
+
+/* Define the type of node our nonterminal symbols represent.
+   The types refer to the %union declaration above. Ex: when
+   we call an ident (defined by union type ident) we are really
+   calling an (NIdentifier*). It makes the compiler happy.
+ */
+%type <ident> ident
+%type <expr> numeric expr
+%type <varvec> func_decl_args
+%type <exprvec> call_args
+%type <block> program stmts block
+%type <stmt> stmt var_decl func_decl
+%type <token> comparison
+
+/* Operator precedence for mathematical operators */
+%left TPLUS TMINUS
+%left TMUL TDIV
+
+%start program
+
+%%
+
+program : stmts { programBlock = $1; }
+        ;
+
+stmts : stmt { $$ = new NBlock(); $$->statements.push_back($<stmt>1); }
+      | stmts stmt { $1->statements.push_back($<stmt>2); }
+      ;
+
+stmt : var_decl | func_decl
+     | expr { $$ = new NExpressionStatement(*$1); }
+     ;
+
+block : TLBRACE stmts TRBRACE { $$ = $2; }
+      | TLBRACE TRBRACE { $$ = new NBlock(); }
+      ;
+
+var_decl : ident ident { $$ = new NVariableDeclaration(*$1, *$2); }
+         | ident ident TEQUAL expr { $$ = new NVariableDeclaration(*$1, *$2, $4); }
+         ;
+
+func_decl : ident ident TLPAREN func_decl_args TRPAREN block
+            { $$ = new NFunctionDeclaration(*$1, *$2, *$4, *$6); delete $4; }
+          ;
+
+func_decl_args : /*blank*/  { $$ = new VariableList(); }
+          | var_decl { $$ = new VariableList(); $$->push_back($<var_decl>1); }
+          | func_decl_args TCOMMA var_decl { $1->push_back($<var_decl>3); }
+          ;
+
+ident : TIDENTIFIER { $$ = new NIdentifier(*$1); delete $1; }
+      ;
+
+numeric : TINTEGER { $$ = new NInteger(atol($1->c_str())); delete $1; }
+        | TDOUBLE { $$ = new NDouble(atof($1->c_str())); delete $1; }
+        ;
+
+expr : ident TEQUAL expr { $$ = new NAssignment(*$<ident>1, *$3); }
+     | ident TLPAREN call_args TRPAREN { $$ = new NMethodCall(*$1, *$3); delete $3; }
+     | ident { $<ident>$ = $1; }
+     | numeric
+     | expr comparison expr { $$ = new NBinaryOperator(*$1, $2, *$3); }
+     | TLPAREN expr TRPAREN { $$ = $2; }
+     ;
+
+call_args : /*blank*/  { $$ = new ExpressionList(); }
+          | expr { $$ = new ExpressionList(); $$->push_back($1); }
+          | call_args TCOMMA expr  { $1->push_back($3); }
+          ;
+
+comparison : TCEQ | TCNE | TCLT | TCLE | TCGT | TCGE
+           | TPLUS | TMINUS | TMUL | TDIV
+           ;
+
+%%
+</pre>
+<p><h2>5、生成Flex和Bison代码</h2>
+</p>
+<p>现在我们有了Flex的token.l文件和Bison的parser.y文件。我们需要将这两个文件传递给工具，并由工具来生成c++代码文件。注意Bison同时会为Flex生成parser.hpp头文件；这样做是通过-d开关实现的，这个开关是的我们的标记声明和源文件分开，这样就是的我们可以让这些token标记被其他的程序使用。下面的命令创建parser.cpp，parser.hpp和tokens.cpp源文件。</p>
+<pre>$ bison -d -o parser.cpp parser.y
+$ lex -o tokens.cpp tokens.l
+</pre>
+<p>如果上述工作都没有出错的话，我们现在位置已经完成了我们编译器工作总量的2/3。如果你现在想测试一下我们的代码，你可以编译一个简单的main.cpp程序：</p>
+<pre data-enlighter-language="c" class="EnlighterJSRAW">#include &lt;iostream&gt;
+#include &quot;node.h&quot;
+extern NBlock* programBlock;
+extern int yyparse();
+
+int main(int argc, char **argv)
+{
+    yyparse();
+    std::cout &lt;&lt; programBlock &lt;&lt; endl;
+    return 0;
+}
+</pre>
+<p>你可以编译这些文件：<br/>
+$ g++ -o parser parser.cpp tokens.cpp main.cpp<br/>
+现在你需要安装LLVM了，因为llvm::Value被node.h引用了。如果你不想这么做，只是想测试一下Flex和Bison部分，你可以注释掉node.h中codeGen()方法。</p>
+<p>如果上述工作都完成了，你现在将有一个语法分析器，这个语法分析器将从标准输入读入，并打出在内存中代表抽象语法树跟节点的内存非零地址。</p>
+<h2>6、组装AST和LLVM</h2>
+<p>编译器的下一步很自然地是应该将AST转换成机器码。这意味着将每一个语义节点转换成等价的机器指令。LLVM将帮助我们把这步变得非常简单，因为LLVM将真实的指令抽象成类似AST的指令。这意味着我们真正要做的事就是将AST转换成抽象指令。<br/>
+你可以想象这个过程是从抽象语法树的根节点开始遍历每一个树上节点并产生字节码的过程。现在就是使用我们在Node中定义的codeGen方法的时候了。例如，当我们遍历NBlock代码的时候(语义上NBlock代表一组我们语言的语句的集合)，我们将调用列表中每条语句的codeGen方法。上面步骤代码类似如下的形式：</p>
+<pre data-enlighter-language="c" class="EnlighterJSRAW">Value* NBlock::codeGen(CodeGenContext&amp; context)
+{
+    StatementList::const_iterator it;
+    Value *last = NULL;
+    for (it = statements.begin(); it != statements.end(); it++) {
+        std::cout &lt;&lt; &quot;Generating code for &quot; &lt;&lt; typeid(**it).name() &lt;&lt; endl;
+        last = (**it).codeGen(context);
+    }
+    std::cout &lt;&lt; &quot;Creating block&quot; &lt;&lt; endl;
+    return last;
+}
+</pre>
+<p>我们将实现抽象语法树上所有节点的codeGen方法，然后在向下遍历树的时候调用它，并隐式的遍历我们整个抽象语法树。在这个过程中，我们在CodeGenContext类来告诉我们生成字节码的位置。</p>
+<p><h3> 6.1、关于LLVM要注意的一些信息</h3>
+</p>
+<p>LLVM最大的一个确定就是，你很难找到LLVM的相关文档。在线手册、教程、或其他的文档都没有及时的得到相关维护，这些文档大部分都是过期的文档。除非你去深入研究，否则你很难找到关于C++ API的信息。如果你自己安装LLVM，docs<br/>
+是最新的文档。</p>
+<p>我发现最好学习LLVM的方法就是通过LLVM的例子去学习。在LLVM的压缩包的&#8217;example&#8217;目录下有很多快速生成字节码的例子。在<a href="http://llvm.org/demo/">LLVM demo site</a>上可以将C做输入，然后生成C++ API的例子。以这些例子提供的方法，我找到了类似于int x = 5 ;的指令的生成方法。我使用这些工具实现大部分的节点。</p>
+<p>关于LLVM的问题描述到此为止，我将在下面罗列出codegen.h和codegen.cpp的源代码</p>
+<p>codegen.h的内容。</p>
+<pre data-enlighter-language="c" class="EnlighterJSRAW">#include &lt;stack&gt;
+#include &lt;llvm/Module.h&gt;
+#include &lt;llvm/Function.h&gt;
+#include &lt;llvm/PassManager.h&gt;
+#include &lt;llvm/CallingConv.h&gt;
+#include &lt;llvm/Bitcode/ReaderWriter.h&gt;
+#include &lt;llvm/Analysis/Verifier.h&gt;
+#include &lt;llvm/Assembly/PrintModulePass.h&gt;
+#include &lt;llvm/Support/IRBuilder.h&gt;
+#include &lt;llvm/ModuleProvider.h&gt;
+#include &lt;llvm/ExecutionEngine/GenericValue.h&gt;
+#include &lt;llvm/ExecutionEngine/JIT.h&gt;
+#include &lt;llvm/Support/raw_ostream.h&gt;
+
+using namespace llvm;
+
+class NBlock;
+
+class CodeGenBlock {
+public:
+    BasicBlock *block;
+    std::map&lt;std::string , Value*&gt; locals;
+};
+
+class CodeGenContext {
+    std::stack&lt;codegenblock  *&gt; blocks;
+    Function *mainFunction;
+
+public:
+    Module *module;
+    CodeGenContext() { module = new Module(&quot;main&quot;); }
+
+    void generateCode(NBlock&amp; root);
+    GenericValue runCode();
+    std::map&lt;std::string , Value*&gt;&amp; locals() { return blocks.top()-&gt;locals; }
+    BasicBlock *currentBlock() { return blocks.top()-&gt;block; }
+    void pushBlock(BasicBlock *block) { blocks.push(new CodeGenBlock()); blocks.top()-&gt;block = block; }
+    void popBlock() { CodeGenBlock *top = blocks.top(); blocks.pop(); delete top; }
+};
+</pre>
+<p>codegen.cpp的内容。</p>
+<pre data-enlighter-language="c" class="EnlighterJSRAW">#include &quot;node.h&quot;
+#include &quot;codegen.h&quot;
+#include &quot;parser.hpp&quot;
+
+using namespace std;
+
+/* Compile the AST into a module */
+void CodeGenContext::generateCode(NBlock&amp; root)
+{
+    std::cout &lt;&lt; &quot;Generating code...\n&quot;;
+
+    /* Create the top level interpreter function to call as entry */
+    vector&lt;const type*&gt; argTypes;
+    FunctionType *ftype = FunctionType::get(Type::VoidTy, argTypes, false);
+    mainFunction = Function::Create(ftype, GlobalValue::InternalLinkage, &quot;main&quot;, module);
+    BasicBlock *bblock = BasicBlock::Create(&quot;entry&quot;, mainFunction, 0);
+
+    /* Push a new variable/block context */
+    pushBlock(bblock);
+    root.codeGen(*this); /* emit bytecode for the toplevel block */
+    ReturnInst::Create(bblock);
+    popBlock();
+
+    /* Print the bytecode in a human-readable format
+       to see if our program compiled properly
+     */
+    std::cout &lt;&lt; &quot;Code is generated.\n&quot;;
+    PassManager pm;
+    pm.add(createPrintModulePass(&amp;outs()));
+    pm.run(*module);
+}
+
+/* Executes the AST by running the main function */
+GenericValue CodeGenContext::runCode() {
+    std::cout &lt;&lt; &quot;Running code...\n&quot;;
+    ExistingModuleProvider *mp = new ExistingModuleProvider(module);
+    ExecutionEngine *ee = ExecutionEngine::create(mp, false);
+    vector&lt;genericvalue&gt; noargs;
+    GenericValue v = ee-&gt;runFunction(mainFunction, noargs);
+    std::cout &lt;&lt; &quot;Code was run.\n&quot;;
+    return v;
+}
+
+/* Returns an LLVM type based on the identifier */
+static const Type *typeOf(const NIdentifier&amp; type)
+{
+    if (type.name.compare(&quot;int&quot;) == 0) {
+        return Type::Int64Ty;
+    }
+    else if (type.name.compare(&quot;double&quot;) == 0) {
+        return Type::FP128Ty;
+    }
+    return Type::VoidTy;
+}
+
+/* -- Code Generation -- */
+
+Value* NInteger::codeGen(CodeGenContext&amp; context)
+{
+    std::cout &lt;&lt; &quot;Creating integer: &quot; &lt;&lt; value &lt;&lt; endl;
+    return ConstantInt::get(Type::Int64Ty, value, true);
+}
+
+Value* NDouble::codeGen(CodeGenContext&amp; context)
+{
+    std::cout &lt;&lt; &quot;Creating double: &quot; &lt;&lt; value &lt;&lt; endl;
+    return ConstantFP::get(Type::FP128Ty, value);
+}
+
+Value* NIdentifier::codeGen(CodeGenContext&amp; context)
+{
+    std::cout &lt;&lt; &quot;Creating identifier reference: &quot; &lt;&lt; name &lt;&lt; endl;
+    if (context.locals().find(name) == context.locals().end()) {
+        std::cerr &lt;&lt; &quot;undeclared variable &quot; &lt;&lt; name &lt;&lt; endl;
+        return NULL;
+    }
+    return new LoadInst(context.locals()[name], &quot;&quot;, false, context.currentBlock());
+}
+
+Value* NMethodCall::codeGen(CodeGenContext&amp; context)
+{
+    Function *function = context.module-&gt;getFunction(id.name.c_str());
+    if (function == NULL) {
+        std::cerr &lt;&lt; &quot;no such function &quot; &lt;&lt; id.name &lt;&lt; endl;
+    }
+    std::vector&lt;value *&gt; args;
+    ExpressionList::const_iterator it;
+    for (it = arguments.begin(); it != arguments.end(); it++) {
+        args.push_back((**it).codeGen(context));
+    }
+    CallInst *call = CallInst::Create(function, args.begin(), args.end(), &quot;&quot;, context.currentBlock());
+    std::cout &lt;&lt; &quot;Creating method call: &quot; &lt;&lt; id.name &lt;&lt; endl;
+    return call;
+}
+
+Value* NBinaryOperator::codeGen(CodeGenContext&amp; context)
+{
+    std::cout &lt;&lt; &quot;Creating binary operation &quot; &lt;&lt; op &lt;&lt; endl;
+    Instruction::BinaryOps instr;
+    switch (op) {
+        case TPLUS:     instr = Instruction::Add; goto math;
+        case TMINUS:    instr = Instruction::Sub; goto math;
+        case TMUL:      instr = Instruction::Mul; goto math;
+        case TDIV:      instr = Instruction::SDiv; goto math;
+
+        /* TODO comparison */
+    }
+
+    return NULL;
+math:
+    return BinaryOperator::Create(instr, lhs.codeGen(context),
+        rhs.codeGen(context), &quot;&quot;, context.currentBlock());
+}
+
+Value* NAssignment::codeGen(CodeGenContext&amp; context)
+{
+    std::cout &lt;&lt; &quot;Creating assignment for &quot; &lt;&lt; lhs.name &lt;&lt; endl;
+    if (context.locals().find(lhs.name) == context.locals().end()) {
+        std::cerr &lt;&lt; &quot;undeclared variable &quot; &lt;&lt; lhs.name &lt;&lt; endl;
+        return NULL;
+    }
+    return new StoreInst(rhs.codeGen(context), context.locals()[lhs.name], false, context.currentBlock());
+}
+
+Value* NBlock::codeGen(CodeGenContext&amp; context)
+{
+    StatementList::const_iterator it;
+    Value *last = NULL;
+    for (it = statements.begin(); it != statements.end(); it++) {
+        std::cout &lt;&lt; &quot;Generating code for &quot; &lt;&lt; typeid(**it).name() &lt;&lt; endl;
+        last = (**it).codeGen(context);
+    }
+    std::cout &lt;&lt; &quot;Creating block&quot; &lt;&lt; endl;
+    return last;
+}
+
+Value* NExpressionStatement::codeGen(CodeGenContext&amp; context)
+{
+    std::cout &lt;&lt; &quot;Generating code for &quot; &lt;&lt; typeid(expression).name() &lt;&lt; endl;
+    return expression.codeGen(context);
+}
+
+Value* NVariableDeclaration::codeGen(CodeGenContext&amp; context)
+{
+    std::cout &lt;&lt; &quot;Creating variable declaration &quot; &lt;&lt; type.name &lt;&lt; &quot; &quot; &lt;&lt; id.name &lt;&lt; endl;
+    AllocaInst *alloc = new AllocaInst(typeOf(type), id.name.c_str(), context.currentBlock());
+    context.locals()[id.name] = alloc;
+    if (assignmentExpr != NULL) {
+        NAssignment assn(id, *assignmentExpr);
+        assn.codeGen(context);
+    }
+    return alloc;
+}
+
+Value* NFunctionDeclaration::codeGen(CodeGenContext&amp; context)
+{
+    vector&lt;const type*&gt; argTypes;
+    VariableList::const_iterator it;
+    for (it = arguments.begin(); it != arguments.end(); it++) {
+        argTypes.push_back(typeOf((**it).type));
+    }
+    FunctionType *ftype = FunctionType::get(typeOf(type), argTypes, false);
+    Function *function = Function::Create(ftype, GlobalValue::InternalLinkage, id.name.c_str(), context.module);
+    BasicBlock *bblock = BasicBlock::Create(&quot;entry&quot;, function, 0);
+
+    context.pushBlock(bblock);
+
+    for (it = arguments.begin(); it != arguments.end(); it++) {
+        (**it).codeGen(context);
+    }
+
+    block.codeGen(context);
+    ReturnInst::Create(bblock);
+
+    context.popBlock();
+    std::cout &lt;&lt; &quot;Creating function: &quot; &lt;&lt; id.name &lt;&lt; endl;
+    return function;
+}
+</pre>
+<p>上述罗列很多的代码，然而这部份代码的含义需要你自己去探索。我在这里只会提及一下你需要注意的内容：</p>
+<ul>
+<li>我们在CodeGenContext类中使用一个语句块的栈来保存最后进入的block(因为语句都被增加到blocks中)
+<li>我们同样用个堆栈来保存每组语句块中的<a href="https://en.wikipedia.org/wiki/Symbol_table">符号表</a> </li>
+<li>我们设计的语言只会知道他当前范围内的内容.要支持“全局”上下的做法，你必须向上搜索整个堆栈中每一个语句块，知道你最后发现你匹配的符号(现在我们只是简单地搜索堆栈中最顶层的符号表)。 </li>
+<li>在我们进入一个语句块之前，我们需要将语句块压栈，离开语句块时将语句块出栈 </li>
+</ul>
+<p>剩下的内容都LLVM相关了，在这个主题上我并不是专家。但是迄今为止，我们已经有了编译和运行我们语言的所有代码。</p>
+<p><h2>7、编译和运行我们的语言</h2>
+</p>
+<p><h3>7.1、编译我们的语言</h3>
+</p>
+<p>我们已经有了代码，现在我们怎么运行它？LLVM有着非常复杂的联接link，幸运的是，如果你是自己安装的LLVM，那么你就应该有一个llvm-config二进制程序，这个程序返回你需要的所有编译和联接选项。<br/>
+我们也要同时更新我们的main.cpp的内容使之可以编译和运行我们的代码，这次我们main.cpp的内容如下：</p>
+<pre data-enlighter-language="c" class="EnlighterJSRAW">#include &lt;iostream&gt;
+#include &quot;codegen.h&quot;
+#include &quot;node.h&quot;
+
+using namespace std;
+
+extern int yyparse();
+extern NBlock* programBlock;
+
+int main(int argc, char **argv)
+{
+    yyparse();
+    std::cout &lt;&lt; programBlock &lt;&lt; endl;
+
+    CodeGenContext context;
+    context.generateCode(*programBlock);
+    context.runCode();
+
+    return 0;
+}
+</pre>
+<p>现在我们需要这样来编译这些代码<br/>
+$ g++ -o parser <code data-enlighter-language="raw" class="EnlighterJSRAW">llvm-config --libs core jit native --cxxflags --ldflags</code> *.cpp<br/>
+你也可以编写一个Makefile来进行编译</p>
+<pre>all: parser
+
+clean:
+	rm parser.cpp parser.hpp parser tokens.cpp
+
+parser.cpp: parser.y
+	bison -d -o <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="ffdbbf">[email&#160;protected]</a> $^
+
+parser.hpp: parser.cpp
+
+tokens.cpp: tokens.l parser.hpp
+	lex -o <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="1c385c">[email&#160;protected]</a> $^
+
+parser: parser.cpp codegen.cpp main.cpp tokens.cpp
+	g++ -o <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="183c58">[email&#160;protected]</a> <code data-enlighter-language="raw" class="EnlighterJSRAW">llvm-config --libs core jit native --cxxflags --ldflags</code> *.cpp
+</pre>
+<p><h3>7.2、运行我们的语言</h3>
+</p>
+<p>假设上述所有工作都圆满完成，那么现在你将有一个名为parser的二进制程序。运行它，还记得我们那个典型例子吗？让我们看看我们的编译器工作的如何。</p>
+<pre>$ echo 'int do_math(int a) { int x = a * 5 + 3 } do_math(10)' | ./parser
+0x100a00f10
+Generating code...
+Generating code for 20NFunctionDeclaration
+Creating variable declaration int a
+Generating code for 20NVariableDeclaration
+Creating variable declaration int x
+Creating assignment for x
+Creating binary operation 276
+Creating binary operation 274
+Creating integer: 3
+Creating integer: 5
+Creating identifier reference: a
+Creating block
+Creating function: do_math
+Generating code for 20NExpressionStatement
+Generating code for 11NMethodCall
+Creating integer: 10
+Creating method call: do_math
+Creating block
+Code is generated.
+; ModuleID = 'main'
+
+define internal void @main() {
+entry:
+	%0 = call i64 @do_math(i64 10)		;  [#uses=0]
+	ret void
+}
+
+define internal i64 @do_math(i64) {
+entry:
+	%a = alloca i64		;  [#uses=1]
+	%x = alloca i64		;  [#uses=1]
+	%1 = add i64 5, 3	;  [#uses=1]
+	%2 = load i64* %a	;  [#uses=1]
+	%3 = mul i64 %2, %1	;  [#uses=1]
+	store i64 %3, i64* %x
+	ret void
+}
+Running code...
+Code was run.
+</pre>
+<p><h2>8、结论</h2>
+</p>
+<p>是不是非常的酷？我同意如果你只是从这篇文章中拷贝粘贴的话，你可能会对运行得到的结果感觉有点失望，但是这点结果可能也会激发你更大的兴趣。此外，这就是本文的意义，这不是本篇指导文章的结束，这只是一个开始。因为有了这篇文章的介绍，你可以在文法分析，语法分析和装配语言的时候附加上一些疯狂的特性，然后创造出一个你自己命名的语言。你现在已经可以编译语句块了，那么你现在应该已经有如何继续下去的基本想法。<br/>
+本文完整的代码在Github<a href="https://github.com/lsegal/my_toy_compiler">这里</a>。我一直都在避免提到这个代码，因为这个代码不是本文的重点，而仅仅是带过这部分代码。</p>
+<p>我意识到这是一篇非常长的文章，并且这篇文章中难免会有出错的地方，如果你找到了任何问题，在你觉得有空的时候，欢迎你给我发电子邮件，我将会调整我的文章。你如果向想我们共享一些信息，你也可以在你觉得有空的时候写信给我们。</p>
+<p></p>
+<div style="margin-top: 15px; font-size: 16px;color: #cc0000;">
+<p align="center"><strong>（转载本站文章请注明作者和出处 <a href="https://coolshell.cn/">酷 壳 &#8211; CoolShell</a> ，请勿用于任何商业用途）</strong></p>
+</div>
+<div class="wp_rp_wrap  wp_rp_vertical_m" id="wp_rp_first"><div class="wp_rp_content"><h3 class="related_post_title">相关文章</h3><ul class="related_post wp_rp"><li><a href="https://coolshell.cn/articles/4907.html" class="wp_rp_thumbnail"><img src="https://coolshell.cn/wp-content/plugins/wordpress-23-related-posts-plugin/static/thumbs/26.jpg" alt="在函数外存取局部变量的一个比喻" width="150" height="150" /></a><a href="https://coolshell.cn/articles/4907.html" class="wp_rp_title">在函数外存取局部变量的一个比喻</a></li><li><a href="https://coolshell.cn/articles/19996.html" class="wp_rp_thumbnail"><img src="https://coolshell.cn/wp-content/uploads/2019/11/ken.dennis-300x186-1-150x150.jpeg" alt="Unix 50 年：Ken Thompson 的密码" width="150" height="150" /></a><a href="https://coolshell.cn/articles/19996.html" class="wp_rp_title">Unix 50 年：Ken Thompson 的密码</a></li><li><a href="https://coolshell.cn/articles/2276.html" class="wp_rp_thumbnail"><img src="https://coolshell.cn/wp-content/plugins/wordpress-23-related-posts-plugin/static/thumbs/1.jpg" alt="又一个Javascript试验田" width="150" height="150" /></a><a href="https://coolshell.cn/articles/2276.html" class="wp_rp_title">又一个Javascript试验田</a></li><li><a href="https://coolshell.cn/articles/7771.html" class="wp_rp_thumbnail"><img src="https://coolshell.cn/wp-content/uploads/2012/06/Less-is-More-Box-ShopTab-300x282-150x150.jpg" alt="少即是极多" width="150" height="150" /></a><a href="https://coolshell.cn/articles/7771.html" class="wp_rp_title">少即是极多</a></li><li><a href="https://coolshell.cn/articles/1234.html" class="wp_rp_thumbnail"><img src="https://coolshell.cn/wp-content/uploads/2009/08/adcompare1-150x150.jpg" alt="几个有趣的漫画" width="150" height="150" /></a><a href="https://coolshell.cn/articles/1234.html" class="wp_rp_title">几个有趣的漫画</a></li><li><a href="https://coolshell.cn/articles/1837.html" class="wp_rp_thumbnail"><img src="https://coolshell.cn/wp-content/uploads/2009/11/eclim-150x150.png" alt="Eclipse 和 Vim" width="150" height="150" /></a><a href="https://coolshell.cn/articles/1837.html" class="wp_rp_title">Eclipse 和 Vim</a></li></ul></div></div>
+<div id="post-ratings-1547" class="post-ratings" itemscope itemtype="https://schema.org/Article" data-nonce="293deec9e8"><img id="rating_1547_1" src="https://coolshell.cn/wp-content/plugins/wp-postratings/images/stars_crystal/rating_on.gif" alt="好烂啊" title="好烂啊" onmouseover="if (!window.__cfRLUnblockHandlers) return false; current_rating(1547, 1, '好烂啊');" onmouseout="if (!window.__cfRLUnblockHandlers) return false; ratings_off(4.2, 0, 0);" onclick="if (!window.__cfRLUnblockHandlers) return false; rate_post();" onkeypress="if (!window.__cfRLUnblockHandlers) return false; rate_post();" style="cursor: pointer; border: 0px;" data-cf-modified-81c2880153fcf3b3d2d66766- /><img id="rating_1547_2" src="https://coolshell.cn/wp-content/plugins/wp-postratings/images/stars_crystal/rating_on.gif" alt="有点差" title="有点差" onmouseover="if (!window.__cfRLUnblockHandlers) return false; current_rating(1547, 2, '有点差');" onmouseout="if (!window.__cfRLUnblockHandlers) return false; ratings_off(4.2, 0, 0);" onclick="if (!window.__cfRLUnblockHandlers) return false; rate_post();" onkeypress="if (!window.__cfRLUnblockHandlers) return false; rate_post();" style="cursor: pointer; border: 0px;" data-cf-modified-81c2880153fcf3b3d2d66766- /><img id="rating_1547_3" src="https://coolshell.cn/wp-content/plugins/wp-postratings/images/stars_crystal/rating_on.gif" alt="凑合看看" title="凑合看看" onmouseover="if (!window.__cfRLUnblockHandlers) return false; current_rating(1547, 3, '凑合看看');" onmouseout="if (!window.__cfRLUnblockHandlers) return false; ratings_off(4.2, 0, 0);" onclick="if (!window.__cfRLUnblockHandlers) return false; rate_post();" onkeypress="if (!window.__cfRLUnblockHandlers) return false; rate_post();" style="cursor: pointer; border: 0px;" data-cf-modified-81c2880153fcf3b3d2d66766- /><img id="rating_1547_4" src="https://coolshell.cn/wp-content/plugins/wp-postratings/images/stars_crystal/rating_on.gif" alt="还不错" title="还不错" onmouseover="if (!window.__cfRLUnblockHandlers) return false; current_rating(1547, 4, '还不错');" onmouseout="if (!window.__cfRLUnblockHandlers) return false; ratings_off(4.2, 0, 0);" onclick="if (!window.__cfRLUnblockHandlers) return false; rate_post();" onkeypress="if (!window.__cfRLUnblockHandlers) return false; rate_post();" style="cursor: pointer; border: 0px;" data-cf-modified-81c2880153fcf3b3d2d66766- /><img id="rating_1547_5" src="https://coolshell.cn/wp-content/plugins/wp-postratings/images/stars_crystal/rating_off.gif" alt="很精彩" title="很精彩" onmouseover="if (!window.__cfRLUnblockHandlers) return false; current_rating(1547, 5, '很精彩');" onmouseout="if (!window.__cfRLUnblockHandlers) return false; ratings_off(4.2, 0, 0);" onclick="if (!window.__cfRLUnblockHandlers) return false; rate_post();" onkeypress="if (!window.__cfRLUnblockHandlers) return false; rate_post();" style="cursor: pointer; border: 0px;" data-cf-modified-81c2880153fcf3b3d2d66766- /> (<strong>25</strong> 人打了分，平均分： <strong>4.24</strong> )<br/><span class="post-ratings-text" id="ratings_1547_text"></span><meta itemprop="name" content="使用Flex Bison 和LLVM编写自己的编译器" /><meta itemprop="headline" content="使用Flex Bison 和LLVM编写自己的编译器" /><meta itemprop="description" content="使用Flex Bison 和 LLVM编写你自己的编译器
+原文出处：http://gnuu.org/2009/09/18/writing-your-own-toy-compiler
+
+ 1、介绍
+我总是对编译器和语言非常感兴趣，但是兴趣并不会让你走的更远。大量的编译器的设计概念可以搞的任何一个程序员迷失在这些概念之中。不用说，我也曾今尝试过，但是并没有取得太大的成功，我以前的尝试都停留在语..." /><meta itemprop="datePublished" content="2009-10-12T12:47:18+08:00" /><meta itemprop="dateModified" content="2009-10-13T08:54:50+08:00" /><meta itemprop="url" content="https://coolshell.cn/articles/1547.html" /><meta itemprop="author" content="Neo" /><meta itemprop="mainEntityOfPage" content="https://coolshell.cn/articles/1547.html" /><div style="display: none;" itemprop="publisher" itemscope itemtype="https://schema.org/Organization"><meta itemprop="name" content="酷 壳 - CoolShell" /><meta itemprop="url" content="https://coolshell.cn" /><div itemprop="logo" itemscope itemtype="https://schema.org/ImageObject"><meta itemprop="url" content /></div></div><div style="display: none;" itemprop="aggregateRating" itemscope itemtype="https://schema.org/AggregateRating"><meta itemprop="bestRating" content="5" /><meta itemprop="worstRating" content="1" /><meta itemprop="ratingValue" content="4.24" /><meta itemprop="ratingCount" content="25" /></div></div><div id="post-ratings-1547-loading" class="post-ratings-loading"><img src="https://coolshell.cn/wp-content/plugins/wp-postratings/images/loading.gif" width="16" height="16" class="post-ratings-image" />Loading...</div>
+</div>
+<footer class="entry-footer">
+<hr><div class="row"><div class="col-md-6 cattegories"><span class="cat-links"><i class="fa fa-folder-open"></i>
+<a href="https://coolshell.cn/category/proglanguage/cplusplus" rel="category tag">C/C++语言</a>, <a href="https://coolshell.cn/category/progdesign" rel="category tag">程序设计</a></span></div><div class="col-md-6 tags"><span class="tags-links"><i class="fa fa-tags"></i> <a href="https://coolshell.cn/tag/%e7%bc%96%e8%af%91%e5%8e%9f%e7%90%86" rel="tag">编译原理</a></span></div></div> </footer>
+</article>
+
+<div id="related_posts">
+<div class="wp_rp_wrap  wp_rp_vertical_m"><div class="wp_rp_content"><h3 class="related_post_title">相关文章</h3><ul class="related_post wp_rp"><li><a href="https://coolshell.cn/articles/4907.html" class="wp_rp_thumbnail"><img src="https://coolshell.cn/wp-content/plugins/wordpress-23-related-posts-plugin/static/thumbs/26.jpg" alt="在函数外存取局部变量的一个比喻" width="150" height="150" /></a><a href="https://coolshell.cn/articles/4907.html" class="wp_rp_title">在函数外存取局部变量的一个比喻</a></li><li><a href="https://coolshell.cn/articles/19996.html" class="wp_rp_thumbnail"><img src="https://coolshell.cn/wp-content/uploads/2019/11/ken.dennis-300x186-1-150x150.jpeg" alt="Unix 50 年：Ken Thompson 的密码" width="150" height="150" /></a><a href="https://coolshell.cn/articles/19996.html" class="wp_rp_title">Unix 50 年：Ken Thompson 的密码</a></li><li><a href="https://coolshell.cn/articles/2276.html" class="wp_rp_thumbnail"><img src="https://coolshell.cn/wp-content/plugins/wordpress-23-related-posts-plugin/static/thumbs/1.jpg" alt="又一个Javascript试验田" width="150" height="150" /></a><a href="https://coolshell.cn/articles/2276.html" class="wp_rp_title">又一个Javascript试验田</a></li><li><a href="https://coolshell.cn/articles/7771.html" class="wp_rp_thumbnail"><img src="https://coolshell.cn/wp-content/uploads/2012/06/Less-is-More-Box-ShopTab-300x282-150x150.jpg" alt="少即是极多" width="150" height="150" /></a><a href="https://coolshell.cn/articles/7771.html" class="wp_rp_title">少即是极多</a></li><li><a href="https://coolshell.cn/articles/1234.html" class="wp_rp_thumbnail"><img src="https://coolshell.cn/wp-content/uploads/2009/08/adcompare1-150x150.jpg" alt="几个有趣的漫画" width="150" height="150" /></a><a href="https://coolshell.cn/articles/1234.html" class="wp_rp_title">几个有趣的漫画</a></li><li><a href="https://coolshell.cn/articles/1837.html" class="wp_rp_thumbnail"><img src="https://coolshell.cn/wp-content/uploads/2009/11/eclim-150x150.png" alt="Eclipse 和 Vim" width="150" height="150" /></a><a href="https://coolshell.cn/articles/1837.html" class="wp_rp_title">Eclipse 和 Vim</a></li></ul></div></div>
+</div><div class="fixed"></div> 
+</main>
+<div class="post-navigation">
+<nav class="navigation" role="navigation">
+<h2 class="screen-reader-text">Post navigation</h2>
+<div class="nav-links">
+<div class="row">
+
+<div class="col-md-6 next-post">
+<a class href="https://coolshell.cn/articles/1561.html"><span class="next-prev-text"><i class="fa fa-angle-left"></i>
+上一篇</span><br>Google Maps API用法教程</a>
+</div>
+
+<div class="col-md-6 prev-post">
+<a class href="https://coolshell.cn/articles/1539.html"><span class="next-prev-text">下一篇 <i class="fa fa-angle-right"></i>
+</span><br>用脚本实现哄小孩睡觉</a>
+</div>
+</div>
+</div>
+</nav>
+</div>
+<div class="post-comments">
+<div id="comments" class="comments-area">
+<h2 class="comments-title">
+《<span>使用Flex Bison 和LLVM编写自己的编译器</span>》的相关评论 </h2>
+<ol class="comment-list">
+<li id="comment-1373" class="comment even thread-even depth-1">
+<article id="div-comment-1373" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/9e234975a690541c8f1fd8427a1b8c0e?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/9e234975a690541c8f1fd8427a1b8c0e?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn"><a href="http://www.dutor.net" class="url" rel="ugc external nofollow">ivan</a></b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/1547.html#comment-1373"><time datetime="2009-10-13T07:17:48+08:00">2009年10月13日 07:17</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>really crazy.</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/1547.html?replytocom=1373#respond" data-commentid="1373" data-postid="1547" data-belowelement="div-comment-1373" data-respondelement="respond" data-replyto="回复给ivan" aria-label="回复给ivan">回复</a></div> </article>
+</li>
+<li id="comment-1426" class="comment odd alt thread-odd thread-alt depth-1">
+<article id="div-comment-1426" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/7af1d0794ce038542302d237166acfb0?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/7af1d0794ce038542302d237166acfb0?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn">huangbaihua</b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/1547.html#comment-1426"><time datetime="2009-10-16T09:19:35+08:00">2009年10月16日 09:19</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>so beautifull&#8230;&#8230;&#8230;</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/1547.html?replytocom=1426#respond" data-commentid="1426" data-postid="1547" data-belowelement="div-comment-1426" data-respondelement="respond" data-replyto="回复给huangbaihua" aria-label="回复给huangbaihua">回复</a></div> </article>
+</li>
+<li id="comment-1434" class="comment even thread-even depth-1">
+<article id="div-comment-1434" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/963fc7a6f634d5d6c092a6dd2d3fc053?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/963fc7a6f634d5d6c092a6dd2d3fc053?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn">davelv</b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/1547.html#comment-1434"><time datetime="2009-10-16T22:06:57+08:00">2009年10月16日 22:06</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>最近要做一个C编译器。看来这些工具真的很不错啊~~</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/1547.html?replytocom=1434#respond" data-commentid="1434" data-postid="1547" data-belowelement="div-comment-1434" data-respondelement="respond" data-replyto="回复给davelv" aria-label="回复给davelv">回复</a></div> </article>
+</li>
+<li id="comment-1660" class="comment odd alt thread-odd thread-alt depth-1">
+<article id="div-comment-1660" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/505193955e57b7c8d1db9791ff8586cc?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/505193955e57b7c8d1db9791ff8586cc?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn">匿名人士65535</b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/1547.html#comment-1660"><time datetime="2009-10-27T13:22:49+08:00">2009年10月27日 13:22</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>bison没用代码格式，尖括号里面的东西都没了</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/1547.html?replytocom=1660#respond" data-commentid="1660" data-postid="1547" data-belowelement="div-comment-1660" data-respondelement="respond" data-replyto="回复给匿名人士65535" aria-label="回复给匿名人士65535">回复</a></div> </article>
+</li>
+<li id="comment-1696" class="comment even thread-even depth-1">
+<article id="div-comment-1696" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/c68c8c1268b149ac034d9ee8c5d5ab99?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/c68c8c1268b149ac034d9ee8c5d5ab99?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn">doubhua</b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/1547.html#comment-1696"><time datetime="2009-10-30T17:55:02+08:00">2009年10月30日 17:55</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>Good material。<br/>
+只是下面这句话翻译得有点绕：<br/>
+“(在语言在组装成而进程码之前)” 提供原文做为参考：(before it is assembled)</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/1547.html?replytocom=1696#respond" data-commentid="1696" data-postid="1547" data-belowelement="div-comment-1696" data-respondelement="respond" data-replyto="回复给doubhua" aria-label="回复给doubhua">回复</a></div> </article>
+</li>
+<li id="comment-2043" class="pingback odd alt thread-odd thread-alt depth-1">
+<div class="comment-body">
+Pingback： <a href="http://shaoyf.com/blog/?p=23" class="url" rel="ugc external nofollow">最要的网址 - 紫阳成功策划网</a> </div>
+</li>
+<li id="comment-2044" class="pingback even thread-even depth-1">
+<div class="comment-body">
+Pingback： <a href="http://shaoyf.com/blog/?p=25" class="url" rel="ugc external nofollow">使用Flex Bison 和LLVM编写自己的编译器 - 紫阳成功策划网</a> </div>
+</li>
+<li id="comment-2059" class="comment odd alt thread-odd thread-alt depth-1">
+<article id="div-comment-2059" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/9fd01bec37a42a6f3cdb59388b0c9328?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/9fd01bec37a42a6f3cdb59388b0c9328?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn">aMR</b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/1547.html#comment-2059"><time datetime="2009-11-23T23:35:51+08:00">2009年11月23日 23:35</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>这个语法定义有问题，优先级明显不对~<br/>
+符号定义为comparison后会丢失优先级~~</p>
+<p>例子中那个程序先算了加法，后算了乘法，作者居然没发现……</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/1547.html?replytocom=2059#respond" data-commentid="2059" data-postid="1547" data-belowelement="div-comment-2059" data-respondelement="respond" data-replyto="回复给aMR" aria-label="回复给aMR">回复</a></div> </article>
+</li>
+<li id="comment-2786" class="pingback even thread-even depth-1">
+<div class="comment-body">
+Pingback： <a href="http://www.bobosky.name/?p=76" class="url" rel="ugc external nofollow">使用Flex、Bison和LLVM编写你自己的编译器（译），2 | BoboSky</a> </div>
+</li>
+<li id="comment-2787" class="pingback odd alt thread-odd thread-alt depth-1">
+<div class="comment-body">
+Pingback： <a href="http://www.bobosky.name/?p=68" class="url" rel="ugc external nofollow">使用Flex、Bison和LLVM编写你自己的编译器（译），1 | BoboSky</a> </div>
+</li>
+<li id="comment-4914" class="comment even thread-even depth-1">
+<article id="div-comment-4914" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/8acada2414c366a86bd9d2ebe4e5a232?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/8acada2414c366a86bd9d2ebe4e5a232?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn">wind</b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/1547.html#comment-4914"><time datetime="2010-02-05T13:11:25+08:00">2010年02月05日 13:11</time></a> </div>
+</footer>
+<div class="comment-content">
+<p><a href="#comment-2059" rel="nofollow">@aMR</a><br/>
+人家好心发教程，你墨迹个p&#8230;</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/1547.html?replytocom=4914#respond" data-commentid="4914" data-postid="1547" data-belowelement="div-comment-4914" data-respondelement="respond" data-replyto="回复给wind" aria-label="回复给wind">回复</a></div> </article>
+</li>
+<li id="comment-18960" class="comment odd alt thread-odd thread-alt depth-1">
+<article id="div-comment-18960" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/1b525434d3d96b9877241de5a569c50d?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/1b525434d3d96b9877241de5a569c50d?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn"><a href="http://hi.baidu.com/ghxandsky/" class="url" rel="ugc external nofollow">华星</a></b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/1547.html#comment-18960"><time datetime="2010-12-16T23:32:53+08:00">2010年12月16日 23:32</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>最近在看单片机89c51的编译器as31，就是典型的汇编语义实现例子。谢谢你文章！</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/1547.html?replytocom=18960#respond" data-commentid="18960" data-postid="1547" data-belowelement="div-comment-18960" data-respondelement="respond" data-replyto="回复给华星" aria-label="回复给华星">回复</a></div> </article>
+</li>
+<li id="comment-21122" class="comment even thread-even depth-1">
+<article id="div-comment-21122" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/a827cc65e9f087d4ae785dfd2ebe76b4?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/a827cc65e9f087d4ae785dfd2ebe76b4?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn">BrokenCoder</b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/1547.html#comment-21122"><time datetime="2011-01-01T09:38:05+08:00">2011年01月01日 09:38</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>谢谢！正需要学这个呢。<br/>
+Bison部分的parser.y 有错，跟原作者的代码不太一样，原作者的代码没问题。</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/1547.html?replytocom=21122#respond" data-commentid="21122" data-postid="1547" data-belowelement="div-comment-21122" data-respondelement="respond" data-replyto="回复给BrokenCoder" aria-label="回复给BrokenCoder">回复</a></div> </article>
+</li>
+<li id="comment-53451" class="comment odd alt thread-odd thread-alt depth-1">
+<article id="div-comment-53451" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/9cbed79514bf01f71e44b57ee825f43a?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/9cbed79514bf01f71e44b57ee825f43a?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn"><a href="http://www.xefan.com" class="url" rel="ugc external nofollow">龙昌</a></b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/1547.html#comment-53451"><time datetime="2011-05-19T22:50:43+08:00">2011年05月19日 22:50</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>不错，必须得顶！</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/1547.html?replytocom=53451#respond" data-commentid="53451" data-postid="1547" data-belowelement="div-comment-53451" data-respondelement="respond" data-replyto="回复给龙昌" aria-label="回复给龙昌">回复</a></div> </article>
+</li>
+<li id="comment-110996" class="comment even thread-even depth-1">
+<article id="div-comment-110996" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/9c7b34cc25962a2e4e5d60a32c35d54e?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/9c7b34cc25962a2e4e5d60a32c35d54e?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn">小鬼</b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/1547.html#comment-110996"><time datetime="2011-12-15T23:12:57+08:00">2011年12月15日 23:12</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>很好的文章，很难得看到这么好的内容</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/1547.html?replytocom=110996#respond" data-commentid="110996" data-postid="1547" data-belowelement="div-comment-110996" data-respondelement="respond" data-replyto="回复给小鬼" aria-label="回复给小鬼">回复</a></div> </article>
+</li>
+<li id="comment-195900" class="comment odd alt thread-odd thread-alt depth-1">
+<article id="div-comment-195900" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/85a015e4e325fad3f27497524fa49721?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/85a015e4e325fad3f27497524fa49721?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn"><a href="http://imlg.tk" class="url" rel="ugc external nofollow">rexfield</a></b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/1547.html#comment-195900"><time datetime="2012-06-03T10:12:10+08:00">2012年06月03日 10:12</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>GJ！以前只是用Flex&amp;Bison写编译器，现在打算部署LLVM了。</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/1547.html?replytocom=195900#respond" data-commentid="195900" data-postid="1547" data-belowelement="div-comment-195900" data-respondelement="respond" data-replyto="回复给rexfield" aria-label="回复给rexfield">回复</a></div> </article>
+</li>
+<li id="comment-195901" class="comment even thread-even depth-1">
+<article id="div-comment-195901" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/85a015e4e325fad3f27497524fa49721?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/85a015e4e325fad3f27497524fa49721?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn"><a href="http://imlg.tk" class="url" rel="ugc external nofollow">rexfield</a></b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/1547.html#comment-195901"><time datetime="2012-06-03T10:20:29+08:00">2012年06月03日 10:20</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>语法文件的话网上有下，标准C的。现在一下子找不到了，名字叫c-parse.y</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/1547.html?replytocom=195901#respond" data-commentid="195901" data-postid="1547" data-belowelement="div-comment-195901" data-respondelement="respond" data-replyto="回复给rexfield" aria-label="回复给rexfield">回复</a></div> </article>
+</li>
+<li id="comment-196488" class="comment odd alt thread-odd thread-alt depth-1">
+<article id="div-comment-196488" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/b38112dab64a08259aeafc79d2d157ff?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/b38112dab64a08259aeafc79d2d157ff?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn">yangzhichina</b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/1547.html#comment-196488"><time datetime="2012-06-13T16:01:49+08:00">2012年06月13日 16:01</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>我在运行bison -d -o parser.cpp parser.y的时候，为什么会遇到parser.y: conflicts: 24 shift/reduce的提示。</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/1547.html?replytocom=196488#respond" data-commentid="196488" data-postid="1547" data-belowelement="div-comment-196488" data-respondelement="respond" data-replyto="回复给yangzhichina" aria-label="回复给yangzhichina">回复</a></div> </article>
+</li>
+<li id="comment-294813" class="pingback even thread-even depth-1">
+<div class="comment-body">
+Pingback： <a href="https://wp-zxg.rhcloud.com/?p=512" class="url" rel="ugc external nofollow">[转]使用Flex Bison 和LLVM编写自己的编译器 | My Blog</a> </div>
+</li>
+<li id="comment-706926" class="pingback odd alt thread-odd thread-alt depth-1">
+<div class="comment-body">
+Pingback： <a href="http://guanmian.net/?p=1757" class="url" rel="ugc external nofollow">Technology of Heartbeat #13 | Steve Guan</a> </div>
+</li>
+<li id="comment-762716" class="comment even thread-even depth-1">
+<article id="div-comment-762716" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/88ffe69be8bd2e228de0b4e65f77d760?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/88ffe69be8bd2e228de0b4e65f77d760?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn">NTj</b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/1547.html#comment-762716"><time datetime="2013-09-26T18:06:02+08:00">2013年09月26日 18:06</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>太棒了<br/>
+學習中</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/1547.html?replytocom=762716#respond" data-commentid="762716" data-postid="1547" data-belowelement="div-comment-762716" data-respondelement="respond" data-replyto="回复给NTj" aria-label="回复给NTj">回复</a></div> </article>
+</li>
+<li id="comment-1241284" class="pingback odd alt thread-odd thread-alt depth-1">
+<div class="comment-body">
+Pingback： <a href="http://hohosoft.com/?p=1084" class="url" rel="ugc external nofollow">C++ Object Persistence with ODB(转) | 吼吼 ~</a> </div>
+</li>
+<li id="comment-1281644" class="comment even thread-even depth-1">
+<article id="div-comment-1281644" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/101967363efcc7c04f2f855d8be02e07?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/101967363efcc7c04f2f855d8be02e07?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn">yunai</b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/1547.html#comment-1281644"><time datetime="2014-02-16T14:54:50+08:00">2014年02月16日 14:54</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>编译bison文件的时候显示type不对</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/1547.html?replytocom=1281644#respond" data-commentid="1281644" data-postid="1547" data-belowelement="div-comment-1281644" data-respondelement="respond" data-replyto="回复给yunai" aria-label="回复给yunai">回复</a></div> </article>
+</li>
+<li id="comment-1281648" class="comment odd alt thread-odd thread-alt depth-1">
+<article id="div-comment-1281648" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/101967363efcc7c04f2f855d8be02e07?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/101967363efcc7c04f2f855d8be02e07?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn">yunai</b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/1547.html#comment-1281648"><time datetime="2014-02-16T14:57:07+08:00">2014年02月16日 14:57</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>type需要确定类型。这里都没有确定类型。</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/1547.html?replytocom=1281648#respond" data-commentid="1281648" data-postid="1547" data-belowelement="div-comment-1281648" data-respondelement="respond" data-replyto="回复给yunai" aria-label="回复给yunai">回复</a></div> </article>
+</li>
+<li id="comment-1463454" class="comment even thread-even depth-1">
+<article id="div-comment-1463454" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/629d0757826755496d1ff0175301521a?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/629d0757826755496d1ff0175301521a?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn">keroro520</b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/1547.html#comment-1463454"><time datetime="2014-05-17T22:33:30+08:00">2014年05月17日 22:33</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>这个教程是好多年了的, 现在llvm的版本都升级到3.4了, 编译不通过.</p>
+<p>就算是github上的代码也不能编译通过&#8230;默默地看代码就够了</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/1547.html?replytocom=1463454#respond" data-commentid="1463454" data-postid="1547" data-belowelement="div-comment-1463454" data-respondelement="respond" data-replyto="回复给keroro520" aria-label="回复给keroro520">回复</a></div> </article>
+</li>
+<li id="comment-1638211" class="comment odd alt thread-odd thread-alt depth-1">
+<article id="div-comment-1638211" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/a781013cc043f14abbd174a9b9756aab?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/a781013cc043f14abbd174a9b9756aab?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn">afa</b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/1547.html#comment-1638211"><time datetime="2014-12-31T19:38:11+08:00">2014年12月31日 19:38</time></a> </div>
+</footer>
+<div class="comment-content">
+<p><a href="#comment-196488" rel="nofollow">@yangzhichina </a> </p>
+<blockquote cite="#commentbody-196488"><p>
+<strong><a href="#comment-196488" rel="nofollow">yangzhichina</a> :</strong><br/>
+我在运行bison -d -o parser.cpp parser.y的时候，为什么会遇到parser.y: conflicts: 24 shift/reduce的提示。
+</p></blockquote>
+<p>语言定义不严谨，有二义性</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/1547.html?replytocom=1638211#respond" data-commentid="1638211" data-postid="1547" data-belowelement="div-comment-1638211" data-respondelement="respond" data-replyto="回复给afa" aria-label="回复给afa">回复</a></div> </article>
+</li>
+<li id="comment-1781844" class="comment even thread-even depth-1">
+<article id="div-comment-1781844" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/54f78dacec77a935cfce39cfca00e3eb?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/54f78dacec77a935cfce39cfca00e3eb?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn">wech</b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/1547.html#comment-1781844"><time datetime="2015-10-27T10:54:29+08:00">2015年10月27日 10:54</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>parser.y: 警告: 48 shift/reduce conflicts [-Wconflicts-sr]</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/1547.html?replytocom=1781844#respond" data-commentid="1781844" data-postid="1547" data-belowelement="div-comment-1781844" data-respondelement="respond" data-replyto="回复给wech" aria-label="回复给wech">回复</a></div> </article>
+</li>
+<li id="comment-1789567" class="comment odd alt thread-odd thread-alt depth-1">
+<article id="div-comment-1789567" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/85b9220c382d03858156e5fa050f0b14?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/85b9220c382d03858156e5fa050f0b14?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn"><a href="http://n2os.org" class="url" rel="ugc external nofollow">wms</a></b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/1547.html#comment-1789567"><time datetime="2015-11-14T14:53:35+08:00">2015年11月14日 14:53</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>里面的内容都被忽略了.</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/1547.html?replytocom=1789567#respond" data-commentid="1789567" data-postid="1547" data-belowelement="div-comment-1789567" data-respondelement="respond" data-replyto="回复给wms" aria-label="回复给wms">回复</a></div> </article>
+</li>
+<li id="comment-1789568" class="comment even thread-even depth-1">
+<article id="div-comment-1789568" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/85b9220c382d03858156e5fa050f0b14?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/85b9220c382d03858156e5fa050f0b14?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn"><a href="http://n2os.org" class="url" rel="ugc external nofollow">wms</a></b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/1547.html#comment-1789568"><time datetime="2015-11-14T14:54:02+08:00">2015年11月14日 14:54</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>尖括号里面的内容都被当HTML解析了.</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/1547.html?replytocom=1789568#respond" data-commentid="1789568" data-postid="1547" data-belowelement="div-comment-1789568" data-respondelement="respond" data-replyto="回复给wms" aria-label="回复给wms">回复</a></div> </article>
+</li>
+<li id="comment-1928660" class="pingback odd alt thread-odd thread-alt depth-1">
+<div class="comment-body">
+Pingback： <a href="https://com-it.tech/archives/40707" class="url" rel="ugc external nofollow">Lex和Yacc學習筆記 - 程序員的後花園</a> </div>
+</li>
+<li id="comment-2308025" class="comment even thread-even depth-1">
+<article id="div-comment-2308025" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/e4dfeb5acb21e4104109c115139e4521?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/e4dfeb5acb21e4104109c115139e4521?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn">小放牛</b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/1547.html#comment-2308025"><time datetime="2021-09-25T06:46:48+08:00">2021年09月25日 06:46</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>不可思议，这感觉像是通过网购组装出原子弹。</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/1547.html?replytocom=2308025#respond" data-commentid="2308025" data-postid="1547" data-belowelement="div-comment-2308025" data-respondelement="respond" data-replyto="回复给小放牛" aria-label="回复给小放牛">回复</a></div> </article>
+</li>
+</ol>
+<div id="respond" class="comment-respond">
+<h3 id="reply-title" class="comment-reply-title">发表回复 <small><a rel="nofollow" id="cancel-comment-reply-link" href="/articles/1547.html#respond" style="display:none;">取消回复</a></small></h3><form action="https://coolshell.cn/wp-comments-post.php" method="post" id="commentform" class="comment-form" novalidate><p class="comment-notes"><span id="email-notes">您的电子邮箱地址不会被公开。</span> <span class="required-field-message">必填项已用<span class="required">*</span>标注</span></p><p class="comment-form-comment"><label for="comment">评论 <span class="required">*</span></label> <textarea id="comment" name="comment" cols="45" rows="8" maxlength="65525" required></textarea></p><p class="comment-form-author"><label for="author">显示名称 <span class="required">*</span></label> <input id="author" name="author" type="text" value size="30" maxlength="245" autocomplete="name" required /></p>
+<p class="comment-form-email"><label for="email">电子邮箱地址 <span class="required">*</span></label> <input id="email" name="email" type="email" value size="30" maxlength="100" aria-describedby="email-notes" autocomplete="email" required /></p>
+<p class="comment-form-url"><label for="url">网站地址</label> <input id="url" name="url" type="url" value size="30" maxlength="200" autocomplete="url" /></p>
+<p class="form-submit"><input name="submit" type="submit" id="submit" class="submit" value="发表评论" /> <input type="hidden" name="comment_post_ID" value="1547" id="comment_post_ID" />
+<input type="hidden" name="comment_parent" id="comment_parent" value="0" />
+</p><p style="display: none;"><input type="hidden" id="akismet_comment_nonce" name="akismet_comment_nonce" value="e266db4fc5" /></p><p style="display: none !important;"><label>&#916;<textarea name="ak_hp_textarea" cols="45" rows="8" maxlength="100"></textarea></label><input type="hidden" id="ak_js_1" name="ak_js" value="125" /><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script type="81c2880153fcf3b3d2d66766-text/javascript">document.getElementById( "ak_js_1" ).setAttribute( "value", ( new Date() ).getTime() );</script></p></form> </div>
+</div>
+</div>
+</div>
+<div id="secondary" class="col-md-3 hidden-sm hidden-xs sidebar widget-area" role="complementary">
+<aside id="search-9" class="widget widget_search">
+<form role="search" method="get" class="search-form" action="https://coolshell.cn/">
+<label>
+<span class="screen-reader-text">Search for:</span>
+<input type="search" class="search-field" placeholder="Search &hellip;" value name="s" title="Search for:" />
+</label>
+<button type="submit" class="search-submit"><span class="screen-reader-text">Search</span></button>
+</form>
+</aside><aside id="custom_html-3" class="widget_text widget widget_custom_html"><h4 class="widget-title">本站公告</h4><div class="textwidget custom-html-widget"><p align="center"><a class="twitter" href="https://twitter.com/haoel" target="_blank" rel="noopener"> Twitter @haoel </a></p>
+
+<p align="center">极客时间专栏<br><a href="http://gk.link/a/10sBp" target="_blank" rel="noopener"><img src="https://coolshell.cn/wp-content/uploads/2021/06/8311623409583_.pic_hd-1024x1024.jpg" height="200" weight="200" alt="极客时间专栏" title="极客时间专栏"></a></p>
+
+</div></aside>
+<aside id="recent-posts-4" class="widget widget_recent_entries">
+<h4 class="widget-title">最新文章</h4>
+<ul>
+<li>
+<a href="https://coolshell.cn/articles/22422.html">是微服务架构不香还是云不香？</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/22398.html">我看ChatGPT: 为啥谷歌掉了千亿美金</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/22367.html">聊聊 nostr 和 审查</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/22341.html">感染新冠的经历</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/22320.html">eBPF 介绍</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/22298.html">聊聊团队协同和协同工具</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/22263.html">从一次经历谈 TIME_WAIT 的那些事</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/22242.html">ETCD的内存问题</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/22173.html">“一把梭：REST API 全用 POST”</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/22157.html">谈谈公司对员工的监控</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/21708.html">网络数字身份认证术</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/21672.html">我做系统架构的一些原则</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/21649.html">源代码特洛伊木马攻击</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/21615.html">Go编程模式 ： 泛型编程</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/21589.html">如何做一个有质量的技术分享</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/21263.html">Go 编程模式：k8s Visitor 模式</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/21228.html">Go编程模式：Pipeline</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/21214.html">Go编程模式：委托和反转控制</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/21179.html">Go 编程模式：Go Generation</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/21164.html">Go编程模式：Map-Reduce</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/21146.html">Go 编程模式：Functional Options</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/21140.html">Go 编程模式：错误处理</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/21128.html">Go编程模式：切片，接口，时间和性能</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/21113.html">百度为什么掉队了</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/20977.html">程序员如何把控自己的职业</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/21003.html">计时攻击 Timing Attacks</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/20845.html">Rust语言的编程范式</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/20793.html">与程序员相关的CPU缓存知识</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/20765.html">MegaEase的远程工作文化</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/20533.html">使用简单的逻辑方法进行独立思考</a>
+</li>
+</ul>
+</aside><aside id="views-6" class="widget widget_views"><h4 class="widget-title">全站热门</h4><ul>
+<li><a href="https://coolshell.cn/articles/4990.html" title="程序员技术练级攻略 - 10,239,184 人阅读">程序员技术练级攻略</a></li><li><a href="https://coolshell.cn/articles/3961.html" title="&ldquo;火柴棍式&rdquo;程序员面试题 - 2,356,238 人阅读">&ldquo;火柴棍式&rdquo;程序员面试题</a></li><li><a href="https://coolshell.cn/articles/5426.html" title="简明 Vim 练级攻略 - 1,325,212 人阅读">简明 Vim 练级攻略</a></li><li><a href="https://coolshell.cn/articles/9308.html" title="&ldquo;作环保的程序员，从不用百度开始&rdquo; - 589,201 人阅读">&ldquo;作环保的程序员，从不用百度开始&rdquo;</a></li><li><a href="https://coolshell.cn/articles/11564.html" title="TCP 的那些事儿（上） - 488,661 人阅读">TCP 的那些事儿（上）</a></li><li><a href="https://coolshell.cn/articles/9070.html" title="AWK 简明教程 - 453,293 人阅读">AWK 简明教程</a></li><li><a href="https://coolshell.cn/articles/7186.html" title="做个环保主义的程序员 - 447,224 人阅读">做个环保主义的程序员</a></li><li><a href="https://coolshell.cn/articles/10688.html" title="编程能力与编程年龄 - 416,611 人阅读">编程能力与编程年龄</a></li><li><a href="https://coolshell.cn/articles/10590.html" title="二维码的生成细节和原理 - 393,749 人阅读">二维码的生成细节和原理</a></li><li><a href="https://coolshell.cn/articles/9104.html" title="sed 简明教程 - 380,237 人阅读">sed 简明教程</a></li><li><a href="https://coolshell.cn/articles/4102.html" title="如何学好C语言 - 368,371 人阅读">如何学好C语言</a></li><li><a href="https://coolshell.cn/articles/19464.html" title="如何超过大多数人 - 314,016 人阅读">如何超过大多数人</a></li><li><a href="https://coolshell.cn/articles/17583.html" title="技术人员的发展之路 - 308,290 人阅读">技术人员的发展之路</a></li><li><a href="https://coolshell.cn/articles/9606.html" title="疫苗：Java HashMap的死循环 - 305,391 人阅读">疫苗：Java HashMap的死循环</a></li><li><a href="https://coolshell.cn/articles/6470.html" title="由12306.cn谈谈网站性能技术 - 298,920 人阅读">由12306.cn谈谈网站性能技术</a></li><li><a href="https://coolshell.cn/articles/8883.html" title="应该知道的Linux技巧 - 296,724 人阅读">应该知道的Linux技巧</a></li><li><a href="https://coolshell.cn/articles/17416.html" title="缓存更新的套路 - 293,595 人阅读">缓存更新的套路</a></li><li><a href="https://coolshell.cn/articles/10910.html" title="分布式系统的事务处理 - 284,597 人阅读">分布式系统的事务处理</a></li><li><a href="https://coolshell.cn/articles/11609.html" title="TCP 的那些事儿（下） - 284,337 人阅读">TCP 的那些事儿（下）</a></li><li><a href="https://coolshell.cn/articles/2250.html" title="&ldquo;21天教你学会C++&rdquo; - 278,570 人阅读">&ldquo;21天教你学会C++&rdquo;</a></li><li><a href="https://coolshell.cn/articles/8239.html" title="无锁队列的实现 - 274,263 人阅读">无锁队列的实现</a></li><li><a href="https://coolshell.cn/articles/20276.html" title="别让自己&ldquo;墙&rdquo;了自己 - 271,034 人阅读">别让自己&ldquo;墙&rdquo;了自己</a></li><li><a href="https://coolshell.cn/articles/10739.html" title="Lua简明教程 - 269,319 人阅读">Lua简明教程</a></li><li><a href="https://coolshell.cn/articles/7490.html" title="性能调优攻略 - 257,243 人阅读">性能调优攻略</a></li><li><a href="https://coolshell.cn/articles/1846.html" title="MySQL性能优化的最佳20+条经验 - 255,727 人阅读">MySQL性能优化的最佳20+条经验</a></li><li><a href="https://coolshell.cn/articles/4758.html" title="如何写出无法维护的代码 - 254,072 人阅读">如何写出无法维护的代码</a></li><li><a href="https://coolshell.cn/articles/914.html" title="6个变态的C语言Hello World程序 - 251,850 人阅读">6个变态的C语言Hello World程序</a></li><li><a href="https://coolshell.cn/articles/17010.html" title="Docker基础技术：Linux Namespace（上） - 241,758 人阅读">Docker基础技术：Linux Namespace（上）</a></li><li><a href="https://coolshell.cn/articles/7829.html" title="28个Unix/Linux的命令行神器 - 241,180 人阅读">28个Unix/Linux的命令行神器</a></li><li><a href="https://coolshell.cn/articles/11312.html" title="无插件Vim编程技巧 - 222,771 人阅读">无插件Vim编程技巧</a></li></ul>
+</aside><aside id="categories-367921425" class="widget widget_categories"><h4 class="widget-title">分类</h4>
+<ul>
+<li class="cat-item cat-item-195"><a href="https://coolshell.cn/category/itnews">业界新闻</a> (33)
+</li>
+<li class="cat-item cat-item-509"><a href="https://coolshell.cn/category/%e4%bc%81%e4%b8%9a%e5%ba%94%e7%94%a8">企业应用</a> (2)
+</li>
+<li class="cat-item cat-item-9"><a href="https://coolshell.cn/category/technews">技术新闻</a> (38)
+</li>
+<li class="cat-item cat-item-550"><a href="https://coolshell.cn/category/%e6%8a%80%e6%9c%af%e7%ae%a1%e7%90%86">技术管理</a> (19)
+</li>
+<li class="cat-item cat-item-12"><a href="https://coolshell.cn/category/techarticle">技术读物</a> (125)
+</li>
+<li class="cat-item cat-item-18"><a href="https://coolshell.cn/category/operatingsystem">操作系统</a> (97)
+<ul class="children">
+<li class="cat-item cat-item-20"><a href="https://coolshell.cn/category/operatingsystem/unixlinux">Unix/Linux</a> (81)
+</li>
+<li class="cat-item cat-item-19"><a href="https://coolshell.cn/category/operatingsystem/mswindows">Windows</a> (12)
+</li>
+</ul>
+</li>
+<li class="cat-item cat-item-105"><a href="https://coolshell.cn/category/datebase">数据库</a> (11)
+</li>
+<li class="cat-item cat-item-10"><a href="https://coolshell.cn/category/misc">杂项资源</a> (295)
+</li>
+<li class="cat-item cat-item-15"><a href="https://coolshell.cn/category/process">流程方法</a> (48)
+</li>
+<li class="cat-item cat-item-23"><a href="https://coolshell.cn/category/progdesign">程序设计</a> (110)
+</li>
+<li class="cat-item cat-item-602"><a href="https://coolshell.cn/category/%e7%b3%bb%e7%bb%9f%e6%9e%b6%e6%9e%84">系统架构</a> (15)
+</li>
+<li class="cat-item cat-item-1"><a href="https://coolshell.cn/category/tools">编程工具</a> (67)
+</li>
+<li class="cat-item cat-item-3"><a href="https://coolshell.cn/category/proglanguage">编程语言</a> (326)
+<ul class="children">
+<li class="cat-item cat-item-189"><a href="https://coolshell.cn/category/proglanguage/dotnet">.NET编程</a> (3)
+</li>
+<li class="cat-item cat-item-8"><a href="https://coolshell.cn/category/proglanguage/ajaxdev">Ajax开发</a> (9)
+</li>
+<li class="cat-item cat-item-5"><a href="https://coolshell.cn/category/proglanguage/cplusplus">C/C++语言</a> (74)
+</li>
+<li class="cat-item cat-item-186"><a href="https://coolshell.cn/category/proglanguage/erlang">Erlang</a> (1)
+</li>
+<li class="cat-item cat-item-819"><a href="https://coolshell.cn/category/proglanguage/go-%e8%af%ad%e8%a8%80">Go 语言</a> (15)
+</li>
+<li class="cat-item cat-item-4"><a href="https://coolshell.cn/category/proglanguage/javadev">Java语言</a> (32)
+</li>
+<li class="cat-item cat-item-11"><a href="https://coolshell.cn/category/proglanguage/phpdev">PHP脚本</a> (11)
+</li>
+<li class="cat-item cat-item-33"><a href="https://coolshell.cn/category/proglanguage/pythondev">Python</a> (23)
+</li>
+<li class="cat-item cat-item-100"><a href="https://coolshell.cn/category/proglanguage/rubydev">Ruby</a> (5)
+</li>
+<li class="cat-item cat-item-860"><a href="https://coolshell.cn/category/proglanguage/rust-%e8%af%ad%e8%a8%80">Rust 语言</a> (1)
+</li>
+<li class="cat-item cat-item-7"><a href="https://coolshell.cn/category/proglanguage/webdev">Web开发</a> (106)
+</li>
+</ul>
+</li>
+<li class="cat-item cat-item-6"><a href="https://coolshell.cn/category/netsecurity">网络安全</a> (36)
+</li>
+<li class="cat-item cat-item-39"><a href="https://coolshell.cn/category/career">职场生涯</a> (40)
+</li>
+<li class="cat-item cat-item-271"><a href="https://coolshell.cn/category/funny">趣味问题</a> (19)
+</li>
+<li class="cat-item cat-item-52"><a href="https://coolshell.cn/category/story">轶事趣闻</a> (147)
+</li>
+</ul>
+</aside><aside id="tag_cloud-4" class="widget widget_tag_cloud"><h4 class="widget-title">标签</h4><div class="tagcloud"><a href="https://coolshell.cn/tag/agile" class="tag-cloud-link tag-link-17 tag-link-position-1" style="font-size: 11.559322033898pt;" aria-label="agile (15个项目)">agile</a>
+<a href="https://coolshell.cn/tag/ajax" class="tag-cloud-link tag-link-34 tag-link-position-2" style="font-size: 10.135593220339pt;" aria-label="AJAX (11个项目)">AJAX</a>
+<a href="https://coolshell.cn/tag/algorithm" class="tag-cloud-link tag-link-76 tag-link-position-3" style="font-size: 14.28813559322pt;" aria-label="Algorithm (26个项目)">Algorithm</a>
+<a href="https://coolshell.cn/tag/android" class="tag-cloud-link tag-link-145 tag-link-position-4" style="font-size: 10.135593220339pt;" aria-label="Android (11个项目)">Android</a>
+<a href="https://coolshell.cn/tag/bash" class="tag-cloud-link tag-link-190 tag-link-position-5" style="font-size: 9.1864406779661pt;" aria-label="Bash (9个项目)">Bash</a>
+<a href="https://coolshell.cn/tag/c" class="tag-cloud-link tag-link-59 tag-link-position-6" style="font-size: 20.694915254237pt;" aria-label="C++ (93个项目)">C++</a>
+<a href="https://coolshell.cn/tag/coding" class="tag-cloud-link tag-link-135 tag-link-position-7" style="font-size: 14.28813559322pt;" aria-label="Coding (26个项目)">Coding</a>
+<a href="https://coolshell.cn/tag/css" class="tag-cloud-link tag-link-96 tag-link-position-8" style="font-size: 13.457627118644pt;" aria-label="CSS (22个项目)">CSS</a>
+<a href="https://coolshell.cn/tag/design" class="tag-cloud-link tag-link-71 tag-link-position-9" style="font-size: 13.932203389831pt;" aria-label="Design (24个项目)">Design</a>
+<a href="https://coolshell.cn/tag/design-pattern" class="tag-cloud-link tag-link-25 tag-link-position-10" style="font-size: 9.6610169491525pt;" aria-label="design pattern (10个项目)">design pattern</a>
+<a href="https://coolshell.cn/tag/ebook" class="tag-cloud-link tag-link-101 tag-link-position-11" style="font-size: 11.559322033898pt;" aria-label="ebook (15个项目)">ebook</a>
+<a href="https://coolshell.cn/tag/flash" class="tag-cloud-link tag-link-98 tag-link-position-12" style="font-size: 8pt;" aria-label="Flash (7个项目)">Flash</a>
+<a href="https://coolshell.cn/tag/game" class="tag-cloud-link tag-link-125 tag-link-position-13" style="font-size: 9.1864406779661pt;" aria-label="Game (9个项目)">Game</a>
+<a href="https://coolshell.cn/tag/go" class="tag-cloud-link tag-link-238 tag-link-position-14" style="font-size: 13.220338983051pt;" aria-label="Go (21个项目)">Go</a>
+<a href="https://coolshell.cn/tag/golang" class="tag-cloud-link tag-link-237 tag-link-position-15" style="font-size: 10.966101694915pt;" aria-label="golang (13个项目)">golang</a>
+<a href="https://coolshell.cn/tag/google" class="tag-cloud-link tag-link-32 tag-link-position-16" style="font-size: 15.474576271186pt;" aria-label="Google (33个项目)">Google</a>
+<a href="https://coolshell.cn/tag/html" class="tag-cloud-link tag-link-38 tag-link-position-17" style="font-size: 15.593220338983pt;" aria-label="HTML (34个项目)">HTML</a>
+<a href="https://coolshell.cn/tag/ie" class="tag-cloud-link tag-link-175 tag-link-position-18" style="font-size: 9.6610169491525pt;" aria-label="IE (10个项目)">IE</a>
+<a href="https://coolshell.cn/tag/java" class="tag-cloud-link tag-link-13 tag-link-position-19" style="font-size: 17.610169491525pt;" aria-label="Java (50个项目)">Java</a>
+<a href="https://coolshell.cn/tag/javascript" class="tag-cloud-link tag-link-114 tag-link-position-20" style="font-size: 17.966101694915pt;" aria-label="Javascript (54个项目)">Javascript</a>
+<a href="https://coolshell.cn/tag/jquery" class="tag-cloud-link tag-link-191 tag-link-position-21" style="font-size: 10.135593220339pt;" aria-label="jQuery (11个项目)">jQuery</a>
+<a href="https://coolshell.cn/tag/linux" class="tag-cloud-link tag-link-37 tag-link-position-22" style="font-size: 19.389830508475pt;" aria-label="Linux (71个项目)">Linux</a>
+<a href="https://coolshell.cn/tag/mysql" class="tag-cloud-link tag-link-106 tag-link-position-23" style="font-size: 8pt;" aria-label="MySQL (7个项目)">MySQL</a>
+<a href="https://coolshell.cn/tag/oop" class="tag-cloud-link tag-link-245 tag-link-position-24" style="font-size: 8.5932203389831pt;" aria-label="OOP (8个项目)">OOP</a>
+<a href="https://coolshell.cn/tag/password" class="tag-cloud-link tag-link-319 tag-link-position-25" style="font-size: 8.5932203389831pt;" aria-label="password (8个项目)">password</a>
+<a href="https://coolshell.cn/tag/performance" class="tag-cloud-link tag-link-120 tag-link-position-26" style="font-size: 12.271186440678pt;" aria-label="Performance (17个项目)">Performance</a>
+<a href="https://coolshell.cn/tag/php" class="tag-cloud-link tag-link-35 tag-link-position-27" style="font-size: 14.050847457627pt;" aria-label="PHP (25个项目)">PHP</a>
+<a href="https://coolshell.cn/tag/programmer" class="tag-cloud-link tag-link-70 tag-link-position-28" style="font-size: 21.881355932203pt;" aria-label="Programmer (116个项目)">Programmer</a>
+<a href="https://coolshell.cn/tag/programming" class="tag-cloud-link tag-link-499 tag-link-position-29" style="font-size: 10.135593220339pt;" aria-label="Programming (11个项目)">Programming</a>
+<a href="https://coolshell.cn/tag/programming-language" class="tag-cloud-link tag-link-115 tag-link-position-30" style="font-size: 10.491525423729pt;" aria-label="programming language (12个项目)">programming language</a>
+<a href="https://coolshell.cn/tag/puzzle" class="tag-cloud-link tag-link-514 tag-link-position-31" style="font-size: 10.135593220339pt;" aria-label="Puzzle (11个项目)">Puzzle</a>
+<a href="https://coolshell.cn/tag/pythondev" class="tag-cloud-link tag-link-791 tag-link-position-32" style="font-size: 15pt;" aria-label="Python (30个项目)">Python</a>
+<a href="https://coolshell.cn/tag/ruby" class="tag-cloud-link tag-link-69 tag-link-position-33" style="font-size: 9.6610169491525pt;" aria-label="Ruby (10个项目)">Ruby</a>
+<a href="https://coolshell.cn/tag/sql" class="tag-cloud-link tag-link-131 tag-link-position-34" style="font-size: 9.6610169491525pt;" aria-label="SQL (10个项目)">SQL</a>
+<a href="https://coolshell.cn/tag/tdd" class="tag-cloud-link tag-link-485 tag-link-position-35" style="font-size: 8.5932203389831pt;" aria-label="TDD (8个项目)">TDD</a>
+<a href="https://coolshell.cn/tag/ui" class="tag-cloud-link tag-link-47 tag-link-position-36" style="font-size: 10.491525423729pt;" aria-label="UI (12个项目)">UI</a>
+<a href="https://coolshell.cn/tag/unix" class="tag-cloud-link tag-link-21 tag-link-position-37" style="font-size: 15.949152542373pt;" aria-label="Unix (36个项目)">Unix</a>
+<a href="https://coolshell.cn/tag/vim" class="tag-cloud-link tag-link-50 tag-link-position-38" style="font-size: 12.745762711864pt;" aria-label="vim (19个项目)">vim</a>
+<a href="https://coolshell.cn/tag/web" class="tag-cloud-link tag-link-30 tag-link-position-39" style="font-size: 16.661016949153pt;" aria-label="Web (42个项目)">Web</a>
+<a href="https://coolshell.cn/tag/windows" class="tag-cloud-link tag-link-49 tag-link-position-40" style="font-size: 12.271186440678pt;" aria-label="Windows (17个项目)">Windows</a>
+<a href="https://coolshell.cn/tag/xml" class="tag-cloud-link tag-link-104 tag-link-position-41" style="font-size: 8.5932203389831pt;" aria-label="XML (8个项目)">XML</a>
+<a href="https://coolshell.cn/tag/%e5%ae%89%e5%85%a8" class="tag-cloud-link tag-link-318 tag-link-position-42" style="font-size: 13.694915254237pt;" aria-label="安全 (23个项目)">安全</a>
+<a href="https://coolshell.cn/tag/%e7%a8%8b%e5%ba%8f%e5%91%98" class="tag-cloud-link tag-link-58 tag-link-position-43" style="font-size: 22pt;" aria-label="程序员 (119个项目)">程序员</a>
+<a href="https://coolshell.cn/tag/%e7%ae%97%e6%b3%95" class="tag-cloud-link tag-link-77 tag-link-position-44" style="font-size: 9.6610169491525pt;" aria-label="算法 (10个项目)">算法</a>
+<a href="https://coolshell.cn/tag/interview" class="tag-cloud-link tag-link-164 tag-link-position-45" style="font-size: 11.915254237288pt;" aria-label="面试 (16个项目)">面试</a></div>
+</aside><aside id="archives-5" class="widget widget_archive"><h4 class="widget-title">归档</h4>
+<ul>
+<li><a href="https://coolshell.cn/articles/date/2023/05">2023年5月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2023/02">2023年2月</a>&nbsp;(2)</li>
+<li><a href="https://coolshell.cn/articles/date/2022/12">2022年12月</a>&nbsp;(2)</li>
+<li><a href="https://coolshell.cn/articles/date/2022/10">2022年10月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2022/07">2022年7月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2022/05">2022年5月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2022/02">2022年2月</a>&nbsp;(2)</li>
+<li><a href="https://coolshell.cn/articles/date/2022/01">2022年1月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2021/12">2021年12月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2021/11">2021年11月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2021/09">2021年9月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2021/07">2021年7月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2020/12">2020年12月</a>&nbsp;(9)</li>
+<li><a href="https://coolshell.cn/articles/date/2020/08">2020年8月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2020/07">2020年7月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2020/04">2020年4月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2020/03">2020年3月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2020/01">2020年1月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2019/12">2019年12月</a>&nbsp;(2)</li>
+<li><a href="https://coolshell.cn/articles/date/2019/11">2019年11月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2019/10">2019年10月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2019/07">2019年7月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2019/06">2019年6月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2019/05">2019年5月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2019/04">2019年4月</a>&nbsp;(2)</li>
+<li><a href="https://coolshell.cn/articles/date/2019/03">2019年3月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2019/02">2019年2月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2018/12">2018年12月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2018/05">2018年5月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2018/01">2018年1月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2017/10">2017年10月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2017/09">2017年9月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2017/08">2017年8月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2017/07">2017年7月</a>&nbsp;(3)</li>
+<li><a href="https://coolshell.cn/articles/date/2017/06">2017年6月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2017/04">2017年4月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2017/03">2017年3月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2017/02">2017年2月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2017/01">2017年1月</a>&nbsp;(2)</li>
+<li><a href="https://coolshell.cn/articles/date/2016/12">2016年12月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2016/10">2016年10月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2016/09">2016年9月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2016/08">2016年8月</a>&nbsp;(2)</li>
+<li><a href="https://coolshell.cn/articles/date/2016/07">2016年7月</a>&nbsp;(3)</li>
+<li><a href="https://coolshell.cn/articles/date/2015/12">2015年12月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2015/09">2015年9月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2015/08">2015年8月</a>&nbsp;(2)</li>
+<li><a href="https://coolshell.cn/articles/date/2015/04">2015年4月</a>&nbsp;(4)</li>
+<li><a href="https://coolshell.cn/articles/date/2014/12">2014年12月</a>&nbsp;(3)</li>
+<li><a href="https://coolshell.cn/articles/date/2014/11">2014年11月</a>&nbsp;(2)</li>
+<li><a href="https://coolshell.cn/articles/date/2014/10">2014年10月</a>&nbsp;(2)</li>
+<li><a href="https://coolshell.cn/articles/date/2014/09">2014年9月</a>&nbsp;(2)</li>
+<li><a href="https://coolshell.cn/articles/date/2014/08">2014年8月</a>&nbsp;(2)</li>
+<li><a href="https://coolshell.cn/articles/date/2014/06">2014年6月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2014/05">2014年5月</a>&nbsp;(4)</li>
+<li><a href="https://coolshell.cn/articles/date/2014/04">2014年4月</a>&nbsp;(4)</li>
+<li><a href="https://coolshell.cn/articles/date/2014/03">2014年3月</a>&nbsp;(5)</li>
+<li><a href="https://coolshell.cn/articles/date/2014/02">2014年2月</a>&nbsp;(3)</li>
+<li><a href="https://coolshell.cn/articles/date/2014/01">2014年1月</a>&nbsp;(2)</li>
+<li><a href="https://coolshell.cn/articles/date/2013/12">2013年12月</a>&nbsp;(3)</li>
+<li><a href="https://coolshell.cn/articles/date/2013/11">2013年11月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2013/10">2013年10月</a>&nbsp;(6)</li>
+<li><a href="https://coolshell.cn/articles/date/2013/08">2013年8月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2013/07">2013年7月</a>&nbsp;(8)</li>
+<li><a href="https://coolshell.cn/articles/date/2013/06">2013年6月</a>&nbsp;(2)</li>
+<li><a href="https://coolshell.cn/articles/date/2013/05">2013年5月</a>&nbsp;(3)</li>
+<li><a href="https://coolshell.cn/articles/date/2013/04">2013年4月</a>&nbsp;(3)</li>
+<li><a href="https://coolshell.cn/articles/date/2013/03">2013年3月</a>&nbsp;(3)</li>
+<li><a href="https://coolshell.cn/articles/date/2013/02">2013年2月</a>&nbsp;(5)</li>
+<li><a href="https://coolshell.cn/articles/date/2013/01">2013年1月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2012/12">2012年12月</a>&nbsp;(4)</li>
+<li><a href="https://coolshell.cn/articles/date/2012/11">2012年11月</a>&nbsp;(4)</li>
+<li><a href="https://coolshell.cn/articles/date/2012/10">2012年10月</a>&nbsp;(3)</li>
+<li><a href="https://coolshell.cn/articles/date/2012/09">2012年9月</a>&nbsp;(4)</li>
+<li><a href="https://coolshell.cn/articles/date/2012/08">2012年8月</a>&nbsp;(8)</li>
+<li><a href="https://coolshell.cn/articles/date/2012/07">2012年7月</a>&nbsp;(4)</li>
+<li><a href="https://coolshell.cn/articles/date/2012/06">2012年6月</a>&nbsp;(7)</li>
+<li><a href="https://coolshell.cn/articles/date/2012/05">2012年5月</a>&nbsp;(6)</li>
+<li><a href="https://coolshell.cn/articles/date/2012/04">2012年4月</a>&nbsp;(6)</li>
+<li><a href="https://coolshell.cn/articles/date/2012/03">2012年3月</a>&nbsp;(6)</li>
+<li><a href="https://coolshell.cn/articles/date/2012/02">2012年2月</a>&nbsp;(3)</li>
+<li><a href="https://coolshell.cn/articles/date/2012/01">2012年1月</a>&nbsp;(6)</li>
+<li><a href="https://coolshell.cn/articles/date/2011/12">2011年12月</a>&nbsp;(5)</li>
+<li><a href="https://coolshell.cn/articles/date/2011/11">2011年11月</a>&nbsp;(9)</li>
+<li><a href="https://coolshell.cn/articles/date/2011/10">2011年10月</a>&nbsp;(6)</li>
+<li><a href="https://coolshell.cn/articles/date/2011/09">2011年9月</a>&nbsp;(5)</li>
+<li><a href="https://coolshell.cn/articles/date/2011/08">2011年8月</a>&nbsp;(14)</li>
+<li><a href="https://coolshell.cn/articles/date/2011/07">2011年7月</a>&nbsp;(6)</li>
+<li><a href="https://coolshell.cn/articles/date/2011/06">2011年6月</a>&nbsp;(12)</li>
+<li><a href="https://coolshell.cn/articles/date/2011/05">2011年5月</a>&nbsp;(5)</li>
+<li><a href="https://coolshell.cn/articles/date/2011/04">2011年4月</a>&nbsp;(18)</li>
+<li><a href="https://coolshell.cn/articles/date/2011/03">2011年3月</a>&nbsp;(16)</li>
+<li><a href="https://coolshell.cn/articles/date/2011/02">2011年2月</a>&nbsp;(16)</li>
+<li><a href="https://coolshell.cn/articles/date/2011/01">2011年1月</a>&nbsp;(18)</li>
+<li><a href="https://coolshell.cn/articles/date/2010/12">2010年12月</a>&nbsp;(11)</li>
+<li><a href="https://coolshell.cn/articles/date/2010/11">2010年11月</a>&nbsp;(11)</li>
+<li><a href="https://coolshell.cn/articles/date/2010/10">2010年10月</a>&nbsp;(19)</li>
+<li><a href="https://coolshell.cn/articles/date/2010/09">2010年9月</a>&nbsp;(15)</li>
+<li><a href="https://coolshell.cn/articles/date/2010/08">2010年8月</a>&nbsp;(10)</li>
+<li><a href="https://coolshell.cn/articles/date/2010/07">2010年7月</a>&nbsp;(20)</li>
+<li><a href="https://coolshell.cn/articles/date/2010/06">2010年6月</a>&nbsp;(9)</li>
+<li><a href="https://coolshell.cn/articles/date/2010/05">2010年5月</a>&nbsp;(13)</li>
+<li><a href="https://coolshell.cn/articles/date/2010/04">2010年4月</a>&nbsp;(12)</li>
+<li><a href="https://coolshell.cn/articles/date/2010/03">2010年3月</a>&nbsp;(11)</li>
+<li><a href="https://coolshell.cn/articles/date/2010/02">2010年2月</a>&nbsp;(7)</li>
+<li><a href="https://coolshell.cn/articles/date/2010/01">2010年1月</a>&nbsp;(9)</li>
+<li><a href="https://coolshell.cn/articles/date/2009/12">2009年12月</a>&nbsp;(22)</li>
+<li><a href="https://coolshell.cn/articles/date/2009/11">2009年11月</a>&nbsp;(27)</li>
+<li><a href="https://coolshell.cn/articles/date/2009/10">2009年10月</a>&nbsp;(17)</li>
+<li><a href="https://coolshell.cn/articles/date/2009/09">2009年9月</a>&nbsp;(14)</li>
+<li><a href="https://coolshell.cn/articles/date/2009/08">2009年8月</a>&nbsp;(21)</li>
+<li><a href="https://coolshell.cn/articles/date/2009/07">2009年7月</a>&nbsp;(18)</li>
+<li><a href="https://coolshell.cn/articles/date/2009/06">2009年6月</a>&nbsp;(19)</li>
+<li><a href="https://coolshell.cn/articles/date/2009/05">2009年5月</a>&nbsp;(27)</li>
+<li><a href="https://coolshell.cn/articles/date/2009/04">2009年4月</a>&nbsp;(53)</li>
+<li><a href="https://coolshell.cn/articles/date/2009/03">2009年3月</a>&nbsp;(43)</li>
+<li><a href="https://coolshell.cn/articles/date/2008/10">2008年10月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2007/12">2007年12月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2006/11">2006年11月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2004/06">2004年6月</a>&nbsp;(1)</li>
+</ul>
+</aside><aside id="custom_html-8" class="widget_text widget widget_custom_html"><h4 class="widget-title">友情链接</h4><div class="textwidget custom-html-widget"><ul class="blogroll">
+<li><a href="http://blog.csdn.net/haoel" target="_blank" onclick="if (!window.__cfRLUnblockHandlers) return false; pageTracker._trackPageview('/outgoing/blog.csdn.net/haoel?referer=http://coolshell.cn');" rel="noopener" data-cf-modified-81c2880153fcf3b3d2d66766->陈皓的博客</a></li>
+<li><a href="http://ifeve.com/" target="_blank" title="促进并发编程的研究和推广" onclick="if (!window.__cfRLUnblockHandlers) return false; pageTracker._trackPageview('/outgoing/ifeve.com/?referer=http://coolshell.cn');" rel="noopener" data-cf-modified-81c2880153fcf3b3d2d66766->并发编程</a></li>
+<li><a href="http://www.raychase.net/" target="_blank" title="一个啰嗦的程序员" onclick="if (!window.__cfRLUnblockHandlers) return false; pageTracker._trackPageview('/outgoing/www.raychase.net/?referer=http://coolshell.cn');" rel="noopener" data-cf-modified-81c2880153fcf3b3d2d66766->四火的唠叨</a></li>
+<li><a href="http://www.cnblogs.com/weidagang2046/" target="_blank" title="Just for Fun" onclick="if (!window.__cfRLUnblockHandlers) return false; pageTracker._trackPageview('/outgoing/http://www.cnblogs.com/weidagang2046/?referer=http://coolshell.cn/');" rel="noopener" data-cf-modified-81c2880153fcf3b3d2d66766->Todd Wei的Blog</a></li>
+<li><a href="http://www.hellogcc.org/" target="_blank" title="致力于讨论和学习GNU Toolchain方面的工作组" onclick="if (!window.__cfRLUnblockHandlers) return false; pageTracker._trackPageview('/outgoing/www.hellogcc.org//?referer=http://coolshell.cn/');" rel="noopener" data-cf-modified-81c2880153fcf3b3d2d66766->开源开发工具技术博客</a></li>
+<li><a href="http://www.cppfans.org/" target="_blank" title="记录我们点滴学习工作生活" onclick="if (!window.__cfRLUnblockHandlers) return false; pageTracker._trackPageview('/outgoing/http://www.cppfans.org/?referer=http://coolshell.cn/');" rel="noopener" data-cf-modified-81c2880153fcf3b3d2d66766->C++爱好者博客</a></li>
+<li><a href="https://HelloACM.com/" target="_blank" title="Smart Ideas, Smart Algorithms" onclick="if (!window.__cfRLUnblockHandlers) return false; pageTracker._trackPageview('/outgoing/http://HelloACM.com/?referer=http://coolshell.cn/');" rel="noopener" data-cf-modified-81c2880153fcf3b3d2d66766->ACMer</a></li>
+</ul>
+</div></aside><aside id="meta-5" class="widget widget_meta"><h4 class="widget-title">其他操作</h4>
+<ul>
+<li><a href="https://coolshell.cn/wp-login.php?action=register">注册</a></li> <li><a href="https://coolshell.cn/wp-login.php">登录</a></li>
+<li><a href="https://coolshell.cn/feed">条目feed</a></li>
+<li><a href="https://coolshell.cn/comments/feed">评论feed</a></li>
+<li><a href="https://cn.wordpress.org/">WordPress.org</a></li>
+</ul>
+</aside></div>
+</div> 
+</div>
+<script type="81c2880153fcf3b3d2d66766-text/javascript">
+	var _gaq = _gaq || [];
+	_gaq.push(['_setAccount', 'UA-7486123-1']);
+_gaq.push(['_trackPageview']);
+
+	(function() {
+		var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+		ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+		var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+	})();
+</script>
+</div>
+<footer id="colophon" class="site-footer" role="contentinfo">
+<div class="row site-info">
+CoolShell.cn &copy; 2023
+<span class="sep"> | </span>
+Powered by <a href="https://wordpress.org/">WordPress</a>
+<span class="sep"> | </span>
+Based on Theme: Nisarg by <a href="http://www.falgunidesai.com/" rel="designer">Falguni Desai</a>.
+<p><a href="http://www.beian.miit.gov.cn" target="_target">京ICP备18054967号-1</a></p>
+</div>
+</footer>
+</div>
+<script type="81c2880153fcf3b3d2d66766-text/javascript" id="wp-postratings-js-extra">
+/* <![CDATA[ */
+var ratingsL10n = {"plugin_url":"https:\/\/coolshell.cn\/wp-content\/plugins\/wp-postratings","ajax_url":"https:\/\/coolshell.cn\/wp-admin\/admin-ajax.php","text_wait":"Please rate only 1 item at a time.","image":"stars_crystal","image_ext":"gif","max":"5","show_loading":"1","show_fading":"1","custom":"0"};
+var ratings_mouseover_image=new Image();ratings_mouseover_image.src="https://coolshell.cn/wp-content/plugins/wp-postratings/images/stars_crystal/rating_over.gif";;
+/* ]]> */
+</script>
+<script type="81c2880153fcf3b3d2d66766-text/javascript" src="https://coolshell.cn/wp-content/plugins/wp-postratings/js/postratings-js.js?ver=1.90.1" id="wp-postratings-js"></script>
+<script type="81c2880153fcf3b3d2d66766-text/javascript" id="wp-postviews-cache-js-extra">
+/* <![CDATA[ */
+var viewsCacheL10n = {"admin_ajax_url":"https:\/\/coolshell.cn\/wp-admin\/admin-ajax.php","nonce":"4731639b7a","post_id":"1547"};
+/* ]]> */
+</script>
+<script type="81c2880153fcf3b3d2d66766-text/javascript" src="https://coolshell.cn/wp-content/plugins/wp-postviews/postviews-cache.js?ver=1.68" id="wp-postviews-cache-js"></script>
+<script type="81c2880153fcf3b3d2d66766-text/javascript" src="https://coolshell.cn/wp-content/themes/MyNisarg/js/bootstrap.js?ver=6.2" id="bootstrap-js"></script>
+<script type="81c2880153fcf3b3d2d66766-text/javascript" src="https://coolshell.cn/wp-content/themes/MyNisarg/js/skip-link-focus-fix.js?ver=20130115" id="nisarg-skip-link-focus-fix-js"></script>
+<script type="81c2880153fcf3b3d2d66766-text/javascript" src="https://coolshell.cn/wp-content/themes/MyNisarg/js/nisarg.js?ver=6.2" id="nisarg-js-js"></script>
+<script type="81c2880153fcf3b3d2d66766-text/javascript" src="https://coolshell.cn/wp-includes/js/comment-reply.min.js?ver=6.2" id="comment-reply-js"></script>
+<script type="81c2880153fcf3b3d2d66766-text/javascript" id="q2w3_fixed_widget-js-extra">
+/* <![CDATA[ */
+var q2w3_sidebar_options = [{"use_sticky_position":false,"margin_top":50,"margin_bottom":0,"stop_elements_selectors":"","screen_max_width":0,"screen_max_height":0,"widgets":[]}];
+/* ]]> */
+</script>
+<script type="81c2880153fcf3b3d2d66766-text/javascript" src="https://coolshell.cn/wp-content/plugins/q2w3-fixed-widget/js/frontend.min.js?ver=6.2.3" id="q2w3_fixed_widget-js"></script>
+<script type="81c2880153fcf3b3d2d66766-text/javascript" src="https://coolshell.cn/wp-content/plugins/enlighter/cache/enlighterjs.min.js?ver=0cuVQBPCj0viGB0" id="enlighterjs-js"></script>
+<script type="81c2880153fcf3b3d2d66766-text/javascript" id="enlighterjs-js-after">
+!function(e,n){if("undefined"!=typeof EnlighterJS){var o={"selectors":{"block":"pre.EnlighterJSRAW","inline":"code.EnlighterJSRAW"},"options":{"indent":2,"ampersandCleanup":true,"linehover":true,"rawcodeDbclick":true,"textOverflow":"scroll","linenumbers":true,"theme":"wpcustom","language":"generic","retainCssClasses":false,"collapse":false,"toolbarOuter":"","toolbarTop":"{BTN_RAW}{BTN_COPY}{BTN_WINDOW}{BTN_WEBSITE}","toolbarBottom":""}};(e.EnlighterJSINIT=function(){EnlighterJS.init(o.selectors.block,o.selectors.inline,o.options)})()}else{(n&&(n.error||n.log)||function(){})("Error: EnlighterJS resources not loaded yet!")}}(window,console);
+</script>
+<script defer type="81c2880153fcf3b3d2d66766-text/javascript" src="https://coolshell.cn/wp-content/plugins/akismet/_inc/akismet-frontend.js?ver=1683523750" id="akismet-frontend-js"></script>
+<script type="81c2880153fcf3b3d2d66766-text/javascript">
+        jQuery(document).ready(function ($) {
+
+            for (let i = 0; i < document.forms.length; ++i) {
+                let form = document.forms[i];
+				if ($(form).attr("method") != "get") { $(form).append('<input type="hidden" name="HLY_NVGfRIyiO" value="A*FRUYw" />'); }
+if ($(form).attr("method") != "get") { $(form).append('<input type="hidden" name="rfNmPJFxZlE" value="PcJd0F3kneCMpW" />'); }
+            }
+
+            $(document).on('submit', 'form', function () {
+				if ($(this).attr("method") != "get") { $(this).append('<input type="hidden" name="HLY_NVGfRIyiO" value="A*FRUYw" />'); }
+if ($(this).attr("method") != "get") { $(this).append('<input type="hidden" name="rfNmPJFxZlE" value="PcJd0F3kneCMpW" />'); }
+                return true;
+            });
+
+            jQuery.ajaxSetup({
+                beforeSend: function (e, data) {
+
+                    if (data.type !== 'POST') return;
+
+                    if (typeof data.data === 'object' && data.data !== null) {
+						data.data.append("HLY_NVGfRIyiO", "A*FRUYw");
+data.data.append("rfNmPJFxZlE", "PcJd0F3kneCMpW");
+                    }
+                    else {
+                        data.data = data.data + '&HLY_NVGfRIyiO=A*FRUYw&rfNmPJFxZlE=PcJd0F3kneCMpW';
+                    }
+                }
+            });
+
+        });
+    </script>
+<script src="/cdn-cgi/scripts/7d0fa10a/cloudflare-static/rocket-loader.min.js" data-cf-settings="81c2880153fcf3b3d2d66766-|49" defer></script></body>
+</html>
+<script type="81c2880153fcf3b3d2d66766-text/javascript" src="https://cdn.jsdelivr.net/gh/haoel/anti-baidu/js/anti-baidu-latest.min.js" charset="UTF-8"></script>
+
+
+

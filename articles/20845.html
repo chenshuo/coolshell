@@ -1,0 +1,1736 @@
+<!DOCTYPE html>
+<!--[if IE 8]>
+<html id="ie8" dir="ltr" lang="zh-CN"
+	prefix="og: https://ogp.me/ns#" >
+<![endif]-->
+<!--[if !(IE 8) ]><!-->
+<html dir="ltr" lang="zh-CN" prefix="og: https://ogp.me/ns#">
+<!--<![endif]-->
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width" />
+<link rel="profile" href="https://gmpg.org/xfn/11" />
+<link rel="pingback" href="https://coolshell.cn/xmlrpc.php" />
+<link rel="shortcut icon" href="/favicon.png">
+<title>Rust语言的编程范式 | 酷 壳 - CoolShell</title>
+
+<meta name="robots" content="max-image-preview:large" />
+<meta name="keywords" content="c++,java,rust,rust 语言,编程语言" />
+<link rel="canonical" href="https://coolshell.cn/articles/20845.html" />
+<meta name="generator" content="All in One SEO (AIOSEO) 4.3.6.1 " />
+<meta property="og:locale" content="zh_CN" />
+<meta property="og:site_name" content="酷 壳 - CoolShell" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="Rust语言的编程范式 | 酷 壳 - CoolShell" />
+<meta property="og:url" content="https://coolshell.cn/articles/20845.html" />
+<meta property="og:image" content="https://coolshell.cn/wp-content/uploads/2020/03/rust-social-wide.jpg" />
+<meta property="og:image:secure_url" content="https://coolshell.cn/wp-content/uploads/2020/03/rust-social-wide.jpg" />
+<meta property="og:image:width" content="2048" />
+<meta property="og:image:height" content="1024" />
+<meta property="article:published_time" content="2020-04-04T06:48:23+00:00" />
+<meta property="article:modified_time" content="2022-08-10T08:01:42+00:00" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="Rust语言的编程范式 | 酷 壳 - CoolShell" />
+<meta name="twitter:image" content="https://coolshell.cn/wp-content/uploads/2020/03/rust-social-wide.jpg" />
+<script type="application/ld+json" class="aioseo-schema">
+			{"@context":"https:\/\/schema.org","@graph":[{"@type":"Article","@id":"https:\/\/coolshell.cn\/articles\/20845.html#article","name":"Rust\u8bed\u8a00\u7684\u7f16\u7a0b\u8303\u5f0f | \u9177 \u58f3 - CoolShell","headline":"Rust\u8bed\u8a00\u7684\u7f16\u7a0b\u8303\u5f0f","author":{"@id":"https:\/\/coolshell.cn\/articles\/author\/haoel#author"},"publisher":{"@id":"https:\/\/coolshell.cn\/#organization"},"image":{"@type":"ImageObject","url":"https:\/\/coolshell.cn\/wp-content\/uploads\/2020\/03\/rust-social-wide.jpg","@id":"https:\/\/coolshell.cn\/#articleImage","width":2048,"height":1024},"datePublished":"2020-04-04T06:48:23+08:00","dateModified":"2022-08-10T08:01:42+08:00","inLanguage":"zh-CN","commentCount":107,"mainEntityOfPage":{"@id":"https:\/\/coolshell.cn\/articles\/20845.html#webpage"},"isPartOf":{"@id":"https:\/\/coolshell.cn\/articles\/20845.html#webpage"},"articleSection":"Rust \u8bed\u8a00, \u7f16\u7a0b\u8bed\u8a00, C++, Java, Rust"},{"@type":"BreadcrumbList","@id":"https:\/\/coolshell.cn\/articles\/20845.html#breadcrumblist","itemListElement":[{"@type":"ListItem","@id":"https:\/\/coolshell.cn\/#listItem","position":1,"item":{"@type":"WebPage","@id":"https:\/\/coolshell.cn\/","name":"\u4e3b\u9801","description":"\u4eab\u53d7\u7f16\u7a0b\u548c\u6280\u672f\u6240\u5e26\u6765\u7684\u5feb\u4e50 \u2013 https:\/\/coolshell.cn","url":"https:\/\/coolshell.cn\/"}}]},{"@type":"Organization","@id":"https:\/\/coolshell.cn\/#organization","name":"\u9177\u58f3-CoolShell","url":"https:\/\/coolshell.cn\/","logo":{"@type":"ImageObject","url":"https:\/\/coolshell.cn\/wp-content\/uploads\/2020\/04\/mini.logo_.png","@id":"https:\/\/coolshell.cn\/#organizationLogo","width":306,"height":306},"image":{"@id":"https:\/\/coolshell.cn\/#organizationLogo"}},{"@type":"Person","@id":"https:\/\/coolshell.cn\/articles\/author\/haoel#author","url":"https:\/\/coolshell.cn\/articles\/author\/haoel","name":"\u9648\u7693","image":{"@type":"ImageObject","@id":"https:\/\/coolshell.cn\/articles\/20845.html#authorImage","url":"https:\/\/secure.gravatar.com\/avatar\/af2fbb7372dd5826e44d87e6ceccea40?s=96&d=mm&r=g","width":96,"height":96,"caption":"\u9648\u7693"}},{"@type":"WebPage","@id":"https:\/\/coolshell.cn\/articles\/20845.html#webpage","url":"https:\/\/coolshell.cn\/articles\/20845.html","name":"Rust\u8bed\u8a00\u7684\u7f16\u7a0b\u8303\u5f0f | \u9177 \u58f3 - CoolShell","inLanguage":"zh-CN","isPartOf":{"@id":"https:\/\/coolshell.cn\/#website"},"breadcrumb":{"@id":"https:\/\/coolshell.cn\/articles\/20845.html#breadcrumblist"},"author":{"@id":"https:\/\/coolshell.cn\/articles\/author\/haoel#author"},"creator":{"@id":"https:\/\/coolshell.cn\/articles\/author\/haoel#author"},"datePublished":"2020-04-04T06:48:23+08:00","dateModified":"2022-08-10T08:01:42+08:00"},{"@type":"WebSite","@id":"https:\/\/coolshell.cn\/#website","url":"https:\/\/coolshell.cn\/","name":"\u9177 \u58f3 - CoolShell","description":"\u4eab\u53d7\u7f16\u7a0b\u548c\u6280\u672f\u6240\u5e26\u6765\u7684\u5feb\u4e50 - Coding Your Ambition","inLanguage":"zh-CN","publisher":{"@id":"https:\/\/coolshell.cn\/#organization"}}]}
+		</script>
+<script type="e3b98322319635b96aca3b62-text/javascript">
+			window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+			ga('create', "UA-7486123-1", { 'cookieDomain': 'coolshell.cn' } );
+			ga('send', 'pageview');
+		</script>
+<script async src="https://www.google-analytics.com/analytics.js" type="e3b98322319635b96aca3b62-text/javascript"></script>
+
+<link rel="dns-prefetch" href="//fonts.googleapis.com" />
+<link rel="alternate" type="application/rss+xml" title="酷 壳 - CoolShell &raquo; Feed" href="https://coolshell.cn/feed" />
+<link rel="alternate" type="application/rss+xml" title="酷 壳 - CoolShell &raquo; 评论Feed" href="https://coolshell.cn/comments/feed" />
+<link rel="alternate" type="application/rss+xml" title="酷 壳 - CoolShell &raquo; Rust语言的编程范式评论Feed" href="https://coolshell.cn/articles/20845.html/feed" />
+<script type="e3b98322319635b96aca3b62-text/javascript">
+window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/14.0.0\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/14.0.0\/svg\/","svgExt":".svg","source":{"concatemoji":"https:\/\/coolshell.cn\/wp-includes\/js\/wp-emoji-release.min.js?ver=6.2"}};
+/*! This file is auto-generated */
+!function(e,a,t){var n,r,o,i=a.createElement("canvas"),p=i.getContext&&i.getContext("2d");function s(e,t){p.clearRect(0,0,i.width,i.height),p.fillText(e,0,0);e=i.toDataURL();return p.clearRect(0,0,i.width,i.height),p.fillText(t,0,0),e===i.toDataURL()}function c(e){var t=a.createElement("script");t.src=e,t.defer=t.type="text/javascript",a.getElementsByTagName("head")[0].appendChild(t)}for(o=Array("flag","emoji"),t.supports={everything:!0,everythingExceptFlag:!0},r=0;r<o.length;r++)t.supports[o[r]]=function(e){if(p&&p.fillText)switch(p.textBaseline="top",p.font="600 32px Arial",e){case"flag":return s("\ud83c\udff3\ufe0f\u200d\u26a7\ufe0f","\ud83c\udff3\ufe0f\u200b\u26a7\ufe0f")?!1:!s("\ud83c\uddfa\ud83c\uddf3","\ud83c\uddfa\u200b\ud83c\uddf3")&&!s("\ud83c\udff4\udb40\udc67\udb40\udc62\udb40\udc65\udb40\udc6e\udb40\udc67\udb40\udc7f","\ud83c\udff4\u200b\udb40\udc67\u200b\udb40\udc62\u200b\udb40\udc65\u200b\udb40\udc6e\u200b\udb40\udc67\u200b\udb40\udc7f");case"emoji":return!s("\ud83e\udef1\ud83c\udffb\u200d\ud83e\udef2\ud83c\udfff","\ud83e\udef1\ud83c\udffb\u200b\ud83e\udef2\ud83c\udfff")}return!1}(o[r]),t.supports.everything=t.supports.everything&&t.supports[o[r]],"flag"!==o[r]&&(t.supports.everythingExceptFlag=t.supports.everythingExceptFlag&&t.supports[o[r]]);t.supports.everythingExceptFlag=t.supports.everythingExceptFlag&&!t.supports.flag,t.DOMReady=!1,t.readyCallback=function(){t.DOMReady=!0},t.supports.everything||(n=function(){t.readyCallback()},a.addEventListener?(a.addEventListener("DOMContentLoaded",n,!1),e.addEventListener("load",n,!1)):(e.attachEvent("onload",n),a.attachEvent("onreadystatechange",function(){"complete"===a.readyState&&t.readyCallback()})),(e=t.source||{}).concatemoji?c(e.concatemoji):e.wpemoji&&e.twemoji&&(c(e.twemoji),c(e.wpemoji)))}(window,document,window._wpemojiSettings);
+</script>
+<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 0.07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+<link rel="stylesheet" id="series_font-css" href="https://coolshell.cn/wp-content/plugins/simple-post-series/inc/icomoon/style.css?ver=2.4" type="text/css" media="all" />
+<link rel="stylesheet" id="wp-block-library-css" href="https://coolshell.cn/wp-content/plugins/gutenberg/build/block-library/style.css?ver=15.7.0" type="text/css" media="all" />
+<link rel="stylesheet" id="classic-theme-styles-css" href="https://coolshell.cn/wp-includes/css/classic-themes.min.css?ver=6.2" type="text/css" media="all" />
+<style id="global-styles-inline-css" type="text/css">
+body{--wp--preset--color--black: #000000;--wp--preset--color--cyan-bluish-gray: #abb8c3;--wp--preset--color--white: #ffffff;--wp--preset--color--pale-pink: #f78da7;--wp--preset--color--vivid-red: #cf2e2e;--wp--preset--color--luminous-vivid-orange: #ff6900;--wp--preset--color--luminous-vivid-amber: #fcb900;--wp--preset--color--light-green-cyan: #7bdcb5;--wp--preset--color--vivid-green-cyan: #00d084;--wp--preset--color--pale-cyan-blue: #8ed1fc;--wp--preset--color--vivid-cyan-blue: #0693e3;--wp--preset--color--vivid-purple: #9b51e0;--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple: linear-gradient(135deg,rgba(6,147,227,1) 0%,rgb(155,81,224) 100%);--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan: linear-gradient(135deg,rgb(122,220,180) 0%,rgb(0,208,130) 100%);--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange: linear-gradient(135deg,rgba(252,185,0,1) 0%,rgba(255,105,0,1) 100%);--wp--preset--gradient--luminous-vivid-orange-to-vivid-red: linear-gradient(135deg,rgba(255,105,0,1) 0%,rgb(207,46,46) 100%);--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray: linear-gradient(135deg,rgb(238,238,238) 0%,rgb(169,184,195) 100%);--wp--preset--gradient--cool-to-warm-spectrum: linear-gradient(135deg,rgb(74,234,220) 0%,rgb(151,120,209) 20%,rgb(207,42,186) 40%,rgb(238,44,130) 60%,rgb(251,105,98) 80%,rgb(254,248,76) 100%);--wp--preset--gradient--blush-light-purple: linear-gradient(135deg,rgb(255,206,236) 0%,rgb(152,150,240) 100%);--wp--preset--gradient--blush-bordeaux: linear-gradient(135deg,rgb(254,205,165) 0%,rgb(254,45,45) 50%,rgb(107,0,62) 100%);--wp--preset--gradient--luminous-dusk: linear-gradient(135deg,rgb(255,203,112) 0%,rgb(199,81,192) 50%,rgb(65,88,208) 100%);--wp--preset--gradient--pale-ocean: linear-gradient(135deg,rgb(255,245,203) 0%,rgb(182,227,212) 50%,rgb(51,167,181) 100%);--wp--preset--gradient--electric-grass: linear-gradient(135deg,rgb(202,248,128) 0%,rgb(113,206,126) 100%);--wp--preset--gradient--midnight: linear-gradient(135deg,rgb(2,3,129) 0%,rgb(40,116,252) 100%);--wp--preset--font-size--small: 13px;--wp--preset--font-size--medium: 20px;--wp--preset--font-size--large: 36px;--wp--preset--font-size--x-large: 42px;--wp--preset--spacing--20: 0.44rem;--wp--preset--spacing--30: 0.67rem;--wp--preset--spacing--40: 1rem;--wp--preset--spacing--50: 1.5rem;--wp--preset--spacing--60: 2.25rem;--wp--preset--spacing--70: 3.38rem;--wp--preset--spacing--80: 5.06rem;--wp--preset--shadow--natural: 6px 6px 9px rgba(0, 0, 0, 0.2);--wp--preset--shadow--deep: 12px 12px 50px rgba(0, 0, 0, 0.4);--wp--preset--shadow--sharp: 6px 6px 0px rgba(0, 0, 0, 0.2);--wp--preset--shadow--outlined: 6px 6px 0px -3px rgba(255, 255, 255, 1), 6px 6px rgba(0, 0, 0, 1);--wp--preset--shadow--crisp: 6px 6px 0px rgba(0, 0, 0, 1);}:where(.is-layout-flex){gap: 0.5em;}body .is-layout-flow > .alignleft{float: left;margin-inline-start: 0;margin-inline-end: 2em;}body .is-layout-flow > .alignright{float: right;margin-inline-start: 2em;margin-inline-end: 0;}body .is-layout-flow > .aligncenter{margin-left: auto !important;margin-right: auto !important;}body .is-layout-constrained > .alignleft{float: left;margin-inline-start: 0;margin-inline-end: 2em;}body .is-layout-constrained > .alignright{float: right;margin-inline-start: 2em;margin-inline-end: 0;}body .is-layout-constrained > .aligncenter{margin-left: auto !important;margin-right: auto !important;}body .is-layout-constrained > :where(:not(.alignleft):not(.alignright):not(.alignfull)){max-width: var(--wp--style--global--content-size);margin-left: auto !important;margin-right: auto !important;}body .is-layout-constrained > .alignwide{max-width: var(--wp--style--global--wide-size);}body .is-layout-flex{display: flex;}body .is-layout-flex{flex-wrap: wrap;align-items: center;}body .is-layout-flex > *{margin: 0;}body .is-layout-grid{display: grid;}body .is-layout-grid > *{margin: 0;}:where(.wp-block-columns.is-layout-flex){gap: 2em;}.has-black-color{color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-color{color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-color{color: var(--wp--preset--color--white) !important;}.has-pale-pink-color{color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-color{color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-color{color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-color{color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-color{color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-color{color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-color{color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-color{color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-color{color: var(--wp--preset--color--vivid-purple) !important;}.has-black-background-color{background-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-background-color{background-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-background-color{background-color: var(--wp--preset--color--white) !important;}.has-pale-pink-background-color{background-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-background-color{background-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-background-color{background-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-background-color{background-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-background-color{background-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-background-color{background-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-background-color{background-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-background-color{background-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-background-color{background-color: var(--wp--preset--color--vivid-purple) !important;}.has-black-border-color{border-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-border-color{border-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-border-color{border-color: var(--wp--preset--color--white) !important;}.has-pale-pink-border-color{border-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-border-color{border-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-border-color{border-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-border-color{border-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-border-color{border-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-border-color{border-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-border-color{border-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-border-color{border-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-border-color{border-color: var(--wp--preset--color--vivid-purple) !important;}.has-vivid-cyan-blue-to-vivid-purple-gradient-background{background: var(--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple) !important;}.has-light-green-cyan-to-vivid-green-cyan-gradient-background{background: var(--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan) !important;}.has-luminous-vivid-amber-to-luminous-vivid-orange-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange) !important;}.has-luminous-vivid-orange-to-vivid-red-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-orange-to-vivid-red) !important;}.has-very-light-gray-to-cyan-bluish-gray-gradient-background{background: var(--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray) !important;}.has-cool-to-warm-spectrum-gradient-background{background: var(--wp--preset--gradient--cool-to-warm-spectrum) !important;}.has-blush-light-purple-gradient-background{background: var(--wp--preset--gradient--blush-light-purple) !important;}.has-blush-bordeaux-gradient-background{background: var(--wp--preset--gradient--blush-bordeaux) !important;}.has-luminous-dusk-gradient-background{background: var(--wp--preset--gradient--luminous-dusk) !important;}.has-pale-ocean-gradient-background{background: var(--wp--preset--gradient--pale-ocean) !important;}.has-electric-grass-gradient-background{background: var(--wp--preset--gradient--electric-grass) !important;}.has-midnight-gradient-background{background: var(--wp--preset--gradient--midnight) !important;}.has-small-font-size{font-size: var(--wp--preset--font-size--small) !important;}.has-medium-font-size{font-size: var(--wp--preset--font-size--medium) !important;}.has-large-font-size{font-size: var(--wp--preset--font-size--large) !important;}.has-x-large-font-size{font-size: var(--wp--preset--font-size--x-large) !important;}
+:where(.wp-block-columns.is-layout-flex){gap: 2em;}
+.wp-block-pullquote{font-size: 1.5em;line-height: 1.6;}
+.wp-block-navigation a:where(:not(.wp-element-button)){color: inherit;}
+</style>
+<link rel="stylesheet" id="wp-postratings-css" href="https://coolshell.cn/wp-content/plugins/wp-postratings/css/postratings-css.css?ver=1.90.1" type="text/css" media="all" />
+<link rel="stylesheet" id="wp-pagenavi-css" href="https://coolshell.cn/wp-content/plugins/wp-pagenavi/pagenavi-css.css?ver=2.70" type="text/css" media="all" />
+<link rel="stylesheet" id="ez-toc-css" href="https://coolshell.cn/wp-content/plugins/easy-table-of-contents/assets/css/screen.min.css?ver=2.0.48" type="text/css" media="all" />
+<style id="ez-toc-inline-css" type="text/css">
+div#ez-toc-container p.ez-toc-title {font-size: 120%;}div#ez-toc-container p.ez-toc-title {font-weight: 500;}div#ez-toc-container ul li {font-size: 95%;}div#ez-toc-container nav ul ul li ul li {font-size: %!important;}
+.ez-toc-container-direction {direction: ltr;}.ez-toc-counter ul{counter-reset: item;}.ez-toc-counter nav ul li a::before {content: counters(item, ".", decimal) ". ";display: inline-block;counter-increment: item;flex-grow: 0;flex-shrink: 0;margin-right: .2em; float: left;}.ez-toc-widget-direction {direction: ltr;}.ez-toc-widget-container ul{counter-reset: item;}.ez-toc-widget-container nav ul li a::before {content: counters(item, ".", decimal) ". ";display: inline-block;counter-increment: item;flex-grow: 0;flex-shrink: 0;margin-right: .2em; float: left;}
+</style>
+<link rel="stylesheet" id="bootstrap-css" href="https://coolshell.cn/wp-content/themes/MyNisarg/css/bootstrap.css?ver=6.2" type="text/css" media="all" />
+<link rel="stylesheet" id="nisarg-style-css" href="https://coolshell.cn/wp-content/themes/MyNisarg/style.css?ver=6.2" type="text/css" media="all" />
+<style id="nisarg-style-inline-css" type="text/css">
+	/* Color Scheme */
+
+	/* Accent Color */
+
+	a:active,
+	a:hover,
+	a:focus {
+	    color: #009688;
+	}
+
+	.navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus {
+		color: #009688;
+	}
+
+	
+	.navbar-default .navbar-nav > .active > a, .navbar-default .navbar-nav > .active > a:hover, .navbar-default .navbar-nav > .active > a:focus {
+		color: #009688;			
+	}
+
+	@media (min-width: 768px){
+		.navbar-default .navbar-nav > .active > a, .navbar-default .navbar-nav > .active > a:hover, .navbar-default .navbar-nav > .active > a:focus {
+			border-top: 4px solid #009688;
+		}		
+	}
+
+	.dropdown-menu > .active > a, .dropdown-menu > .active > a:hover, .dropdown-menu > .active > a:focus {	    
+	    background-color: #009688;
+	}
+
+
+	.navbar-default .navbar-nav > .open > a, .navbar-default .navbar-nav > .open > a:hover, .navbar-default .navbar-nav > .open > a:focus {
+		color: #009688;
+	}
+
+	.navbar-default .navbar-nav > li > .dropdown-menu > li > a:hover,
+	.navbar-default .navbar-nav > li > .dropdown-menu > li > a:focus {
+		color: #fff;
+		background-color: #009688;
+	}
+
+	.navbar-default .navbar-nav .open .dropdown-menu > .active > a, .navbar-default .navbar-nav .open .dropdown-menu > .active > a:hover, .navbar-default .navbar-nav .open .dropdown-menu > .active > a:focus {
+		background-color: #fff;
+		color: #009688;
+	}
+
+	@media (max-width: 767px) {
+		.navbar-default .navbar-nav .open .dropdown-menu > li > a:hover {
+			background-color: #009688;
+			color: #fff;
+		}
+	}
+
+	.sticky-post{
+	    background: #009688;
+	    color:white;
+	}
+	
+	.entry-title a:hover,
+	.entry-title a:focus{
+	    color: #009688;
+	}
+
+	.entry-header .entry-meta::after{
+	    background: #009688;
+	}
+
+	.fa {
+		color: #009688;
+	}
+
+	.btn-default{
+		border-bottom: 1px solid #009688;
+	}
+
+	.btn-default:hover, .btn-default:focus{
+	    border-bottom: 1px solid #009688;
+	    background-color: #009688;
+	}
+
+	.nav-previous:hover, .nav-next:hover{
+	    border: 1px solid #009688;
+	    background-color: #009688;
+	}
+
+	.next-post a:hover,.prev-post a:hover{
+	    color: #009688;
+	}
+
+	.posts-navigation .next-post a:hover .fa, .posts-navigation .prev-post a:hover .fa{
+	    color: #009688;
+	}
+
+
+	#secondary .widget-title::after{
+		background-color: #009688;
+	    content: "";
+	    position: absolute;
+	    width: 75px;
+	    display: block;
+	    height: 4px;    
+	    bottom: -15px;
+	}
+
+	#secondary .widget a:hover,
+	#secondary .widget a:focus{
+		color: #009688;
+	}
+
+	#secondary .widget_calendar tbody a {
+	    background-color: #009688;
+	    color: #fff;
+	    padding: 0.2em;
+	}
+
+	#secondary .widget_calendar tbody a:hover{
+	    background-color: #009688;
+	    color: #fff;
+	    padding: 0.2em;
+	}	
+
+</style>
+<link rel="stylesheet" id="font-awesome-css" href="https://coolshell.cn/wp-content/themes/MyNisarg/font-awesome/css/font-awesome.min.css?ver=6.2" type="text/css" media="all" />
+<link rel="stylesheet" id="nisarggooglefonts-css" href="//fonts.googleapis.com/css?family=Lato:400,300italic,700|Source+Sans+Pro:400,400italic" type="text/css" media="all" />
+<link rel="stylesheet" id="enlighterjs-css" href="https://coolshell.cn/wp-content/plugins/enlighter/cache/enlighterjs.min.css?ver=0cuVQBPCj0viGB0" type="text/css" media="all" />
+<script type="e3b98322319635b96aca3b62-text/javascript" src="https://coolshell.cn/wp-includes/js/jquery/jquery.min.js?ver=3.6.3" id="jquery-core-js"></script>
+<script type="e3b98322319635b96aca3b62-text/javascript" src="https://coolshell.cn/wp-includes/js/jquery/jquery-migrate.min.js?ver=3.4.0" id="jquery-migrate-js"></script>
+<script type="e3b98322319635b96aca3b62-text/javascript" src="https://coolshell.cn/wp-content/plugins/simple-post-series/autohide.js?ver=2.4" id="series-js"></script>
+<script type="e3b98322319635b96aca3b62-text/javascript" id="ez-toc-scroll-scriptjs-js-after">
+jQuery(document).ready(function(){document.querySelectorAll(".ez-toc-section").forEach(t=>{t.setAttribute("ez-toc-data-id","#"+decodeURI(t.getAttribute("id")))}),jQuery("a.ez-toc-link").click(function(){let t=jQuery(this).attr("href"),e=jQuery("#wpadminbar"),i=0;30>30&&(i=30),e.length&&(i+=e.height()),jQuery('[ez-toc-data-id="'+decodeURI(t)+'"]').length>0&&(i=jQuery('[ez-toc-data-id="'+decodeURI(t)+'"]').offset().top-i),jQuery("html, body").animate({scrollTop:i},500)})});
+</script>
+<!--[if lt IE 9]>
+<script type='text/javascript' src='https://coolshell.cn/wp-content/themes/MyNisarg/js/html5shiv.js?ver=3.7.3' id='html5shiv-js'></script>
+<![endif]-->
+<link rel="https://api.w.org/" href="https://coolshell.cn/wp-json/" /><link rel="alternate" type="application/json" href="https://coolshell.cn/wp-json/wp/v2/posts/20845" /><link rel="EditURI" type="application/rsd+xml" title="RSD" href="https://coolshell.cn/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="https://coolshell.cn/wp-includes/wlwmanifest.xml" />
+<meta name="generator" content="WordPress 6.2" />
+<link rel="shortlink" href="https://coolshell.cn/?p=20845" />
+<link rel="alternate" type="application/json+oembed" href="https://coolshell.cn/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fcoolshell.cn%2Farticles%2F20845.html" />
+<link rel="alternate" type="text/xml+oembed" href="https://coolshell.cn/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fcoolshell.cn%2Farticles%2F20845.html&#038;format=xml" />
+<script type="e3b98322319635b96aca3b62-text/javascript">
+	window._wp_rp_static_base_url = 'https://wprp.zemanta.com/static/';
+	window._wp_rp_wp_ajax_url = "https://coolshell.cn/wp-admin/admin-ajax.php";
+	window._wp_rp_plugin_version = '3.6.4';
+	window._wp_rp_post_id = '20845';
+	window._wp_rp_num_rel_posts = '6';
+	window._wp_rp_thumbnails = true;
+	window._wp_rp_post_title = 'Rust%E8%AF%AD%E8%A8%80%E7%9A%84%E7%BC%96%E7%A8%8B%E8%8C%83%E5%BC%8F';
+	window._wp_rp_post_tags = ['c%2B%2B', 'rust', 'java', '%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80', 'rust+%E8%AF%AD%E8%A8%80', 'alt', 'java', 'li', 'lili', 'javascript', 'shadow', 'scala', 'trait', 'rust'];
+	window._wp_rp_promoted_content = true;
+</script>
+<link rel="stylesheet" href="https://coolshell.cn/wp-content/plugins/wordpress-23-related-posts-plugin/static/themes/vertical-m.css?version=3.6.4" />
+<style type="text/css">
+        .site-header { background: #1d2b2d; }
+</style>
+</head>
+<body class="post-template-default single single-post postid-20845 single-format-standard group-blog">
+<link rel="stylesheet" id="nisarg-style-css" href="https://coolshell.cn/wp-content/themes/MyNisarg/style.css" type="text/css" media="all">
+<div id="page" class="hfeed site">
+<header id="masthead" role="banner">
+<nav class="navbar navbar-default navbar-fixed-top navbar-left" role="navigation">
+
+<div class="container" id="navigation_menu">
+<div class="navbar-header">
+<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+<span class="sr-only">Toggle navigation</span>
+<span class="icon-bar"></span>
+<span class="icon-bar"></span>
+<span class="icon-bar"></span>
+</button>
+<a class="navbar-brand" href="https://coolshell.cn/"><div class="coolshell_logo"></div>酷 壳 &#8211; CoolShell</a>
+</div>
+<div class="collapse navbar-collapse navbar-ex1-collapse"><ul id="menu-coolshell" class="nav navbar-nav"><li id="menu-item-17405" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-17405"><a title="首页" href="https://coolshell.cn/">首页</a></li>
+<li id="menu-item-17406" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-17406"><a title="推荐文章" href="https://coolshell.cn/featured">推荐文章</a></li>
+<li id="menu-item-17407" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-17407"><a title="本站插件" href="https://coolshell.cn/plugins">本站插件</a></li>
+<li id="menu-item-17408" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-17408"><a title="留言小本" href="https://coolshell.cn/guestbook">留言小本</a></li>
+<li id="menu-item-17409" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-17409"><a title="关于酷壳" href="https://coolshell.cn/about">关于酷壳</a></li>
+<li id="menu-item-17410" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-17410"><a title="关于陈皓" href="https://coolshell.cn/haoel">关于陈皓</a></li>
+<li id="menu-item-17582" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-17582"><a title="RSS" href="https://coolshell.cn/feed">RSS</a></li>
+</ul></div>
+</div>
+</nav>
+<div id="cc_spacer"></div>
+<div class="site-header">
+<div class="pull-right">
+<a title="把这个链接拖到你的Chrome收藏夹工具栏中" href="javascript:(function(){function c(){var e=document.createElement(&quot;link&quot;);e.setAttribute(&quot;type&quot;,&quot;text/css&quot;);e.setAttribute(&quot;rel&quot;,&quot;stylesheet&quot;);e.setAttribute(&quot;href&quot;,f);e.setAttribute(&quot;class&quot;,l);document.body.appendChild(e)}function h(){var e=document.getElementsByClassName(l);for(var t=0;t<e.length;t++){document.body.removeChild(e[t])}}function p(){var e=document.createElement(&quot;div&quot;);e.setAttribute(&quot;class&quot;,a);document.body.appendChild(e);setTimeout(function(){document.body.removeChild(e)},100)}function d(e){return{height:e.offsetHeight,width:e.offsetWidth}}function v(i){var s=d(i);return s.height>e&&s.height<n&&s.width>t&&s.width<r}function m(e){var t=e;var n=0;while(!!t){n+=t.offsetTop;t=t.offsetParent}return n}function g(){var e=document.documentElement;if(!!window.innerWidth){return window.innerHeight}else if(e&&!isNaN(e.clientHeight)){return e.clientHeight}return 0}function y(){if(window.pageYOffset){return window.pageYOffset}return Math.max(document.documentElement.scrollTop,document.body.scrollTop)}function E(e){var t=m(e);return t>=w&&t<=b+w}function S(){var e=document.createElement(&quot;audio&quot;);e.setAttribute(&quot;class&quot;,l);e.src=i;e.loop=false;e.addEventListener(&quot;canplay&quot;,function(){setTimeout(function(){x(k)},500);setTimeout(function(){N();p();for(var e=0;e<O.length;e++){T(O[e])}},15500)},true);e.addEventListener(&quot;ended&quot;,function(){N();h()},true);e.innerHTML=&quot; <p>If you are reading this, it is because your browser does not support the audio element. We recommend that you get a new browser.</p> <p>&quot;;document.body.appendChild(e);e.play()}function x(e){e.className+=&quot; &quot;+s+&quot; &quot;+o}function T(e){e.className+=&quot; &quot;+s+&quot; &quot;+u[Math.floor(Math.random()*u.length)]}function N(){var e=document.getElementsByClassName(s);var t=new RegExp(&quot;\\b&quot;+s+&quot;\\b&quot;);for(var n=0;n<e.length;){e[n].className=e[n].className.replace(t,&quot;&quot;)}}var e=30;var t=30;var n=350;var r=350;var i=&quot;//s3.amazonaws.com/moovweb-marketing/playground/harlem-shake.mp3&quot;;var s=&quot;mw-harlem_shake_me&quot;;var o=&quot;im_first&quot;;var u=[&quot;im_drunk&quot;,&quot;im_baked&quot;,&quot;im_trippin&quot;,&quot;im_blown&quot;];var a=&quot;mw-strobe_light&quot;;var f=&quot;//s3.amazonaws.com/moovweb-marketing/playground/harlem-shake-style.css&quot;;var l=&quot;mw_added_css&quot;;var b=g();var w=y();var C=document.getElementsByTagName(&quot;*&quot;);var k=null;for(var L=0;L<C.length;L++){var A=C[L];if(v(A)){if(E(A)){k=A;break}}}if(A===null){console.warn(&quot;Could not find a node of the right size. Please try a different page.&quot;);return}c();S();var O=[];for(var L=0;L<C.length;L++){var A=C[L];if(v(A)){O.push(A)}}})()    ">High一下!</a>
+</div>
+<div class="site-branding">
+<a class="home-link" href="https://coolshell.cn/" title="酷 壳 &#8211; CoolShell" rel="home">
+<h1 class="site-title">酷 壳 &#8211; CoolShell</h1>
+<h2 class="site-description">享受编程和技术所带来的快乐 &#8211; Coding Your Ambition</h2>
+</a>
+</div>
+</div>
+</header>
+<div class="container">
+<div class="row">
+<div class="col-md-9 nav-searchbox hidden-lg hidden-md visible-sm-* visible-xs-*">
+<form role="search" method="get" class="search-form" action="https://coolshell.cn/">
+<label>
+<span class="screen-reader-text">Search for:</span>
+<input type="search" class="search-field" placeholder="Search …" value name="s" title="Search for:">
+</label>
+<button type="submit" class="search-submit"><span class="screen-reader-text">Search</span></button>
+</form>
+</div>
+</div>
+</div>
+<div id="content" class="site-content">
+<div class="container">
+<div class="row">
+<div id="primary" class="col-md-9 content-area">
+<main id="main" role="main">
+<article id="post-20845" class="post-content post-20845 post type-post status-publish format-standard hentry category-rust- category-proglanguage tag-c tag-java tag-rust">
+<header class="entry-header">
+<span class="screen-reader-text">Rust语言的编程范式</span>
+<h1 class="entry-title">Rust语言的编程范式</h1>
+<div class="entry-meta">
+<h5 class="entry-date"><i class="fa fa-calendar-o"></i> <a href="https://coolshell.cn/articles/20845.html" title="14:48" rel="bookmark"><time class="entry-date" datetime="2020-04-04T14:48:23+08:00" pubdate>2020年04月04日 </time></a><span class="byline"><span class="sep"></span><i class="fa fa-user"></i>
+<span class="author vcard"><a class="url fn n" href="https://coolshell.cn/articles/author/haoel" title="View all posts by 陈皓" rel="author">陈皓</a></span></span> <i class="fa fa-comments-o"></i><span class="screen-reader-text">评论 </span> <a href="https://coolshell.cn/articles/20845.html#comments" class="comments-link">107 条评论</a> <i class="fa fa-users" style="margin-left:10px;"></i> 118,446 人阅读</h5>
+</div>
+</header>
+<div class="entry-content">
+<p><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3415450859608158" crossorigin="anonymous" type="e3b98322319635b96aca3b62-text/javascript"></script><img decoding="async" class="alignright size-sup_wechat_big wp-image-20925" src="https://coolshell.cn/wp-content/uploads/2020/03/rust-social-wide-360x200.jpg" alt width="360" height="200" />总是有很多很多人来问我对Rust语言怎么看的问题，在各种地方被at，其实，我不是很想表达我的想法。因为在不同的角度，你会看到不同的东西。编程语言这个东西，老实说很难评价，在学术上来说，Lisp就是很好的语言，然而在工程使用的时候，你会发现Lisp没什么人用，而Javascript或是PHP这样在学术很糟糕设计的语言反而成了主流，你觉得C++很反人类，在我看来，C++有很多不错的设计，而且对于了解编程语言和编译器的和原理非常有帮助。<strong>但是C++也很危险，所以，出现在像Java或Go 语言来改善它，Rust本质上也是在改善C++的。他们各自都有各自的长处和优势</strong>。</p>
+<p>因为各个语言都有好有不好，因此，我不想用别的语言来说Rust的问题，或是把Rust吹成朵花以打压别的语言，写成这样的文章，是很没有营养的事。<strong>本文主要想通过Rust的语言设计来看看编程中的一些挑战，尤其是Rust重要的一些编程范式，这样反而更有意义一些，因为这样你才可能一通百通</strong>。</p>
+<p>这篇文章的篇幅比较长，而且有很多代码，信息量可能会非常大，所以，<strong>在读本文前，你需要有如下的知识准备</strong>：</p>
+<ul>
+<li>你对C++语言的一些特性和问题比较熟悉。尤其是：指针、引用、右值move、内存对象管理、泛型编程、智能指针……</li>
+<li>当然，你还要略懂Rust，不懂也没太大关系，但本文不会是Rust的教程文章，可以参看“<a href="https://doc.rust-lang.org/book/title-page.html" target="_blank" rel="noopener noreferrer">Rust的官方教程</a>”（<a href="https://kaisery.github.io/trpl-zh-cn/" target="_blank" rel="noopener noreferrer">中文版</a>）</li>
+</ul>
+<p><strong>因为本文太长，所以，我有必要写上 TL;DR ——</strong></p>
+<p><span id="more-20845"></span></p>
+<p>Java 与 Rust 在改善C/C++上走了完全不同的两条路，他们主要改善的问题就是C/C++ Safety的问题。所谓C/C++编程安全上的问题，主要是：内存的管理、数据在共享中出现的“野指针”、“野引用”的问题。</p>
+<ul>
+<li>对于这些问题，Java用引用垃圾回收再加上强大的VM字节码技术可以进行各种像反射、字节码修改的黑魔法。</li>
+<li>而Rust不玩垃圾回收，也不玩VM，所以，作为静态语言的它，只能在编译器上下工夫。如果要让编译器能够在编译时检查出一些安全问题，那么就需要程序员在编程上与Rust语言有一些约定了，其中最大的一个约定规则就是变量的所有权问题，并且还要在代码上“去糖”，比如让程序员说明一些共享引用的生命周期。</li>
+<li>Rust的这些所有权的约定造成了很大的编程上的麻烦，写Rust的程序时，基本上来说，你的程序再也不要想可能轻轻松松能编译通过了。而且，在面对一些场景的代码编写时，如：函数式的闭包，多线程的不变数据的共享，多态……开始变得有些复杂，并会让你有种找不到北的感觉。</li>
+<li>Rust的Trait很像Java的接口，通过Trait可以实现C++的拷贝构造、重载操作符、多态等操作……</li>
+<li>学习Rust的学习曲线并不平，用Rust写程序，基本上来说，一旦编译通过，代码运行起来是安全的，bug也是很少的。</li>
+</ul>
+<p><strong>如果你对Rust的概念认识的不完整，你完全写不出程序，那怕就是很简单的一段代码</strong>。<strong>这逼着程序员必需了解所有的概念才能编码。但是，另一方面也表明了这门语言并不适合初学者……</strong></p>
+<div id="ez-toc-container" class="ez-toc-v2_0_48 counter-hierarchy ez-toc-counter ez-toc-grey ez-toc-container-direction">
+<div class="ez-toc-title-container">
+<p class="ez-toc-title">目录</p>
+<span class="ez-toc-title-toggle"></span></div>
+<nav><ul class="ez-toc-list ez-toc-list-level-1 "><li class="ez-toc-page-1 ez-toc-heading-level-4"><a class="ez-toc-link ez-toc-heading-1" href="#%E5%8F%98%E9%87%8F%E7%9A%84%E5%8F%AF%E5%8F%98%E6%80%A7" title="变量的可变性">变量的可变性</a></li><li class="ez-toc-page-1 ez-toc-heading-level-4"><a class="ez-toc-link ez-toc-heading-2" href="#%E5%8F%98%E9%87%8F%E7%9A%84%E6%89%80%E6%9C%89%E6%9D%83" title="变量的所有权">变量的所有权</a></li><li class="ez-toc-page-1 ez-toc-heading-level-4"><a class="ez-toc-link ez-toc-heading-3" href="#Owner%E8%AF%AD%E4%B9%89%E5%B8%A6%E6%9D%A5%E7%9A%84%E5%A4%8D%E6%9D%82%E5%BA%A6" title="Owner语义带来的复杂度">Owner语义带来的复杂度</a></li><li class="ez-toc-page-1 ez-toc-heading-level-4"><a class="ez-toc-link ez-toc-heading-4" href="#%E5%BC%95%E7%94%A8%EF%BC%88%E5%80%9F%E7%94%A8%EF%BC%89%E5%92%8C%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F" title="引用（借用）和生命周期">引用（借用）和生命周期</a><ul class="ez-toc-list-level-5"><li class="ez-toc-heading-level-5"><a class="ez-toc-link ez-toc-heading-5" href="#%E5%BC%95%E7%94%A8%EF%BC%88%E5%80%9F%E7%94%A8%EF%BC%89" title="引用（借用）">引用（借用）</a></li><li class="ez-toc-page-1 ez-toc-heading-level-5"><a class="ez-toc-link ez-toc-heading-6" href="#%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F" title="生命周期">生命周期</a></li></ul></li><li class="ez-toc-page-1 ez-toc-heading-level-4"><a class="ez-toc-link ez-toc-heading-7" href="#%E9%97%AD%E5%8C%85%E4%B8%8E%E6%89%80%E6%9C%89%E6%9D%83" title="闭包与所有权">闭包与所有权</a><ul class="ez-toc-list-level-5"><li class="ez-toc-heading-level-5"><a class="ez-toc-link ez-toc-heading-8" href="#%E5%87%BD%E6%95%B0%E9%97%AD%E5%8C%85" title="函数闭包">函数闭包</a></li><li class="ez-toc-page-1 ez-toc-heading-level-5"><a class="ez-toc-link ez-toc-heading-9" href="#%E7%BA%BF%E7%A8%8B%E9%97%AD%E5%8C%85" title="线程闭包">线程闭包</a></li></ul></li><li class="ez-toc-page-1 ez-toc-heading-level-4"><a class="ez-toc-link ez-toc-heading-10" href="#Rust%E7%9A%84%E6%99%BA%E8%83%BD%E6%8C%87%E9%92%88" title="Rust的智能指针">Rust的智能指针</a></li><li class="ez-toc-page-1 ez-toc-heading-level-4"><a class="ez-toc-link ez-toc-heading-11" href="#%E7%BA%BF%E7%A8%8B%E4%B8%8E%E6%99%BA%E8%83%BD%E6%8C%87%E9%92%88" title="线程与智能指针">线程与智能指针</a></li><li class="ez-toc-page-1 ez-toc-heading-level-4"><a class="ez-toc-link ez-toc-heading-12" href="#%E5%A4%9A%E6%80%81%E5%92%8C%E8%BF%90%E8%A1%8C%E6%97%B6%E8%AF%86%E5%88%AB" title="多态和运行时识别">多态和运行时识别</a><ul class="ez-toc-list-level-5"><li class="ez-toc-heading-level-5"><a class="ez-toc-link ez-toc-heading-13" href="#%E9%80%9A%E8%BF%87Trait%E5%A4%9A%E6%80%81" title="通过Trait多态">通过Trait多态</a></li><li class="ez-toc-page-1 ez-toc-heading-level-5"><a class="ez-toc-link ez-toc-heading-14" href="#%E5%90%91%E4%B8%8B%E8%BD%AC%E5%9E%8B" title="向下转型">向下转型</a></li></ul></li><li class="ez-toc-page-1 ez-toc-heading-level-4"><a class="ez-toc-link ez-toc-heading-15" href="#Trait_%E9%87%8D%E8%BD%BD%E6%93%8D%E4%BD%9C%E7%AC%A6" title="Trait 重载操作符">Trait 重载操作符</a></li><li class="ez-toc-page-1 ez-toc-heading-level-4"><a class="ez-toc-link ez-toc-heading-16" href="#%E5%B0%8F%E7%BB%93" title="小结">小结</a></li></ul></nav></div>
+<h4><span class="ez-toc-section" id="%E5%8F%98%E9%87%8F%E7%9A%84%E5%8F%AF%E5%8F%98%E6%80%A7"></span>变量的可变性<span class="ez-toc-section-end"></span></h4>
+<p>首先，Rust里的变量声明默认是“不可变的”，如果你声明一个变量 <code>let x = 5;</code>  变量 <code>x</code> 是不可变的，也就是说，<code>x = y + 10;</code> 编译器会报错的。如果你要变量的话，你需要使用 <code>mut</code> 关键词，也就是要声明成 <code>let mut x = 5;</code> 表示这是一个可以改变的变量。这个是比较有趣的，因为其它主流语言在声明变量时默认是可变的，而Rust则是要反过来。这可以理解，不可变的通常来说会有更好的稳定性，而可变的会代来不稳定性。所以，Rust应该是想成为更为安全的语言，所以，默认是 immutable 的变量。当然，Rust同样有 <code>const</code> 修饰的常量。于是，Rust可以玩出这么些东西来：</p>
+<ul>
+<li>常量：<code>const LEN:u32 = 1024;</code> 其中的 <code>LEN</code> 就是一个<code>u32</code> 的整型常量（无符号32位整型），是编译时用到的。</li>
+<li>可变的变量： <code>let mut x = 5;</code> 这个就跟其它语言的类似， 在运行时用到。</li>
+<li>不可变的变量：<code>let x= 5;</code> 对这种变量，你无论修改它，但是，你可以使用 <code>let x = x + 10;</code> 这样的方式来重新定义一个新的 <code>x</code>。这个在Rust里叫 Shadowing ，第二个 <code>x</code>  把第一个 <code>x</code> 给遮蔽了。</li>
+</ul>
+<p>不可变的变量对于程序的稳定运行是有帮助的，这是一种编程“契约”，当处理契约为不可变的变量时，程序就可以稳定很多，尤其是多线程的环境下，因为不可变意味着只读不写，其他好处是，与易变对象相比，它们更易于理解和推理，并提供更高的安全性。有了这样的“契约”后，编译器也很容易在编译时查错了。这就是Rust语言的编译器的编译期可以帮你检查很多编程上的问题。</p>
+<p>对于标识不可变的变量，在 C/C++中我们用<code>const</code> ，在Java中使用 <code>final</code> ，在 C#中使用 <code>readonly</code> ，Scala用 <code>val</code> ……（在Javascript 和Python这样的动态语言中，原始类型基本都是不可变的，而自定义类型是可变的）。</p>
+<p>对于Rust的Shadowing，我个人觉得是比较危险的，在我的职业生涯中，这种使用同名变量（在嵌套的scope环境下）带来的bug还是很不好找的。一般来说，每个变量都应该有他最合适的名字，最好不要重名。</p>
+<h4><span class="ez-toc-section" id="%E5%8F%98%E9%87%8F%E7%9A%84%E6%89%80%E6%9C%89%E6%9D%83"></span>变量的所有权<span class="ez-toc-section-end"></span></h4>
+<p>这个是Rust这个语言中比较强调的一个概念。其实，在我们的编程中，很多情况下，都是把一个对象（变量）传递过来传递过去，在传递的过程中，传的是一份复本，还是这个对象本身，也就是所谓的“传值还是传引用”的被程序员问得最多的问题。</p>
+<ul>
+<li><strong>传递副本（传值）</strong>。把一个对象的复本传到一个函数中，或是放到一个数据结构容器中，可能需要出现复制的操作，这个复制对于一个对象来说，需要深度复制才安全，否则就会出现各种问题。而深度复制就会导致性能问题。</li>
+<li><strong>传递对象本身（传引用）</strong>。传引用也就是不需要考虑对象的复制成本，但是需要考虑对象在传递后，会多个变量所引用的问题。比如：我们把一个对象的引用传给一个List或其它的一个函数，这意味着，大家对同一个对象都有控制权，如果有一个人释放了这个对象，那边其它人就遭殃了，所以，一般会采用引用计数的方式来共享一个对象。引用除了共享的问题外，还有作用域的问题，比如：你从一个函数的栈内存中返回一个对象的引用给调用者，调用者就会收到一个被释放了个引用对象（因为函数结束后栈被清了）。</li>
+</ul>
+<p>这些东西在任何一个编程语言中都是必需要解决的问题，要足够灵活到让程序员可以根据自己的需要来写程序。</p>
+<p>在C++中，如果你要传递一个对象，有这么几种方式：</p>
+<ul>
+<li><strong>引用或指针。</strong>也就是不建复本，完全共享，于是，但是会出现悬挂指针（<a href="https://en.wikipedia.org/wiki/Dangling_pointer" target="_blank" rel="noopener noreferrer">Dangling Pointer</a>）又叫野指针的问题，也就是一个指针或引用指向一块废弃的内存。为了解决这个问题，C++的解决方案是使用 <code>share_ptr</code> 这样的托管类来管理共享时的引用计数。</li>
+<li><strong>传递复本</strong>，传递一个拷贝，需要重载对象的“拷贝构造函数”和“赋值构造函数”。</li>
+<li><strong>移动Move</strong>。C++中，为了解决一些临时对象的构造的开销，可以使用Move操作，把一个对象的所有权移动到给另外一个对象，这个解决了C++中在传递对象时的会产生很多临时对象来影响性能的情况。</li>
+</ul>
+<p>C++的这些个“神操作”，可以让你非常灵活地在各种情况下传递对象，但是也提升整体语言的复杂度。而Java直接把C/C++的指针给废了，用了更为安全的引用 ，然后为了解决多个引用共享同一个内存，内置了引用计数和垃圾回收，于是整个复杂度大大降低。对于Java要传对象的复本的话，需要定义一个通过自己构造自己的构造函数，或是通过prototype设计模式的 <code>clone()</code> 方法来进行，如果你要让Java解除引用，需要明显的把引用变量赋成 <code>null</code> 。总之，无论什么语言都需要这对象的传递这个事做好，不然，无法提供相对比较灵活编程方法。</p>
+<p>在Rust中，Rust强化了“所有权”的概念，下面是Rust的所有者的三大铁律：</p>
+<ol>
+<li>Rust 中的每一个值都有一个被称为其 <strong>所有者</strong>（owner）的变量。</li>
+<li>值有且只有一个所有者。</li>
+<li>当所有者（变量）离开作用域，这个值将被丢弃。</li>
+</ol>
+<p>这意味着什么？</p>
+<p>如果你需要传递一个对象的复本，你需要给这个对象实现 <code>Copy</code> trait ，<strong>trait </strong>怎么翻译我也不知道，你可以认为是一个对象的一些特别的接口（可以用于一些对像操作上的约定，比如：<code>Copy</code> 用于复制（类型于C++的拷贝构造和赋值操作符重载），<code>Display</code> 用于输出（类似于Java的 <code>toString()</code>），还有 <code>Drop</code> 和操作符重载等等，当然，也可以是对象的方法，或是用于多态的接口定义，后面会讲）。</p>
+<p>对于内建的整型、布尔型、浮点型、字符型、多元组都被实现了 <code>Copy</code> 所以，在进行传递的时候，会进行<code>memcpy</code> 这样的复制（bit-wise式的浅拷贝）。而对于对象来说，则不行，在Rust的编程范式中，需要使用的是 <code>Clone</code> trait。</p>
+<p>于是，<code>Copy</code> 和 <code>Clone</code> 这两个相似而又不一样的概念就出来了，<code>Copy</code> 主要是给内建类型，或是由内建类型全是支持 <code>Copy</code> 的对象，而 <code>Clone</code> 则是给程序员自己复制对象的。嗯，这就是浅拷贝和深拷贝的差别，<code>Copy</code> 告诉编译器，我这个对象可以进行 bit-wise的复制，而 <code>Clone</code> 则是指深度拷贝。</p>
+<p>像 <code>String</code> 这样的内部需要在堆上分布内存的数据结构，是没有实现<code>Copy</code> 的（因为内部是一个指针，所以，语义上是深拷贝，浅拷贝会招至各种bug和crash），需要复制的话，必需手动的调用其 <code>clone()</code> 方法，如果不这样的的话，当在进行函数参数传递，或是变量传递的时候，所有权一下就转移了，而之前的变量什么也不是了（这里编译器会帮你做检查有没有使用到所有权被转走的变量）。这个相当于C++的Move语义。</p>
+<p>参看下面的示例，你可能对Rust自动转移所有权会有更好的了解（代码中有注释了，我就不多说了）。</p>
+<pre class="EnlighterJSRAW" data-enlighter-language="rust">// takes_ownership 取得调用函数传入参数的所有权，因为不返回，所以变量进来了就出不去了
+fn takes_ownership(some_string: String) {
+    println!("{}", some_string);
+} // 这里，some_string 移出作用域并调用 <code data-enlighter-language="raw" class="EnlighterJSRAW">drop</code> 方法。占用的内存被释放
+
+// gives_ownership 将返回值移动给调用它的函数
+fn gives_ownership() -&gt; String {
+    let some_string = String::from("hello"); // some_string 进入作用域.
+    some_string // 返回 some_string 并移出给调用的函数
+}
+
+// takes_and_gives_back 将传入字符串并返回该值
+fn takes_and_gives_back(mut a_string: String) -&gt; String {
+    a_string.push_str(", world");
+    a_string  // 返回 a_string 将所有权移出给调用的函数
+}
+
+fn main()
+{
+    // gives_ownership 将返回值移给 s1
+    let s1 = gives_ownership();
+    // 所有权转给了 takes_ownership 函数, s1 不可用了
+    takes_ownership(s1);
+    // 如果编译下面的代码，会出现s1不可用的错误
+    // println!("s1= {}", s1);
+    //                    ^^ value borrowed here after move
+    let s2 = String::from("hello");// 声明s2
+    // s2 被移动到 takes_and_gives_back 中, 它也将返回值移给 s3。
+    // 而 s2 则不可用了。
+    let s3 = takes_and_gives_back(s2);
+    //如果编译下面的代码，会出现可不可用的错误
+    //println!("s2={}, s3={}", s2, s3);
+    //                         ^^ value borrowed here after move
+    println!("s3={}", s3);
+}
+</pre>
+<p>这样的 Move 的方式，在性能上和安全性上都是非常有效的，而Rust的编译器会帮你检查出使用了所有权被move走的变量的错误。而且，我们还可以从函数栈上返回对象了，如下所示：</p>
+<pre class="EnlighterJSRAW" data-enlighter-language="rust">fn new_person() -&gt; Person {
+    let person = Person {
+        name : String::from("Hao Chen"),
+        age : 44,
+        sex : Sex::Male,
+        email: String::from("<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="6e060f010b022e06011a030f0702400d0103">[email&#160;protected]</a>"),
+    };
+    return person;
+}
+
+fn main() {
+   let p  = new_person();
+}
+</pre>
+<p>因为对象是Move走的，所以，在函数上 <code>new_person()</code> 上返回的 <code>Person</code> 对象是Move 语言，被Move到了 <code>main()</code> 函数中来，这样就没有性能上的问题了。而在C++中，我们需要把对象的Move函数给写出来才能做到。因为，C++默认是调用拷贝构造函数的，而不是Move的。</p>
+<h4><span class="ez-toc-section" id="Owner%E8%AF%AD%E4%B9%89%E5%B8%A6%E6%9D%A5%E7%9A%84%E5%A4%8D%E6%9D%82%E5%BA%A6"></span>Owner语义带来的复杂度<span class="ez-toc-section-end"></span></h4>
+<p>Owner + Move 的语义也会带来一些复杂度。首先，如果有一个结构体，我们把其中的成员 Move 掉了，会怎么样。参看如下的代码：</p>
+<pre class="EnlighterJSRAW" data-enlighter-language="rust">#[derive(Debug)] // 让结构体可以使用 <code data-enlighter-language="raw" class="EnlighterJSRAW">{:?}</code>的方式输出
+struct Person {
+    name :String,
+    email:String,
+}
+
+let _name = p.name; // 把结构体 Person::name Move掉
+println!("{} {}", _name, p.email); //其它成员可以正常访问
+println!("{:?}", p); //编译出错 "value borrowed here after partial move"
+p.name = "Hao Chen".to_string(); // Person::name又有了。
+println!("{:?}", p); //可以正常的编译了
+</pre>
+<p>上面这个示例，我们可以看到，结构体中的成员是可以被Move掉的，Move掉的结构实例会成为一个部分的未初始化的结构，如果需要访问整个结构体的成员，会出现编译问题。但是后面把 Person::name补上后，又可以愉快地工作了。</p>
+<p>下面我们再看一个更复杂的示例——这个示例模拟动画渲染的场景，我们需要有两个buffer，一个是正在显示的，另一个是下一帧要显示的。</p>
+<pre class="EnlighterJSRAW" data-enlighter-language="rust">struct Buffer {
+    buffer : String,
+}
+
+struct Render {
+    current_buffer : Buffer,
+    next_buffer : Buffer,
+}
+//实现结构体 <code data-enlighter-language="raw" class="EnlighterJSRAW">Render</code> 的方法
+impl Render { 
+    //实现 update_buffer() 方法，
+    //更新buffer，把 next 更新到 current 中，再更新 next
+    fn update_buffer(&amp; mut self, buf : String) {
+        self.current_buffer = self.next_buffer;
+        self.next_buffer = Buffer{ buffer: buf};
+    }
+}
+</pre>
+<p>上面这段代码，我们写下来没什么问题，但是 Rust 编译不会让我们编译通过。它会告诉我们如下的错误：</p>
+<pre class="EnlighterJSRAW" data-enlighter-language="no-highlight">error[E0507]: cannot move out of <code data-enlighter-language="raw" class="EnlighterJSRAW">self.next_buffer</code> which is behind a mutable reference
+--&gt; /.........../xxx.rs:18:31
+|
+14 | self.current_buffer = self.next_buffer;
+|                          ^^^^^^^^^^^^^^^^ move occurs because <code data-enlighter-language="raw" class="EnlighterJSRAW">self.next_buffer</code> has type <code data-enlighter-language="raw" class="EnlighterJSRAW">Buffer</code>,
+                                            which does not implement the <code data-enlighter-language="raw" class="EnlighterJSRAW">Copy</code> trait</pre>
+<p>编译器会提示你，<code>Buffer</code> 没有 Copy trait 方法。<strong>但是，如果你实现了 Copy 方法后，你又不能享受 Move 带来的性能上快乐了。于是，到这里，你开始进退两难了，完全不知道取舍了</strong>。</p>
+<ul>
+<li>Rust编译器不让我们在成员方法中把成员Move走，因为 <code>self</code> 引用就不完整了。</li>
+<li>Rust要我们实现 <code>Copy</code> Trait，但是我们不想要拷贝，因为我们就是想把 <code>next_buffer</code> move 到 <code>current_buffer</code> 中</li>
+</ul>
+<p>我们想要同时 Move 两个变量，参数 <code>buf</code> move 到 <code>next_buffer</code> 的同时，还要把 <code>next_buffer</code> 里的东西 move 到 <code>current_buffer</code> 中。 我们需要一个“杂耍”的技能。<br/>
+<img decoding="async" loading="lazy" class="aligncenter size-full wp-image-20872" src="https://coolshell.cn/wp-content/uploads/2020/03/indy.gif" alt width="500" height="264" /></p>
+<p>这个需要动用 <code>std::mem::replace(&amp;dest, src)</code> 函数了， 这个函数技把 <code>src</code> 的值 move 到 <code>dest</code> 中，然后把 <code>dest</code> 再返回出来（这其中使用了 unsafe 的一些底层骚操作才能完成）。Anyway，最终是这样实现的：</p>
+<pre class="EnlighterJSRAW" data-enlighter-language="rust">use std::mem::replace
+fn update_buffer(&amp; mut self, buf : String) { 
+  self.current_buffer = replace(&amp;mut self.next_buffer, Buffer{buffer : buf}); 
+}</pre>
+<p>不知道你觉得这样“杂耍”的代码看上去怎么以样？我觉得可读性下降一个数量级。</p>
+<h4><span class="ez-toc-section" id="%E5%BC%95%E7%94%A8%EF%BC%88%E5%80%9F%E7%94%A8%EF%BC%89%E5%92%8C%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F"></span>引用（借用）和生命周期<span class="ez-toc-section-end"></span></h4>
+<p>下面，我们来讲讲引用，因为把对象的所有权 Move 走了的情况，在一些时候肯定不合适，比如，我有一个 <code>compare(s1: Student, s2: Student) -&gt; bool</code> 我想比较两个学生的平均份成绩， 我不想传复本，因为太慢，我也不想把所有权交进去，因为只是想计算其中的数据。这个时候，传引用就是一个比较好的选择，Rust同样支持传引用。只需要把上面的函数声明改成：<code>compare(s1 :&amp;Student, s2 : &amp;Student) -&gt; bool</code> 就可以了，在调用的时候，<code>compare (&amp;s1, &amp;s2);</code>  与C++一致。在Rust中，这也叫“借用”（嗯，Rust发明出来的这些新术语，在语义上感觉让人更容易理解了，当然，也增加了学习的复杂度了）</p>
+<h5><span class="ez-toc-section" id="%E5%BC%95%E7%94%A8%EF%BC%88%E5%80%9F%E7%94%A8%EF%BC%89"></span>引用（借用）<span class="ez-toc-section-end"></span></h5>
+<p>另外，如果你要修改这个引用对象，就需要使用“可变引用”，如：<code>foo( s : &amp;mut Student)</code> 以及 <code>foo( &amp;mut s);</code>另外，为了避免一些数据竞争需要进行数据同步的事，Rust严格规定了——<strong>在任意时刻，要么只能有一个可变引用，要么只能有多个不可变引用</strong>。</p>
+<p>这些严格的规定会导致程序员失去编程的灵活性，不熟悉Rust的程序员可能会在一些编译错误下会很崩溃，但是你的代码的稳定性也会提高，bug率也会降低。</p>
+<p>另外，Rust为了解决“野引用”的问题，也就是说，有多个变量引用到一个对象上，还不能使用额外的引用计数来增加程序运行的复杂度。那么，Rust就要管理程序中引用的生命周期了，而且还是要在编译期管理，如果发现有引用的生命周期有问题的，就要报错。比如：</p>
+<pre class="EnlighterJSRAW" data-enlighter-language="rust">let r;
+{
+    let x = 10;
+    r = &amp;x;
+}
+println!("r = {}",r );
+</pre>
+<p>上面的这段代码，程序员肉眼就能看到 <code>x</code> 的作用域比 <code>r</code>  小，所以导致 <code>r</code> 在 <code>println()</code> 的时候 <code>r</code> 引用的 <code>x</code> 已经没有了。这个代码在C++中可以正常编译而且可以执行，虽然最后可以打出“内嵌作用域”的 <code>x</code> 的值，但其实这个值已经是有问题的了。而在 Rust 语言中，编译器会给出一个编译错误，告诉你，“<code>x</code> dropped here while still borrowed”，这个真是太棒了。</p>
+<p>但是这中编译时检查的技术对于目前的编译器来说，只在程序变得稍微复杂一点，编译器的“失效引用”检查就不那么容易了。比如下面这个代码：</p>
+<pre class="EnlighterJSRAW" data-enlighter-language="rust">fn order_string(s1 : &amp;str, s2 : &amp;str) -&gt; (&amp;str, &amp;str) {
+    if s1.len() &lt; s2.len() {
+        return (s1, s2);
+    }
+    return (s2, s1);
+}
+
+let str1 = String::from("long long long long string");
+let str2 = "short string";
+
+let (long_str, short_str) = order_string(str1.as_str(), str2);
+
+println!(" long={} nshort={} ", long_str, short_str);
+</pre>
+<p>我们有两个字符串，<code>str1</code> 和 <code>str2</code> 我们想通过函数 <code>order_string()</code> 把这两个字串符返回成 <code>long_str</code> 和 <code>short_str</code>  这样方便后面的代码进行处理。这是一段很常见的处理代码的示例。然而，你会发现，这段代码编译不过。编译器会告诉你，<code>order_string()</code> 返回的 引用类型 <code>&amp;str</code> 需要一个 lifetime的参数 &#8211; “ expected lifetime parameter”。这是因为Rust编译无法通过观察静态代码分析返回的两个引用返回值，到底是<code>(s1, s2)</code> 还是 <code>(s2, s1)</code> ，因为这是运行时决定的。所以，返回值的两个参数的引用没法确定其生命周期到底是跟 <code>s1</code> 还是跟 <code>s2</code>，这个时候，编译器就不知道了。</p>
+<h5><span class="ez-toc-section" id="%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F"></span>生命周期<span class="ez-toc-section-end"></span></h5>
+<p>如果你的代码是下面这个样子，编程器可以自己推导出来，函数 <code>foo()</code> 的参数和返回值都是一个引用，他们的生命周期是一样的，所以，也就可以编译通过。</p>
+<pre class="EnlighterJSRAW" data-enlighter-language="rust">fn foo (s: &amp;mut String) -&gt; &amp;String {
+    s.push_str("coolshell");
+    s
+}
+
+let mut s = "hello, ".to_string();
+println!("{}", foo(&amp;mut s))
+</pre>
+<p>而对于传入多个引用，返回值可能是任一引用，这个时候编译器就犯糊涂了，因为不知道运行时的事，所以，就需要程序员来标注了。</p>
+<pre class="EnlighterJSRAW" data-enlighter-language="rust">fn long_string&lt;'c&gt;(s1 : &amp;'c str, s2 : &amp;'c str) -&gt; (&amp;'c str, &amp;'c str) {
+    if s1.len() &gt; s2.len() {
+        return (s1, s2);
+    }
+    return (s2, s1);
+}
+</pre>
+<p>上述的Rust的标注语法，用个单引号加一个任意字符串来标注（<code>'static</code>除外，这是一个关键词，表示生命周期跟整个程序一样长），然后，说明返回的那两个引用的生命周期跟 <code>s1</code> 和 <code>s2</code> 的生命周期相同，这个标注的目的就是把运行时的事变成了编译时的事。于是程序就可以编译通过了。（注：你也不要以为你可以用这个技术乱写生命周期，这只是一种“去语法糖操作”，是帮助编译器理解其中的生命周期，如果违反实际生命周期，编译器也是会拒绝编译的）</p>
+<p>这里有两个说明，</p>
+<ul>
+<li>只要你玩引用，生命周期标识就会来了。</li>
+<li>Rust编译器不知道运行时会发生什么事，所以，需要你来标注声明</li>
+</ul>
+<p>我感觉，你现在开始有点头晕了吧？接下来，我们让你再晕一下。比如：如果你要在结构体中玩引用，那必需要为引用声明生命周期，如下所示：</p>
+<pre class="EnlighterJSRAW" data-enlighter-language="rust">// 引用 ref1 和 ref2 的生命周期与结构体一致
+struct Test &lt;'life&gt; {
+    ref_int : &amp;'life i32,
+    ref_str : &amp;'life str,
+}
+</pre>
+<p>其中，生命周期标识 <code>'life</code> 定义在结构体上，被使用于其成员引用上。意思是声明规则——“<strong>结构体的生命周期 &lt;= 成员引用的生命周期</strong>”</p>
+<p>然后，如果你要给这个结构实现两个 <code>set</code> 方法，你也得带上 lifetime 标识。</p>
+<pre class="EnlighterJSRAW" data-enlighter-language="rust">imp&lt;'life&gt; Test&lt;'life&gt; {
+    fn set_string(&amp;mut self, s : &amp;'life str) {
+        self.ref_str = s;
+    }
+    fn set_int(&amp;mut self,  i : &amp;'life i32) {
+        self.ref_int = i;
+    }
+}
+</pre>
+<p>在上面的这个示例中，生命周期变量 <code>'life</code> 声明在 <code>impl</code> 上，用于结构体和其方法的入参上。 意思是声明规则——“<strong>结构体方法的“引用参数”的生命周期 &gt;= 结构体的生命周期</strong>”</p>
+<p>有了这些个生命周期的标识规则后，Rust就可以愉快地检查这些规则说明，并编译代码了。</p>
+<h4><span class="ez-toc-section" id="%E9%97%AD%E5%8C%85%E4%B8%8E%E6%89%80%E6%9C%89%E6%9D%83"></span>闭包与所有权<span class="ez-toc-section-end"></span></h4>
+<p>这种所有权和引用的严格区分和管理，会影响到很多地方，下面我们来看一下函数闭包中的这些东西的传递。函数闭包又叫Closure，是函数式编程中一个不可或缺的东西，又被称为lambda表达式，基本上所有的高级语言都会支持。在 Rust 语言中，其闭包函数的表示是用两根竖线（| |）中间加传如参数进行定义。如下所示：</p>
+<pre class="EnlighterJSRAW" data-enlighter-language="rust">// 定义了一个 x + y 操作的 lambda f(x, y) = x + y;
+let plus = |x: i32, y:i32| x + y; 
+// 定义另一个lambda g(x) = f(x, 5)
+let plus_five = |x| plus(x, 5); 
+//输出
+println!("plus_five(10)={}", plus_five(10) );</pre>
+<h5><span class="ez-toc-section" id="%E5%87%BD%E6%95%B0%E9%97%AD%E5%8C%85"></span>函数闭包<span class="ez-toc-section-end"></span></h5>
+<p>但是一旦加上了上述的所有权这些东西后，问题就会变得复杂开来。参看下面的代码。</p>
+<pre class="EnlighterJSRAW" data-enlighter-language="rust">struct Person {
+    name : String,
+    age : u8,
+}
+
+fn main() {
+    let p = Person{ name: "Hao Chen".to_string(), age : 44};
+    //可以运行，因为 <code data-enlighter-language="raw" class="EnlighterJSRAW">u8</code> 有 Copy Trait
+    let age = |p : Person| p.age; 
+    // String 没有Copy Trait，所以，这里所有权就 Move 走了
+    let name = |p : Person | p.name; 
+    println! ("name={}, age={}" , name(p), age(p));
+}</pre>
+<p>上面的代码无法编译通过，因为Rust编译器发现在调用 <code>name(p)</code> 的时候，<code>p</code> 的所有权被移走了。然后，我们想想，改成引用的版本，如下所示：</p>
+<pre class="EnlighterJSRAW" data-enlighter-language="rust">let age = |p : &amp;Person| p.age;
+let name = |p : &amp;Person | &amp;p.name;
+
+println! ("name={}, age={}" , name(&amp;p), age(&amp;p));</pre>
+<p>你会现在还是无法编译，报错中说：<strong>cannot infer an appropriate lifetime for borrow expression due to conflicting requirements</strong></p>
+<pre class="EnlighterJSRAW" data-enlighter-language="null">error[E0495]: cannot infer an appropriate lifetime for borrow expression due to conflicting requirements
+  --&gt; src/main.rs:11:31
+   |
+11 |     let name = |p : &amp;Person | &amp;p.name;
+   |                               ^^^^^^^</pre>
+<p>然后你开始尝试加 lifetime，用尽各种Rust的骚操作（官方Github上的<a href="https://github.com/rust-lang/rust/issues/58052" target="_blank" rel="noopener noreferrer"> #issue 58052</a>），然后，还是无法让你的程序可以编译通过。最后，上StackOverflow 里寻找帮助，得到下面的正确写法（这个可能跟这个bug有关系：<a href="https://github.com/rust-lang/rust/issues/41078" target="_blank" rel="noopener noreferrer">#issue 41078</a> ）。但是这样的写法，已经让简洁的代码变得面目全非。</p>
+<pre class="EnlighterJSRAW" data-enlighter-language="rust" data-enlighter-highlight="7">//下面的声明可以正确译
+let name: for&lt;'a&gt; fn(&amp;'a Person) -&gt; &amp;'a String = |p: &amp;Person| &amp;p.name;</pre>
+<p>上面的这种lifetime的标识也是很奇葩，通过定义一个函数类型来做相关的标注，但是这个函数类型，需要用到 <code>for&lt;'a&gt;</code> 关键字。你可能会很confuse这个关键字不是用来做循环的吗？嗯，Rust这种重用关键字的作法，我个人觉得带来了很多不必要的复杂度。总之，这样的声明代码，我觉得基本不会有人能想得到的——“去语法糖操作太严重了，绝大多数人绝对hold不住”！</p>
+<p>最后，我们再来看另一个问题，下面的代码无法编译通过：</p>
+<pre class="EnlighterJSRAW" data-enlighter-language="rust">let s = String::from("coolshell");
+let take_str = || s;
+println!("{}", s); //ERROR
+println!("{}",  take_str()); // OK</pre>
+<p>Rust的编译器会告诉你，<code>take_str</code>  把 <code>s</code> 的所有权给拿走了（因为需要作成返回值）。所以，后面的输出语句就用不到了。这里意味着：</p>
+<ul>
+<li>对于内建的类型，都实现了 <code>Copy</code> 的 trait，那么闭包执行的是 “借用”</li>
+<li>对于没有实现 <code>Copy</code> 的trait，在闭包中可以调用其方法，是“借用”，但是不能当成返回值，当成返回值了就是“移动”。</li>
+</ul>
+<p>虽然有了这些“通常情况下是借用的潜规则”，但是还是不能满足一些情况，所以，还要让程序员可以定义 <code>move</code> 的“明规则”。下面的代码，一个有 move 一个没有move，他们的差别也不一样。</p>
+<pre class="EnlighterJSRAW" data-enlighter-language="rust">//-----------借用的情况-----------
+let mut num = 5;
+{
+    let mut add_num = |x: i32| num += x;
+    add_num(5);
+}
+println!("num={}", num); //输出 10
+
+//-----------Move的情况-----------
+let mut num = 5;
+{
+    // 把 num（5）所有权给 move 到了 add_num 中，
+    // 使用其成为闭包中的局部变量。
+    let mut add_num = move |x: i32| num += x;
+    add_num(5);
+    println!("num(move)={}", num); //输出10
+}
+//因为i32实现了 <code data-enlighter-language="raw" class="EnlighterJSRAW">Copy</code>，所以，这里还可以访问
+println!("num(move)={}", num); //输出5</pre>
+<p>真是有点头大了，int这样的类型，因为实现了Copy Trait，所以，所有权被移走后，意味着，在内嵌块中的<code>num</code> 和外层的 <code>num</code> 是两个完全不相干的变量。<strong>但是你在读代码的时候，你的大脑可能并不会让你这么想，因为里面的那个num又没有被声明过，应该是外层的</strong>。我个人觉得这是Rust 各种“按下葫芦起了瓢”的现象。</p>
+<h5><span class="ez-toc-section" id="%E7%BA%BF%E7%A8%8B%E9%97%AD%E5%8C%85"></span>线程闭包<span class="ez-toc-section-end"></span></h5>
+<p>通过上面的示例，我们可以看到， <code>move</code> 关键词，可以把闭包外使用到的变量给移动到闭包内，成为闭包内的一个局部变量。这种方式，在多线程的方式下可以让线程运行地更为的安全。参看如下代码：</p>
+<pre class="EnlighterJSRAW" data-enlighter-language="rust">let name = "CoolShell".to_string();
+let t = thread::spawn(move || {
+    println!("Hello, {}", name);
+});
+println!("wait {:?}", t.join());</pre>
+<p>首先，线程 <code>thread::spawn()</code> 里的闭包函数是不能带参数的，因为是闭包，所以可以使用这个可见范围内的变量，但是，问题来了，因为是另一个线程，所以，这代表其和其它线程（如：主线程）开始共享数据了，所以，在Rust下，要求把使用到的变量给 Move 到线程内，这就保证了安全的问题—— <code>name</code> 在线程中永远不会失效，而且不会被别人改了。</p>
+<p>你可能会有一些疑问，你会质疑到</p>
+<ul>
+<li>一方面，这个 <code>name</code> 变量又没有声明成 <code>mut</code> 这意味着不变，没必要使用move语义也是安全的。</li>
+<li>另一方面，如果我想把这个 <code>name</code> 传递到多个线程里呢？</li>
+</ul>
+<p>嗯，是的，但是Rust的线程必需是 move的，不管是不是可变的，不然编译不过去。如果你想把一个变量传到多个线程中，你得创建变量的复本，也就是调用 <code>clone()</code> 方法。</p>
+<pre class="EnlighterJSRAW" data-enlighter-language="rust" data-enlighter-highlight="2,7">let name = "CoolShell".to_string();
+let name1 = name.clone();
+let t1 = thread::spawn(move || {
+    println!("Hello, {}", name.clone());
+})
+let t2 = thread::spawn(move || {
+    println!("Hello, {}", name1.clone());
+});
+println!("wait t1={:?}, t2={:?}", t1.join(), t2.join());</pre>
+<p>然后，你说，这种clone的方式成本不是很高？设想，如果我要用多线程对一个很大的数组做统计，这种clone的方式完全吃不消。嗯，是的。这个时候，需要使用另一个技术，智能指针了。</p>
+<h4><span class="ez-toc-section" id="Rust%E7%9A%84%E6%99%BA%E8%83%BD%E6%8C%87%E9%92%88"></span>Rust的智能指针<span class="ez-toc-section-end"></span></h4>
+<p>如果你看到这里还不晕的话，那么，我的文章还算成功（如果晕的话，请告诉我，我会进行改善）。接下来我们来讲讲Rust的智能指针和多态。</p>
+<p>因为有些内存需要分配在Heap（堆）上，而不是Stack（堆）上，Stack上的内存一般是编译时决定的，所以，编译器需要知道你的数组、结构体、枚举等这些数据类型的长度，没有长度是无法编译的，而且长度也不能太大，Stack上的内存大小是有限，太大的内存会有StackOverflow的错误。所以，对于更大的内存或是动态的内存分配需要分配在Heap上。学过C/C++的同学对于这个概念不会陌生。</p>
+<p>Rust 作为一个内存安全的语言，这个堆上分配的内存也是需要管理的。在C中，需要程序员自己管理，而在C++中，一般使用 <a href="https://en.wikipedia.org/wiki/Resource_acquisition_is_initialization" target="_blank" rel="noopener noreferrer">RAII 的机制</a>（面向对象的代理模式），一种通过分配在Stack上的对象来管理Heap上的内存的技术。在C++中，这种技术的实现叫“智能指针”（Smart Pointer）。</p>
+<p>在C++11中，会有三种智能指针（这三种指针是什么我就不多说了）：</p>
+<ul>
+<li><code>unique_ptr</code>。独占内存，不共享。在Rust中是：<code>std::boxed::Box</code></li>
+<li><code>shared_ptr</code>。以引用计数的方式共享内存。在Rust中是：<code>std::rc::Rc</code></li>
+<li><code>weak_ptr</code>。不以引用计数的方式共享内存。在Rust中是：<code>std::rc::Weak</code></li>
+</ul>
+<p>对于独占的 <code>Box</code> 不多说了，这里重点说一下共享的 <code>Rc</code> 和 <code>Weak</code> ：</p>
+<ul>
+<li>对于Rust的 Rc 来说，Rc指针内会有一个 <code>strong_count</code> 的引用持计数，一旦引用计数为0后，内存就自动释放了。</li>
+<li>需要共享内存的时候，需要调用实例的 <code>clone()</code> 方法。如： <code>let another = rc.clone()</code> 克隆的时候，只会增加引用计数，不会作深度复制（个人觉得Clone的语义在这里被践踏了）</li>
+<li>有这种共享的引用计数，就意味着有多线程的问题，所以，如果需要使用线程安全的智能指针，则需要使用<code>std::sync::Arc</code></li>
+<li>可以使用 <code>Rc::downgrade(&amp;rc)</code> 后，会变成 Weak 指针，Weak指针增加的是 <code>weak_count</code> 的引用计数，内存释放时不会检查它是否为 0。</li>
+</ul>
+<p>我们简单的来看个示例：</p>
+<pre class="EnlighterJSRAW" data-enlighter-language="rust">use std::rc::Rc;
+use std::rc::Weak
+
+//声明两个未初始化的指针变量
+let weak : Weak; 
+let strong : Rc;
+{
+    let five = Rc::new(5); //局部变量
+    strong = five.clone(); //进行强引用
+    weak = Rc::downgrade(&amp;five); //对局部变量进行弱引用
+}
+//此时，five已析构，所以 Rc::strong_count(&amp;strong)=1， Rc::weak_count(&amp;strong)=1
+//如果调用 drop(strong)，那个整个内存就释放了
+//drop(strong);
+
+//如果要访问弱引用的值，需要把弱引用 upgrade 成强引用，才能安全的使用
+match  weak_five.upgrade() {
+    Some(r) =&gt; println!("{}", r),
+    None =&gt; println!("None"),
+} 
+</pre>
+<p>上面这个示例比较简单，其中主要展示了，指针共享的东西。因为指针是共享的，所以，对于强引用来说，最后的那个人把引用给释放了，是安全的。但是对于弱引用来说，这就是一个坑了，你们强引用的人有Ownership，但是我们弱引用没有，你们把内存释放了，我怎么知道？</p>
+<p>于是，<strong>在弱引用需要使用内存的时候需要“升级”成强引用 ，但是这个升级可能会不成功，因为内存可能已经被别人清空了</strong>。所以，这个操作会返回一个 <code>Option</code> 的枚举值，<code>Option::Some(T)</code> 表示成功了，而 <code>Option::None</code> 则表示失改了。你会说，这么麻烦，我们为什么还要 <code>Weak</code> ? 这是因为强引用的 <code>Rc</code> 会有循环引用的问题……（学过C++的都应该知道）</p>
+<p>另外，如果你要修改 <code>Rc</code> 里的值，Rust 会给你两个方法，一个是 <code>get_mut()</code>，一个是 <code>make_mut()</code> ，这两个方法都有副作用或是限制。</p>
+<p><code>get_mut()</code> 需要做一个“唯一引用”的检查，也就是没有任何的共享才能修改</p>
+<pre class="EnlighterJSRAW" data-enlighter-language="rust">//修改引用的变量 - get_mut 会返回一个Option对象
+//但是需要注意，仅当（只有一个强引用 &amp;&amp; 没有弱引用）为真才能修改
+if let Some(val) = Rc::get_mut(&amp;mut strong) {
+    *val = 555;
+}</pre>
+<p><code>make_mut()</code> 则是会把当前的引用给clone出来，再也不共享了， 是一份全新的。</p>
+<pre class="EnlighterJSRAW" data-enlighter-language="rust">//此处可以修改，但是是以 clone 的方式，也就是让strong这个指针独立出来了。
+*Rc::make_mut(&amp;mut strong) = 555;
+</pre>
+<p>如果不这样做，就会出现很多内存不安全的情况。<strong>这些小细节一定要注意，不然你的代码怎么运作的你会一脸蒙逼的</strong>。</p>
+<p>嗯，如果你想更快乐地使用智能指针，这里还有个选择 &#8211; <code>Cell</code> 和 <code>RefCell</code>，它们弥补了 Rust 所有权机制在灵活性上和某些场景下的不足。他们提供了 <code>set()</code>/<code>get()</code> 以及 <code>borrow()</code>/<code>borrow_mut()</code> 的方法，让你的程序更灵活，而不会被限制得死死的。参看下面的示例。</p>
+<pre class="EnlighterJSRAW" data-enlighter-language="rust">use std::cell::Cell;
+use std::cell::RefCell
+
+let x = Cell::new(1);
+let y = &amp;x; //引用（借用）
+let z = &amp;x; //引用（借用）
+x.set(2); // 可以进行修改，x，y，z全都改了
+y.set(3);
+z.set(4);
+println!("x={} y={} z={}", x.get(), y.get(), z.get());
+
+let x = RefCell::new(vec![1,2,3,4]);
+{
+    println!("{:?}", *x.borrow())
+}
+
+{
+    let mut my_ref = x.borrow_mut();
+    my_ref.push(1);
+}
+println!("{:?}", *x.borrow());</pre>
+<p>通过上面的示例你可以看到你可以比较方便地更为正常的使用智能指针了。然而，需要注意的是 <code>Cell</code> 和 <code>RefCell</code> 不是线程安全的。在多线程下，需要使用Mutex进行互斥。</p>
+<h4><span class="ez-toc-section" id="%E7%BA%BF%E7%A8%8B%E4%B8%8E%E6%99%BA%E8%83%BD%E6%8C%87%E9%92%88"></span>线程与智能指针<span class="ez-toc-section-end"></span></h4>
+<p>现在，我们回来来解决前面那还没有解决的问题，就是——我想在多个线程中共享一个只读的数据，比如：一个很大的数组，我开多个线程进行并行统计。我们肯定不能对这个大数组进行clone，但也不能把这个大数组move到一个线程中。根据上述的智能指针的逻辑，我们可以通过智指指针来完成这个事，下面是一个例程：</p>
+<pre class="EnlighterJSRAW" data-enlighter-language="rust" data-enlighter-highlight="4,5,12,13,27">const TOTAL_SIZE:usize = 100 * 1000; //数组长度
+const NTHREAD:usize = 6; //线程数
+
+let data : Vec&lt;i32&gt; = (1..(TOTAL_SIZE+1) as i32).collect(); //初始化一个数据从1到n数组
+let arc_data = Arc::new(data); //data 的所有权转给了 ar_data
+let result  = Arc::new(AtomicU64::new(0)); //收集结果的数组(原子操作)
+
+let mut thread_handlers = vec![]; // 用于收集线程句柄
+
+for i in 0..NTHREAD {
+    // clone Arc 准备move到线程中，只增加引用计数，不会深拷贝内部数据
+    let test_data = arc_data.clone(); 
+    let res = result.clone(); 
+    thread_handlers.push( 
+        thread::spawn(move || {
+            let id = i;
+            //找到自己的分区
+            let chunk_size = TOTAL_SIZE / NTHREAD + 1;
+            let start = id * chunk_size;
+            let end = std::cmp::min(start + chunk_size, TOTAL_SIZE);
+            //进行求和运算
+            let mut sum = 0;
+            for  i in start..end  {
+                sum += test_data[i];
+            }
+            //原子操作
+            res.fetch_add(sum as u64, Ordering::SeqCst);
+            println!("id={}, sum={}", id, sum );
+        }
+    ));
+}
+//等所有的线程执行完
+for th in thread_handlers {
+    th.join().expect("The sender thread panic!!!");
+}
+//输出结果
+println!("result = {}",result.load(Ordering::SeqCst));</pre>
+<p>上面的这个例程，是用多线程的方式来并行计算一个大的数组的和，每个线程都会计算自己的那一部分。上面的代码中，</p>
+<ul>
+<li>需要向每个线程传入一个只读的数组，我们用<code>Arc</code> 智能指针把这个数组包了一层。</li>
+<li>需要向每个线程传入一个变量用于数据数据，我们用 <code>Arc&lt;AtomicU64&gt;</code> 包了一层。</li>
+<li>注意：<code>Arc</code> 所包的对象是不可变的，所以，如果要可变的，那要么用原子对象，或是用Mutex/Cell对象再包一层。</li>
+</ul>
+<p>这一些都是为了要解决“线程的Move语义后还要共享问题”。</p>
+<h4><span class="ez-toc-section" id="%E5%A4%9A%E6%80%81%E5%92%8C%E8%BF%90%E8%A1%8C%E6%97%B6%E8%AF%86%E5%88%AB"></span>多态和运行时识别<span class="ez-toc-section-end"></span></h4>
+<h5><span class="ez-toc-section" id="%E9%80%9A%E8%BF%87Trait%E5%A4%9A%E6%80%81"></span>通过Trait多态<span class="ez-toc-section-end"></span></h5>
+<p>多态是抽象和解耦的关键，所以，一个高级的语言是必需实现多态的。在C++中，多态是通过虚函数表来实现的（参看《<a href="https://coolshell.cn/articles/12165.html" target="_blank" rel="noopener noreferrer">C++的虚函数表</a>》），Rust也很类似，不过，在编程范式上，更像Java的接口的方式。其通过借用于Erlang的Trait对象的方式来完成。参看下面的代码：</p>
+<pre class="EnlighterJSRAW" data-enlighter-language="rust">struct Rectangle {
+    width : u32,
+    height : u32,
+} 
+
+struct Circle {
+    x : u32,
+    y : u32,
+    radius : u32,
+}
+
+trait  IShape  { 
+    fn area(&amp;self) -&gt; f32;
+    fn to_string(&amp;self) -&gt; String;
+}</pre>
+<p>我们有两个类，一个是“长方形”，一个是“圆形”， 还有一个 <code>IShape</code> 的trait 对象（原谅我用了Java的命名方式），其中有两个方法：求面积的 <code>area()</code> 和 转字符串的 <code>to_string()</code>。下面相关的实现：</p>
+<pre class="EnlighterJSRAW" data-enlighter-language="rust">impl IShape  for Rectangle {
+    fn area(&amp;self) -&gt; f32 { (self.height * self.width) as f32 }
+    fn to_string(&amp;self) -&gt;String {
+         format!("Rectangle -&gt; width={} height={} area={}", 
+                  self.width, self.height, self.area())
+    }
+}
+
+use std::f64::consts::PI;
+impl IShape  for Circle  {
+    fn area(&amp;self) -&gt; f32 { (self.radius * self.radius) as f32 * PI as f32}
+    fn to_string(&amp;self) -&gt; String {
+        format!("Circle -&gt; x={}, y={}, area={}", 
+                 self.x, self.y, self.area())
+    }
+}
+</pre>
+<p>于是，我们就可以有下面的多态的使用方式了（我们使用独占的智能指针类 <code>Box</code>）：</p>
+<pre class="EnlighterJSRAW" data-enlighter-language="rust">use std::vec::Vec;
+
+let rect = Box::new( Rectangle { width: 4, height: 6});
+let circle = Box::new( Circle { x: 0, y:0, radius: 5});
+let mut v : Vec&lt;Box&gt; = Vec::new();
+v.push(rect);
+v.push(circle);
+
+for i in v.iter() {
+   println!("area={}", i.area() );
+   println!("{}", i.to_string() );
+}</pre>
+<h5><span class="ez-toc-section" id="%E5%90%91%E4%B8%8B%E8%BD%AC%E5%9E%8B"></span>向下转型<span class="ez-toc-section-end"></span></h5>
+<p>但是，在C++中，多态的类型是抽象类型，我们还想把其转成实际的具体类型，在C++中叫运行进实别RTTI，需要使用像 <code>type_id</code> 或是 <code>dynamic_cast</code> 这两个技术。在Rust中，转型是使用 &#8216;<code>as</code>&#8216; 关键字，然而，这是编译时识别，不是运行时。那么，在Rust中是怎么做呢？</p>
+<p>嗯，这里需要使用 Rust 的 <code>std::any::Any</code> 这个东西，这个东西就可以使用 <code>downcast_ref</code> 这个东西来进行具体类型的转换。于是我们要对现有的代码进行改造。</p>
+<p>首先，先得让 <code>IShape</code> 继承于 <code>Any</code> ，并增加一个 <code>as_any()</code> 的转型接口。</p>
+<pre class="EnlighterJSRAW" data-enlighter-language="rust">use std::any::Any;
+trait  IShape : Any + 'static  {
+    fn as_any(&amp;self) -&gt; &amp;dyn Any; 
+    …… …… …… 
+}</pre>
+<p>然后，在具体类中实现这个接口：</p>
+<pre class="EnlighterJSRAW" data-enlighter-language="rust">impl IShape  for Rectangle {
+    fn as_any(&amp;self) -&gt; &amp;dyn Any { self }
+    …… …… …… 
+}
+impl IShape  for Circle  {
+    fn as_any(&amp;self) -&gt; &amp;dyn Any { self }
+    …… …… …… 
+}</pre>
+<p>于是，我们就可以进行运行时的向下转型了：</p>
+<pre class="EnlighterJSRAW" data-enlighter-language="rust" data-enlighter-highlight="5,7">let mut v : Vec&lt;Box&lt;dyn IShape&gt;&gt; = Vec::new();
+v.push(rect);
+v.push(circle);
+for i in v.iter() {
+    if let Some(s) = i.as_any().downcast_ref::&lt;Rectangle&gt;() {
+        println!("downcast - Rectangle w={}, h={}", s.width, s.height);
+    }else if let Some(s) = i.as_any().downcast_ref::&lt;Circle&gt;() {
+        println!("downcast - Circle x={}, y={}, r={}", s.x, s.y, s.radius);
+    }else{
+        println!("invaild type");
+    }
+}</pre>
+<h4><span class="ez-toc-section" id="Trait_%E9%87%8D%E8%BD%BD%E6%93%8D%E4%BD%9C%E7%AC%A6"></span>Trait 重载操作符<span class="ez-toc-section-end"></span></h4>
+<p>操作符重载对进行泛行编程是非常有帮助的，如果所有的对象都可以进行大于，小于，等于这亲的比较操作，那么就可以直接放到一个标准的数组排序的的算法中去了。在Rust中，在 <code>std::ops</code> 下有全载的操作符重载的Trait，在<code>std::cmp</code> 下则是比较操作的操作符。我们下面来看一个示例：</p>
+<p>假如我们有一个“员工”对象，我们想要按员工的薪水排序，如果我们想要使用<code>Vec::sort()</code>方法，我们就需要实现这个对象的各种“比较”方法。这些方法在 <code>std::cmp</code> 内—— 其中有四个Trait : <code>Ord</code>、<code>PartialOrd</code> 、<code>Eq</code> 和 <code>PartialEq</code>  。其中，<code>Ord</code> 依赖于 <code>PartialOrd</code> 和 <code>Eq</code> ，而<code>Eq</code> 依赖于 <code>PartialEq</code>，这意味着你需要实现所有的Trait，而<code>Eq</code> 这个Trait 是没有方法的，所以，其实现如下：</p>
+<pre class="EnlighterJSRAW" data-enlighter-language="null">use std::cmp::{Ord, PartialOrd, PartialEq, Ordering};
+
+#[derive(Debug)]
+struct Employee {
+    name : String,
+    salary : i32,
+}
+impl Ord for Employee {
+    fn cmp(&amp;self, rhs: &amp;Self) -&gt; Ordering {
+        self.salary.cmp(&amp;rhs.salary)
+    }
+}
+impl PartialOrd for Employee {
+    fn partial_cmp(&amp;self, rhs: &amp;Self) -&gt; Option&lt;Ordering&gt; {
+        Some(self.cmp(rhs))
+    }
+}
+impl Eq for Employee {
+}
+impl PartialEq for Employee {
+    fn eq(&amp;self, rhs: &amp;Self) -&gt; bool {
+        self.salary == rhs.salary
+    }
+}</pre>
+<p>于是，我们就可以进行如下的操作了：</p>
+<pre class="EnlighterJSRAW" data-enlighter-language="null">let mut v = vec![
+    Employee {name : String::from("Bob"),     salary: 2048},
+    Employee {name : String::from("Alice"),   salary: 3208},
+    Employee {name : String::from("Tom"),     salary: 2359},
+    Employee {name : String::from("Jack"),    salary: 4865},
+    Employee {name : String::from("Marray"),  salary: 3743},
+    Employee {name : String::from("Hao"),     salary: 2964},
+    Employee {name : String::from("Chen"),    salary: 4197},
+];
+
+//用for-loop找出薪水最多的人
+let mut e = &amp;v[0];
+for i in 0..v.len() {
+    if *e &lt; v[i] { 
+        e = &amp;v[i]; 
+    }
+}
+println!("max = {:?}", e);
+
+//使用标准的方法
+println!("min = {:?}", v.iter().min().unwrap());
+println!("max = {:?}", v.iter().max().unwrap());
+
+//使用标准的排序方法
+v.sort();
+println!("{:?}", v);</pre>
+<h4><span class="ez-toc-section" id="%E5%B0%8F%E7%BB%93"></span>小结<span class="ez-toc-section-end"></span></h4>
+<p>现在我们来小结一下：</p>
+<ul>
+<li>在Rust的中，最重要的概念就是“不可变”和“所有权”以及“Trait”这三个概念。</li>
+<li>在所有权概念上，Rust喜欢move所有权，如果需要借用则需要使用引用。</li>
+<li>Move所有权会导致一些编程上的复杂度，尤其是需要同时move两个变量时。</li>
+<li>引用（借用）的问题是生命周期的问题，一些时候需要程序员来标注生命周期。</li>
+<li>在函数式的闭包和多线程下，这些所有权又出现了各种麻烦事。</li>
+<li>使用智能指针可以解决所有权和借用带来的复杂度，但带来其它的问题。</li>
+<li>最后介绍了Rust的Trait对象完成多态和函数重载的玩法。</li>
+</ul>
+<p>Rust是一个比较严格的编程语言，它会严格检查你程序中的：</p>
+<ul>
+<li>变量是否是可变的</li>
+<li>变量的所有权是否被移走了</li>
+<li>引用的生命周期是否完整</li>
+<li>对象是否需要实现一些Trait</li>
+</ul>
+<p>这些东西都会导致失去编译的灵活性，并在一些时候需要“去糖”，导致，你在使用Rust会有诸多的不适应，程序编译不过的挫败感也是令人沮丧的。在初学Rust的时候，我想自己写一个单向链表，结果，费尽心力，才得以完成。也就是说，<strong>如果你对Rust的概念认识的不完整，你完全写不出程序，那怕就是很简单的一段代码</strong>。我觉得，这种挺好的，逼着程序员必需了解所有的概念才能编码。但是，另一方面也表明了这门语言并不适合初学者。</p>
+<p>没有银弹，任何语言都有些适合的地方和场景。</p>
+<p>（全文完）</p>
+<p><audio style="display: none;" controls="controls"></audio></p>
+<p><audio style="display: none;" controls="controls"></audio></p>
+<p><audio style="display: none;" controls="controls"></audio></p>
+<p><audio style="display: none;" controls="controls"></audio></p>
+<p><audio style="display: none;" controls="controls"></audio></p>
+<p><audio style="display: none;" controls="controls"></audio></p>
+<p><audio style="display: none;" controls="controls"></audio></p>
+<p><audio style="display: none;" controls="controls"></audio></p>
+<p><audio style="display: none;" controls="controls"></audio></p>
+<p><audio style="display: none;" controls="controls"></audio></p>
+<p><audio style="display: none;" controls="controls"></audio></p>
+<p><audio style="display: none;" controls="controls"></audio></p>
+<p><audio style="display: none;" controls="controls"></audio></p>
+<p><audio style="display: none;" controls="controls"></audio></p>
+<p><audio style="display: none;" controls="controls"></audio></p>
+<p><audio style="display: none;" controls="controls"></audio></p>
+<p><audio style="display: none;" controls="controls"></audio></p>
+<div id="gtx-trans" style="position: absolute; left: 36px; top: 17975.6px;">
+<div class="gtx-trans-icon"></div>
+</div>
+<p></p>
+<div style="margin-top: 15px; font-size: 16px;color: #cc0000;">
+<p align="center"><strong>（转载本站文章请注明作者和出处 <a href="https://coolshell.cn/">酷 壳 &#8211; CoolShell</a> ，请勿用于任何商业用途）</strong></p>
+</div>
+<div class="wp_rp_wrap  wp_rp_vertical_m" id="wp_rp_first"><div class="wp_rp_content"><h3 class="related_post_title">相关文章</h3><ul class="related_post wp_rp"><li><a href="https://coolshell.cn/articles/18360.html" class="wp_rp_thumbnail"><img src="https://coolshell.cn/wp-content/uploads/2018/05/300x262-150x150.jpg" alt="程序员练级攻略（2018)  与我的专栏" width="150" height="150" /></a><a href="https://coolshell.cn/articles/18360.html" class="wp_rp_title">程序员练级攻略（2018) 与我的专栏</a></li><li><a href="https://coolshell.cn/articles/8088.html" class="wp_rp_thumbnail"><img src="https://coolshell.cn/wp-content/plugins/wordpress-23-related-posts-plugin/static/thumbs/7.jpg" alt="对技术的态度" width="150" height="150" /></a><a href="https://coolshell.cn/articles/8088.html" class="wp_rp_title">对技术的态度</a></li><li><a href="https://coolshell.cn/articles/7992.html" class="wp_rp_thumbnail"><img src="https://coolshell.cn/wp-content/uploads/2012/08/cpp_small-150x150.jpg" alt="C++的坑真的多吗？" width="150" height="150" /></a><a href="https://coolshell.cn/articles/7992.html" class="wp_rp_title">C++的坑真的多吗？</a></li><li><a href="https://coolshell.cn/articles/5576.html" class="wp_rp_thumbnail"><img src="https://coolshell.cn/wp-content/uploads/2011/10/00.QuickBasic_PDS_IDE-150x150.png" alt="那些曾伴我走过编程之路的软件" width="150" height="150" /></a><a href="https://coolshell.cn/articles/5576.html" class="wp_rp_title">那些曾伴我走过编程之路的软件</a></li><li><a href="https://coolshell.cn/articles/4990.html" class="wp_rp_thumbnail"><img src="https://coolshell.cn/wp-content/uploads/2011/07/programmer-150x150.png" alt="程序员技术练级攻略" width="150" height="150" /></a><a href="https://coolshell.cn/articles/4990.html" class="wp_rp_title">程序员技术练级攻略</a></li><li><a href="https://coolshell.cn/articles/4905.html" class="wp_rp_thumbnail"><img src="https://coolshell.cn/wp-content/plugins/wordpress-23-related-posts-plugin/static/thumbs/3.jpg" alt="语言的数据亲和力" width="150" height="150" /></a><a href="https://coolshell.cn/articles/4905.html" class="wp_rp_title">语言的数据亲和力</a></li></ul></div></div>
+<div id="post-ratings-20845" class="post-ratings" itemscope itemtype="https://schema.org/Article" data-nonce="e1cd45848b"><img id="rating_20845_1" src="https://coolshell.cn/wp-content/plugins/wp-postratings/images/stars_crystal/rating_on.gif" alt="好烂啊" title="好烂啊" onmouseover="if (!window.__cfRLUnblockHandlers) return false; current_rating(20845, 1, '好烂啊');" onmouseout="if (!window.__cfRLUnblockHandlers) return false; ratings_off(4.6, 5, 0);" onclick="if (!window.__cfRLUnblockHandlers) return false; rate_post();" onkeypress="if (!window.__cfRLUnblockHandlers) return false; rate_post();" style="cursor: pointer; border: 0px;" data-cf-modified-e3b98322319635b96aca3b62- /><img id="rating_20845_2" src="https://coolshell.cn/wp-content/plugins/wp-postratings/images/stars_crystal/rating_on.gif" alt="有点差" title="有点差" onmouseover="if (!window.__cfRLUnblockHandlers) return false; current_rating(20845, 2, '有点差');" onmouseout="if (!window.__cfRLUnblockHandlers) return false; ratings_off(4.6, 5, 0);" onclick="if (!window.__cfRLUnblockHandlers) return false; rate_post();" onkeypress="if (!window.__cfRLUnblockHandlers) return false; rate_post();" style="cursor: pointer; border: 0px;" data-cf-modified-e3b98322319635b96aca3b62- /><img id="rating_20845_3" src="https://coolshell.cn/wp-content/plugins/wp-postratings/images/stars_crystal/rating_on.gif" alt="凑合看看" title="凑合看看" onmouseover="if (!window.__cfRLUnblockHandlers) return false; current_rating(20845, 3, '凑合看看');" onmouseout="if (!window.__cfRLUnblockHandlers) return false; ratings_off(4.6, 5, 0);" onclick="if (!window.__cfRLUnblockHandlers) return false; rate_post();" onkeypress="if (!window.__cfRLUnblockHandlers) return false; rate_post();" style="cursor: pointer; border: 0px;" data-cf-modified-e3b98322319635b96aca3b62- /><img id="rating_20845_4" src="https://coolshell.cn/wp-content/plugins/wp-postratings/images/stars_crystal/rating_on.gif" alt="还不错" title="还不错" onmouseover="if (!window.__cfRLUnblockHandlers) return false; current_rating(20845, 4, '还不错');" onmouseout="if (!window.__cfRLUnblockHandlers) return false; ratings_off(4.6, 5, 0);" onclick="if (!window.__cfRLUnblockHandlers) return false; rate_post();" onkeypress="if (!window.__cfRLUnblockHandlers) return false; rate_post();" style="cursor: pointer; border: 0px;" data-cf-modified-e3b98322319635b96aca3b62- /><img id="rating_20845_5" src="https://coolshell.cn/wp-content/plugins/wp-postratings/images/stars_crystal/rating_half.gif" alt="很精彩" title="很精彩" onmouseover="if (!window.__cfRLUnblockHandlers) return false; current_rating(20845, 5, '很精彩');" onmouseout="if (!window.__cfRLUnblockHandlers) return false; ratings_off(4.6, 5, 0);" onclick="if (!window.__cfRLUnblockHandlers) return false; rate_post();" onkeypress="if (!window.__cfRLUnblockHandlers) return false; rate_post();" style="cursor: pointer; border: 0px;" data-cf-modified-e3b98322319635b96aca3b62- /> (<strong>119</strong> 人打了分，平均分： <strong>4.59</strong> )<br/><span class="post-ratings-text" id="ratings_20845_text"></span><meta itemprop="name" content="Rust语言的编程范式" /><meta itemprop="headline" content="Rust语言的编程范式" /><meta itemprop="description" content="总是有很多很多人来问我对Rust语言怎么看的问题，在各种地方被at，其实，我不是很想表达我的想法。因为在不同的角度，你会看到不同的东西。编程语言这个东西，老实说很难评价，在学术上来说，Lisp就是很好的语言，然而在工程使用的时候，你会发现Lisp没什么人用，而Javascript或是PHP这样在学术很糟糕设计的语言反而成了主流，你觉得C++很反人类，在我看来，C++有很多不错的设计，而且对于了解编..." /><meta itemprop="datePublished" content="2020-04-04T14:48:23+08:00" /><meta itemprop="dateModified" content="2022-08-10T16:01:42+08:00" /><meta itemprop="url" content="https://coolshell.cn/articles/20845.html" /><meta itemprop="author" content="陈皓" /><meta itemprop="mainEntityOfPage" content="https://coolshell.cn/articles/20845.html" /><div style="display: none;" itemprop="publisher" itemscope itemtype="https://schema.org/Organization"><meta itemprop="name" content="酷 壳 - CoolShell" /><meta itemprop="url" content="https://coolshell.cn" /><div itemprop="logo" itemscope itemtype="https://schema.org/ImageObject"><meta itemprop="url" content /></div></div><div style="display: none;" itemprop="aggregateRating" itemscope itemtype="https://schema.org/AggregateRating"><meta itemprop="bestRating" content="5" /><meta itemprop="worstRating" content="1" /><meta itemprop="ratingValue" content="4.59" /><meta itemprop="ratingCount" content="119" /></div></div><div id="post-ratings-20845-loading" class="post-ratings-loading"><img src="https://coolshell.cn/wp-content/plugins/wp-postratings/images/loading.gif" width="16" height="16" class="post-ratings-image" />Loading...</div>
+</div>
+<footer class="entry-footer">
+<hr><div class="row"><div class="col-md-6 cattegories"><span class="cat-links"><i class="fa fa-folder-open"></i>
+<a href="https://coolshell.cn/category/proglanguage/rust-%e8%af%ad%e8%a8%80" rel="category tag">Rust 语言</a>, <a href="https://coolshell.cn/category/proglanguage" rel="category tag">编程语言</a></span></div><div class="col-md-6 tags"><span class="tags-links"><i class="fa fa-tags"></i> <a href="https://coolshell.cn/tag/c" rel="tag">C++</a>, <a href="https://coolshell.cn/tag/java" rel="tag">Java</a>, <a href="https://coolshell.cn/tag/rust" rel="tag">Rust</a></span></div></div> </footer>
+</article>
+
+<div id="related_posts">
+<div class="wp_rp_wrap  wp_rp_vertical_m"><div class="wp_rp_content"><h3 class="related_post_title">相关文章</h3><ul class="related_post wp_rp"><li><a href="https://coolshell.cn/articles/18360.html" class="wp_rp_thumbnail"><img src="https://coolshell.cn/wp-content/uploads/2018/05/300x262-150x150.jpg" alt="程序员练级攻略（2018)  与我的专栏" width="150" height="150" /></a><a href="https://coolshell.cn/articles/18360.html" class="wp_rp_title">程序员练级攻略（2018) 与我的专栏</a></li><li><a href="https://coolshell.cn/articles/8088.html" class="wp_rp_thumbnail"><img src="https://coolshell.cn/wp-content/plugins/wordpress-23-related-posts-plugin/static/thumbs/7.jpg" alt="对技术的态度" width="150" height="150" /></a><a href="https://coolshell.cn/articles/8088.html" class="wp_rp_title">对技术的态度</a></li><li><a href="https://coolshell.cn/articles/7992.html" class="wp_rp_thumbnail"><img src="https://coolshell.cn/wp-content/uploads/2012/08/cpp_small-150x150.jpg" alt="C++的坑真的多吗？" width="150" height="150" /></a><a href="https://coolshell.cn/articles/7992.html" class="wp_rp_title">C++的坑真的多吗？</a></li><li><a href="https://coolshell.cn/articles/5576.html" class="wp_rp_thumbnail"><img src="https://coolshell.cn/wp-content/uploads/2011/10/00.QuickBasic_PDS_IDE-150x150.png" alt="那些曾伴我走过编程之路的软件" width="150" height="150" /></a><a href="https://coolshell.cn/articles/5576.html" class="wp_rp_title">那些曾伴我走过编程之路的软件</a></li><li><a href="https://coolshell.cn/articles/4990.html" class="wp_rp_thumbnail"><img src="https://coolshell.cn/wp-content/uploads/2011/07/programmer-150x150.png" alt="程序员技术练级攻略" width="150" height="150" /></a><a href="https://coolshell.cn/articles/4990.html" class="wp_rp_title">程序员技术练级攻略</a></li><li><a href="https://coolshell.cn/articles/4905.html" class="wp_rp_thumbnail"><img src="https://coolshell.cn/wp-content/plugins/wordpress-23-related-posts-plugin/static/thumbs/3.jpg" alt="语言的数据亲和力" width="150" height="150" /></a><a href="https://coolshell.cn/articles/4905.html" class="wp_rp_title">语言的数据亲和力</a></li></ul></div></div>
+</div><div class="fixed"></div> 
+</main>
+<div class="post-navigation">
+<nav class="navigation" role="navigation">
+<h2 class="screen-reader-text">Post navigation</h2>
+<div class="nav-links">
+<div class="row">
+
+<div class="col-md-6 next-post">
+<a class href="https://coolshell.cn/articles/21003.html"><span class="next-prev-text"><i class="fa fa-angle-left"></i>
+上一篇</span><br>计时攻击 Timing Attacks</a>
+</div>
+
+<div class="col-md-6 prev-post">
+<a class href="https://coolshell.cn/articles/20793.html"><span class="next-prev-text">下一篇 <i class="fa fa-angle-right"></i>
+</span><br>与程序员相关的CPU缓存知识</a>
+</div>
+</div>
+</div>
+</nav>
+</div>
+<div class="post-comments">
+<div id="comments" class="comments-area">
+<h2 class="comments-title">
+《<span>Rust语言的编程范式</span>》的相关评论 </h2>
+<ol class="comment-list">
+<li id="comment-2147642" class="pingback even thread-even depth-1">
+<div class="comment-body">
+Pingback： <a href="https://kknews.xyz/4320" class="url" rel="ugc external nofollow">悬挂引用是如何被Rust消灭的？ - KKNEWS</a> </div>
+</li>
+<li id="comment-2150117" class="comment odd alt thread-odd thread-alt depth-1 parent">
+<article id="div-comment-2150117" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/b4fc485307728ec52fa8a64e3e28383d?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/b4fc485307728ec52fa8a64e3e28383d?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn">吴翱翔</b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/20845.html/comment-page-2#comment-2150117"><time datetime="2020-09-02T15:20:10+08:00">2020年09月02日 15:20</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>文中两处笔误</p>
+<blockquote><p>
+首先，先得让 IShape 继承于 Any
+</p></blockquote>
+<p>Rust没有继承的概念，trait A : B{}实际上是给A加上一个约束条件: implement B also need to implement A</p>
+<p>而且O&#8217;REILLY的《Programming Rust》这本书也没有提到trait有inherit的概念</p>
+<blockquote><p>
+所以，编译器需要知道你的数组、结构构、枚举等这些数据类型的长度
+</p></blockquote>
+<p>结构构 -&gt; 结构体</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/20845.html/comment-page-2?replytocom=2150117#respond" data-commentid="2150117" data-postid="20845" data-belowelement="div-comment-2150117" data-respondelement="respond" data-replyto="回复给吴翱翔" aria-label="回复给吴翱翔">回复</a></div> </article>
+<ol class="children">
+<li id="comment-2186011" class="comment even depth-2">
+<article id="div-comment-2186011" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/bc2fd947a292fe7d13d1d9b6d1e32ce2?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/bc2fd947a292fe7d13d1d9b6d1e32ce2?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn">david raft</b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/20845.html/comment-page-2#comment-2186011"><time datetime="2020-12-22T16:47:03+08:00">2020年12月22日 16:47</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>操作符重载对进行泛行编程是非常有帮助的，如果所有的对象都可以进行大于，小于，等于这亲的比较操作</p>
+<p>这里亲的貌似也是笔误</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/20845.html/comment-page-2?replytocom=2186011#respond" data-commentid="2186011" data-postid="20845" data-belowelement="div-comment-2186011" data-respondelement="respond" data-replyto="回复给david raft" aria-label="回复给david raft">回复</a></div> </article>
+</li>
+</ol>
+</li>
+<li id="comment-2153823" class="comment odd alt thread-even depth-1">
+<article id="div-comment-2153823" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/e1e477c382d906ce639a9938db077261?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/e1e477c382d906ce639a9938db077261?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn"><a href="https://www.zikaotisheng.com/" class="url" rel="ugc external nofollow">广东自考</a></b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/20845.html/comment-page-2#comment-2153823"><time datetime="2020-09-16T18:07:19+08:00">2020年09月16日 18:07</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>好厉害啊！学习学习</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/20845.html/comment-page-2?replytocom=2153823#respond" data-commentid="2153823" data-postid="20845" data-belowelement="div-comment-2153823" data-respondelement="respond" data-replyto="回复给广东自考" aria-label="回复给广东自考">回复</a></div> </article>
+</li>
+<li id="comment-2157747" class="comment even thread-odd thread-alt depth-1">
+<article id="div-comment-2157747" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/acd6e5836d90a79dacc0dd1f3d5950f0?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/acd6e5836d90a79dacc0dd1f3d5950f0?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn">aixi</b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/20845.html/comment-page-2#comment-2157747"><time datetime="2020-09-30T01:05:59+08:00">2020年09月30日 01:05</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>我还是喜欢C++ 20</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/20845.html/comment-page-2?replytocom=2157747#respond" data-commentid="2157747" data-postid="20845" data-belowelement="div-comment-2157747" data-respondelement="respond" data-replyto="回复给aixi" aria-label="回复给aixi">回复</a></div> </article>
+</li>
+<li id="comment-2162609" class="comment odd alt thread-even depth-1">
+<article id="div-comment-2162609" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/e9c600ff73bf929ce049a9721d872f10?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/e9c600ff73bf929ce049a9721d872f10?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn">codingchef</b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/20845.html/comment-page-2#comment-2162609"><time datetime="2020-10-16T07:42:10+08:00">2020年10月16日 07:42</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>多谢！</p>
+<p>有些代码貌似无法编译，比如：<br/>
+<code>let mut v : Vec&lt;Box &gt; = Vec::new();</code></p>
+<p>要改成：<br/>
+<code>let mut v : Vec&lt;Box&lt;dyn IShape&gt; &gt; = Vec::new();</code></p>
+<p><code>//声明两个未初始化的指针变量<br/>
+let weak : Weak;<br/>
+let strong : Rc;<br/>
+</code></p>
+<p>要改成:</p>
+<p><code>//声明两个未初始化的指针变量<br/>
+let weak : Weak&lt;i32&gt;;<br/>
+let strong : Rc&lt;i32&gt;;<br/>
+</code></p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/20845.html/comment-page-2?replytocom=2162609#respond" data-commentid="2162609" data-postid="20845" data-belowelement="div-comment-2162609" data-respondelement="respond" data-replyto="回复给codingchef" aria-label="回复给codingchef">回复</a></div> </article>
+</li>
+<li id="comment-2176080" class="comment even thread-odd thread-alt depth-1">
+<article id="div-comment-2176080" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/6338e356cd96e06ca75d187c02bfec45?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/6338e356cd96e06ca75d187c02bfec45?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn"><a href="https://www.gov-bid.com/" class="url" rel="ugc external nofollow">招标查询</a></b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/20845.html/comment-page-2#comment-2176080"><time datetime="2020-11-25T17:51:00+08:00">2020年11月25日 17:51</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>写的非常详细，也太厉害了吧</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/20845.html/comment-page-2?replytocom=2176080#respond" data-commentid="2176080" data-postid="20845" data-belowelement="div-comment-2176080" data-respondelement="respond" data-replyto="回复给招标查询" aria-label="回复给招标查询">回复</a></div> </article>
+</li>
+<li id="comment-2187179" class="comment odd alt thread-even depth-1">
+<article id="div-comment-2187179" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/04ee2ee26d7f64165671ebd3cb01febe?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/04ee2ee26d7f64165671ebd3cb01febe?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn">shankun</b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/20845.html/comment-page-2#comment-2187179"><time datetime="2020-12-25T15:31:33+08:00">2020年12月25日 15:31</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>昨晚看过视频又一次看文章，高屋建瓴，不愧是大佬，站的层次确实高，可惜内容太少了；</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/20845.html/comment-page-2?replytocom=2187179#respond" data-commentid="2187179" data-postid="20845" data-belowelement="div-comment-2187179" data-respondelement="respond" data-replyto="回复给shankun" aria-label="回复给shankun">回复</a></div> </article>
+</li>
+<li id="comment-2253583" class="comment even thread-odd thread-alt depth-1">
+<article id="div-comment-2253583" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/fb81ec98cc32b5b07a88147c5478930b?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/fb81ec98cc32b5b07a88147c5478930b?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn">gebitang</b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/20845.html/comment-page-2#comment-2253583"><time datetime="2021-05-26T16:02:53+08:00">2021年05月26日 16:02</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>第一次被直接劝退。</p>
+<p>今天回来再看……至少可以理解了。</p>
+<p>学习一段时间后再回来重温一下:)</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/20845.html/comment-page-2?replytocom=2253583#respond" data-commentid="2253583" data-postid="20845" data-belowelement="div-comment-2253583" data-respondelement="respond" data-replyto="回复给gebitang" aria-label="回复给gebitang">回复</a></div> </article>
+</li>
+<li id="comment-2278155" class="comment odd alt thread-even depth-1">
+<article id="div-comment-2278155" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/cc584f239e87be28a03ab4439180f805?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/cc584f239e87be28a03ab4439180f805?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn">worker</b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/20845.html/comment-page-2#comment-2278155"><time datetime="2021-07-22T16:39:02+08:00">2021年07月22日 16:39</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>看完之后劝退了</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/20845.html/comment-page-2?replytocom=2278155#respond" data-commentid="2278155" data-postid="20845" data-belowelement="div-comment-2278155" data-respondelement="respond" data-replyto="回复给worker" aria-label="回复给worker">回复</a></div> </article>
+</li>
+<li id="comment-2318260" class="comment even thread-odd thread-alt depth-1">
+<article id="div-comment-2318260" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/ff518d86af08f9951edad56571bf5c23?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/ff518d86af08f9951edad56571bf5c23?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn">我爱胶水</b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/20845.html/comment-page-2#comment-2318260"><time datetime="2021-10-11T22:50:56+08:00">2021年10月11日 22:50</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>学了一点点rust，看到第四部分头已经开始突突的疼了，真实劝退啊</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/20845.html/comment-page-2?replytocom=2318260#respond" data-commentid="2318260" data-postid="20845" data-belowelement="div-comment-2318260" data-respondelement="respond" data-replyto="回复给我爱胶水" aria-label="回复给我爱胶水">回复</a></div> </article>
+</li>
+<li id="comment-2325956" class="comment odd alt thread-even depth-1">
+<article id="div-comment-2325956" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/3b1534c28faa1783f736eb8190771601?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/3b1534c28faa1783f736eb8190771601?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn">沙渺</b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/20845.html/comment-page-2#comment-2325956"><time datetime="2021-10-28T10:46:23+08:00">2021年10月28日 10:46</time></a> </div>
+</footer>
+<div class="comment-content">
+<p><code>std::marker::Copy</code> 这个trait的讲解还是有很大问题的。</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/20845.html/comment-page-2?replytocom=2325956#respond" data-commentid="2325956" data-postid="20845" data-belowelement="div-comment-2325956" data-respondelement="respond" data-replyto="回复给沙渺" aria-label="回复给沙渺">回复</a></div> </article>
+</li>
+<li id="comment-2328766" class="comment even thread-odd thread-alt depth-1">
+<article id="div-comment-2328766" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/b1d48495018974a6082327a9fc659206?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/b1d48495018974a6082327a9fc659206?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn"><a href="http://catnipan.com" class="url" rel="ugc external nofollow">卡特尼普</a></b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/20845.html/comment-page-2#comment-2328766"><time datetime="2021-11-03T12:06:43+08:00">2021年11月03日 12:06</time></a> </div>
+</footer>
+<div class="comment-content">
+<blockquote><p>
+一方面，这个 name 变量又没有声明成 mut 这意味着不变，没必要使用move语义也是安全的。
+</p></blockquote>
+<p>不可变只是对于当前绑定而言的，可以像下面这样把所有权到另一个mut变量里，就可以变了</p>
+<p><code>fn main() {<br/>
+let s = String::from("hello world");<br/>
+let mut ms = s;<br/>
+ms.push('x');<br/>
+println!("{:?}", ms);<br/>
+}<br/>
+</code></p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/20845.html/comment-page-2?replytocom=2328766#respond" data-commentid="2328766" data-postid="20845" data-belowelement="div-comment-2328766" data-respondelement="respond" data-replyto="回复给卡特尼普" aria-label="回复给卡特尼普">回复</a></div> </article>
+</li>
+<li id="comment-2355176" class="comment odd alt thread-even depth-1">
+<article id="div-comment-2355176" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/8b34c0a48674d33571581bb95822e316?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/8b34c0a48674d33571581bb95822e316?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn">chary</b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/20845.html/comment-page-2#comment-2355176"><time datetime="2021-12-31T18:03:20+08:00">2021年12月31日 18:03</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>我们可以通过智指指针来完成这个事，下面是一个例程 ===</p>
+<p>感觉有错别字。</p>
+<p>&#8212; 纯属围观 “所有权”的吃瓜群众</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/20845.html/comment-page-2?replytocom=2355176#respond" data-commentid="2355176" data-postid="20845" data-belowelement="div-comment-2355176" data-respondelement="respond" data-replyto="回复给chary" aria-label="回复给chary">回复</a></div> </article>
+</li>
+<li id="comment-2364792" class="comment even thread-odd thread-alt depth-1">
+<article id="div-comment-2364792" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/6b33ffc7c00b5411e027f947d86d92eb?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/6b33ffc7c00b5411e027f947d86d92eb?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn">若如</b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/20845.html/comment-page-2#comment-2364792"><time datetime="2022-02-08T15:02:32+08:00">2022年02月08日 15:02</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>5.1 函数闭包的例子</p>
+<p>stackoverflow 的例子太麻烦了，可以改成如下版本</p>
+<p><code>let name = |p: &amp;Person| String::from(&amp;p.name);<br/>
+println!("name={}, age={}", name(&amp;p), age(p));<br/>
+</code></p>
+<p>话说皓叔啥时候支持一下markdown</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/20845.html/comment-page-2?replytocom=2364792#respond" data-commentid="2364792" data-postid="20845" data-belowelement="div-comment-2364792" data-respondelement="respond" data-replyto="回复给若如" aria-label="回复给若如">回复</a></div> </article>
+</li>
+<li id="comment-2370626" class="comment odd alt thread-even depth-1">
+<article id="div-comment-2370626" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/40885d934156a474c4b5aa918ae95ac1?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/40885d934156a474c4b5aa918ae95ac1?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn"><a href="http://www.ibyte.me" class="url" rel="ugc external nofollow">Leon Ding</a></b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/20845.html/comment-page-2#comment-2370626"><time datetime="2022-08-02T11:55:58+08:00">2022年08月02日 11:55</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>感谢耗子叔的分享，让我这种新手少走弯路，前人栽树后人乘凉。</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/20845.html/comment-page-2?replytocom=2370626#respond" data-commentid="2370626" data-postid="20845" data-belowelement="div-comment-2370626" data-respondelement="respond" data-replyto="回复给Leon Ding" aria-label="回复给Leon Ding">回复</a></div> </article>
+</li>
+<li id="comment-2370636" class="pingback even thread-odd thread-alt depth-1">
+<div class="comment-body">
+Pingback： <a href="https://rebase.network/posts/2852" class="url" rel="ugc external nofollow">Web3 极客日报 #936 | Rebase Network | Rebase 社区 | Rebase Community</a> </div>
+</li>
+<li id="comment-2370907" class="comment odd alt thread-even depth-1">
+<article id="div-comment-2370907" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/3a522ba29032b7f61c2fd7532dcc3658?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/3a522ba29032b7f61c2fd7532dcc3658?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn">baipang</b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/20845.html/comment-page-2#comment-2370907"><time datetime="2022-11-14T17:03:23+08:00">2022年11月14日 17:03</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>写的好棒，本来学rust感觉好难，不得要领。看完感觉有了那棵树，打通了任督二脉，学起来突然觉得轻松多了。</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/20845.html/comment-page-2?replytocom=2370907#respond" data-commentid="2370907" data-postid="20845" data-belowelement="div-comment-2370907" data-respondelement="respond" data-replyto="回复给baipang" aria-label="回复给baipang">回复</a></div> </article>
+</li>
+<li id="comment-2371226" class="comment even thread-odd thread-alt depth-1">
+<article id="div-comment-2371226" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/adf8cfa8c27472633ed02442834a52fb?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/adf8cfa8c27472633ed02442834a52fb?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn">xyb</b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/20845.html/comment-page-2#comment-2371226"><time datetime="2023-05-10T16:59:22+08:00">2023年05月10日 16:59</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>typo: “而不是Stack（<strong>堆</strong>）上”，实际应该是“而不是Stack（<strong>栈</strong>）上”。</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/20845.html/comment-page-2?replytocom=2371226#respond" data-commentid="2371226" data-postid="20845" data-belowelement="div-comment-2371226" data-respondelement="respond" data-replyto="回复给xyb" aria-label="回复给xyb">回复</a></div> </article>
+</li>
+</ol>
+<nav class="navigation comment-navigation" role="navigation">
+<h2 class="screen-reader-text">Comment navigation</h2>
+<div class="nav-links">
+<div id="commentnavi">
+<span class="pages"><i class="fa fa-comments"></i> 评论分页</span>
+<div id="commentpager">
+<a class="prev page-numbers" href="https://coolshell.cn/articles/20845.html/comment-page-1#comments">&laquo; 上一页</a>
+<a class="page-numbers" href="https://coolshell.cn/articles/20845.html/comment-page-1#comments">1</a>
+<span aria-current="page" class="page-numbers current">2</span> <span id="cp_post_id">20845</span>
+</div>
+<div class="fixed"></div>
+</div>
+</div>
+</nav>
+<div id="respond" class="comment-respond">
+<h3 id="reply-title" class="comment-reply-title">发表回复 <small><a rel="nofollow" id="cancel-comment-reply-link" href="/articles/20845.html#respond" style="display:none;">取消回复</a></small></h3><form action="https://coolshell.cn/wp-comments-post.php" method="post" id="commentform" class="comment-form" novalidate><p class="comment-notes"><span id="email-notes">您的电子邮箱地址不会被公开。</span> <span class="required-field-message">必填项已用<span class="required">*</span>标注</span></p><p class="comment-form-comment"><label for="comment">评论 <span class="required">*</span></label> <textarea id="comment" name="comment" cols="45" rows="8" maxlength="65525" required></textarea></p><p class="comment-form-author"><label for="author">显示名称 <span class="required">*</span></label> <input id="author" name="author" type="text" value size="30" maxlength="245" autocomplete="name" required /></p>
+<p class="comment-form-email"><label for="email">电子邮箱地址 <span class="required">*</span></label> <input id="email" name="email" type="email" value size="30" maxlength="100" aria-describedby="email-notes" autocomplete="email" required /></p>
+<p class="comment-form-url"><label for="url">网站地址</label> <input id="url" name="url" type="url" value size="30" maxlength="200" autocomplete="url" /></p>
+<p class="form-submit"><input name="submit" type="submit" id="submit" class="submit" value="发表评论" /> <input type="hidden" name="comment_post_ID" value="20845" id="comment_post_ID" />
+<input type="hidden" name="comment_parent" id="comment_parent" value="0" />
+</p><p style="display: none;"><input type="hidden" id="akismet_comment_nonce" name="akismet_comment_nonce" value="c486576cfa" /></p><p style="display: none !important;"><label>&#916;<textarea name="ak_hp_textarea" cols="45" rows="8" maxlength="100"></textarea></label><input type="hidden" id="ak_js_1" name="ak_js" value="209" /><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script type="e3b98322319635b96aca3b62-text/javascript">document.getElementById( "ak_js_1" ).setAttribute( "value", ( new Date() ).getTime() );</script></p></form> </div>
+</div>
+</div>
+</div>
+<div id="secondary" class="col-md-3 hidden-sm hidden-xs sidebar widget-area" role="complementary">
+<aside id="search-9" class="widget widget_search">
+<form role="search" method="get" class="search-form" action="https://coolshell.cn/">
+<label>
+<span class="screen-reader-text">Search for:</span>
+<input type="search" class="search-field" placeholder="Search &hellip;" value name="s" title="Search for:" />
+</label>
+<button type="submit" class="search-submit"><span class="screen-reader-text">Search</span></button>
+</form>
+</aside><aside id="custom_html-3" class="widget_text widget widget_custom_html"><h4 class="widget-title">本站公告</h4><div class="textwidget custom-html-widget"><p align="center"><a class="twitter" href="https://twitter.com/haoel" target="_blank" rel="noopener"> Twitter @haoel </a></p>
+
+<p align="center">极客时间专栏<br><a href="http://gk.link/a/10sBp" target="_blank" rel="noopener"><img src="https://coolshell.cn/wp-content/uploads/2021/06/8311623409583_.pic_hd-1024x1024.jpg" height="200" weight="200" alt="极客时间专栏" title="极客时间专栏"></a></p>
+
+</div></aside>
+<aside id="recent-posts-4" class="widget widget_recent_entries">
+<h4 class="widget-title">最新文章</h4>
+<ul>
+<li>
+<a href="https://coolshell.cn/articles/22422.html">是微服务架构不香还是云不香？</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/22398.html">我看ChatGPT: 为啥谷歌掉了千亿美金</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/22367.html">聊聊 nostr 和 审查</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/22341.html">感染新冠的经历</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/22320.html">eBPF 介绍</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/22298.html">聊聊团队协同和协同工具</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/22263.html">从一次经历谈 TIME_WAIT 的那些事</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/22242.html">ETCD的内存问题</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/22173.html">“一把梭：REST API 全用 POST”</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/22157.html">谈谈公司对员工的监控</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/21708.html">网络数字身份认证术</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/21672.html">我做系统架构的一些原则</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/21649.html">源代码特洛伊木马攻击</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/21615.html">Go编程模式 ： 泛型编程</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/21589.html">如何做一个有质量的技术分享</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/21263.html">Go 编程模式：k8s Visitor 模式</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/21228.html">Go编程模式：Pipeline</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/21214.html">Go编程模式：委托和反转控制</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/21179.html">Go 编程模式：Go Generation</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/21164.html">Go编程模式：Map-Reduce</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/21146.html">Go 编程模式：Functional Options</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/21140.html">Go 编程模式：错误处理</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/21128.html">Go编程模式：切片，接口，时间和性能</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/21113.html">百度为什么掉队了</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/20977.html">程序员如何把控自己的职业</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/21003.html">计时攻击 Timing Attacks</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/20845.html" aria-current="page">Rust语言的编程范式</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/20793.html">与程序员相关的CPU缓存知识</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/20765.html">MegaEase的远程工作文化</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/20533.html">使用简单的逻辑方法进行独立思考</a>
+</li>
+</ul>
+</aside><aside id="views-6" class="widget widget_views"><h4 class="widget-title">全站热门</h4><ul>
+<li><a href="https://coolshell.cn/articles/4990.html" title="程序员技术练级攻略 - 10,239,427 人阅读">程序员技术练级攻略</a></li><li><a href="https://coolshell.cn/articles/3961.html" title="&ldquo;火柴棍式&rdquo;程序员面试题 - 2,356,396 人阅读">&ldquo;火柴棍式&rdquo;程序员面试题</a></li><li><a href="https://coolshell.cn/articles/5426.html" title="简明 Vim 练级攻略 - 1,325,359 人阅读">简明 Vim 练级攻略</a></li><li><a href="https://coolshell.cn/articles/9308.html" title="&ldquo;作环保的程序员，从不用百度开始&rdquo; - 589,367 人阅读">&ldquo;作环保的程序员，从不用百度开始&rdquo;</a></li><li><a href="https://coolshell.cn/articles/11564.html" title="TCP 的那些事儿（上） - 488,737 人阅读">TCP 的那些事儿（上）</a></li><li><a href="https://coolshell.cn/articles/9070.html" title="AWK 简明教程 - 453,322 人阅读">AWK 简明教程</a></li><li><a href="https://coolshell.cn/articles/7186.html" title="做个环保主义的程序员 - 447,313 人阅读">做个环保主义的程序员</a></li><li><a href="https://coolshell.cn/articles/10688.html" title="编程能力与编程年龄 - 416,737 人阅读">编程能力与编程年龄</a></li><li><a href="https://coolshell.cn/articles/10590.html" title="二维码的生成细节和原理 - 393,834 人阅读">二维码的生成细节和原理</a></li><li><a href="https://coolshell.cn/articles/9104.html" title="sed 简明教程 - 380,317 人阅读">sed 简明教程</a></li><li><a href="https://coolshell.cn/articles/4102.html" title="如何学好C语言 - 368,399 人阅读">如何学好C语言</a></li><li><a href="https://coolshell.cn/articles/19464.html" title="如何超过大多数人 - 314,176 人阅读">如何超过大多数人</a></li><li><a href="https://coolshell.cn/articles/17583.html" title="技术人员的发展之路 - 308,387 人阅读">技术人员的发展之路</a></li><li><a href="https://coolshell.cn/articles/9606.html" title="疫苗：Java HashMap的死循环 - 305,434 人阅读">疫苗：Java HashMap的死循环</a></li><li><a href="https://coolshell.cn/articles/6470.html" title="由12306.cn谈谈网站性能技术 - 298,940 人阅读">由12306.cn谈谈网站性能技术</a></li><li><a href="https://coolshell.cn/articles/8883.html" title="应该知道的Linux技巧 - 296,838 人阅读">应该知道的Linux技巧</a></li><li><a href="https://coolshell.cn/articles/17416.html" title="缓存更新的套路 - 293,608 人阅读">缓存更新的套路</a></li><li><a href="https://coolshell.cn/articles/10910.html" title="分布式系统的事务处理 - 284,614 人阅读">分布式系统的事务处理</a></li><li><a href="https://coolshell.cn/articles/11609.html" title="TCP 的那些事儿（下） - 284,361 人阅读">TCP 的那些事儿（下）</a></li><li><a href="https://coolshell.cn/articles/2250.html" title="&ldquo;21天教你学会C++&rdquo; - 278,597 人阅读">&ldquo;21天教你学会C++&rdquo;</a></li><li><a href="https://coolshell.cn/articles/8239.html" title="无锁队列的实现 - 274,283 人阅读">无锁队列的实现</a></li><li><a href="https://coolshell.cn/articles/20276.html" title="别让自己&ldquo;墙&rdquo;了自己 - 271,298 人阅读">别让自己&ldquo;墙&rdquo;了自己</a></li><li><a href="https://coolshell.cn/articles/10739.html" title="Lua简明教程 - 269,335 人阅读">Lua简明教程</a></li><li><a href="https://coolshell.cn/articles/7490.html" title="性能调优攻略 - 257,249 人阅读">性能调优攻略</a></li><li><a href="https://coolshell.cn/articles/1846.html" title="MySQL性能优化的最佳20+条经验 - 255,746 人阅读">MySQL性能优化的最佳20+条经验</a></li><li><a href="https://coolshell.cn/articles/4758.html" title="如何写出无法维护的代码 - 254,093 人阅读">如何写出无法维护的代码</a></li><li><a href="https://coolshell.cn/articles/914.html" title="6个变态的C语言Hello World程序 - 251,863 人阅读">6个变态的C语言Hello World程序</a></li><li><a href="https://coolshell.cn/articles/17010.html" title="Docker基础技术：Linux Namespace（上） - 241,782 人阅读">Docker基础技术：Linux Namespace（上）</a></li><li><a href="https://coolshell.cn/articles/7829.html" title="28个Unix/Linux的命令行神器 - 241,199 人阅读">28个Unix/Linux的命令行神器</a></li><li><a href="https://coolshell.cn/articles/11312.html" title="无插件Vim编程技巧 - 222,789 人阅读">无插件Vim编程技巧</a></li></ul>
+</aside><aside id="categories-367921425" class="widget widget_categories"><h4 class="widget-title">分类</h4>
+<ul>
+<li class="cat-item cat-item-195"><a href="https://coolshell.cn/category/itnews">业界新闻</a> (33)
+</li>
+<li class="cat-item cat-item-509"><a href="https://coolshell.cn/category/%e4%bc%81%e4%b8%9a%e5%ba%94%e7%94%a8">企业应用</a> (2)
+</li>
+<li class="cat-item cat-item-9"><a href="https://coolshell.cn/category/technews">技术新闻</a> (38)
+</li>
+<li class="cat-item cat-item-550"><a href="https://coolshell.cn/category/%e6%8a%80%e6%9c%af%e7%ae%a1%e7%90%86">技术管理</a> (19)
+</li>
+<li class="cat-item cat-item-12"><a href="https://coolshell.cn/category/techarticle">技术读物</a> (125)
+</li>
+<li class="cat-item cat-item-18"><a href="https://coolshell.cn/category/operatingsystem">操作系统</a> (97)
+<ul class="children">
+<li class="cat-item cat-item-20"><a href="https://coolshell.cn/category/operatingsystem/unixlinux">Unix/Linux</a> (81)
+</li>
+<li class="cat-item cat-item-19"><a href="https://coolshell.cn/category/operatingsystem/mswindows">Windows</a> (12)
+</li>
+</ul>
+</li>
+<li class="cat-item cat-item-105"><a href="https://coolshell.cn/category/datebase">数据库</a> (11)
+</li>
+<li class="cat-item cat-item-10"><a href="https://coolshell.cn/category/misc">杂项资源</a> (295)
+</li>
+<li class="cat-item cat-item-15"><a href="https://coolshell.cn/category/process">流程方法</a> (48)
+</li>
+<li class="cat-item cat-item-23"><a href="https://coolshell.cn/category/progdesign">程序设计</a> (110)
+</li>
+<li class="cat-item cat-item-602"><a href="https://coolshell.cn/category/%e7%b3%bb%e7%bb%9f%e6%9e%b6%e6%9e%84">系统架构</a> (15)
+</li>
+<li class="cat-item cat-item-1"><a href="https://coolshell.cn/category/tools">编程工具</a> (67)
+</li>
+<li class="cat-item cat-item-3"><a href="https://coolshell.cn/category/proglanguage">编程语言</a> (326)
+<ul class="children">
+<li class="cat-item cat-item-189"><a href="https://coolshell.cn/category/proglanguage/dotnet">.NET编程</a> (3)
+</li>
+<li class="cat-item cat-item-8"><a href="https://coolshell.cn/category/proglanguage/ajaxdev">Ajax开发</a> (9)
+</li>
+<li class="cat-item cat-item-5"><a href="https://coolshell.cn/category/proglanguage/cplusplus">C/C++语言</a> (74)
+</li>
+<li class="cat-item cat-item-186"><a href="https://coolshell.cn/category/proglanguage/erlang">Erlang</a> (1)
+</li>
+<li class="cat-item cat-item-819"><a href="https://coolshell.cn/category/proglanguage/go-%e8%af%ad%e8%a8%80">Go 语言</a> (15)
+</li>
+<li class="cat-item cat-item-4"><a href="https://coolshell.cn/category/proglanguage/javadev">Java语言</a> (32)
+</li>
+<li class="cat-item cat-item-11"><a href="https://coolshell.cn/category/proglanguage/phpdev">PHP脚本</a> (11)
+</li>
+<li class="cat-item cat-item-33"><a href="https://coolshell.cn/category/proglanguage/pythondev">Python</a> (23)
+</li>
+<li class="cat-item cat-item-100"><a href="https://coolshell.cn/category/proglanguage/rubydev">Ruby</a> (5)
+</li>
+<li class="cat-item cat-item-860"><a href="https://coolshell.cn/category/proglanguage/rust-%e8%af%ad%e8%a8%80">Rust 语言</a> (1)
+</li>
+<li class="cat-item cat-item-7"><a href="https://coolshell.cn/category/proglanguage/webdev">Web开发</a> (106)
+</li>
+</ul>
+</li>
+<li class="cat-item cat-item-6"><a href="https://coolshell.cn/category/netsecurity">网络安全</a> (36)
+</li>
+<li class="cat-item cat-item-39"><a href="https://coolshell.cn/category/career">职场生涯</a> (40)
+</li>
+<li class="cat-item cat-item-271"><a href="https://coolshell.cn/category/funny">趣味问题</a> (19)
+</li>
+<li class="cat-item cat-item-52"><a href="https://coolshell.cn/category/story">轶事趣闻</a> (147)
+</li>
+</ul>
+</aside><aside id="tag_cloud-4" class="widget widget_tag_cloud"><h4 class="widget-title">标签</h4><div class="tagcloud"><a href="https://coolshell.cn/tag/agile" class="tag-cloud-link tag-link-17 tag-link-position-1" style="font-size: 11.559322033898pt;" aria-label="agile (15个项目)">agile</a>
+<a href="https://coolshell.cn/tag/ajax" class="tag-cloud-link tag-link-34 tag-link-position-2" style="font-size: 10.135593220339pt;" aria-label="AJAX (11个项目)">AJAX</a>
+<a href="https://coolshell.cn/tag/algorithm" class="tag-cloud-link tag-link-76 tag-link-position-3" style="font-size: 14.28813559322pt;" aria-label="Algorithm (26个项目)">Algorithm</a>
+<a href="https://coolshell.cn/tag/android" class="tag-cloud-link tag-link-145 tag-link-position-4" style="font-size: 10.135593220339pt;" aria-label="Android (11个项目)">Android</a>
+<a href="https://coolshell.cn/tag/bash" class="tag-cloud-link tag-link-190 tag-link-position-5" style="font-size: 9.1864406779661pt;" aria-label="Bash (9个项目)">Bash</a>
+<a href="https://coolshell.cn/tag/c" class="tag-cloud-link tag-link-59 tag-link-position-6" style="font-size: 20.694915254237pt;" aria-label="C++ (93个项目)">C++</a>
+<a href="https://coolshell.cn/tag/coding" class="tag-cloud-link tag-link-135 tag-link-position-7" style="font-size: 14.28813559322pt;" aria-label="Coding (26个项目)">Coding</a>
+<a href="https://coolshell.cn/tag/css" class="tag-cloud-link tag-link-96 tag-link-position-8" style="font-size: 13.457627118644pt;" aria-label="CSS (22个项目)">CSS</a>
+<a href="https://coolshell.cn/tag/design" class="tag-cloud-link tag-link-71 tag-link-position-9" style="font-size: 13.932203389831pt;" aria-label="Design (24个项目)">Design</a>
+<a href="https://coolshell.cn/tag/design-pattern" class="tag-cloud-link tag-link-25 tag-link-position-10" style="font-size: 9.6610169491525pt;" aria-label="design pattern (10个项目)">design pattern</a>
+<a href="https://coolshell.cn/tag/ebook" class="tag-cloud-link tag-link-101 tag-link-position-11" style="font-size: 11.559322033898pt;" aria-label="ebook (15个项目)">ebook</a>
+<a href="https://coolshell.cn/tag/flash" class="tag-cloud-link tag-link-98 tag-link-position-12" style="font-size: 8pt;" aria-label="Flash (7个项目)">Flash</a>
+<a href="https://coolshell.cn/tag/game" class="tag-cloud-link tag-link-125 tag-link-position-13" style="font-size: 9.1864406779661pt;" aria-label="Game (9个项目)">Game</a>
+<a href="https://coolshell.cn/tag/go" class="tag-cloud-link tag-link-238 tag-link-position-14" style="font-size: 13.220338983051pt;" aria-label="Go (21个项目)">Go</a>
+<a href="https://coolshell.cn/tag/golang" class="tag-cloud-link tag-link-237 tag-link-position-15" style="font-size: 10.966101694915pt;" aria-label="golang (13个项目)">golang</a>
+<a href="https://coolshell.cn/tag/google" class="tag-cloud-link tag-link-32 tag-link-position-16" style="font-size: 15.474576271186pt;" aria-label="Google (33个项目)">Google</a>
+<a href="https://coolshell.cn/tag/html" class="tag-cloud-link tag-link-38 tag-link-position-17" style="font-size: 15.593220338983pt;" aria-label="HTML (34个项目)">HTML</a>
+<a href="https://coolshell.cn/tag/ie" class="tag-cloud-link tag-link-175 tag-link-position-18" style="font-size: 9.6610169491525pt;" aria-label="IE (10个项目)">IE</a>
+<a href="https://coolshell.cn/tag/java" class="tag-cloud-link tag-link-13 tag-link-position-19" style="font-size: 17.610169491525pt;" aria-label="Java (50个项目)">Java</a>
+<a href="https://coolshell.cn/tag/javascript" class="tag-cloud-link tag-link-114 tag-link-position-20" style="font-size: 17.966101694915pt;" aria-label="Javascript (54个项目)">Javascript</a>
+<a href="https://coolshell.cn/tag/jquery" class="tag-cloud-link tag-link-191 tag-link-position-21" style="font-size: 10.135593220339pt;" aria-label="jQuery (11个项目)">jQuery</a>
+<a href="https://coolshell.cn/tag/linux" class="tag-cloud-link tag-link-37 tag-link-position-22" style="font-size: 19.389830508475pt;" aria-label="Linux (71个项目)">Linux</a>
+<a href="https://coolshell.cn/tag/mysql" class="tag-cloud-link tag-link-106 tag-link-position-23" style="font-size: 8pt;" aria-label="MySQL (7个项目)">MySQL</a>
+<a href="https://coolshell.cn/tag/oop" class="tag-cloud-link tag-link-245 tag-link-position-24" style="font-size: 8.5932203389831pt;" aria-label="OOP (8个项目)">OOP</a>
+<a href="https://coolshell.cn/tag/password" class="tag-cloud-link tag-link-319 tag-link-position-25" style="font-size: 8.5932203389831pt;" aria-label="password (8个项目)">password</a>
+<a href="https://coolshell.cn/tag/performance" class="tag-cloud-link tag-link-120 tag-link-position-26" style="font-size: 12.271186440678pt;" aria-label="Performance (17个项目)">Performance</a>
+<a href="https://coolshell.cn/tag/php" class="tag-cloud-link tag-link-35 tag-link-position-27" style="font-size: 14.050847457627pt;" aria-label="PHP (25个项目)">PHP</a>
+<a href="https://coolshell.cn/tag/programmer" class="tag-cloud-link tag-link-70 tag-link-position-28" style="font-size: 21.881355932203pt;" aria-label="Programmer (116个项目)">Programmer</a>
+<a href="https://coolshell.cn/tag/programming" class="tag-cloud-link tag-link-499 tag-link-position-29" style="font-size: 10.135593220339pt;" aria-label="Programming (11个项目)">Programming</a>
+<a href="https://coolshell.cn/tag/programming-language" class="tag-cloud-link tag-link-115 tag-link-position-30" style="font-size: 10.491525423729pt;" aria-label="programming language (12个项目)">programming language</a>
+<a href="https://coolshell.cn/tag/puzzle" class="tag-cloud-link tag-link-514 tag-link-position-31" style="font-size: 10.135593220339pt;" aria-label="Puzzle (11个项目)">Puzzle</a>
+<a href="https://coolshell.cn/tag/pythondev" class="tag-cloud-link tag-link-791 tag-link-position-32" style="font-size: 15pt;" aria-label="Python (30个项目)">Python</a>
+<a href="https://coolshell.cn/tag/ruby" class="tag-cloud-link tag-link-69 tag-link-position-33" style="font-size: 9.6610169491525pt;" aria-label="Ruby (10个项目)">Ruby</a>
+<a href="https://coolshell.cn/tag/sql" class="tag-cloud-link tag-link-131 tag-link-position-34" style="font-size: 9.6610169491525pt;" aria-label="SQL (10个项目)">SQL</a>
+<a href="https://coolshell.cn/tag/tdd" class="tag-cloud-link tag-link-485 tag-link-position-35" style="font-size: 8.5932203389831pt;" aria-label="TDD (8个项目)">TDD</a>
+<a href="https://coolshell.cn/tag/ui" class="tag-cloud-link tag-link-47 tag-link-position-36" style="font-size: 10.491525423729pt;" aria-label="UI (12个项目)">UI</a>
+<a href="https://coolshell.cn/tag/unix" class="tag-cloud-link tag-link-21 tag-link-position-37" style="font-size: 15.949152542373pt;" aria-label="Unix (36个项目)">Unix</a>
+<a href="https://coolshell.cn/tag/vim" class="tag-cloud-link tag-link-50 tag-link-position-38" style="font-size: 12.745762711864pt;" aria-label="vim (19个项目)">vim</a>
+<a href="https://coolshell.cn/tag/web" class="tag-cloud-link tag-link-30 tag-link-position-39" style="font-size: 16.661016949153pt;" aria-label="Web (42个项目)">Web</a>
+<a href="https://coolshell.cn/tag/windows" class="tag-cloud-link tag-link-49 tag-link-position-40" style="font-size: 12.271186440678pt;" aria-label="Windows (17个项目)">Windows</a>
+<a href="https://coolshell.cn/tag/xml" class="tag-cloud-link tag-link-104 tag-link-position-41" style="font-size: 8.5932203389831pt;" aria-label="XML (8个项目)">XML</a>
+<a href="https://coolshell.cn/tag/%e5%ae%89%e5%85%a8" class="tag-cloud-link tag-link-318 tag-link-position-42" style="font-size: 13.694915254237pt;" aria-label="安全 (23个项目)">安全</a>
+<a href="https://coolshell.cn/tag/%e7%a8%8b%e5%ba%8f%e5%91%98" class="tag-cloud-link tag-link-58 tag-link-position-43" style="font-size: 22pt;" aria-label="程序员 (119个项目)">程序员</a>
+<a href="https://coolshell.cn/tag/%e7%ae%97%e6%b3%95" class="tag-cloud-link tag-link-77 tag-link-position-44" style="font-size: 9.6610169491525pt;" aria-label="算法 (10个项目)">算法</a>
+<a href="https://coolshell.cn/tag/interview" class="tag-cloud-link tag-link-164 tag-link-position-45" style="font-size: 11.915254237288pt;" aria-label="面试 (16个项目)">面试</a></div>
+</aside><aside id="archives-5" class="widget widget_archive"><h4 class="widget-title">归档</h4>
+<ul>
+<li><a href="https://coolshell.cn/articles/date/2023/05">2023年5月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2023/02">2023年2月</a>&nbsp;(2)</li>
+<li><a href="https://coolshell.cn/articles/date/2022/12">2022年12月</a>&nbsp;(2)</li>
+<li><a href="https://coolshell.cn/articles/date/2022/10">2022年10月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2022/07">2022年7月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2022/05">2022年5月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2022/02">2022年2月</a>&nbsp;(2)</li>
+<li><a href="https://coolshell.cn/articles/date/2022/01">2022年1月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2021/12">2021年12月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2021/11">2021年11月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2021/09">2021年9月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2021/07">2021年7月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2020/12">2020年12月</a>&nbsp;(9)</li>
+<li><a href="https://coolshell.cn/articles/date/2020/08">2020年8月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2020/07">2020年7月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2020/04">2020年4月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2020/03">2020年3月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2020/01">2020年1月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2019/12">2019年12月</a>&nbsp;(2)</li>
+<li><a href="https://coolshell.cn/articles/date/2019/11">2019年11月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2019/10">2019年10月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2019/07">2019年7月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2019/06">2019年6月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2019/05">2019年5月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2019/04">2019年4月</a>&nbsp;(2)</li>
+<li><a href="https://coolshell.cn/articles/date/2019/03">2019年3月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2019/02">2019年2月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2018/12">2018年12月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2018/05">2018年5月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2018/01">2018年1月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2017/10">2017年10月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2017/09">2017年9月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2017/08">2017年8月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2017/07">2017年7月</a>&nbsp;(3)</li>
+<li><a href="https://coolshell.cn/articles/date/2017/06">2017年6月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2017/04">2017年4月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2017/03">2017年3月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2017/02">2017年2月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2017/01">2017年1月</a>&nbsp;(2)</li>
+<li><a href="https://coolshell.cn/articles/date/2016/12">2016年12月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2016/10">2016年10月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2016/09">2016年9月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2016/08">2016年8月</a>&nbsp;(2)</li>
+<li><a href="https://coolshell.cn/articles/date/2016/07">2016年7月</a>&nbsp;(3)</li>
+<li><a href="https://coolshell.cn/articles/date/2015/12">2015年12月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2015/09">2015年9月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2015/08">2015年8月</a>&nbsp;(2)</li>
+<li><a href="https://coolshell.cn/articles/date/2015/04">2015年4月</a>&nbsp;(4)</li>
+<li><a href="https://coolshell.cn/articles/date/2014/12">2014年12月</a>&nbsp;(3)</li>
+<li><a href="https://coolshell.cn/articles/date/2014/11">2014年11月</a>&nbsp;(2)</li>
+<li><a href="https://coolshell.cn/articles/date/2014/10">2014年10月</a>&nbsp;(2)</li>
+<li><a href="https://coolshell.cn/articles/date/2014/09">2014年9月</a>&nbsp;(2)</li>
+<li><a href="https://coolshell.cn/articles/date/2014/08">2014年8月</a>&nbsp;(2)</li>
+<li><a href="https://coolshell.cn/articles/date/2014/06">2014年6月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2014/05">2014年5月</a>&nbsp;(4)</li>
+<li><a href="https://coolshell.cn/articles/date/2014/04">2014年4月</a>&nbsp;(4)</li>
+<li><a href="https://coolshell.cn/articles/date/2014/03">2014年3月</a>&nbsp;(5)</li>
+<li><a href="https://coolshell.cn/articles/date/2014/02">2014年2月</a>&nbsp;(3)</li>
+<li><a href="https://coolshell.cn/articles/date/2014/01">2014年1月</a>&nbsp;(2)</li>
+<li><a href="https://coolshell.cn/articles/date/2013/12">2013年12月</a>&nbsp;(3)</li>
+<li><a href="https://coolshell.cn/articles/date/2013/11">2013年11月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2013/10">2013年10月</a>&nbsp;(6)</li>
+<li><a href="https://coolshell.cn/articles/date/2013/08">2013年8月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2013/07">2013年7月</a>&nbsp;(8)</li>
+<li><a href="https://coolshell.cn/articles/date/2013/06">2013年6月</a>&nbsp;(2)</li>
+<li><a href="https://coolshell.cn/articles/date/2013/05">2013年5月</a>&nbsp;(3)</li>
+<li><a href="https://coolshell.cn/articles/date/2013/04">2013年4月</a>&nbsp;(3)</li>
+<li><a href="https://coolshell.cn/articles/date/2013/03">2013年3月</a>&nbsp;(3)</li>
+<li><a href="https://coolshell.cn/articles/date/2013/02">2013年2月</a>&nbsp;(5)</li>
+<li><a href="https://coolshell.cn/articles/date/2013/01">2013年1月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2012/12">2012年12月</a>&nbsp;(4)</li>
+<li><a href="https://coolshell.cn/articles/date/2012/11">2012年11月</a>&nbsp;(4)</li>
+<li><a href="https://coolshell.cn/articles/date/2012/10">2012年10月</a>&nbsp;(3)</li>
+<li><a href="https://coolshell.cn/articles/date/2012/09">2012年9月</a>&nbsp;(4)</li>
+<li><a href="https://coolshell.cn/articles/date/2012/08">2012年8月</a>&nbsp;(8)</li>
+<li><a href="https://coolshell.cn/articles/date/2012/07">2012年7月</a>&nbsp;(4)</li>
+<li><a href="https://coolshell.cn/articles/date/2012/06">2012年6月</a>&nbsp;(7)</li>
+<li><a href="https://coolshell.cn/articles/date/2012/05">2012年5月</a>&nbsp;(6)</li>
+<li><a href="https://coolshell.cn/articles/date/2012/04">2012年4月</a>&nbsp;(6)</li>
+<li><a href="https://coolshell.cn/articles/date/2012/03">2012年3月</a>&nbsp;(6)</li>
+<li><a href="https://coolshell.cn/articles/date/2012/02">2012年2月</a>&nbsp;(3)</li>
+<li><a href="https://coolshell.cn/articles/date/2012/01">2012年1月</a>&nbsp;(6)</li>
+<li><a href="https://coolshell.cn/articles/date/2011/12">2011年12月</a>&nbsp;(5)</li>
+<li><a href="https://coolshell.cn/articles/date/2011/11">2011年11月</a>&nbsp;(9)</li>
+<li><a href="https://coolshell.cn/articles/date/2011/10">2011年10月</a>&nbsp;(6)</li>
+<li><a href="https://coolshell.cn/articles/date/2011/09">2011年9月</a>&nbsp;(5)</li>
+<li><a href="https://coolshell.cn/articles/date/2011/08">2011年8月</a>&nbsp;(14)</li>
+<li><a href="https://coolshell.cn/articles/date/2011/07">2011年7月</a>&nbsp;(6)</li>
+<li><a href="https://coolshell.cn/articles/date/2011/06">2011年6月</a>&nbsp;(12)</li>
+<li><a href="https://coolshell.cn/articles/date/2011/05">2011年5月</a>&nbsp;(5)</li>
+<li><a href="https://coolshell.cn/articles/date/2011/04">2011年4月</a>&nbsp;(18)</li>
+<li><a href="https://coolshell.cn/articles/date/2011/03">2011年3月</a>&nbsp;(16)</li>
+<li><a href="https://coolshell.cn/articles/date/2011/02">2011年2月</a>&nbsp;(16)</li>
+<li><a href="https://coolshell.cn/articles/date/2011/01">2011年1月</a>&nbsp;(18)</li>
+<li><a href="https://coolshell.cn/articles/date/2010/12">2010年12月</a>&nbsp;(11)</li>
+<li><a href="https://coolshell.cn/articles/date/2010/11">2010年11月</a>&nbsp;(11)</li>
+<li><a href="https://coolshell.cn/articles/date/2010/10">2010年10月</a>&nbsp;(19)</li>
+<li><a href="https://coolshell.cn/articles/date/2010/09">2010年9月</a>&nbsp;(15)</li>
+<li><a href="https://coolshell.cn/articles/date/2010/08">2010年8月</a>&nbsp;(10)</li>
+<li><a href="https://coolshell.cn/articles/date/2010/07">2010年7月</a>&nbsp;(20)</li>
+<li><a href="https://coolshell.cn/articles/date/2010/06">2010年6月</a>&nbsp;(9)</li>
+<li><a href="https://coolshell.cn/articles/date/2010/05">2010年5月</a>&nbsp;(13)</li>
+<li><a href="https://coolshell.cn/articles/date/2010/04">2010年4月</a>&nbsp;(12)</li>
+<li><a href="https://coolshell.cn/articles/date/2010/03">2010年3月</a>&nbsp;(11)</li>
+<li><a href="https://coolshell.cn/articles/date/2010/02">2010年2月</a>&nbsp;(7)</li>
+<li><a href="https://coolshell.cn/articles/date/2010/01">2010年1月</a>&nbsp;(9)</li>
+<li><a href="https://coolshell.cn/articles/date/2009/12">2009年12月</a>&nbsp;(22)</li>
+<li><a href="https://coolshell.cn/articles/date/2009/11">2009年11月</a>&nbsp;(27)</li>
+<li><a href="https://coolshell.cn/articles/date/2009/10">2009年10月</a>&nbsp;(17)</li>
+<li><a href="https://coolshell.cn/articles/date/2009/09">2009年9月</a>&nbsp;(14)</li>
+<li><a href="https://coolshell.cn/articles/date/2009/08">2009年8月</a>&nbsp;(21)</li>
+<li><a href="https://coolshell.cn/articles/date/2009/07">2009年7月</a>&nbsp;(18)</li>
+<li><a href="https://coolshell.cn/articles/date/2009/06">2009年6月</a>&nbsp;(19)</li>
+<li><a href="https://coolshell.cn/articles/date/2009/05">2009年5月</a>&nbsp;(27)</li>
+<li><a href="https://coolshell.cn/articles/date/2009/04">2009年4月</a>&nbsp;(53)</li>
+<li><a href="https://coolshell.cn/articles/date/2009/03">2009年3月</a>&nbsp;(43)</li>
+<li><a href="https://coolshell.cn/articles/date/2008/10">2008年10月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2007/12">2007年12月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2006/11">2006年11月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2004/06">2004年6月</a>&nbsp;(1)</li>
+</ul>
+</aside><aside id="custom_html-8" class="widget_text widget widget_custom_html"><h4 class="widget-title">友情链接</h4><div class="textwidget custom-html-widget"><ul class="blogroll">
+<li><a href="http://blog.csdn.net/haoel" target="_blank" onclick="if (!window.__cfRLUnblockHandlers) return false; pageTracker._trackPageview('/outgoing/blog.csdn.net/haoel?referer=http://coolshell.cn');" rel="noopener" data-cf-modified-e3b98322319635b96aca3b62->陈皓的博客</a></li>
+<li><a href="http://ifeve.com/" target="_blank" title="促进并发编程的研究和推广" onclick="if (!window.__cfRLUnblockHandlers) return false; pageTracker._trackPageview('/outgoing/ifeve.com/?referer=http://coolshell.cn');" rel="noopener" data-cf-modified-e3b98322319635b96aca3b62->并发编程</a></li>
+<li><a href="http://www.raychase.net/" target="_blank" title="一个啰嗦的程序员" onclick="if (!window.__cfRLUnblockHandlers) return false; pageTracker._trackPageview('/outgoing/www.raychase.net/?referer=http://coolshell.cn');" rel="noopener" data-cf-modified-e3b98322319635b96aca3b62->四火的唠叨</a></li>
+<li><a href="http://www.cnblogs.com/weidagang2046/" target="_blank" title="Just for Fun" onclick="if (!window.__cfRLUnblockHandlers) return false; pageTracker._trackPageview('/outgoing/http://www.cnblogs.com/weidagang2046/?referer=http://coolshell.cn/');" rel="noopener" data-cf-modified-e3b98322319635b96aca3b62->Todd Wei的Blog</a></li>
+<li><a href="http://www.hellogcc.org/" target="_blank" title="致力于讨论和学习GNU Toolchain方面的工作组" onclick="if (!window.__cfRLUnblockHandlers) return false; pageTracker._trackPageview('/outgoing/www.hellogcc.org//?referer=http://coolshell.cn/');" rel="noopener" data-cf-modified-e3b98322319635b96aca3b62->开源开发工具技术博客</a></li>
+<li><a href="http://www.cppfans.org/" target="_blank" title="记录我们点滴学习工作生活" onclick="if (!window.__cfRLUnblockHandlers) return false; pageTracker._trackPageview('/outgoing/http://www.cppfans.org/?referer=http://coolshell.cn/');" rel="noopener" data-cf-modified-e3b98322319635b96aca3b62->C++爱好者博客</a></li>
+<li><a href="https://HelloACM.com/" target="_blank" title="Smart Ideas, Smart Algorithms" onclick="if (!window.__cfRLUnblockHandlers) return false; pageTracker._trackPageview('/outgoing/http://HelloACM.com/?referer=http://coolshell.cn/');" rel="noopener" data-cf-modified-e3b98322319635b96aca3b62->ACMer</a></li>
+</ul>
+</div></aside><aside id="meta-5" class="widget widget_meta"><h4 class="widget-title">其他操作</h4>
+<ul>
+<li><a href="https://coolshell.cn/wp-login.php?action=register">注册</a></li> <li><a href="https://coolshell.cn/wp-login.php">登录</a></li>
+<li><a href="https://coolshell.cn/feed">条目feed</a></li>
+<li><a href="https://coolshell.cn/comments/feed">评论feed</a></li>
+<li><a href="https://cn.wordpress.org/">WordPress.org</a></li>
+</ul>
+</aside></div>
+</div> 
+</div>
+<script type="e3b98322319635b96aca3b62-text/javascript">
+	var _gaq = _gaq || [];
+	_gaq.push(['_setAccount', 'UA-7486123-1']);
+_gaq.push(['_trackPageview']);
+
+	(function() {
+		var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+		ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+		var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+	})();
+</script>
+</div>
+<footer id="colophon" class="site-footer" role="contentinfo">
+<div class="row site-info">
+CoolShell.cn &copy; 2023
+<span class="sep"> | </span>
+Powered by <a href="https://wordpress.org/">WordPress</a>
+<span class="sep"> | </span>
+Based on Theme: Nisarg by <a href="http://www.falgunidesai.com/" rel="designer">Falguni Desai</a>.
+<p><a href="http://www.beian.miit.gov.cn" target="_target">京ICP备18054967号-1</a></p>
+</div>
+</footer>
+</div>
+<script type="e3b98322319635b96aca3b62-text/javascript" id="wp-postratings-js-extra">
+/* <![CDATA[ */
+var ratingsL10n = {"plugin_url":"https:\/\/coolshell.cn\/wp-content\/plugins\/wp-postratings","ajax_url":"https:\/\/coolshell.cn\/wp-admin\/admin-ajax.php","text_wait":"Please rate only 1 item at a time.","image":"stars_crystal","image_ext":"gif","max":"5","show_loading":"1","show_fading":"1","custom":"0"};
+var ratings_mouseover_image=new Image();ratings_mouseover_image.src="https://coolshell.cn/wp-content/plugins/wp-postratings/images/stars_crystal/rating_over.gif";;
+/* ]]> */
+</script>
+<script type="e3b98322319635b96aca3b62-text/javascript" src="https://coolshell.cn/wp-content/plugins/wp-postratings/js/postratings-js.js?ver=1.90.1" id="wp-postratings-js"></script>
+<script type="e3b98322319635b96aca3b62-text/javascript" id="wp-postviews-cache-js-extra">
+/* <![CDATA[ */
+var viewsCacheL10n = {"admin_ajax_url":"https:\/\/coolshell.cn\/wp-admin\/admin-ajax.php","nonce":"4731639b7a","post_id":"20845"};
+/* ]]> */
+</script>
+<script type="e3b98322319635b96aca3b62-text/javascript" src="https://coolshell.cn/wp-content/plugins/wp-postviews/postviews-cache.js?ver=1.68" id="wp-postviews-cache-js"></script>
+<script type="e3b98322319635b96aca3b62-text/javascript" src="https://coolshell.cn/wp-content/themes/MyNisarg/js/bootstrap.js?ver=6.2" id="bootstrap-js"></script>
+<script type="e3b98322319635b96aca3b62-text/javascript" src="https://coolshell.cn/wp-content/themes/MyNisarg/js/skip-link-focus-fix.js?ver=20130115" id="nisarg-skip-link-focus-fix-js"></script>
+<script type="e3b98322319635b96aca3b62-text/javascript" src="https://coolshell.cn/wp-content/themes/MyNisarg/js/nisarg.js?ver=6.2" id="nisarg-js-js"></script>
+<script type="e3b98322319635b96aca3b62-text/javascript" src="https://coolshell.cn/wp-includes/js/comment-reply.min.js?ver=6.2" id="comment-reply-js"></script>
+<script type="e3b98322319635b96aca3b62-text/javascript" id="q2w3_fixed_widget-js-extra">
+/* <![CDATA[ */
+var q2w3_sidebar_options = [{"use_sticky_position":false,"margin_top":50,"margin_bottom":0,"stop_elements_selectors":"","screen_max_width":0,"screen_max_height":0,"widgets":[]}];
+/* ]]> */
+</script>
+<script type="e3b98322319635b96aca3b62-text/javascript" src="https://coolshell.cn/wp-content/plugins/q2w3-fixed-widget/js/frontend.min.js?ver=6.2.3" id="q2w3_fixed_widget-js"></script>
+<script type="e3b98322319635b96aca3b62-text/javascript" src="https://coolshell.cn/wp-content/plugins/enlighter/cache/enlighterjs.min.js?ver=0cuVQBPCj0viGB0" id="enlighterjs-js"></script>
+<script type="e3b98322319635b96aca3b62-text/javascript" id="enlighterjs-js-after">
+!function(e,n){if("undefined"!=typeof EnlighterJS){var o={"selectors":{"block":"pre.EnlighterJSRAW","inline":"code.EnlighterJSRAW"},"options":{"indent":2,"ampersandCleanup":true,"linehover":true,"rawcodeDbclick":true,"textOverflow":"scroll","linenumbers":true,"theme":"wpcustom","language":"generic","retainCssClasses":false,"collapse":false,"toolbarOuter":"","toolbarTop":"{BTN_RAW}{BTN_COPY}{BTN_WINDOW}{BTN_WEBSITE}","toolbarBottom":""}};(e.EnlighterJSINIT=function(){EnlighterJS.init(o.selectors.block,o.selectors.inline,o.options)})()}else{(n&&(n.error||n.log)||function(){})("Error: EnlighterJS resources not loaded yet!")}}(window,console);
+</script>
+<script type="e3b98322319635b96aca3b62-text/javascript" src="https://coolshell.cn/wp-content/plugins/easy-table-of-contents/vendor/js-cookie/js.cookie.min.js?ver=2.2.1" id="ez-toc-js-cookie-js"></script>
+<script type="e3b98322319635b96aca3b62-text/javascript" src="https://coolshell.cn/wp-content/plugins/easy-table-of-contents/vendor/sticky-kit/jquery.sticky-kit.min.js?ver=1.9.2" id="ez-toc-jquery-sticky-kit-js"></script>
+<script type="e3b98322319635b96aca3b62-text/javascript" id="ez-toc-js-js-extra">
+/* <![CDATA[ */
+var ezTOC = {"smooth_scroll":"1","scroll_offset":"30","fallbackIcon":"<span style=\"display: flex;align-items: center;width: 35px;height: 30px;justify-content: center;direction:ltr;\"><svg style=\"fill: #999;color:#999\" xmlns=\"http:\/\/www.w3.org\/2000\/svg\" class=\"list-377408\" width=\"20px\" height=\"20px\" viewBox=\"0 0 24 24\" fill=\"none\"><path d=\"M6 6H4v2h2V6zm14 0H8v2h12V6zM4 11h2v2H4v-2zm16 0H8v2h12v-2zM4 16h2v2H4v-2zm16 0H8v2h12v-2z\" fill=\"currentColor\"><\/path><\/svg><svg style=\"fill: #999;color:#999\" class=\"arrow-unsorted-368013\" xmlns=\"http:\/\/www.w3.org\/2000\/svg\" width=\"10px\" height=\"10px\" viewBox=\"0 0 24 24\" version=\"1.2\" baseProfile=\"tiny\"><path d=\"M18.2 9.3l-6.2-6.3-6.2 6.3c-.2.2-.3.4-.3.7s.1.5.3.7c.2.2.4.3.7.3h11c.3 0 .5-.1.7-.3.2-.2.3-.5.3-.7s-.1-.5-.3-.7zM5.8 14.7l6.2 6.3 6.2-6.3c.2-.2.3-.5.3-.7s-.1-.5-.3-.7c-.2-.2-.4-.3-.7-.3h-11c-.3 0-.5.1-.7.3-.2.2-.3.5-.3.7s.1.5.3.7z\"\/><\/svg><\/span>"};
+/* ]]> */
+</script>
+<script type="e3b98322319635b96aca3b62-text/javascript" src="https://coolshell.cn/wp-content/plugins/easy-table-of-contents/assets/js/front.min.js?ver=2.0.48-1683606477" id="ez-toc-js-js"></script>
+<script defer type="e3b98322319635b96aca3b62-text/javascript" src="https://coolshell.cn/wp-content/plugins/akismet/_inc/akismet-frontend.js?ver=1683523750" id="akismet-frontend-js"></script>
+<script type="e3b98322319635b96aca3b62-text/javascript">
+        jQuery(document).ready(function ($) {
+
+            for (let i = 0; i < document.forms.length; ++i) {
+                let form = document.forms[i];
+				if ($(form).attr("method") != "get") { $(form).append('<input type="hidden" name="HLY_NVGfRIyiO" value="A*FRUYw" />'); }
+if ($(form).attr("method") != "get") { $(form).append('<input type="hidden" name="rfNmPJFxZlE" value="PcJd0F3kneCMpW" />'); }
+            }
+
+            $(document).on('submit', 'form', function () {
+				if ($(this).attr("method") != "get") { $(this).append('<input type="hidden" name="HLY_NVGfRIyiO" value="A*FRUYw" />'); }
+if ($(this).attr("method") != "get") { $(this).append('<input type="hidden" name="rfNmPJFxZlE" value="PcJd0F3kneCMpW" />'); }
+                return true;
+            });
+
+            jQuery.ajaxSetup({
+                beforeSend: function (e, data) {
+
+                    if (data.type !== 'POST') return;
+
+                    if (typeof data.data === 'object' && data.data !== null) {
+						data.data.append("HLY_NVGfRIyiO", "A*FRUYw");
+data.data.append("rfNmPJFxZlE", "PcJd0F3kneCMpW");
+                    }
+                    else {
+                        data.data = data.data + '&HLY_NVGfRIyiO=A*FRUYw&rfNmPJFxZlE=PcJd0F3kneCMpW';
+                    }
+                }
+            });
+
+        });
+    </script>
+<script src="/cdn-cgi/scripts/7d0fa10a/cloudflare-static/rocket-loader.min.js" data-cf-settings="e3b98322319635b96aca3b62-|49" defer></script></body>
+</html>
+<script type="e3b98322319635b96aca3b62-text/javascript" src="https://cdn.jsdelivr.net/gh/haoel/anti-baidu/js/anti-baidu-latest.min.js" charset="UTF-8"></script>
+
+
+

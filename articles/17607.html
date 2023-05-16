@@ -1,0 +1,1424 @@
+<!DOCTYPE html>
+<!--[if IE 8]>
+<html id="ie8" dir="ltr" lang="zh-CN"
+	prefix="og: https://ogp.me/ns#" >
+<![endif]-->
+<!--[if !(IE 8) ]><!-->
+<html dir="ltr" lang="zh-CN" prefix="og: https://ogp.me/ns#">
+<!--<![endif]-->
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width" />
+<link rel="profile" href="https://gmpg.org/xfn/11" />
+<link rel="pingback" href="https://coolshell.cn/xmlrpc.php" />
+<link rel="shortcut icon" href="/favicon.png">
+<title>从 MongoDB “赎金事件” 看安全问题 | 酷 壳 - CoolShell</title>
+
+<meta name="robots" content="max-image-preview:large" />
+<meta name="keywords" content="bitcoin,mongodb,ransom,安全,技术新闻,网络安全" />
+<link rel="canonical" href="https://coolshell.cn/articles/17607.html" />
+<meta name="generator" content="All in One SEO (AIOSEO) 4.3.6.1 " />
+<meta property="og:locale" content="zh_CN" />
+<meta property="og:site_name" content="酷 壳 - CoolShell" />
+<meta property="og:type" content="activity" />
+<meta property="og:title" content="从 MongoDB “赎金事件” 看安全问题 | 酷 壳 - CoolShell" />
+<meta property="og:url" content="https://coolshell.cn/articles/17607.html" />
+<meta property="og:image" content="https://coolshell.cn/wp-content/uploads/2017/01/MongoDB.jpg" />
+<meta property="og:image:secure_url" content="https://coolshell.cn/wp-content/uploads/2017/01/MongoDB.jpg" />
+<meta property="og:image:width" content="500" />
+<meta property="og:image:height" content="281" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="从 MongoDB “赎金事件” 看安全问题 | 酷 壳 - CoolShell" />
+<meta name="twitter:image" content="https://coolshell.cn/wp-content/uploads/2017/01/MongoDB.jpg" />
+<script type="application/ld+json" class="aioseo-schema">
+			{"@context":"https:\/\/schema.org","@graph":[{"@type":"Article","@id":"https:\/\/coolshell.cn\/articles\/17607.html#article","name":"\u4ece MongoDB \u201c\u8d4e\u91d1\u4e8b\u4ef6\u201d \u770b\u5b89\u5168\u95ee\u9898 | \u9177 \u58f3 - CoolShell","headline":"\u4ece MongoDB \u201c\u8d4e\u91d1\u4e8b\u4ef6\u201d \u770b\u5b89\u5168\u95ee\u9898","author":{"@id":"https:\/\/coolshell.cn\/articles\/author\/haoel#author"},"publisher":{"@id":"https:\/\/coolshell.cn\/#organization"},"image":{"@type":"ImageObject","url":"https:\/\/coolshell.cn\/wp-content\/uploads\/2017\/01\/MongoDB.jpg","@id":"https:\/\/coolshell.cn\/#articleImage","width":500,"height":281},"datePublished":"2017-01-07T09:11:28+08:00","dateModified":"2017-01-08T03:27:16+08:00","inLanguage":"zh-CN","commentCount":44,"mainEntityOfPage":{"@id":"https:\/\/coolshell.cn\/articles\/17607.html#webpage"},"isPartOf":{"@id":"https:\/\/coolshell.cn\/articles\/17607.html#webpage"},"articleSection":"\u6280\u672f\u65b0\u95fb, \u7f51\u7edc\u5b89\u5168, Bitcoin, MongoDB, ransom, \u5b89\u5168"},{"@type":"BreadcrumbList","@id":"https:\/\/coolshell.cn\/articles\/17607.html#breadcrumblist","itemListElement":[{"@type":"ListItem","@id":"https:\/\/coolshell.cn\/#listItem","position":1,"item":{"@type":"WebPage","@id":"https:\/\/coolshell.cn\/","name":"\u4e3b\u9801","description":"\u4eab\u53d7\u7f16\u7a0b\u548c\u6280\u672f\u6240\u5e26\u6765\u7684\u5feb\u4e50 \u2013 https:\/\/coolshell.cn","url":"https:\/\/coolshell.cn\/"}}]},{"@type":"Organization","@id":"https:\/\/coolshell.cn\/#organization","name":"\u9177\u58f3-CoolShell","url":"https:\/\/coolshell.cn\/","logo":{"@type":"ImageObject","url":"https:\/\/coolshell.cn\/wp-content\/uploads\/2020\/04\/mini.logo_.png","@id":"https:\/\/coolshell.cn\/#organizationLogo","width":306,"height":306},"image":{"@id":"https:\/\/coolshell.cn\/#organizationLogo"}},{"@type":"Person","@id":"https:\/\/coolshell.cn\/articles\/author\/haoel#author","url":"https:\/\/coolshell.cn\/articles\/author\/haoel","name":"\u9648\u7693","image":{"@type":"ImageObject","@id":"https:\/\/coolshell.cn\/articles\/17607.html#authorImage","url":"https:\/\/secure.gravatar.com\/avatar\/af2fbb7372dd5826e44d87e6ceccea40?s=96&d=mm&r=g","width":96,"height":96,"caption":"\u9648\u7693"}},{"@type":"WebPage","@id":"https:\/\/coolshell.cn\/articles\/17607.html#webpage","url":"https:\/\/coolshell.cn\/articles\/17607.html","name":"\u4ece MongoDB \u201c\u8d4e\u91d1\u4e8b\u4ef6\u201d \u770b\u5b89\u5168\u95ee\u9898 | \u9177 \u58f3 - CoolShell","inLanguage":"zh-CN","isPartOf":{"@id":"https:\/\/coolshell.cn\/#website"},"breadcrumb":{"@id":"https:\/\/coolshell.cn\/articles\/17607.html#breadcrumblist"},"author":{"@id":"https:\/\/coolshell.cn\/articles\/author\/haoel#author"},"creator":{"@id":"https:\/\/coolshell.cn\/articles\/author\/haoel#author"},"datePublished":"2017-01-07T09:11:28+08:00","dateModified":"2017-01-08T03:27:16+08:00"},{"@type":"WebSite","@id":"https:\/\/coolshell.cn\/#website","url":"https:\/\/coolshell.cn\/","name":"\u9177 \u58f3 - CoolShell","description":"\u4eab\u53d7\u7f16\u7a0b\u548c\u6280\u672f\u6240\u5e26\u6765\u7684\u5feb\u4e50 - Coding Your Ambition","inLanguage":"zh-CN","publisher":{"@id":"https:\/\/coolshell.cn\/#organization"}}]}
+		</script>
+<script type="b902c321ef99d864eef8c78b-text/javascript">
+			window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+			ga('create', "UA-7486123-1", { 'cookieDomain': 'coolshell.cn' } );
+			ga('send', 'pageview');
+		</script>
+<script async src="https://www.google-analytics.com/analytics.js" type="b902c321ef99d864eef8c78b-text/javascript"></script>
+
+<link rel="dns-prefetch" href="//fonts.googleapis.com" />
+<link rel="alternate" type="application/rss+xml" title="酷 壳 - CoolShell &raquo; Feed" href="https://coolshell.cn/feed" />
+<link rel="alternate" type="application/rss+xml" title="酷 壳 - CoolShell &raquo; 评论Feed" href="https://coolshell.cn/comments/feed" />
+<link rel="alternate" type="application/rss+xml" title="酷 壳 - CoolShell &raquo; 从 MongoDB “赎金事件” 看安全问题评论Feed" href="https://coolshell.cn/articles/17607.html/feed" />
+<script type="b902c321ef99d864eef8c78b-text/javascript">
+window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/14.0.0\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/14.0.0\/svg\/","svgExt":".svg","source":{"concatemoji":"https:\/\/coolshell.cn\/wp-includes\/js\/wp-emoji-release.min.js?ver=6.2"}};
+/*! This file is auto-generated */
+!function(e,a,t){var n,r,o,i=a.createElement("canvas"),p=i.getContext&&i.getContext("2d");function s(e,t){p.clearRect(0,0,i.width,i.height),p.fillText(e,0,0);e=i.toDataURL();return p.clearRect(0,0,i.width,i.height),p.fillText(t,0,0),e===i.toDataURL()}function c(e){var t=a.createElement("script");t.src=e,t.defer=t.type="text/javascript",a.getElementsByTagName("head")[0].appendChild(t)}for(o=Array("flag","emoji"),t.supports={everything:!0,everythingExceptFlag:!0},r=0;r<o.length;r++)t.supports[o[r]]=function(e){if(p&&p.fillText)switch(p.textBaseline="top",p.font="600 32px Arial",e){case"flag":return s("\ud83c\udff3\ufe0f\u200d\u26a7\ufe0f","\ud83c\udff3\ufe0f\u200b\u26a7\ufe0f")?!1:!s("\ud83c\uddfa\ud83c\uddf3","\ud83c\uddfa\u200b\ud83c\uddf3")&&!s("\ud83c\udff4\udb40\udc67\udb40\udc62\udb40\udc65\udb40\udc6e\udb40\udc67\udb40\udc7f","\ud83c\udff4\u200b\udb40\udc67\u200b\udb40\udc62\u200b\udb40\udc65\u200b\udb40\udc6e\u200b\udb40\udc67\u200b\udb40\udc7f");case"emoji":return!s("\ud83e\udef1\ud83c\udffb\u200d\ud83e\udef2\ud83c\udfff","\ud83e\udef1\ud83c\udffb\u200b\ud83e\udef2\ud83c\udfff")}return!1}(o[r]),t.supports.everything=t.supports.everything&&t.supports[o[r]],"flag"!==o[r]&&(t.supports.everythingExceptFlag=t.supports.everythingExceptFlag&&t.supports[o[r]]);t.supports.everythingExceptFlag=t.supports.everythingExceptFlag&&!t.supports.flag,t.DOMReady=!1,t.readyCallback=function(){t.DOMReady=!0},t.supports.everything||(n=function(){t.readyCallback()},a.addEventListener?(a.addEventListener("DOMContentLoaded",n,!1),e.addEventListener("load",n,!1)):(e.attachEvent("onload",n),a.attachEvent("onreadystatechange",function(){"complete"===a.readyState&&t.readyCallback()})),(e=t.source||{}).concatemoji?c(e.concatemoji):e.wpemoji&&e.twemoji&&(c(e.twemoji),c(e.wpemoji)))}(window,document,window._wpemojiSettings);
+</script>
+<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 0.07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+<link rel="stylesheet" id="series_font-css" href="https://coolshell.cn/wp-content/plugins/simple-post-series/inc/icomoon/style.css?ver=2.4" type="text/css" media="all" />
+<link rel="stylesheet" id="wp-block-library-css" href="https://coolshell.cn/wp-content/plugins/gutenberg/build/block-library/style.css?ver=15.7.0" type="text/css" media="all" />
+<link rel="stylesheet" id="classic-theme-styles-css" href="https://coolshell.cn/wp-includes/css/classic-themes.min.css?ver=6.2" type="text/css" media="all" />
+<style id="global-styles-inline-css" type="text/css">
+body{--wp--preset--color--black: #000000;--wp--preset--color--cyan-bluish-gray: #abb8c3;--wp--preset--color--white: #ffffff;--wp--preset--color--pale-pink: #f78da7;--wp--preset--color--vivid-red: #cf2e2e;--wp--preset--color--luminous-vivid-orange: #ff6900;--wp--preset--color--luminous-vivid-amber: #fcb900;--wp--preset--color--light-green-cyan: #7bdcb5;--wp--preset--color--vivid-green-cyan: #00d084;--wp--preset--color--pale-cyan-blue: #8ed1fc;--wp--preset--color--vivid-cyan-blue: #0693e3;--wp--preset--color--vivid-purple: #9b51e0;--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple: linear-gradient(135deg,rgba(6,147,227,1) 0%,rgb(155,81,224) 100%);--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan: linear-gradient(135deg,rgb(122,220,180) 0%,rgb(0,208,130) 100%);--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange: linear-gradient(135deg,rgba(252,185,0,1) 0%,rgba(255,105,0,1) 100%);--wp--preset--gradient--luminous-vivid-orange-to-vivid-red: linear-gradient(135deg,rgba(255,105,0,1) 0%,rgb(207,46,46) 100%);--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray: linear-gradient(135deg,rgb(238,238,238) 0%,rgb(169,184,195) 100%);--wp--preset--gradient--cool-to-warm-spectrum: linear-gradient(135deg,rgb(74,234,220) 0%,rgb(151,120,209) 20%,rgb(207,42,186) 40%,rgb(238,44,130) 60%,rgb(251,105,98) 80%,rgb(254,248,76) 100%);--wp--preset--gradient--blush-light-purple: linear-gradient(135deg,rgb(255,206,236) 0%,rgb(152,150,240) 100%);--wp--preset--gradient--blush-bordeaux: linear-gradient(135deg,rgb(254,205,165) 0%,rgb(254,45,45) 50%,rgb(107,0,62) 100%);--wp--preset--gradient--luminous-dusk: linear-gradient(135deg,rgb(255,203,112) 0%,rgb(199,81,192) 50%,rgb(65,88,208) 100%);--wp--preset--gradient--pale-ocean: linear-gradient(135deg,rgb(255,245,203) 0%,rgb(182,227,212) 50%,rgb(51,167,181) 100%);--wp--preset--gradient--electric-grass: linear-gradient(135deg,rgb(202,248,128) 0%,rgb(113,206,126) 100%);--wp--preset--gradient--midnight: linear-gradient(135deg,rgb(2,3,129) 0%,rgb(40,116,252) 100%);--wp--preset--font-size--small: 13px;--wp--preset--font-size--medium: 20px;--wp--preset--font-size--large: 36px;--wp--preset--font-size--x-large: 42px;--wp--preset--spacing--20: 0.44rem;--wp--preset--spacing--30: 0.67rem;--wp--preset--spacing--40: 1rem;--wp--preset--spacing--50: 1.5rem;--wp--preset--spacing--60: 2.25rem;--wp--preset--spacing--70: 3.38rem;--wp--preset--spacing--80: 5.06rem;--wp--preset--shadow--natural: 6px 6px 9px rgba(0, 0, 0, 0.2);--wp--preset--shadow--deep: 12px 12px 50px rgba(0, 0, 0, 0.4);--wp--preset--shadow--sharp: 6px 6px 0px rgba(0, 0, 0, 0.2);--wp--preset--shadow--outlined: 6px 6px 0px -3px rgba(255, 255, 255, 1), 6px 6px rgba(0, 0, 0, 1);--wp--preset--shadow--crisp: 6px 6px 0px rgba(0, 0, 0, 1);}:where(.is-layout-flex){gap: 0.5em;}body .is-layout-flow > .alignleft{float: left;margin-inline-start: 0;margin-inline-end: 2em;}body .is-layout-flow > .alignright{float: right;margin-inline-start: 2em;margin-inline-end: 0;}body .is-layout-flow > .aligncenter{margin-left: auto !important;margin-right: auto !important;}body .is-layout-constrained > .alignleft{float: left;margin-inline-start: 0;margin-inline-end: 2em;}body .is-layout-constrained > .alignright{float: right;margin-inline-start: 2em;margin-inline-end: 0;}body .is-layout-constrained > .aligncenter{margin-left: auto !important;margin-right: auto !important;}body .is-layout-constrained > :where(:not(.alignleft):not(.alignright):not(.alignfull)){max-width: var(--wp--style--global--content-size);margin-left: auto !important;margin-right: auto !important;}body .is-layout-constrained > .alignwide{max-width: var(--wp--style--global--wide-size);}body .is-layout-flex{display: flex;}body .is-layout-flex{flex-wrap: wrap;align-items: center;}body .is-layout-flex > *{margin: 0;}body .is-layout-grid{display: grid;}body .is-layout-grid > *{margin: 0;}:where(.wp-block-columns.is-layout-flex){gap: 2em;}.has-black-color{color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-color{color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-color{color: var(--wp--preset--color--white) !important;}.has-pale-pink-color{color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-color{color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-color{color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-color{color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-color{color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-color{color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-color{color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-color{color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-color{color: var(--wp--preset--color--vivid-purple) !important;}.has-black-background-color{background-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-background-color{background-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-background-color{background-color: var(--wp--preset--color--white) !important;}.has-pale-pink-background-color{background-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-background-color{background-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-background-color{background-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-background-color{background-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-background-color{background-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-background-color{background-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-background-color{background-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-background-color{background-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-background-color{background-color: var(--wp--preset--color--vivid-purple) !important;}.has-black-border-color{border-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-border-color{border-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-border-color{border-color: var(--wp--preset--color--white) !important;}.has-pale-pink-border-color{border-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-border-color{border-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-border-color{border-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-border-color{border-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-border-color{border-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-border-color{border-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-border-color{border-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-border-color{border-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-border-color{border-color: var(--wp--preset--color--vivid-purple) !important;}.has-vivid-cyan-blue-to-vivid-purple-gradient-background{background: var(--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple) !important;}.has-light-green-cyan-to-vivid-green-cyan-gradient-background{background: var(--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan) !important;}.has-luminous-vivid-amber-to-luminous-vivid-orange-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange) !important;}.has-luminous-vivid-orange-to-vivid-red-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-orange-to-vivid-red) !important;}.has-very-light-gray-to-cyan-bluish-gray-gradient-background{background: var(--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray) !important;}.has-cool-to-warm-spectrum-gradient-background{background: var(--wp--preset--gradient--cool-to-warm-spectrum) !important;}.has-blush-light-purple-gradient-background{background: var(--wp--preset--gradient--blush-light-purple) !important;}.has-blush-bordeaux-gradient-background{background: var(--wp--preset--gradient--blush-bordeaux) !important;}.has-luminous-dusk-gradient-background{background: var(--wp--preset--gradient--luminous-dusk) !important;}.has-pale-ocean-gradient-background{background: var(--wp--preset--gradient--pale-ocean) !important;}.has-electric-grass-gradient-background{background: var(--wp--preset--gradient--electric-grass) !important;}.has-midnight-gradient-background{background: var(--wp--preset--gradient--midnight) !important;}.has-small-font-size{font-size: var(--wp--preset--font-size--small) !important;}.has-medium-font-size{font-size: var(--wp--preset--font-size--medium) !important;}.has-large-font-size{font-size: var(--wp--preset--font-size--large) !important;}.has-x-large-font-size{font-size: var(--wp--preset--font-size--x-large) !important;}
+:where(.wp-block-columns.is-layout-flex){gap: 2em;}
+.wp-block-pullquote{font-size: 1.5em;line-height: 1.6;}
+.wp-block-navigation a:where(:not(.wp-element-button)){color: inherit;}
+</style>
+<link rel="stylesheet" id="wp-postratings-css" href="https://coolshell.cn/wp-content/plugins/wp-postratings/css/postratings-css.css?ver=1.90.1" type="text/css" media="all" />
+<link rel="stylesheet" id="wp-pagenavi-css" href="https://coolshell.cn/wp-content/plugins/wp-pagenavi/pagenavi-css.css?ver=2.70" type="text/css" media="all" />
+<link rel="stylesheet" id="ez-toc-css" href="https://coolshell.cn/wp-content/plugins/easy-table-of-contents/assets/css/screen.min.css?ver=2.0.48" type="text/css" media="all" />
+<style id="ez-toc-inline-css" type="text/css">
+div#ez-toc-container p.ez-toc-title {font-size: 120%;}div#ez-toc-container p.ez-toc-title {font-weight: 500;}div#ez-toc-container ul li {font-size: 95%;}div#ez-toc-container nav ul ul li ul li {font-size: %!important;}
+.ez-toc-container-direction {direction: ltr;}.ez-toc-counter ul{counter-reset: item;}.ez-toc-counter nav ul li a::before {content: counters(item, ".", decimal) ". ";display: inline-block;counter-increment: item;flex-grow: 0;flex-shrink: 0;margin-right: .2em; float: left;}.ez-toc-widget-direction {direction: ltr;}.ez-toc-widget-container ul{counter-reset: item;}.ez-toc-widget-container nav ul li a::before {content: counters(item, ".", decimal) ". ";display: inline-block;counter-increment: item;flex-grow: 0;flex-shrink: 0;margin-right: .2em; float: left;}
+</style>
+<link rel="stylesheet" id="bootstrap-css" href="https://coolshell.cn/wp-content/themes/MyNisarg/css/bootstrap.css?ver=6.2" type="text/css" media="all" />
+<link rel="stylesheet" id="nisarg-style-css" href="https://coolshell.cn/wp-content/themes/MyNisarg/style.css?ver=6.2" type="text/css" media="all" />
+<style id="nisarg-style-inline-css" type="text/css">
+	/* Color Scheme */
+
+	/* Accent Color */
+
+	a:active,
+	a:hover,
+	a:focus {
+	    color: #009688;
+	}
+
+	.navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus {
+		color: #009688;
+	}
+
+	
+	.navbar-default .navbar-nav > .active > a, .navbar-default .navbar-nav > .active > a:hover, .navbar-default .navbar-nav > .active > a:focus {
+		color: #009688;			
+	}
+
+	@media (min-width: 768px){
+		.navbar-default .navbar-nav > .active > a, .navbar-default .navbar-nav > .active > a:hover, .navbar-default .navbar-nav > .active > a:focus {
+			border-top: 4px solid #009688;
+		}		
+	}
+
+	.dropdown-menu > .active > a, .dropdown-menu > .active > a:hover, .dropdown-menu > .active > a:focus {	    
+	    background-color: #009688;
+	}
+
+
+	.navbar-default .navbar-nav > .open > a, .navbar-default .navbar-nav > .open > a:hover, .navbar-default .navbar-nav > .open > a:focus {
+		color: #009688;
+	}
+
+	.navbar-default .navbar-nav > li > .dropdown-menu > li > a:hover,
+	.navbar-default .navbar-nav > li > .dropdown-menu > li > a:focus {
+		color: #fff;
+		background-color: #009688;
+	}
+
+	.navbar-default .navbar-nav .open .dropdown-menu > .active > a, .navbar-default .navbar-nav .open .dropdown-menu > .active > a:hover, .navbar-default .navbar-nav .open .dropdown-menu > .active > a:focus {
+		background-color: #fff;
+		color: #009688;
+	}
+
+	@media (max-width: 767px) {
+		.navbar-default .navbar-nav .open .dropdown-menu > li > a:hover {
+			background-color: #009688;
+			color: #fff;
+		}
+	}
+
+	.sticky-post{
+	    background: #009688;
+	    color:white;
+	}
+	
+	.entry-title a:hover,
+	.entry-title a:focus{
+	    color: #009688;
+	}
+
+	.entry-header .entry-meta::after{
+	    background: #009688;
+	}
+
+	.fa {
+		color: #009688;
+	}
+
+	.btn-default{
+		border-bottom: 1px solid #009688;
+	}
+
+	.btn-default:hover, .btn-default:focus{
+	    border-bottom: 1px solid #009688;
+	    background-color: #009688;
+	}
+
+	.nav-previous:hover, .nav-next:hover{
+	    border: 1px solid #009688;
+	    background-color: #009688;
+	}
+
+	.next-post a:hover,.prev-post a:hover{
+	    color: #009688;
+	}
+
+	.posts-navigation .next-post a:hover .fa, .posts-navigation .prev-post a:hover .fa{
+	    color: #009688;
+	}
+
+
+	#secondary .widget-title::after{
+		background-color: #009688;
+	    content: "";
+	    position: absolute;
+	    width: 75px;
+	    display: block;
+	    height: 4px;    
+	    bottom: -15px;
+	}
+
+	#secondary .widget a:hover,
+	#secondary .widget a:focus{
+		color: #009688;
+	}
+
+	#secondary .widget_calendar tbody a {
+	    background-color: #009688;
+	    color: #fff;
+	    padding: 0.2em;
+	}
+
+	#secondary .widget_calendar tbody a:hover{
+	    background-color: #009688;
+	    color: #fff;
+	    padding: 0.2em;
+	}	
+
+</style>
+<link rel="stylesheet" id="font-awesome-css" href="https://coolshell.cn/wp-content/themes/MyNisarg/font-awesome/css/font-awesome.min.css?ver=6.2" type="text/css" media="all" />
+<link rel="stylesheet" id="nisarggooglefonts-css" href="//fonts.googleapis.com/css?family=Lato:400,300italic,700|Source+Sans+Pro:400,400italic" type="text/css" media="all" />
+<link rel="stylesheet" id="enlighterjs-css" href="https://coolshell.cn/wp-content/plugins/enlighter/cache/enlighterjs.min.css?ver=0cuVQBPCj0viGB0" type="text/css" media="all" />
+<script type="b902c321ef99d864eef8c78b-text/javascript" src="https://coolshell.cn/wp-includes/js/jquery/jquery.min.js?ver=3.6.3" id="jquery-core-js"></script>
+<script type="b902c321ef99d864eef8c78b-text/javascript" src="https://coolshell.cn/wp-includes/js/jquery/jquery-migrate.min.js?ver=3.4.0" id="jquery-migrate-js"></script>
+<script type="b902c321ef99d864eef8c78b-text/javascript" src="https://coolshell.cn/wp-content/plugins/simple-post-series/autohide.js?ver=2.4" id="series-js"></script>
+<script type="b902c321ef99d864eef8c78b-text/javascript" id="ez-toc-scroll-scriptjs-js-after">
+jQuery(document).ready(function(){document.querySelectorAll(".ez-toc-section").forEach(t=>{t.setAttribute("ez-toc-data-id","#"+decodeURI(t.getAttribute("id")))}),jQuery("a.ez-toc-link").click(function(){let t=jQuery(this).attr("href"),e=jQuery("#wpadminbar"),i=0;30>30&&(i=30),e.length&&(i+=e.height()),jQuery('[ez-toc-data-id="'+decodeURI(t)+'"]').length>0&&(i=jQuery('[ez-toc-data-id="'+decodeURI(t)+'"]').offset().top-i),jQuery("html, body").animate({scrollTop:i},500)})});
+</script>
+<!--[if lt IE 9]>
+<script type='text/javascript' src='https://coolshell.cn/wp-content/themes/MyNisarg/js/html5shiv.js?ver=3.7.3' id='html5shiv-js'></script>
+<![endif]-->
+<link rel="https://api.w.org/" href="https://coolshell.cn/wp-json/" /><link rel="alternate" type="application/json" href="https://coolshell.cn/wp-json/wp/v2/posts/17607" /><link rel="EditURI" type="application/rsd+xml" title="RSD" href="https://coolshell.cn/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="https://coolshell.cn/wp-includes/wlwmanifest.xml" />
+<meta name="generator" content="WordPress 6.2" />
+<link rel="shortlink" href="https://coolshell.cn/?p=17607" />
+<link rel="alternate" type="application/json+oembed" href="https://coolshell.cn/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fcoolshell.cn%2Farticles%2F17607.html" />
+<link rel="alternate" type="text/xml+oembed" href="https://coolshell.cn/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fcoolshell.cn%2Farticles%2F17607.html&#038;format=xml" />
+<script type="b902c321ef99d864eef8c78b-text/javascript">
+	window._wp_rp_static_base_url = 'https://wprp.zemanta.com/static/';
+	window._wp_rp_wp_ajax_url = "https://coolshell.cn/wp-admin/admin-ajax.php";
+	window._wp_rp_plugin_version = '3.6.4';
+	window._wp_rp_post_id = '17607';
+	window._wp_rp_num_rel_posts = '6';
+	window._wp_rp_thumbnails = true;
+	window._wp_rp_post_title = '%E4%BB%8E+MongoDB+%E2%80%9C%E8%B5%8E%E9%87%91%E4%BA%8B%E4%BB%B6%E2%80%9D+%E7%9C%8B%E5%AE%89%E5%85%A8%E9%97%AE%E9%A2%98';
+	window._wp_rp_post_tags = ['%E5%AE%89%E5%85%A8', 'bitcoin', 'ransom', 'mongodb', '%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8', '%E6%8A%80%E6%9C%AF%E6%96%B0%E9%97%BB', 'a', 'databas', 'victor', 'note', 'group', 'server', 'mail', 'btc', 'ubuntu', 'li', 'ip', 'alt', 'data', 'ransom', 'mongodb'];
+	window._wp_rp_promoted_content = true;
+</script>
+<link rel="stylesheet" href="https://coolshell.cn/wp-content/plugins/wordpress-23-related-posts-plugin/static/themes/vertical-m.css?version=3.6.4" />
+<style type="text/css">
+        .site-header { background: #1d2b2d; }
+</style>
+</head>
+<body class="post-template-default single single-post postid-17607 single-format-standard group-blog">
+<link rel="stylesheet" id="nisarg-style-css" href="https://coolshell.cn/wp-content/themes/MyNisarg/style.css" type="text/css" media="all">
+<div id="page" class="hfeed site">
+<header id="masthead" role="banner">
+<nav class="navbar navbar-default navbar-fixed-top navbar-left" role="navigation">
+
+<div class="container" id="navigation_menu">
+<div class="navbar-header">
+<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+<span class="sr-only">Toggle navigation</span>
+<span class="icon-bar"></span>
+<span class="icon-bar"></span>
+<span class="icon-bar"></span>
+</button>
+<a class="navbar-brand" href="https://coolshell.cn/"><div class="coolshell_logo"></div>酷 壳 &#8211; CoolShell</a>
+</div>
+<div class="collapse navbar-collapse navbar-ex1-collapse"><ul id="menu-coolshell" class="nav navbar-nav"><li id="menu-item-17405" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-17405"><a title="首页" href="https://coolshell.cn/">首页</a></li>
+<li id="menu-item-17406" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-17406"><a title="推荐文章" href="https://coolshell.cn/featured">推荐文章</a></li>
+<li id="menu-item-17407" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-17407"><a title="本站插件" href="https://coolshell.cn/plugins">本站插件</a></li>
+<li id="menu-item-17408" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-17408"><a title="留言小本" href="https://coolshell.cn/guestbook">留言小本</a></li>
+<li id="menu-item-17409" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-17409"><a title="关于酷壳" href="https://coolshell.cn/about">关于酷壳</a></li>
+<li id="menu-item-17410" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-17410"><a title="关于陈皓" href="https://coolshell.cn/haoel">关于陈皓</a></li>
+<li id="menu-item-17582" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-17582"><a title="RSS" href="https://coolshell.cn/feed">RSS</a></li>
+</ul></div>
+</div>
+</nav>
+<div id="cc_spacer"></div>
+<div class="site-header">
+<div class="pull-right">
+<a title="把这个链接拖到你的Chrome收藏夹工具栏中" href="javascript:(function(){function c(){var e=document.createElement(&quot;link&quot;);e.setAttribute(&quot;type&quot;,&quot;text/css&quot;);e.setAttribute(&quot;rel&quot;,&quot;stylesheet&quot;);e.setAttribute(&quot;href&quot;,f);e.setAttribute(&quot;class&quot;,l);document.body.appendChild(e)}function h(){var e=document.getElementsByClassName(l);for(var t=0;t<e.length;t++){document.body.removeChild(e[t])}}function p(){var e=document.createElement(&quot;div&quot;);e.setAttribute(&quot;class&quot;,a);document.body.appendChild(e);setTimeout(function(){document.body.removeChild(e)},100)}function d(e){return{height:e.offsetHeight,width:e.offsetWidth}}function v(i){var s=d(i);return s.height>e&&s.height<n&&s.width>t&&s.width<r}function m(e){var t=e;var n=0;while(!!t){n+=t.offsetTop;t=t.offsetParent}return n}function g(){var e=document.documentElement;if(!!window.innerWidth){return window.innerHeight}else if(e&&!isNaN(e.clientHeight)){return e.clientHeight}return 0}function y(){if(window.pageYOffset){return window.pageYOffset}return Math.max(document.documentElement.scrollTop,document.body.scrollTop)}function E(e){var t=m(e);return t>=w&&t<=b+w}function S(){var e=document.createElement(&quot;audio&quot;);e.setAttribute(&quot;class&quot;,l);e.src=i;e.loop=false;e.addEventListener(&quot;canplay&quot;,function(){setTimeout(function(){x(k)},500);setTimeout(function(){N();p();for(var e=0;e<O.length;e++){T(O[e])}},15500)},true);e.addEventListener(&quot;ended&quot;,function(){N();h()},true);e.innerHTML=&quot; <p>If you are reading this, it is because your browser does not support the audio element. We recommend that you get a new browser.</p> <p>&quot;;document.body.appendChild(e);e.play()}function x(e){e.className+=&quot; &quot;+s+&quot; &quot;+o}function T(e){e.className+=&quot; &quot;+s+&quot; &quot;+u[Math.floor(Math.random()*u.length)]}function N(){var e=document.getElementsByClassName(s);var t=new RegExp(&quot;\\b&quot;+s+&quot;\\b&quot;);for(var n=0;n<e.length;){e[n].className=e[n].className.replace(t,&quot;&quot;)}}var e=30;var t=30;var n=350;var r=350;var i=&quot;//s3.amazonaws.com/moovweb-marketing/playground/harlem-shake.mp3&quot;;var s=&quot;mw-harlem_shake_me&quot;;var o=&quot;im_first&quot;;var u=[&quot;im_drunk&quot;,&quot;im_baked&quot;,&quot;im_trippin&quot;,&quot;im_blown&quot;];var a=&quot;mw-strobe_light&quot;;var f=&quot;//s3.amazonaws.com/moovweb-marketing/playground/harlem-shake-style.css&quot;;var l=&quot;mw_added_css&quot;;var b=g();var w=y();var C=document.getElementsByTagName(&quot;*&quot;);var k=null;for(var L=0;L<C.length;L++){var A=C[L];if(v(A)){if(E(A)){k=A;break}}}if(A===null){console.warn(&quot;Could not find a node of the right size. Please try a different page.&quot;);return}c();S();var O=[];for(var L=0;L<C.length;L++){var A=C[L];if(v(A)){O.push(A)}}})()    ">High一下!</a>
+</div>
+<div class="site-branding">
+<a class="home-link" href="https://coolshell.cn/" title="酷 壳 &#8211; CoolShell" rel="home">
+<h1 class="site-title">酷 壳 &#8211; CoolShell</h1>
+<h2 class="site-description">享受编程和技术所带来的快乐 &#8211; Coding Your Ambition</h2>
+</a>
+</div>
+</div>
+</header>
+<div class="container">
+<div class="row">
+<div class="col-md-9 nav-searchbox hidden-lg hidden-md visible-sm-* visible-xs-*">
+<form role="search" method="get" class="search-form" action="https://coolshell.cn/">
+<label>
+<span class="screen-reader-text">Search for:</span>
+<input type="search" class="search-field" placeholder="Search …" value name="s" title="Search for:">
+</label>
+<button type="submit" class="search-submit"><span class="screen-reader-text">Search</span></button>
+</form>
+</div>
+</div>
+</div>
+<div id="content" class="site-content">
+<div class="container">
+<div class="row">
+<div id="primary" class="col-md-9 content-area">
+<main id="main" role="main">
+<article id="post-17607" class="post-content post-17607 post type-post status-publish format-standard hentry category-technews category-netsecurity tag-bitcoin tag-mongodb tag-ransom tag-318">
+<header class="entry-header">
+<span class="screen-reader-text">从 MongoDB “赎金事件” 看安全问题</span>
+<h1 class="entry-title">从 MongoDB “赎金事件” 看安全问题</h1>
+<div class="entry-meta">
+<h5 class="entry-date"><i class="fa fa-calendar-o"></i> <a href="https://coolshell.cn/articles/17607.html" title="17:11" rel="bookmark"><time class="entry-date" datetime="2017-01-07T17:11:28+08:00" pubdate>2017年01月07日 </time></a><span class="byline"><span class="sep"></span><i class="fa fa-user"></i>
+<span class="author vcard"><a class="url fn n" href="https://coolshell.cn/articles/author/haoel" title="View all posts by 陈皓" rel="author">陈皓</a></span></span> <i class="fa fa-comments-o"></i><span class="screen-reader-text">评论 </span> <a href="https://coolshell.cn/articles/17607.html#comments" class="comments-link">44 条评论</a> <i class="fa fa-users" style="margin-left:10px;"></i> 81,592 人阅读</h5>
+</div>
+</header>
+<div class="entry-content">
+<p><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3415450859608158" crossorigin="anonymous" type="b902c321ef99d864eef8c78b-text/javascript"></script><img decoding="async" class="alignright size-sup_wechat_big wp-image-17621" src="https://coolshell.cn/wp-content/uploads/2017/01/MongoDB-360x200.jpg" alt width="360" height="200" />今天上午（2017年1月7日），我的微信群中同时出现了两个MongoDB被黑掉要赎金的情况，于是在调查过程中，发现了这个事件。这个事件应该是2017年开年的第一次比较大的安全事件吧，发现国内居然没有什么报道，国内安全圈也没有什么动静（当然，他们也许知道，只是不想说吧），Anyway，让我这个非安全领域的人来帮补补位。</p>
+<h4>事件回顾</h4>
+<p>这个事情应该是从2017年1月3日进入公众视野的，是由安全圈的大拿 Victor Gevers （网名：<a href="https://twitter.com/0xDUDE" target="_blank">0xDUDE</a>，<span class="js-display-url"><a class="twitter-timeline-link" dir="ltr" title="http://GDI.foundation" href="http://GDI.foundation" target="_blank" rel="nofollow noopener" data-expanded-url="http://GDI.foundation">GDI.foundation</a> </span>的Chairman），其实，他早在2016年12月27日就发现了一些在互联网上用户的MongoDB没有任何的保护措施，被攻击者把数据库删除了，并留下了一个叫 WARNING 的数据库，这张表的内容如下：</p>
+<pre><code class="language-sql">{
+    "_id" : ObjectId("5859a0370b8e49f123fcc7da"),
+    "mail" : "<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="8ee6effcefe5bffcbfcefde7e9efe7e0faa0e1fce9">[email&#160;protected]</a>",
+    "note" : "SEND 0.2 BTC TO THIS ADDRESS 13zaxGVjj9MNc2jyvDRhLyYpkCh323MsMq AND CONTACT THIS EMAIL WITH YOUR IP OF YOUR SERVER TO RECOVER YOUR DATABASE !"
+}</code></pre>
+<p>基本上如下所示：</p>
+<p><span id="more-17607"></span></p>
+<figure id="attachment_17609" aria-describedby="caption-attachment-17609" style="width: 646px" class="wp-caption aligncenter"><img decoding="async" loading="lazy" class="size-full wp-image-17609" src="https://coolshell.cn/wp-content/uploads/2017/01/MongoDB-ransom.png" alt="MongoDB ransom demand (via Victor Gevers)" width="646" height="332" srcset="https://coolshell.cn/wp-content/uploads/2017/01/MongoDB-ransom.png 646w, https://coolshell.cn/wp-content/uploads/2017/01/MongoDB-ransom-300x154.png 300w, https://coolshell.cn/wp-content/uploads/2017/01/MongoDB-ransom-525x270.png 525w" sizes="(max-width: 646px) 100vw, 646px" /><figcaption id="caption-attachment-17609" class="wp-caption-text">MongoDB ransom demand (via Victor Gevers)</figcaption></figure>
+<p>说白了就是黑客留下的东西——<strong>老子把你的MongoDB里的数据库给转走了，如果你要你的数据的话，给我0.2个的比特币（大约USD200）</strong>。然后，他的twitter上不断地发布这个“赎金事件”的跟踪报道。与此同时，中国区的V2EX上也发现了相关的攻击问题 《<a href="https://www.v2ex.com/t/331887" target="_blank">自己装的 mongo 没有设置密码结果被黑了</a>》</p>
+<p>然后，在接下来的几天内，全球大约有1800个MongoDB的数据库被黑，这个行为来自一个叫 Harak1r1 的黑客组织（这个组织似乎就好黑MongoDB，据说他们历史上干了近8500个MongoDB的数据库，几乎都是在祼奔的MongoDB）。</p>
+<p>不过，这个组织干了两天后就停手了，可能是因为这事已经引起了全球科技媒体的注意，产生了大量的报道（如果你在Google News里查一下“<a href="https://www.google.com/webhp?sourceid=chrome-instant&amp;ion=1&amp;espv=2&amp;ie=UTF-8#q=mongodb+ransom&amp;newwindow=1&amp;tbm=nws" target="_blank">mongodb ransom</a>”，你会看到大量的报道（中文社区中，只有<a href="https://unwire.pro/2017/01/05/2000-mongodb-ransom/security/" target="_blank">台湾有相关的报道</a>）），他们也许是不敢再搞下去了。</p>
+<p>不过，很快，有几个copycats开始接着干，</p>
+<p>马上跟进的是 own3d ，他们留下的数据库的名字叫 WARNING_ALERT，他们至少干掉了 930个MongoDB，赎金0.5个比特币（USD500），至少有3个用户付费了</p>
+<p>然后是0704341626asdf，他们留下的数据库名字叫PWNED，他们至少干掉了740个MongoDB，赎金0.15个比特币（USD150），看看他们在数据库里留下的文字——<strong>你的MongoDB没有任何的认证，并且暴露在公网里（你TMD是怎么想的？）……</strong></p>
+<figure id="attachment_17610" aria-describedby="caption-attachment-17610" style="width: 616px" class="wp-caption aligncenter"><img decoding="async" loading="lazy" class="size-full wp-image-17610" src="https://coolshell.cn/wp-content/uploads/2017/01/MongoDB-Group-3.jpg" alt="0704341626asdf group ransom note (via Victor Gerves)" width="616" height="236" srcset="https://coolshell.cn/wp-content/uploads/2017/01/MongoDB-Group-3.jpg 616w, https://coolshell.cn/wp-content/uploads/2017/01/MongoDB-Group-3-300x115.jpg 300w, https://coolshell.cn/wp-content/uploads/2017/01/MongoDB-Group-3-604x231.jpg 604w" sizes="(max-width: 616px) 100vw, 616px" /><figcaption id="caption-attachment-17610" class="wp-caption-text">0704341626asdf group ransom note (via Victor Gerves)</figcaption></figure>
+<p>就在这两天，有两个新的黑客也来了</p>
+<ul>
+<li>先是kraken0，发现到现在1天了，干了13个MongoDB，赎金 0.1个比特币。</li>
+<li>然后是 3lix1r，发现到现在5个小时，干了17个MongoDB，赎金0.25比特币。</li>
+</ul>
+<p>BBC新闻也于昨天报道了这一情况——《<a href="http://www.bbc.com/news/technology-38521973" target="_blank">Web databases hit in ransom attacks</a>》，现在这个事情应该是一个Big News了。</p>
+<h4>关于MongoDB的安全</h4>
+<p>安全问题从来都是需要多方面一起努力，但是安全问题最大的短板就是在用户这边。这次的这个事，说白了，就是用户没有给MongoDB设置上用户名和口令，然后还把服务公开到了公网上。</p>
+<p>是的，这个安全事件，相当的匪夷所思，为什么这些用户要在公网上祼奔自己的数据库？他们的脑子是怎么想的？</p>
+<p>让我们去看一下Shodan上可以看到的有多少个在暴露在公网上而且没有防范的MongoDB？我了个去！<strong>4万7千个，还是很触目惊心的</strong>（下图来自我刚刚创建的 <a href="https://www.shodan.io/report/h0bgF6zM" target="_blank">Shodan关于MongoDB的报表</a>）</p>
+<p><img decoding="async" loading="lazy" class="aligncenter size-large wp-image-17614" src="https://coolshell.cn/wp-content/uploads/2017/01/MongoDB_Shodan-1024x485.png" alt width="640" height="303" srcset="https://coolshell.cn/wp-content/uploads/2017/01/MongoDB_Shodan-1024x485.png 1024w, https://coolshell.cn/wp-content/uploads/2017/01/MongoDB_Shodan-300x142.png 300w, https://coolshell.cn/wp-content/uploads/2017/01/MongoDB_Shodan-768x364.png 768w, https://coolshell.cn/wp-content/uploads/2017/01/MongoDB_Shodan-570x270.png 570w, https://coolshell.cn/wp-content/uploads/2017/01/MongoDB_Shodan.png 1124w" sizes="(max-width: 640px) 100vw, 640px" /></p>
+<p>&nbsp;</p>
+<p>那么，怎么会有这么多的对外暴露的MongoDB？看了一下Shodan的报告，发现主要还是来自公有云平台，Amazon，Alibaba，Digital Ocean，OVH，Azure 的云平台上有很多这样的服务。不过，像AWS这样的云平台，有很完善的默认安全组设置和VPC是可以不把这样的后端服务暴露到公有云上的，为什么还会有那么多？</p>
+<p><img decoding="async" loading="lazy" class="aligncenter wp-image-17616" src="https://coolshell.cn/wp-content/uploads/2017/01/MongoDB_Org.png" width="650" height="403" srcset="https://coolshell.cn/wp-content/uploads/2017/01/MongoDB_Org.png 867w, https://coolshell.cn/wp-content/uploads/2017/01/MongoDB_Org-300x186.png 300w, https://coolshell.cn/wp-content/uploads/2017/01/MongoDB_Org-768x476.png 768w, https://coolshell.cn/wp-content/uploads/2017/01/MongoDB_Org-436x270.png 436w" sizes="(max-width: 650px) 100vw, 650px" /></p>
+<p>&nbsp;</p>
+<p>这么大量的暴露在公网上的服务是怎么回事？有人发现（参看这篇文章《<a href="https://blog.shodan.io/its-the-data-stupid/" target="_blank">It&#8217;s the Data, Stupid!</a>》 ），MongoDB历史上一直都是把侦听端口绑在所有的IP上的，这个问题在5年前（2011年11月）就报给了MongoDB (<a href="https://jira.mongodb.org/browse/SERVER-4216" target="_blank">SERVER-4216</a>)，结果2014年4月才解决掉。所以，他觉得可能似乎 MongoDB的 2.6之前的版本都会默认上侦听在0.0.0.0 。</p>
+<p>于是我做了一个小试验，到我的Ubuntu 14.04上去 <code>apt-get install mongodb</code>（2.4.9版），然后我在<code>/etc/mongodb.conf</code> 文件中，看到了默认的配置是127.0.0.1，mongod启动也侦听在了127.0.0.1这台机器上。一切正常。不过，可能是时过境迁，debain的安装包里已加上了这个默认配置文件。不管怎么样，MongoDB似乎是有一些问题的。</p>
+<p>再到Shodan上看到相关的在公网裸奔的MongoDB的版本如下，发现3.x的也是主流：</p>
+<p><img decoding="async" loading="lazy" class="aligncenter wp-image-17615" src="https://coolshell.cn/wp-content/uploads/2017/01/MongoDB_Version.png" width="650" height="410" srcset="https://coolshell.cn/wp-content/uploads/2017/01/MongoDB_Version.png 888w, https://coolshell.cn/wp-content/uploads/2017/01/MongoDB_Version-300x189.png 300w, https://coolshell.cn/wp-content/uploads/2017/01/MongoDB_Version-768x484.png 768w, https://coolshell.cn/wp-content/uploads/2017/01/MongoDB_Version-428x270.png 428w" sizes="(max-width: 650px) 100vw, 650px" /></p>
+<p>&nbsp;</p>
+<p>虽然，3.x的版本成为了主流，但是似乎，还是有很多人把MongoDB的服务开到了互联网上来，而且可以随意访问。</p>
+<p><strong>你看，我在阿里云随便找了几台机器，一登就登上去了。</strong></p>
+<p><img decoding="async" loading="lazy" class="aligncenter wp-image-17617" src="https://coolshell.cn/wp-content/uploads/2017/01/MongoDB_Aliyun.png" width="300" height="587" srcset="https://coolshell.cn/wp-content/uploads/2017/01/MongoDB_Aliyun.png 640w, https://coolshell.cn/wp-content/uploads/2017/01/MongoDB_Aliyun-153x300.png 153w, https://coolshell.cn/wp-content/uploads/2017/01/MongoDB_Aliyun-523x1024.png 523w, https://coolshell.cn/wp-content/uploads/2017/01/MongoDB_Aliyun-138x270.png 138w" sizes="(max-width: 300px) 100vw, 300px" /></p>
+<p>真是如那些黑客中的邮件所说的：WTF，你们是怎么想的？</p>
+<h4>后续的反思</h4>
+<p>为什么还是有这么多的MongoDB在公网上祼奔呢？难道有这么多的用户都是小白？这个原因，是什么呢？我觉得可能会是如下两个原因：</p>
+<p style="padding-left: 30px;">1）一是技术人员下载了mongod的软包，一般来说，mongodb的压缩包只有binary文件 ，没有配置文件 ，所以直接解开后运行，结果就没有安全认证，也绑在了公网上。也许，MongoDB这么做的原因就是为了可以快速上手，不要在环境上花太多的时间，这个有助于软件方面的推广。但是，这样可能就坑了更多的人。</p>
+<p style="padding-left: 30px;">2）因为MongoDB是后端基础服务，所以，需要很多内部机器防问，按道理呢，应该绑定在内网IP上，但是呢，可能是技术人员不小心，绑在了0.0.0.0的IP上。</p>
+<p>那么，这个问题在云平台上是否可以更好的解决呢？</p>
+<p><strong>关于公网的IP。</strong>一般来说，公有云平台上的虚拟主机都会有一个公网的IP地址，老实说，这并不是一个好的方法，因为有很多主机是不需要暴露到公网上的，所以，也就不需要使用公网IP，于是，就会出现弹性IP或虚拟路由器以及VPC这样的虚拟网络服务，这样用户在公有云就可以很容易的组网，也就没有必要每台机器都需要一个公网IP，使用云平台，最好还是使用组网方案比较好的平台。</p>
+<p><strong>关于安全组</strong>。在AWS上，你开一台EC2，会有一个非常严格的安全组——只暴露22端口，其它的全部对外网关闭。这样做，其实是可以帮用户防止一下不小心把不必要的服务Open到公网上。按道理来说，AWS上应该是帮用户防了这些的。但是，AWS上的MongoDB祼奔的机器数量是最多的，估计和AWS的EC2的 基数有关系吧（据说AWS有千万台左右的EC2了）</p>
+<p>最后，提醒大家一下，被黑了也不要去付赎金，因为目前来说没有任何证据证明黑客们真正保存了你的数据，因为，被黑的服务器太多了，估计有几百T的数据，估计是不会为你保存的。下面也是Victor Gevers的提示：</p>
+<p><img decoding="async" loading="lazy" class="aligncenter size-full wp-image-17619" src="https://coolshell.cn/wp-content/uploads/2017/01/MongoDB_Twitter.png" alt width="507" height="213" srcset="https://coolshell.cn/wp-content/uploads/2017/01/MongoDB_Twitter.png 507w, https://coolshell.cn/wp-content/uploads/2017/01/MongoDB_Twitter-300x126.png 300w" sizes="(max-width: 507px) 100vw, 507px" /></p>
+<p>（全文完）</p>
+<div style="margin-top: 15px; font-size: 16px;color: #cc0000;">
+<p align="center"><strong>（转载本站文章请注明作者和出处 <a href="https://coolshell.cn/">酷 壳 &#8211; CoolShell</a> ，请勿用于任何商业用途）</strong></p>
+</div>
+<div class="wp_rp_wrap  wp_rp_vertical_m" id="wp_rp_first"><div class="wp_rp_content"><h3 class="related_post_title">相关文章</h3><ul class="related_post wp_rp"><li><a href="https://coolshell.cn/articles/11973.html" class="wp_rp_thumbnail"><img src="https://coolshell.cn/wp-content/uploads/2014/09/bashbug-150x150.jpg" alt="bash代码注入的安全漏洞" width="150" height="150" /></a><a href="https://coolshell.cn/articles/11973.html" class="wp_rp_title">bash代码注入的安全漏洞</a></li><li><a href="https://coolshell.cn/articles/6976.html" class="wp_rp_thumbnail"><img src="https://coolshell.cn/wp-content/uploads/2012/04/61e04755jw1drlo96bsktj-150x150.jpg" alt="谈谈数据安全和云存储" width="150" height="150" /></a><a href="https://coolshell.cn/articles/6976.html" class="wp_rp_title">谈谈数据安全和云存储</a></li><li><a href="https://coolshell.cn/articles/8711.html" class="wp_rp_thumbnail"><img src="https://coolshell.cn/wp-content/uploads/2012/12/200906020837401710-150x150.jpg" alt="程序员疫苗：代码注入" width="150" height="150" /></a><a href="https://coolshell.cn/articles/8711.html" class="wp_rp_title">程序员疫苗：代码注入</a></li><li><a href="https://coolshell.cn/articles/11021.html" class="wp_rp_thumbnail"><img src="https://coolshell.cn/wp-content/uploads/2014/02/Github-Security-150x150.png" alt="从“黑掉Github”学Web安全开发" width="150" height="150" /></a><a href="https://coolshell.cn/articles/11021.html" class="wp_rp_title">从“黑掉Github”学Web安全开发</a></li><li><a href="https://coolshell.cn/articles/17066.html" class="wp_rp_thumbnail"><img src="https://coolshell.cn/wp-content/uploads/2015/04/phishing-1-150x150.jpg" alt="关于移动端的钓鱼式攻击" width="150" height="150" /></a><a href="https://coolshell.cn/articles/17066.html" class="wp_rp_title">关于移动端的钓鱼式攻击</a></li><li><a href="https://coolshell.cn/articles/6424.html" class="wp_rp_thumbnail"><img src="https://coolshell.cn/wp-content/plugins/wordpress-23-related-posts-plugin/static/thumbs/14.jpg" alt="Hash Collision DoS 问题" width="150" height="150" /></a><a href="https://coolshell.cn/articles/6424.html" class="wp_rp_title">Hash Collision DoS 问题</a></li></ul></div></div>
+<div id="post-ratings-17607" class="post-ratings" itemscope itemtype="https://schema.org/Article" data-nonce="84fe3a9cb7"><img id="rating_17607_1" src="https://coolshell.cn/wp-content/plugins/wp-postratings/images/stars_crystal/rating_on.gif" alt="好烂啊" title="好烂啊" onmouseover="if (!window.__cfRLUnblockHandlers) return false; current_rating(17607, 1, '好烂啊');" onmouseout="if (!window.__cfRLUnblockHandlers) return false; ratings_off(4, 4, 0);" onclick="if (!window.__cfRLUnblockHandlers) return false; rate_post();" onkeypress="if (!window.__cfRLUnblockHandlers) return false; rate_post();" style="cursor: pointer; border: 0px;" data-cf-modified-b902c321ef99d864eef8c78b- /><img id="rating_17607_2" src="https://coolshell.cn/wp-content/plugins/wp-postratings/images/stars_crystal/rating_on.gif" alt="有点差" title="有点差" onmouseover="if (!window.__cfRLUnblockHandlers) return false; current_rating(17607, 2, '有点差');" onmouseout="if (!window.__cfRLUnblockHandlers) return false; ratings_off(4, 4, 0);" onclick="if (!window.__cfRLUnblockHandlers) return false; rate_post();" onkeypress="if (!window.__cfRLUnblockHandlers) return false; rate_post();" style="cursor: pointer; border: 0px;" data-cf-modified-b902c321ef99d864eef8c78b- /><img id="rating_17607_3" src="https://coolshell.cn/wp-content/plugins/wp-postratings/images/stars_crystal/rating_on.gif" alt="凑合看看" title="凑合看看" onmouseover="if (!window.__cfRLUnblockHandlers) return false; current_rating(17607, 3, '凑合看看');" onmouseout="if (!window.__cfRLUnblockHandlers) return false; ratings_off(4, 4, 0);" onclick="if (!window.__cfRLUnblockHandlers) return false; rate_post();" onkeypress="if (!window.__cfRLUnblockHandlers) return false; rate_post();" style="cursor: pointer; border: 0px;" data-cf-modified-b902c321ef99d864eef8c78b- /><img id="rating_17607_4" src="https://coolshell.cn/wp-content/plugins/wp-postratings/images/stars_crystal/rating_on.gif" alt="还不错" title="还不错" onmouseover="if (!window.__cfRLUnblockHandlers) return false; current_rating(17607, 4, '还不错');" onmouseout="if (!window.__cfRLUnblockHandlers) return false; ratings_off(4, 4, 0);" onclick="if (!window.__cfRLUnblockHandlers) return false; rate_post();" onkeypress="if (!window.__cfRLUnblockHandlers) return false; rate_post();" style="cursor: pointer; border: 0px;" data-cf-modified-b902c321ef99d864eef8c78b- /><img id="rating_17607_5" src="https://coolshell.cn/wp-content/plugins/wp-postratings/images/stars_crystal/rating_off.gif" alt="很精彩" title="很精彩" onmouseover="if (!window.__cfRLUnblockHandlers) return false; current_rating(17607, 5, '很精彩');" onmouseout="if (!window.__cfRLUnblockHandlers) return false; ratings_off(4, 4, 0);" onclick="if (!window.__cfRLUnblockHandlers) return false; rate_post();" onkeypress="if (!window.__cfRLUnblockHandlers) return false; rate_post();" style="cursor: pointer; border: 0px;" data-cf-modified-b902c321ef99d864eef8c78b- /> (<strong>57</strong> 人打了分，平均分： <strong>3.96</strong> )<br/><span class="post-ratings-text" id="ratings_17607_text"></span><meta itemprop="name" content="从 MongoDB “赎金事件” 看安全问题" /><meta itemprop="headline" content="从 MongoDB “赎金事件” 看安全问题" /><meta itemprop="description" content="今天上午（2017年1月7日），我的微信群中同时出现了两个MongoDB被黑掉要赎金的情况，于是在调查过程中，发现了这个事件。这个事件应该是2017年开年的第一次比较大的安全事件吧，发现国内居然没有什么报道，国内安全圈也没有什么动静（当然，他们也许知道，只是不想说吧），Anyway，让我这个非安全领域的人来帮补补位。
+事件回顾
+这个事情应该是从2017年1月3日进入公众视野的，是由安全圈的大拿..." /><meta itemprop="datePublished" content="2017-01-07T17:11:28+08:00" /><meta itemprop="dateModified" content="2017-01-08T11:27:16+08:00" /><meta itemprop="url" content="https://coolshell.cn/articles/17607.html" /><meta itemprop="author" content="陈皓" /><meta itemprop="mainEntityOfPage" content="https://coolshell.cn/articles/17607.html" /><div style="display: none;" itemprop="publisher" itemscope itemtype="https://schema.org/Organization"><meta itemprop="name" content="酷 壳 - CoolShell" /><meta itemprop="url" content="https://coolshell.cn" /><div itemprop="logo" itemscope itemtype="https://schema.org/ImageObject"><meta itemprop="url" content /></div></div><div style="display: none;" itemprop="aggregateRating" itemscope itemtype="https://schema.org/AggregateRating"><meta itemprop="bestRating" content="5" /><meta itemprop="worstRating" content="1" /><meta itemprop="ratingValue" content="3.96" /><meta itemprop="ratingCount" content="57" /></div></div><div id="post-ratings-17607-loading" class="post-ratings-loading"><img src="https://coolshell.cn/wp-content/plugins/wp-postratings/images/loading.gif" width="16" height="16" class="post-ratings-image" />Loading...</div>
+</div>
+<footer class="entry-footer">
+<hr><div class="row"><div class="col-md-6 cattegories"><span class="cat-links"><i class="fa fa-folder-open"></i>
+<a href="https://coolshell.cn/category/technews" rel="category tag">技术新闻</a>, <a href="https://coolshell.cn/category/netsecurity" rel="category tag">网络安全</a></span></div><div class="col-md-6 tags"><span class="tags-links"><i class="fa fa-tags"></i> <a href="https://coolshell.cn/tag/bitcoin" rel="tag">Bitcoin</a>, <a href="https://coolshell.cn/tag/mongodb" rel="tag">MongoDB</a>, <a href="https://coolshell.cn/tag/ransom" rel="tag">ransom</a>, <a href="https://coolshell.cn/tag/%e5%ae%89%e5%85%a8" rel="tag">安全</a></span></div></div> </footer>
+</article>
+
+<div id="related_posts">
+<div class="wp_rp_wrap  wp_rp_vertical_m"><div class="wp_rp_content"><h3 class="related_post_title">相关文章</h3><ul class="related_post wp_rp"><li><a href="https://coolshell.cn/articles/11973.html" class="wp_rp_thumbnail"><img src="https://coolshell.cn/wp-content/uploads/2014/09/bashbug-150x150.jpg" alt="bash代码注入的安全漏洞" width="150" height="150" /></a><a href="https://coolshell.cn/articles/11973.html" class="wp_rp_title">bash代码注入的安全漏洞</a></li><li><a href="https://coolshell.cn/articles/6976.html" class="wp_rp_thumbnail"><img src="https://coolshell.cn/wp-content/uploads/2012/04/61e04755jw1drlo96bsktj-150x150.jpg" alt="谈谈数据安全和云存储" width="150" height="150" /></a><a href="https://coolshell.cn/articles/6976.html" class="wp_rp_title">谈谈数据安全和云存储</a></li><li><a href="https://coolshell.cn/articles/8711.html" class="wp_rp_thumbnail"><img src="https://coolshell.cn/wp-content/uploads/2012/12/200906020837401710-150x150.jpg" alt="程序员疫苗：代码注入" width="150" height="150" /></a><a href="https://coolshell.cn/articles/8711.html" class="wp_rp_title">程序员疫苗：代码注入</a></li><li><a href="https://coolshell.cn/articles/11021.html" class="wp_rp_thumbnail"><img src="https://coolshell.cn/wp-content/uploads/2014/02/Github-Security-150x150.png" alt="从“黑掉Github”学Web安全开发" width="150" height="150" /></a><a href="https://coolshell.cn/articles/11021.html" class="wp_rp_title">从“黑掉Github”学Web安全开发</a></li><li><a href="https://coolshell.cn/articles/17066.html" class="wp_rp_thumbnail"><img src="https://coolshell.cn/wp-content/uploads/2015/04/phishing-1-150x150.jpg" alt="关于移动端的钓鱼式攻击" width="150" height="150" /></a><a href="https://coolshell.cn/articles/17066.html" class="wp_rp_title">关于移动端的钓鱼式攻击</a></li><li><a href="https://coolshell.cn/articles/6424.html" class="wp_rp_thumbnail"><img src="https://coolshell.cn/wp-content/plugins/wordpress-23-related-posts-plugin/static/thumbs/11.jpg" alt="Hash Collision DoS 问题" width="150" height="150" /></a><a href="https://coolshell.cn/articles/6424.html" class="wp_rp_title">Hash Collision DoS 问题</a></li></ul></div></div>
+</div><div class="fixed"></div> 
+</main>
+<div class="post-navigation">
+<nav class="navigation" role="navigation">
+<h2 class="screen-reader-text">Post navigation</h2>
+<div class="nav-links">
+<div class="row">
+
+<div class="col-md-6 next-post">
+<a class href="https://coolshell.cn/articles/17634.html"><span class="next-prev-text"><i class="fa fa-angle-left"></i>
+上一篇</span><br>Chrome开发者工具的小技巧</a>
+</div>
+
+<div class="col-md-6 prev-post">
+<a class href="https://coolshell.cn/articles/17583.html"><span class="next-prev-text">下一篇 <i class="fa fa-angle-right"></i>
+</span><br>技术人员的发展之路</a>
+</div>
+</div>
+</div>
+</nav>
+</div>
+<div class="post-comments">
+<div id="comments" class="comments-area">
+<h2 class="comments-title">
+《<span>从 MongoDB “赎金事件” 看安全问题</span>》的相关评论 </h2>
+<ol class="comment-list">
+<li id="comment-1910184" class="comment even thread-even depth-1 parent">
+<article id="div-comment-1910184" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/f93f22f2c8e501a705f487692cb342a3?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/f93f22f2c8e501a705f487692cb342a3?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn">Tony</b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/17607.html#comment-1910184"><time datetime="2017-01-07T17:39:32+08:00">2017年01月07日 17:39</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>之前 Redis 也出过这样的问题，默认绑定 0.0.0.0。现在应该都改成 localhost 了。</p>
+<p><a href="http://antirez.com/news/96" rel="nofollow ugc">http://antirez.com/news/96</a></p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/17607.html?replytocom=1910184#respond" data-commentid="1910184" data-postid="17607" data-belowelement="div-comment-1910184" data-respondelement="respond" data-replyto="回复给Tony" aria-label="回复给Tony">回复</a></div> </article>
+<ol class="children">
+<li id="comment-1910390" class="comment odd alt depth-2">
+<article id="div-comment-1910390" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/64f2aff021ad2833a7b98920f51df7da?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/64f2aff021ad2833a7b98920f51df7da?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn"><a href="https://www.catscarlet.com/" class="url" rel="ugc external nofollow">石櫻燈籠</a></b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/17607.html#comment-1910390"><time datetime="2017-01-09T09:35:32+08:00">2017年01月09日 09:35</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>说真的我接触服务环境差不多有6年，还没见过几个不裸奔的，尤其是不设密码的缓存数据库（MongoDB和Redis为代表），其次是root/root的SQL数据库（MySQL和PSQL为代表）。</p>
+<p>曾经见过一个做产品的，我偶然瞟见他redis的监听就是0.0.0.0:6379，我跟他说你加一条iptables，或者监听127.0.0.1或者内网IP。人家说没事，谁会入侵。产品上线一小时后，redis数据库只剩一条String:Hacked.</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/17607.html?replytocom=1910390#respond" data-commentid="1910390" data-postid="17607" data-belowelement="div-comment-1910390" data-respondelement="respond" data-replyto="回复给石櫻燈籠" aria-label="回复给石櫻燈籠">回复</a></div> </article>
+</li>
+</ol>
+</li>
+<li id="comment-1910187" class="comment even thread-odd thread-alt depth-1 parent">
+<article id="div-comment-1910187" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/7be3529a021b2ae39a717234fd2d68ca?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/7be3529a021b2ae39a717234fd2d68ca?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn">沛秦</b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/17607.html#comment-1910187"><time datetime="2017-01-07T17:55:53+08:00">2017年01月07日 17:55</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>业余开发者一枚，搭建MongoDB的时候都会把auth启用，默认是不会启用的…可能是因为要多设置密码太麻烦吧…</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/17607.html?replytocom=1910187#respond" data-commentid="1910187" data-postid="17607" data-belowelement="div-comment-1910187" data-respondelement="respond" data-replyto="回复给沛秦" aria-label="回复给沛秦">回复</a></div> </article>
+<ol class="children">
+<li id="comment-1910260" class="comment odd alt depth-2">
+<article id="div-comment-1910260" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/b7a8d7e7dfebe4bfeabd7449822ea0fe?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/b7a8d7e7dfebe4bfeabd7449822ea0fe?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn">leyu</b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/17607.html#comment-1910260"><time datetime="2017-01-08T00:08:04+08:00">2017年01月08日 00:08</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>&#8220;我在阿里云随便找了几台机器&#8221;</p>
+<p>好奇这个怎么找，是密码吗——</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/17607.html?replytocom=1910260#respond" data-commentid="1910260" data-postid="17607" data-belowelement="div-comment-1910260" data-respondelement="respond" data-replyto="回复给leyu" aria-label="回复给leyu">回复</a></div> </article>
+</li>
+</ol>
+</li>
+<li id="comment-1910191" class="comment even thread-even depth-1">
+<article id="div-comment-1910191" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/6e47f108c20f2f22e2ad9fcb6453879d?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/6e47f108c20f2f22e2ad9fcb6453879d?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn">这是芦苇</b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/17607.html#comment-1910191"><time datetime="2017-01-07T18:07:17+08:00">2017年01月07日 18:07</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>现在看起来3.x的mogodb，可能原本安装了2.4.14之前的旧版本，配置文件是0.0.0.0，然后后来升级，配置文件保存没变</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/17607.html?replytocom=1910191#respond" data-commentid="1910191" data-postid="17607" data-belowelement="div-comment-1910191" data-respondelement="respond" data-replyto="回复给这是芦苇" aria-label="回复给这是芦苇">回复</a></div> </article>
+</li>
+<li id="comment-1910192" class="comment odd alt thread-odd thread-alt depth-1 parent">
+<article id="div-comment-1910192" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/2c0edfedb8ea6e9768932d1062f6e6f6?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/2c0edfedb8ea6e9768932d1062f6e6f6?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn">Bruce</b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/17607.html#comment-1910192"><time datetime="2017-01-07T18:28:04+08:00">2017年01月07日 18:28</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>黑客们是怎样发现这些暴露的数据库的，技术含量高吗？和绑定到0.0.0.0有什么关系，小白求科普</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/17607.html?replytocom=1910192#respond" data-commentid="1910192" data-postid="17607" data-belowelement="div-comment-1910192" data-respondelement="respond" data-replyto="回复给Bruce" aria-label="回复给Bruce">回复</a></div> </article>
+<ol class="children">
+<li id="comment-1910218" class="comment even depth-2">
+<article id="div-comment-1910218" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/6a88a19a8bb6c1cbf0c878780a0b1312?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/6a88a19a8bb6c1cbf0c878780a0b1312?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn">Tkk</b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/17607.html#comment-1910218"><time datetime="2017-01-07T23:06:14+08:00">2017年01月07日 23:06</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>全网扫描，先扫特定端口27017，然后在扫特征码<br/>
+话说尼玛阿里云里的redis和mongo也有这问题</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/17607.html?replytocom=1910218#respond" data-commentid="1910218" data-postid="17607" data-belowelement="div-comment-1910218" data-respondelement="respond" data-replyto="回复给Tkk" aria-label="回复给Tkk">回复</a></div> </article>
+</li>
+</ol>
+</li>
+<li id="comment-1910194" class="comment odd alt thread-even depth-1">
+<article id="div-comment-1910194" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/2fa408468fdb48929e51f8eaeeaeb729?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/2fa408468fdb48929e51f8eaeeaeb729?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn"><a href="http://cnblogs.com/Jack47/" class="url" rel="ugc external nofollow">Jack47</a></b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/17607.html#comment-1910194"><time datetime="2017-01-07T18:31:30+08:00">2017年01月07日 18:31</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>友情提示一下，大家不要乱搞这些裸奔的数据库，如果把别人生产数据搞没了是要付法律责任的，是可以反向定位出是谁搞的。</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/17607.html?replytocom=1910194#respond" data-commentid="1910194" data-postid="17607" data-belowelement="div-comment-1910194" data-respondelement="respond" data-replyto="回复给Jack47" aria-label="回复给Jack47">回复</a></div> </article>
+</li>
+<li id="comment-1910195" class="comment even thread-odd thread-alt depth-1 parent">
+<article id="div-comment-1910195" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/da40d8229f91d4b3b4c8b9d82a0dc78e?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/da40d8229f91d4b3b4c8b9d82a0dc78e?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn">binz</b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/17607.html#comment-1910195"><time datetime="2017-01-07T18:37:33+08:00">2017年01月07日 18:37</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>&#8220;到我拉Ubuntu 14.04上去&#8221; &#8211;&gt; &#8220;到我的Ubuntu 14.04上去&#8221; ？</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/17607.html?replytocom=1910195#respond" data-commentid="1910195" data-postid="17607" data-belowelement="div-comment-1910195" data-respondelement="respond" data-replyto="回复给binz" aria-label="回复给binz">回复</a></div> </article>
+<ol class="children">
+<li id="comment-1910198" class="comment byuser comment-author-haoel bypostauthor odd alt depth-2">
+<article id="div-comment-1910198" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/af2fbb7372dd5826e44d87e6ceccea40?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/af2fbb7372dd5826e44d87e6ceccea40?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn"><a href="https://coolshell.cn" class="url" rel="ugc">陈皓</a></b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/17607.html#comment-1910198"><time datetime="2017-01-07T20:25:49+08:00">2017年01月07日 20:25</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>谢谢，已更改。</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/17607.html?replytocom=1910198#respond" data-commentid="1910198" data-postid="17607" data-belowelement="div-comment-1910198" data-respondelement="respond" data-replyto="回复给陈皓" aria-label="回复给陈皓">回复</a></div> </article>
+</li>
+</ol>
+</li>
+<li id="comment-1910202" class="comment even thread-even depth-1 parent">
+<article id="div-comment-1910202" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/70c5234ad3c61ae834a5da73da611712?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/70c5234ad3c61ae834a5da73da611712?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn">not to say</b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/17607.html#comment-1910202"><time datetime="2017-01-07T21:08:17+08:00">2017年01月07日 21:08</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>实验室的被黑了，查历史日志，登录后就直接删除了，没有任何拷贝操作，所以不要付款</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/17607.html?replytocom=1910202#respond" data-commentid="1910202" data-postid="17607" data-belowelement="div-comment-1910202" data-respondelement="respond" data-replyto="回复给not to say" aria-label="回复给not to say">回复</a></div> </article>
+<ol class="children">
+<li id="comment-1910391" class="comment odd alt depth-2">
+<article id="div-comment-1910391" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/64f2aff021ad2833a7b98920f51df7da?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/64f2aff021ad2833a7b98920f51df7da?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn"><a href="https://www.catscarlet.com/" class="url" rel="ugc external nofollow">石櫻燈籠</a></b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/17607.html#comment-1910391"><time datetime="2017-01-09T09:36:47+08:00">2017年01月09日 09:36</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>一般都会连历史日志也删除的。难道还要留下操作记录等着被抓么……</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/17607.html?replytocom=1910391#respond" data-commentid="1910391" data-postid="17607" data-belowelement="div-comment-1910391" data-respondelement="respond" data-replyto="回复给石櫻燈籠" aria-label="回复给石櫻燈籠">回复</a></div> </article>
+</li>
+</ol>
+</li>
+<li id="comment-1910207" class="comment even thread-odd thread-alt depth-1">
+<article id="div-comment-1910207" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/944bbef72724e44bed6b87fa9593c2fa?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/944bbef72724e44bed6b87fa9593c2fa?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn"><a href="http://pankui.info" class="url" rel="ugc external nofollow">灵犀相印</a></b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/17607.html#comment-1910207"><time datetime="2017-01-07T22:00:09+08:00">2017年01月07日 22:00</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>有点意思。。。</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/17607.html?replytocom=1910207#respond" data-commentid="1910207" data-postid="17607" data-belowelement="div-comment-1910207" data-respondelement="respond" data-replyto="回复给灵犀相印" aria-label="回复给灵犀相印">回复</a></div> </article>
+</li>
+<li id="comment-1910208" class="comment odd alt thread-even depth-1">
+<article id="div-comment-1910208" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/24fd04af6a04d7db9b1ac1590b6d9473?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/24fd04af6a04d7db9b1ac1590b6d9473?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn">niklaus</b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/17607.html#comment-1910208"><time datetime="2017-01-07T22:23:38+08:00">2017年01月07日 22:23</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>安全问题重来都是需要多方面一起努力<br/>
+——&gt; 从来</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/17607.html?replytocom=1910208#respond" data-commentid="1910208" data-postid="17607" data-belowelement="div-comment-1910208" data-respondelement="respond" data-replyto="回复给niklaus" aria-label="回复给niklaus">回复</a></div> </article>
+</li>
+<li id="comment-1910212" class="pingback even thread-odd thread-alt depth-1">
+<div class="comment-body">
+Pingback： <a href="https://suipianx.com/archives/218" class="url" rel="ugc external nofollow">07/01/2017 第 16 期 &#8211; 碎片信息</a> </div>
+</li>
+<li id="comment-1910217" class="comment odd alt thread-even depth-1 parent">
+<article id="div-comment-1910217" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/31223e6694a1b72e5e514213c7569bd3?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/31223e6694a1b72e5e514213c7569bd3?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn"><a href="https://github.com/zbinlin" class="url" rel="ugc external nofollow">zbinlin</a></b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/17607.html#comment-1910217"><time datetime="2017-01-07T23:03:08+08:00">2017年01月07日 23:03</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>觉得主要原因是：<br/>
+1. 没有专业运维人员<br/>
+2. 开发人员的安全意识太差了（或者说是没有这方面的知识）</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/17607.html?replytocom=1910217#respond" data-commentid="1910217" data-postid="17607" data-belowelement="div-comment-1910217" data-respondelement="respond" data-replyto="回复给zbinlin" aria-label="回复给zbinlin">回复</a></div> </article>
+<ol class="children">
+<li id="comment-1911086" class="comment even depth-2">
+<article id="div-comment-1911086" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/bc50d274c705b08b0d85ef96db54cdd4?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/bc50d274c705b08b0d85ef96db54cdd4?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn">liuis</b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/17607.html#comment-1911086"><time datetime="2017-01-16T11:31:54+08:00">2017年01月16日 11:31</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>我觉得没有专业运维人员这个不妥，开发人员最基本的安全意识还是要有的，不能说明都指望运维人员，不设密码，起码默认端口要改一下吧。。。像很多人都没有这个习惯</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/17607.html?replytocom=1911086#respond" data-commentid="1911086" data-postid="17607" data-belowelement="div-comment-1911086" data-respondelement="respond" data-replyto="回复给liuis" aria-label="回复给liuis">回复</a></div> </article>
+</li>
+</ol>
+</li>
+<li id="comment-1910285" class="comment odd alt thread-odd thread-alt depth-1">
+<article id="div-comment-1910285" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/8a9a994b71fd587577a598e42932c45b?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/8a9a994b71fd587577a598e42932c45b?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn">陈皮</b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/17607.html#comment-1910285"><time datetime="2017-01-08T07:51:38+08:00">2017年01月08日 07:51</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>我的是内网的哈哈.更重要的是根本没数据</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/17607.html?replytocom=1910285#respond" data-commentid="1910285" data-postid="17607" data-belowelement="div-comment-1910285" data-respondelement="respond" data-replyto="回复给陈皮" aria-label="回复给陈皮">回复</a></div> </article>
+</li>
+<li id="comment-1910293" class="comment even thread-even depth-1">
+<article id="div-comment-1910293" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/f91a873e68b9910400e035732c00949b?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/f91a873e68b9910400e035732c00949b?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn">Ric</b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/17607.html#comment-1910293"><time datetime="2017-01-08T09:16:14+08:00">2017年01月08日 09:16</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>监控所有 IP address 作为默认值没问题啊，只想说 AWS 的 Security Group 是个好东西，为啥就不用呢</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/17607.html?replytocom=1910293#respond" data-commentid="1910293" data-postid="17607" data-belowelement="div-comment-1910293" data-respondelement="respond" data-replyto="回复给Ric" aria-label="回复给Ric">回复</a></div> </article>
+</li>
+<li id="comment-1910295" class="comment odd alt thread-odd thread-alt depth-1 parent">
+<article id="div-comment-1910295" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/1b67fad3b120385ecbb54d30b24e9937?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/1b67fad3b120385ecbb54d30b24e9937?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn"><a href="http://verycb.me" class="url" rel="ugc external nofollow">VeryCB</a></b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/17607.html#comment-1910295"><time datetime="2017-01-08T09:46:58+08:00">2017年01月08日 09:46</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>你看到的 3.2.8 版本是你本地的 MongoDB Shell 版本，不是所连接的数据库版本，看数据库版本要用 db.version()</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/17607.html?replytocom=1910295#respond" data-commentid="1910295" data-postid="17607" data-belowelement="div-comment-1910295" data-respondelement="respond" data-replyto="回复给VeryCB" aria-label="回复给VeryCB">回复</a></div> </article>
+<ol class="children">
+<li id="comment-1910300" class="comment byuser comment-author-haoel bypostauthor even depth-2">
+<article id="div-comment-1910300" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/af2fbb7372dd5826e44d87e6ceccea40?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/af2fbb7372dd5826e44d87e6ceccea40?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn"><a href="https://coolshell.cn" class="url" rel="ugc">陈皓</a></b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/17607.html#comment-1910300"><time datetime="2017-01-08T11:14:04+08:00">2017年01月08日 11:14</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>哦，是我乌龙了。谢谢</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/17607.html?replytocom=1910300#respond" data-commentid="1910300" data-postid="17607" data-belowelement="div-comment-1910300" data-respondelement="respond" data-replyto="回复给陈皓" aria-label="回复给陈皓">回复</a></div> </article>
+</li>
+</ol>
+</li>
+<li id="comment-1910307" class="comment odd alt thread-even depth-1">
+<article id="div-comment-1910307" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/df12c21880573d3194a4b573a82dbbcf?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/df12c21880573d3194a4b573a82dbbcf?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn">程卓</b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/17607.html#comment-1910307"><time datetime="2017-01-08T12:34:39+08:00">2017年01月08日 12:34</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>耗子叔总是不忘记顺便黑一下阿里，嘿嘿~~</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/17607.html?replytocom=1910307#respond" data-commentid="1910307" data-postid="17607" data-belowelement="div-comment-1910307" data-respondelement="respond" data-replyto="回复给程卓" aria-label="回复给程卓">回复</a></div> </article>
+</li>
+<li id="comment-1910308" class="comment even thread-odd thread-alt depth-1 parent">
+<article id="div-comment-1910308" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/0a92e161b21fb4070e2ed4edd7d7e9ba?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/0a92e161b21fb4070e2ed4edd7d7e9ba?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn"><a href="http://haitao.appinn.me" class="url" rel="ugc external nofollow">haitao</a></b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/17607.html#comment-1910308"><time datetime="2017-01-08T12:34:58+08:00">2017年01月08日 12:34</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>【因为目前来说没有任何证据证明黑客们真正保存了你的数据，因为，被黑的服务器太多了，估计有几百T的数据，估计是不会为你保存的】<br/>
+不用额外保存啊，只要他把你的数据库加上密码，就行了</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/17607.html?replytocom=1910308#respond" data-commentid="1910308" data-postid="17607" data-belowelement="div-comment-1910308" data-respondelement="respond" data-replyto="回复给haitao" aria-label="回复给haitao">回复</a></div> </article>
+<ol class="children">
+<li id="comment-1910314" class="comment odd alt depth-2 parent">
+<article id="div-comment-1910314" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/18cca2186d91b0886660380fec3248c6?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/18cca2186d91b0886660380fec3248c6?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn">LurenJia</b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/17607.html#comment-1910314"><time datetime="2017-01-08T14:47:35+08:00">2017年01月08日 14:47</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>你连接上去会发现，上面的DB都空了。</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/17607.html?replytocom=1910314#respond" data-commentid="1910314" data-postid="17607" data-belowelement="div-comment-1910314" data-respondelement="respond" data-replyto="回复给LurenJia" aria-label="回复给LurenJia">回复</a></div> </article>
+<ol class="children">
+<li id="comment-1910340" class="comment even depth-3 parent">
+<article id="div-comment-1910340" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/0a92e161b21fb4070e2ed4edd7d7e9ba?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/0a92e161b21fb4070e2ed4edd7d7e9ba?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn"><a href="http://haitao.appinn.me" class="url" rel="ugc external nofollow">haitao</a></b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/17607.html#comment-1910340"><time datetime="2017-01-08T21:46:08+08:00">2017年01月08日 21:46</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>不知道mongodb的机制。。。。<br/>
+按常理说，黑客没必要删除db，给用户的db或系统 置一个强密码，用户就无法使用了，黑客自己又能随时恢复或通知付赎金者密码（即使骗用户也多点依据）</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/17607.html?replytocom=1910340#respond" data-commentid="1910340" data-postid="17607" data-belowelement="div-comment-1910340" data-respondelement="respond" data-replyto="回复给haitao" aria-label="回复给haitao">回复</a></div> </article>
+<ol class="children">
+<li id="comment-1910736" class="comment odd alt depth-4 parent">
+<article id="div-comment-1910736" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/7d363989a4948d5469eb1430b24f1144?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/7d363989a4948d5469eb1430b24f1144?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn">追求技术</b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/17607.html#comment-1910736"><time datetime="2017-01-12T15:33:13+08:00">2017年01月12日 15:33</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>mangodb进场出问题阿</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/17607.html?replytocom=1910736#respond" data-commentid="1910736" data-postid="17607" data-belowelement="div-comment-1910736" data-respondelement="respond" data-replyto="回复给追求技术" aria-label="回复给追求技术">回复</a></div> </article>
+<ol class="children">
+<li id="comment-1910737" class="comment even depth-5">
+<article id="div-comment-1910737" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/7d363989a4948d5469eb1430b24f1144?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/7d363989a4948d5469eb1430b24f1144?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn">追求技术</b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/17607.html#comment-1910737"><time datetime="2017-01-12T15:33:54+08:00">2017年01月12日 15:33</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>到底能搞多少层阿</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/17607.html?replytocom=1910737#respond" data-commentid="1910737" data-postid="17607" data-belowelement="div-comment-1910737" data-respondelement="respond" data-replyto="回复给追求技术" aria-label="回复给追求技术">回复</a></div> </article>
+</li>
+</ol>
+</li>
+</ol>
+</li>
+</ol>
+</li>
+</ol>
+</li>
+<li id="comment-1910313" class="comment odd alt thread-even depth-1">
+<article id="div-comment-1910313" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/18cca2186d91b0886660380fec3248c6?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/18cca2186d91b0886660380fec3248c6?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn">LurenJia</b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/17607.html#comment-1910313"><time datetime="2017-01-08T14:45:34+08:00">2017年01月08日 14:45</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>mongo 45.32.72.8</p>
+<p>db.CONTACTME.find()<br/>
+{ &#8220;_id&#8221; : ObjectId(&#8220;5871c42ab5f3814b92d5679d&#8221;), &#8220;mail&#8221; : &#8220;<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="7447181d0c45063419151d1846001b065a171b19">[email&#160;protected]</a>&#8221;, &#8220;note&#8221; : &#8220;SEND 0.25 BTC TO THIS ADDRESS 17w8EBkCgTQJQAQZ9Bzdf2rZeR5xxfCanV AND CONTACT THIS EMAIL WITH YOUR IP OF YOUR SERVER AND PROOF OF PAIEMENT TO RECOVER YOUR DATABASE !&#8221; }</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/17607.html?replytocom=1910313#respond" data-commentid="1910313" data-postid="17607" data-belowelement="div-comment-1910313" data-respondelement="respond" data-replyto="回复给LurenJia" aria-label="回复给LurenJia">回复</a></div> </article>
+</li>
+<li id="comment-1910343" class="comment even thread-odd thread-alt depth-1">
+<article id="div-comment-1910343" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/a8107cfefeeb689b9039dc6658d7427f?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/a8107cfefeeb689b9039dc6658d7427f?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn">tryao</b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/17607.html#comment-1910343"><time datetime="2017-01-08T22:44:36+08:00">2017年01月08日 22:44</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>阿里云扫一圈27017就知道了</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/17607.html?replytocom=1910343#respond" data-commentid="1910343" data-postid="17607" data-belowelement="div-comment-1910343" data-respondelement="respond" data-replyto="回复给tryao" aria-label="回复给tryao">回复</a></div> </article>
+</li>
+<li id="comment-1910457" class="comment odd alt thread-even depth-1">
+<article id="div-comment-1910457" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/41d090b68fd2ec5260a3c8a28f7c62f4?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/41d090b68fd2ec5260a3c8a28f7c62f4?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn">好气啊</b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/17607.html#comment-1910457"><time datetime="2017-01-10T00:10:11+08:00">2017年01月10日 00:10</time></a> </div>
+</footer>
+<div class="comment-content">
+<p><a href="http://dwz.cn/51TzHv" rel="nofollow ugc">http://dwz.cn/51TzHv</a></p>
+<p>真实的故事，被攻击的教训，愿受害者共勉。</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/17607.html?replytocom=1910457#respond" data-commentid="1910457" data-postid="17607" data-belowelement="div-comment-1910457" data-respondelement="respond" data-replyto="回复给好气啊" aria-label="回复给好气啊">回复</a></div> </article>
+</li>
+<li id="comment-1910480" class="comment even thread-odd thread-alt depth-1">
+<article id="div-comment-1910480" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/ae4a8d417263481ad1d83abdd4a8a21c?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/ae4a8d417263481ad1d83abdd4a8a21c?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn"><a href="http://legofan.cc" class="url" rel="ugc external nofollow">天地仁一</a></b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/17607.html#comment-1910480"><time datetime="2017-01-10T06:30:25+08:00">2017年01月10日 06:30</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>以前一直不理解Shodan的用法，现在才明白……</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/17607.html?replytocom=1910480#respond" data-commentid="1910480" data-postid="17607" data-belowelement="div-comment-1910480" data-respondelement="respond" data-replyto="回复给天地仁一" aria-label="回复给天地仁一">回复</a></div> </article>
+</li>
+<li id="comment-1910508" class="comment odd alt thread-even depth-1">
+<article id="div-comment-1910508" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/72a2c881c9245a04045c4ea661e6f1fe?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/72a2c881c9245a04045c4ea661e6f1fe?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn"><a href="http://www.alixinxiu.com/" class="url" rel="ugc external nofollow">Henry Smith</a></b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/17607.html#comment-1910508"><time datetime="2017-01-10T13:42:00+08:00">2017年01月10日 13:42</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>不错,学习了.感谢分享!</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/17607.html?replytocom=1910508#respond" data-commentid="1910508" data-postid="17607" data-belowelement="div-comment-1910508" data-respondelement="respond" data-replyto="回复给Henry Smith" aria-label="回复给Henry Smith">回复</a></div> </article>
+</li>
+<li id="comment-1910828" class="pingback even thread-odd thread-alt depth-1">
+<div class="comment-body">
+Pingback： <a href="http://mybeibei.net/2017/01/13/%e4%b8%80%e5%91%a8%e4%bf%a1%e6%81%af%e5%ae%89%e5%85%a8%e5%b9%b2%e8%b4%a7%e5%88%86%e4%ba%ab%e3%80%90%e7%ac%ac87%e6%9c%9f%e3%80%91/" class="url" rel="ugc external nofollow">一周信息安全干货分享【第87期】 &#8211; Guge&#039;s blog</a> </div>
+</li>
+<li id="comment-1911005" class="comment odd alt thread-even depth-1">
+<article id="div-comment-1911005" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/7ff7c2ec916d21fe4116ca8fdcf3a473?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/7ff7c2ec916d21fe4116ca8fdcf3a473?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn">@rt</b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/17607.html#comment-1911005"><time datetime="2017-01-15T19:44:40+08:00">2017年01月15日 19:44</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>跑个题，</p>
+<p>第一次试用Shodan的搜索引擎，建了一个report,<br/>
+<a href="https://www.shodan.io/report/cmSKSGFa" rel="nofollow ugc">https://www.shodan.io/report/cmSKSGFa</a><br/>
+然后跟你的一比，<br/>
+<a href="https://www.shodan.io/report/h0bgF6zM" rel="nofollow ugc">https://www.shodan.io/report/h0bgF6zM</a></p>
+<p>发现数据多出很多，是因为过去一周多了很多mongoDB exposure? 还是Shodan收集了更多数据？还是耗哥加了什么过滤？<br/>
+求指教</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/17607.html?replytocom=1911005#respond" data-commentid="1911005" data-postid="17607" data-belowelement="div-comment-1911005" data-respondelement="respond" data-replyto="回复给@rt" aria-label="回复给@rt">回复</a></div> </article>
+</li>
+<li id="comment-1911156" class="comment even thread-odd thread-alt depth-1">
+<article id="div-comment-1911156" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/5d50c2dbe9be37f4d47af08594b76ad5?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/5d50c2dbe9be37f4d47af08594b76ad5?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn"><a href="https://daniate.com" class="url" rel="ugc external nofollow">Daniate</a></b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/17607.html#comment-1911156"><time datetime="2017-01-17T09:18:31+08:00">2017年01月17日 09:18</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>后续的反思里面列出的第二条原因：需要很多内部机器防问</p>
+<p>『访问』</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/17607.html?replytocom=1911156#respond" data-commentid="1911156" data-postid="17607" data-belowelement="div-comment-1911156" data-respondelement="respond" data-replyto="回复给Daniate" aria-label="回复给Daniate">回复</a></div> </article>
+</li>
+<li id="comment-1911535" class="comment odd alt thread-even depth-1">
+<article id="div-comment-1911535" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/c8516a464b88c35c188a560e86015943?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/c8516a464b88c35c188a560e86015943?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn"><a href="http://www.fengyingsheng.com" class="url" rel="ugc external nofollow">eason</a></b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/17607.html#comment-1911535"><time datetime="2017-01-22T18:32:43+08:00">2017年01月22日 18:32</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>好文章，顶一下，学习不少知识！</p>
+<p>谢谢楼主！</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/17607.html?replytocom=1911535#respond" data-commentid="1911535" data-postid="17607" data-belowelement="div-comment-1911535" data-respondelement="respond" data-replyto="回复给eason" aria-label="回复给eason">回复</a></div> </article>
+</li>
+<li id="comment-1913404" class="pingback even thread-odd thread-alt depth-1">
+<div class="comment-body">
+Pingback： <a href="http://hack.hk.cn/2017/03/07/%e5%9f%ba%e4%ba%8edocker%e7%9a%84mongodb%e5%ae%9e%e7%8e%b0%e6%8e%88%e6%9d%83%e8%ae%bf%e9%97%ae/" class="url" rel="ugc external nofollow">基于Docker的MongoDB实现授权访问 - 莹莹之色</a> </div>
+</li>
+<li id="comment-1913739" class="comment odd alt thread-even depth-1">
+<article id="div-comment-1913739" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/c3ab920fe0ca066e5fda77abc3dc2648?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/c3ab920fe0ca066e5fda77abc3dc2648?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn"><a href="http://www.yuchgame.com" class="url" rel="ugc external nofollow">yuchting</a></b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/17607.html#comment-1913739"><time datetime="2017-04-11T16:18:18+08:00">2017年04月11日 16:18</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>看标题吓了我一身冷汗，赶紧点进去看了一下。我去，原来是没有密码的裸鸡，心里舒了一口气。</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/17607.html?replytocom=1913739#respond" data-commentid="1913739" data-postid="17607" data-belowelement="div-comment-1913739" data-respondelement="respond" data-replyto="回复给yuchting" aria-label="回复给yuchting">回复</a></div> </article>
+</li>
+<li id="comment-1913773" class="comment even thread-odd thread-alt depth-1">
+<article id="div-comment-1913773" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/b93fbb5b4f3994c9e6c2af306a3013ac?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/b93fbb5b4f3994c9e6c2af306a3013ac?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn">luoqeng</b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/17607.html#comment-1913773"><time datetime="2017-04-14T22:00:40+08:00">2017年04月14日 22:00</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>因为mongodb创建账号超级麻烦，大多数人用默认配置。</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/17607.html?replytocom=1913773#respond" data-commentid="1913773" data-postid="17607" data-belowelement="div-comment-1913773" data-respondelement="respond" data-replyto="回复给luoqeng" aria-label="回复给luoqeng">回复</a></div> </article>
+</li>
+<li id="comment-1914067" class="comment odd alt thread-even depth-1">
+<article id="div-comment-1914067" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/e37353f5c687cdac97e3b15c28edcc65?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/e37353f5c687cdac97e3b15c28edcc65?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn">绝尘</b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/17607.html#comment-1914067"><time datetime="2017-05-14T05:33:07+08:00">2017年05月14日 05:33</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>当时看到这篇文章怎么没有想到比特币要涨价呢 哎 三个月的囤货时间 今天突然惊醒 可惜反应太慢 博主关注你公众号新文章微信能收到提醒吗？⋯⋯</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/17607.html?replytocom=1914067#respond" data-commentid="1914067" data-postid="17607" data-belowelement="div-comment-1914067" data-respondelement="respond" data-replyto="回复给绝尘" aria-label="回复给绝尘">回复</a></div> </article>
+</li>
+<li id="comment-1918198" class="pingback even thread-odd thread-alt depth-1">
+<div class="comment-body">
+Pingback： <a href="http://www.codeba.cc/mongdb%e5%bc%80%e5%90%af%e6%9d%83%e9%99%90%e8%ae%a4%e8%af%81.html" class="url" rel="ugc external nofollow">MongDB开启权限认证 | Codeba</a> </div>
+</li>
+<li id="comment-1980678" class="comment odd alt thread-even depth-1">
+<article id="div-comment-1980678" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/ddcc7981c7ed32341a6ebef075a3b7f0?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/ddcc7981c7ed32341a6ebef075a3b7f0?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn"><a href="http://cheapgogenvia.com/" class="url" rel="ugc external nofollow">jjeitarl</a></b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/17607.html#comment-1980678"><time datetime="2019-03-23T23:43:26+08:00">2019年03月23日 23:43</time></a> </div>
+</footer>
+<div class="comment-content">
+<p><a href="http://cheapgogenvia.com/" rel="nofollow ugc">http://cheapgogenvia.com/</a> viagra generic date</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/17607.html?replytocom=1980678#respond" data-commentid="1980678" data-postid="17607" data-belowelement="div-comment-1980678" data-respondelement="respond" data-replyto="回复给jjeitarl" aria-label="回复给jjeitarl">回复</a></div> </article>
+</li>
+<li id="comment-1996375" class="pingback even thread-odd thread-alt depth-1">
+<div class="comment-body">
+Pingback： <a href="http://www.bigbai.net/2019/05/09/%e3%80%90%e9%85%b7%e5%a3%b3%e3%80%91-http-api-%e8%ae%a4%e8%af%81%e6%8e%88%e6%9d%83%e6%9c%af/" class="url" rel="ugc external nofollow">【酷壳】 HTTP API 认证授权术 | 大白的平凡世界</a> </div>
+</li>
+<li id="comment-2161290" class="pingback odd alt thread-even depth-1">
+<div class="comment-body">
+Pingback： <a href="http://www.fixbbs.com/a/11141944.html" class="url" rel="ugc external nofollow">MongoDB开启权限认证 &#8211; FIXBBS</a> </div>
+</li>
+</ol>
+<div id="respond" class="comment-respond">
+<h3 id="reply-title" class="comment-reply-title">发表回复 <small><a rel="nofollow" id="cancel-comment-reply-link" href="/articles/17607.html#respond" style="display:none;">取消回复</a></small></h3><form action="https://coolshell.cn/wp-comments-post.php" method="post" id="commentform" class="comment-form" novalidate><p class="comment-notes"><span id="email-notes">您的电子邮箱地址不会被公开。</span> <span class="required-field-message">必填项已用<span class="required">*</span>标注</span></p><p class="comment-form-comment"><label for="comment">评论 <span class="required">*</span></label> <textarea id="comment" name="comment" cols="45" rows="8" maxlength="65525" required></textarea></p><p class="comment-form-author"><label for="author">显示名称 <span class="required">*</span></label> <input id="author" name="author" type="text" value size="30" maxlength="245" autocomplete="name" required /></p>
+<p class="comment-form-email"><label for="email">电子邮箱地址 <span class="required">*</span></label> <input id="email" name="email" type="email" value size="30" maxlength="100" aria-describedby="email-notes" autocomplete="email" required /></p>
+<p class="comment-form-url"><label for="url">网站地址</label> <input id="url" name="url" type="url" value size="30" maxlength="200" autocomplete="url" /></p>
+<p class="form-submit"><input name="submit" type="submit" id="submit" class="submit" value="发表评论" /> <input type="hidden" name="comment_post_ID" value="17607" id="comment_post_ID" />
+<input type="hidden" name="comment_parent" id="comment_parent" value="0" />
+</p><p style="display: none;"><input type="hidden" id="akismet_comment_nonce" name="akismet_comment_nonce" value="0b130eb9ff" /></p><p style="display: none !important;"><label>&#916;<textarea name="ak_hp_textarea" cols="45" rows="8" maxlength="100"></textarea></label><input type="hidden" id="ak_js_1" name="ak_js" value="68" /><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script type="b902c321ef99d864eef8c78b-text/javascript">document.getElementById( "ak_js_1" ).setAttribute( "value", ( new Date() ).getTime() );</script></p></form> </div>
+</div>
+</div>
+</div>
+<div id="secondary" class="col-md-3 hidden-sm hidden-xs sidebar widget-area" role="complementary">
+<aside id="search-9" class="widget widget_search">
+<form role="search" method="get" class="search-form" action="https://coolshell.cn/">
+<label>
+<span class="screen-reader-text">Search for:</span>
+<input type="search" class="search-field" placeholder="Search &hellip;" value name="s" title="Search for:" />
+</label>
+<button type="submit" class="search-submit"><span class="screen-reader-text">Search</span></button>
+</form>
+</aside><aside id="custom_html-3" class="widget_text widget widget_custom_html"><h4 class="widget-title">本站公告</h4><div class="textwidget custom-html-widget"><p align="center"><a class="twitter" href="https://twitter.com/haoel" target="_blank" rel="noopener"> Twitter @haoel </a></p>
+
+<p align="center">极客时间专栏<br><a href="http://gk.link/a/10sBp" target="_blank" rel="noopener"><img src="https://coolshell.cn/wp-content/uploads/2021/06/8311623409583_.pic_hd-1024x1024.jpg" height="200" weight="200" alt="极客时间专栏" title="极客时间专栏"></a></p>
+
+</div></aside>
+<aside id="recent-posts-4" class="widget widget_recent_entries">
+<h4 class="widget-title">最新文章</h4>
+<ul>
+<li>
+<a href="https://coolshell.cn/articles/22422.html">是微服务架构不香还是云不香？</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/22398.html">我看ChatGPT: 为啥谷歌掉了千亿美金</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/22367.html">聊聊 nostr 和 审查</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/22341.html">感染新冠的经历</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/22320.html">eBPF 介绍</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/22298.html">聊聊团队协同和协同工具</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/22263.html">从一次经历谈 TIME_WAIT 的那些事</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/22242.html">ETCD的内存问题</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/22173.html">“一把梭：REST API 全用 POST”</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/22157.html">谈谈公司对员工的监控</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/21708.html">网络数字身份认证术</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/21672.html">我做系统架构的一些原则</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/21649.html">源代码特洛伊木马攻击</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/21615.html">Go编程模式 ： 泛型编程</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/21589.html">如何做一个有质量的技术分享</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/21263.html">Go 编程模式：k8s Visitor 模式</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/21228.html">Go编程模式：Pipeline</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/21214.html">Go编程模式：委托和反转控制</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/21179.html">Go 编程模式：Go Generation</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/21164.html">Go编程模式：Map-Reduce</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/21146.html">Go 编程模式：Functional Options</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/21140.html">Go 编程模式：错误处理</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/21128.html">Go编程模式：切片，接口，时间和性能</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/21113.html">百度为什么掉队了</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/20977.html">程序员如何把控自己的职业</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/21003.html">计时攻击 Timing Attacks</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/20845.html">Rust语言的编程范式</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/20793.html">与程序员相关的CPU缓存知识</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/20765.html">MegaEase的远程工作文化</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/20533.html">使用简单的逻辑方法进行独立思考</a>
+</li>
+</ul>
+</aside><aside id="views-6" class="widget widget_views"><h4 class="widget-title">全站热门</h4><ul>
+<li><a href="https://coolshell.cn/articles/4990.html" title="程序员技术练级攻略 - 10,239,358 人阅读">程序员技术练级攻略</a></li><li><a href="https://coolshell.cn/articles/3961.html" title="&ldquo;火柴棍式&rdquo;程序员面试题 - 2,356,393 人阅读">&ldquo;火柴棍式&rdquo;程序员面试题</a></li><li><a href="https://coolshell.cn/articles/5426.html" title="简明 Vim 练级攻略 - 1,325,330 人阅读">简明 Vim 练级攻略</a></li><li><a href="https://coolshell.cn/articles/9308.html" title="&ldquo;作环保的程序员，从不用百度开始&rdquo; - 589,344 人阅读">&ldquo;作环保的程序员，从不用百度开始&rdquo;</a></li><li><a href="https://coolshell.cn/articles/11564.html" title="TCP 的那些事儿（上） - 488,716 人阅读">TCP 的那些事儿（上）</a></li><li><a href="https://coolshell.cn/articles/9070.html" title="AWK 简明教程 - 453,317 人阅读">AWK 简明教程</a></li><li><a href="https://coolshell.cn/articles/7186.html" title="做个环保主义的程序员 - 447,306 人阅读">做个环保主义的程序员</a></li><li><a href="https://coolshell.cn/articles/10688.html" title="编程能力与编程年龄 - 416,720 人阅读">编程能力与编程年龄</a></li><li><a href="https://coolshell.cn/articles/10590.html" title="二维码的生成细节和原理 - 393,832 人阅读">二维码的生成细节和原理</a></li><li><a href="https://coolshell.cn/articles/9104.html" title="sed 简明教程 - 380,315 人阅读">sed 简明教程</a></li><li><a href="https://coolshell.cn/articles/4102.html" title="如何学好C语言 - 368,394 人阅读">如何学好C语言</a></li><li><a href="https://coolshell.cn/articles/19464.html" title="如何超过大多数人 - 314,150 人阅读">如何超过大多数人</a></li><li><a href="https://coolshell.cn/articles/17583.html" title="技术人员的发展之路 - 308,366 人阅读">技术人员的发展之路</a></li><li><a href="https://coolshell.cn/articles/9606.html" title="疫苗：Java HashMap的死循环 - 305,430 人阅读">疫苗：Java HashMap的死循环</a></li><li><a href="https://coolshell.cn/articles/6470.html" title="由12306.cn谈谈网站性能技术 - 298,938 人阅读">由12306.cn谈谈网站性能技术</a></li><li><a href="https://coolshell.cn/articles/8883.html" title="应该知道的Linux技巧 - 296,771 人阅读">应该知道的Linux技巧</a></li><li><a href="https://coolshell.cn/articles/17416.html" title="缓存更新的套路 - 293,607 人阅读">缓存更新的套路</a></li><li><a href="https://coolshell.cn/articles/10910.html" title="分布式系统的事务处理 - 284,611 人阅读">分布式系统的事务处理</a></li><li><a href="https://coolshell.cn/articles/11609.html" title="TCP 的那些事儿（下） - 284,359 人阅读">TCP 的那些事儿（下）</a></li><li><a href="https://coolshell.cn/articles/2250.html" title="&ldquo;21天教你学会C++&rdquo; - 278,597 人阅读">&ldquo;21天教你学会C++&rdquo;</a></li><li><a href="https://coolshell.cn/articles/8239.html" title="无锁队列的实现 - 274,280 人阅读">无锁队列的实现</a></li><li><a href="https://coolshell.cn/articles/20276.html" title="别让自己&ldquo;墙&rdquo;了自己 - 271,252 人阅读">别让自己&ldquo;墙&rdquo;了自己</a></li><li><a href="https://coolshell.cn/articles/10739.html" title="Lua简明教程 - 269,333 人阅读">Lua简明教程</a></li><li><a href="https://coolshell.cn/articles/7490.html" title="性能调优攻略 - 257,249 人阅读">性能调优攻略</a></li><li><a href="https://coolshell.cn/articles/1846.html" title="MySQL性能优化的最佳20+条经验 - 255,745 人阅读">MySQL性能优化的最佳20+条经验</a></li><li><a href="https://coolshell.cn/articles/4758.html" title="如何写出无法维护的代码 - 254,090 人阅读">如何写出无法维护的代码</a></li><li><a href="https://coolshell.cn/articles/914.html" title="6个变态的C语言Hello World程序 - 251,862 人阅读">6个变态的C语言Hello World程序</a></li><li><a href="https://coolshell.cn/articles/17010.html" title="Docker基础技术：Linux Namespace（上） - 241,781 人阅读">Docker基础技术：Linux Namespace（上）</a></li><li><a href="https://coolshell.cn/articles/7829.html" title="28个Unix/Linux的命令行神器 - 241,197 人阅读">28个Unix/Linux的命令行神器</a></li><li><a href="https://coolshell.cn/articles/11312.html" title="无插件Vim编程技巧 - 222,787 人阅读">无插件Vim编程技巧</a></li></ul>
+</aside><aside id="categories-367921425" class="widget widget_categories"><h4 class="widget-title">分类</h4>
+<ul>
+<li class="cat-item cat-item-195"><a href="https://coolshell.cn/category/itnews">业界新闻</a> (33)
+</li>
+<li class="cat-item cat-item-509"><a href="https://coolshell.cn/category/%e4%bc%81%e4%b8%9a%e5%ba%94%e7%94%a8">企业应用</a> (2)
+</li>
+<li class="cat-item cat-item-9"><a href="https://coolshell.cn/category/technews">技术新闻</a> (38)
+</li>
+<li class="cat-item cat-item-550"><a href="https://coolshell.cn/category/%e6%8a%80%e6%9c%af%e7%ae%a1%e7%90%86">技术管理</a> (19)
+</li>
+<li class="cat-item cat-item-12"><a href="https://coolshell.cn/category/techarticle">技术读物</a> (125)
+</li>
+<li class="cat-item cat-item-18"><a href="https://coolshell.cn/category/operatingsystem">操作系统</a> (97)
+<ul class="children">
+<li class="cat-item cat-item-20"><a href="https://coolshell.cn/category/operatingsystem/unixlinux">Unix/Linux</a> (81)
+</li>
+<li class="cat-item cat-item-19"><a href="https://coolshell.cn/category/operatingsystem/mswindows">Windows</a> (12)
+</li>
+</ul>
+</li>
+<li class="cat-item cat-item-105"><a href="https://coolshell.cn/category/datebase">数据库</a> (11)
+</li>
+<li class="cat-item cat-item-10"><a href="https://coolshell.cn/category/misc">杂项资源</a> (295)
+</li>
+<li class="cat-item cat-item-15"><a href="https://coolshell.cn/category/process">流程方法</a> (48)
+</li>
+<li class="cat-item cat-item-23"><a href="https://coolshell.cn/category/progdesign">程序设计</a> (110)
+</li>
+<li class="cat-item cat-item-602"><a href="https://coolshell.cn/category/%e7%b3%bb%e7%bb%9f%e6%9e%b6%e6%9e%84">系统架构</a> (15)
+</li>
+<li class="cat-item cat-item-1"><a href="https://coolshell.cn/category/tools">编程工具</a> (67)
+</li>
+<li class="cat-item cat-item-3"><a href="https://coolshell.cn/category/proglanguage">编程语言</a> (326)
+<ul class="children">
+<li class="cat-item cat-item-189"><a href="https://coolshell.cn/category/proglanguage/dotnet">.NET编程</a> (3)
+</li>
+<li class="cat-item cat-item-8"><a href="https://coolshell.cn/category/proglanguage/ajaxdev">Ajax开发</a> (9)
+</li>
+<li class="cat-item cat-item-5"><a href="https://coolshell.cn/category/proglanguage/cplusplus">C/C++语言</a> (74)
+</li>
+<li class="cat-item cat-item-186"><a href="https://coolshell.cn/category/proglanguage/erlang">Erlang</a> (1)
+</li>
+<li class="cat-item cat-item-819"><a href="https://coolshell.cn/category/proglanguage/go-%e8%af%ad%e8%a8%80">Go 语言</a> (15)
+</li>
+<li class="cat-item cat-item-4"><a href="https://coolshell.cn/category/proglanguage/javadev">Java语言</a> (32)
+</li>
+<li class="cat-item cat-item-11"><a href="https://coolshell.cn/category/proglanguage/phpdev">PHP脚本</a> (11)
+</li>
+<li class="cat-item cat-item-33"><a href="https://coolshell.cn/category/proglanguage/pythondev">Python</a> (23)
+</li>
+<li class="cat-item cat-item-100"><a href="https://coolshell.cn/category/proglanguage/rubydev">Ruby</a> (5)
+</li>
+<li class="cat-item cat-item-860"><a href="https://coolshell.cn/category/proglanguage/rust-%e8%af%ad%e8%a8%80">Rust 语言</a> (1)
+</li>
+<li class="cat-item cat-item-7"><a href="https://coolshell.cn/category/proglanguage/webdev">Web开发</a> (106)
+</li>
+</ul>
+</li>
+<li class="cat-item cat-item-6"><a href="https://coolshell.cn/category/netsecurity">网络安全</a> (36)
+</li>
+<li class="cat-item cat-item-39"><a href="https://coolshell.cn/category/career">职场生涯</a> (40)
+</li>
+<li class="cat-item cat-item-271"><a href="https://coolshell.cn/category/funny">趣味问题</a> (19)
+</li>
+<li class="cat-item cat-item-52"><a href="https://coolshell.cn/category/story">轶事趣闻</a> (147)
+</li>
+</ul>
+</aside><aside id="tag_cloud-4" class="widget widget_tag_cloud"><h4 class="widget-title">标签</h4><div class="tagcloud"><a href="https://coolshell.cn/tag/agile" class="tag-cloud-link tag-link-17 tag-link-position-1" style="font-size: 11.559322033898pt;" aria-label="agile (15个项目)">agile</a>
+<a href="https://coolshell.cn/tag/ajax" class="tag-cloud-link tag-link-34 tag-link-position-2" style="font-size: 10.135593220339pt;" aria-label="AJAX (11个项目)">AJAX</a>
+<a href="https://coolshell.cn/tag/algorithm" class="tag-cloud-link tag-link-76 tag-link-position-3" style="font-size: 14.28813559322pt;" aria-label="Algorithm (26个项目)">Algorithm</a>
+<a href="https://coolshell.cn/tag/android" class="tag-cloud-link tag-link-145 tag-link-position-4" style="font-size: 10.135593220339pt;" aria-label="Android (11个项目)">Android</a>
+<a href="https://coolshell.cn/tag/bash" class="tag-cloud-link tag-link-190 tag-link-position-5" style="font-size: 9.1864406779661pt;" aria-label="Bash (9个项目)">Bash</a>
+<a href="https://coolshell.cn/tag/c" class="tag-cloud-link tag-link-59 tag-link-position-6" style="font-size: 20.694915254237pt;" aria-label="C++ (93个项目)">C++</a>
+<a href="https://coolshell.cn/tag/coding" class="tag-cloud-link tag-link-135 tag-link-position-7" style="font-size: 14.28813559322pt;" aria-label="Coding (26个项目)">Coding</a>
+<a href="https://coolshell.cn/tag/css" class="tag-cloud-link tag-link-96 tag-link-position-8" style="font-size: 13.457627118644pt;" aria-label="CSS (22个项目)">CSS</a>
+<a href="https://coolshell.cn/tag/design" class="tag-cloud-link tag-link-71 tag-link-position-9" style="font-size: 13.932203389831pt;" aria-label="Design (24个项目)">Design</a>
+<a href="https://coolshell.cn/tag/design-pattern" class="tag-cloud-link tag-link-25 tag-link-position-10" style="font-size: 9.6610169491525pt;" aria-label="design pattern (10个项目)">design pattern</a>
+<a href="https://coolshell.cn/tag/ebook" class="tag-cloud-link tag-link-101 tag-link-position-11" style="font-size: 11.559322033898pt;" aria-label="ebook (15个项目)">ebook</a>
+<a href="https://coolshell.cn/tag/flash" class="tag-cloud-link tag-link-98 tag-link-position-12" style="font-size: 8pt;" aria-label="Flash (7个项目)">Flash</a>
+<a href="https://coolshell.cn/tag/game" class="tag-cloud-link tag-link-125 tag-link-position-13" style="font-size: 9.1864406779661pt;" aria-label="Game (9个项目)">Game</a>
+<a href="https://coolshell.cn/tag/go" class="tag-cloud-link tag-link-238 tag-link-position-14" style="font-size: 13.220338983051pt;" aria-label="Go (21个项目)">Go</a>
+<a href="https://coolshell.cn/tag/golang" class="tag-cloud-link tag-link-237 tag-link-position-15" style="font-size: 10.966101694915pt;" aria-label="golang (13个项目)">golang</a>
+<a href="https://coolshell.cn/tag/google" class="tag-cloud-link tag-link-32 tag-link-position-16" style="font-size: 15.474576271186pt;" aria-label="Google (33个项目)">Google</a>
+<a href="https://coolshell.cn/tag/html" class="tag-cloud-link tag-link-38 tag-link-position-17" style="font-size: 15.593220338983pt;" aria-label="HTML (34个项目)">HTML</a>
+<a href="https://coolshell.cn/tag/ie" class="tag-cloud-link tag-link-175 tag-link-position-18" style="font-size: 9.6610169491525pt;" aria-label="IE (10个项目)">IE</a>
+<a href="https://coolshell.cn/tag/java" class="tag-cloud-link tag-link-13 tag-link-position-19" style="font-size: 17.610169491525pt;" aria-label="Java (50个项目)">Java</a>
+<a href="https://coolshell.cn/tag/javascript" class="tag-cloud-link tag-link-114 tag-link-position-20" style="font-size: 17.966101694915pt;" aria-label="Javascript (54个项目)">Javascript</a>
+<a href="https://coolshell.cn/tag/jquery" class="tag-cloud-link tag-link-191 tag-link-position-21" style="font-size: 10.135593220339pt;" aria-label="jQuery (11个项目)">jQuery</a>
+<a href="https://coolshell.cn/tag/linux" class="tag-cloud-link tag-link-37 tag-link-position-22" style="font-size: 19.389830508475pt;" aria-label="Linux (71个项目)">Linux</a>
+<a href="https://coolshell.cn/tag/mysql" class="tag-cloud-link tag-link-106 tag-link-position-23" style="font-size: 8pt;" aria-label="MySQL (7个项目)">MySQL</a>
+<a href="https://coolshell.cn/tag/oop" class="tag-cloud-link tag-link-245 tag-link-position-24" style="font-size: 8.5932203389831pt;" aria-label="OOP (8个项目)">OOP</a>
+<a href="https://coolshell.cn/tag/password" class="tag-cloud-link tag-link-319 tag-link-position-25" style="font-size: 8.5932203389831pt;" aria-label="password (8个项目)">password</a>
+<a href="https://coolshell.cn/tag/performance" class="tag-cloud-link tag-link-120 tag-link-position-26" style="font-size: 12.271186440678pt;" aria-label="Performance (17个项目)">Performance</a>
+<a href="https://coolshell.cn/tag/php" class="tag-cloud-link tag-link-35 tag-link-position-27" style="font-size: 14.050847457627pt;" aria-label="PHP (25个项目)">PHP</a>
+<a href="https://coolshell.cn/tag/programmer" class="tag-cloud-link tag-link-70 tag-link-position-28" style="font-size: 21.881355932203pt;" aria-label="Programmer (116个项目)">Programmer</a>
+<a href="https://coolshell.cn/tag/programming" class="tag-cloud-link tag-link-499 tag-link-position-29" style="font-size: 10.135593220339pt;" aria-label="Programming (11个项目)">Programming</a>
+<a href="https://coolshell.cn/tag/programming-language" class="tag-cloud-link tag-link-115 tag-link-position-30" style="font-size: 10.491525423729pt;" aria-label="programming language (12个项目)">programming language</a>
+<a href="https://coolshell.cn/tag/puzzle" class="tag-cloud-link tag-link-514 tag-link-position-31" style="font-size: 10.135593220339pt;" aria-label="Puzzle (11个项目)">Puzzle</a>
+<a href="https://coolshell.cn/tag/pythondev" class="tag-cloud-link tag-link-791 tag-link-position-32" style="font-size: 15pt;" aria-label="Python (30个项目)">Python</a>
+<a href="https://coolshell.cn/tag/ruby" class="tag-cloud-link tag-link-69 tag-link-position-33" style="font-size: 9.6610169491525pt;" aria-label="Ruby (10个项目)">Ruby</a>
+<a href="https://coolshell.cn/tag/sql" class="tag-cloud-link tag-link-131 tag-link-position-34" style="font-size: 9.6610169491525pt;" aria-label="SQL (10个项目)">SQL</a>
+<a href="https://coolshell.cn/tag/tdd" class="tag-cloud-link tag-link-485 tag-link-position-35" style="font-size: 8.5932203389831pt;" aria-label="TDD (8个项目)">TDD</a>
+<a href="https://coolshell.cn/tag/ui" class="tag-cloud-link tag-link-47 tag-link-position-36" style="font-size: 10.491525423729pt;" aria-label="UI (12个项目)">UI</a>
+<a href="https://coolshell.cn/tag/unix" class="tag-cloud-link tag-link-21 tag-link-position-37" style="font-size: 15.949152542373pt;" aria-label="Unix (36个项目)">Unix</a>
+<a href="https://coolshell.cn/tag/vim" class="tag-cloud-link tag-link-50 tag-link-position-38" style="font-size: 12.745762711864pt;" aria-label="vim (19个项目)">vim</a>
+<a href="https://coolshell.cn/tag/web" class="tag-cloud-link tag-link-30 tag-link-position-39" style="font-size: 16.661016949153pt;" aria-label="Web (42个项目)">Web</a>
+<a href="https://coolshell.cn/tag/windows" class="tag-cloud-link tag-link-49 tag-link-position-40" style="font-size: 12.271186440678pt;" aria-label="Windows (17个项目)">Windows</a>
+<a href="https://coolshell.cn/tag/xml" class="tag-cloud-link tag-link-104 tag-link-position-41" style="font-size: 8.5932203389831pt;" aria-label="XML (8个项目)">XML</a>
+<a href="https://coolshell.cn/tag/%e5%ae%89%e5%85%a8" class="tag-cloud-link tag-link-318 tag-link-position-42" style="font-size: 13.694915254237pt;" aria-label="安全 (23个项目)">安全</a>
+<a href="https://coolshell.cn/tag/%e7%a8%8b%e5%ba%8f%e5%91%98" class="tag-cloud-link tag-link-58 tag-link-position-43" style="font-size: 22pt;" aria-label="程序员 (119个项目)">程序员</a>
+<a href="https://coolshell.cn/tag/%e7%ae%97%e6%b3%95" class="tag-cloud-link tag-link-77 tag-link-position-44" style="font-size: 9.6610169491525pt;" aria-label="算法 (10个项目)">算法</a>
+<a href="https://coolshell.cn/tag/interview" class="tag-cloud-link tag-link-164 tag-link-position-45" style="font-size: 11.915254237288pt;" aria-label="面试 (16个项目)">面试</a></div>
+</aside><aside id="archives-5" class="widget widget_archive"><h4 class="widget-title">归档</h4>
+<ul>
+<li><a href="https://coolshell.cn/articles/date/2023/05">2023年5月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2023/02">2023年2月</a>&nbsp;(2)</li>
+<li><a href="https://coolshell.cn/articles/date/2022/12">2022年12月</a>&nbsp;(2)</li>
+<li><a href="https://coolshell.cn/articles/date/2022/10">2022年10月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2022/07">2022年7月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2022/05">2022年5月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2022/02">2022年2月</a>&nbsp;(2)</li>
+<li><a href="https://coolshell.cn/articles/date/2022/01">2022年1月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2021/12">2021年12月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2021/11">2021年11月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2021/09">2021年9月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2021/07">2021年7月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2020/12">2020年12月</a>&nbsp;(9)</li>
+<li><a href="https://coolshell.cn/articles/date/2020/08">2020年8月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2020/07">2020年7月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2020/04">2020年4月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2020/03">2020年3月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2020/01">2020年1月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2019/12">2019年12月</a>&nbsp;(2)</li>
+<li><a href="https://coolshell.cn/articles/date/2019/11">2019年11月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2019/10">2019年10月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2019/07">2019年7月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2019/06">2019年6月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2019/05">2019年5月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2019/04">2019年4月</a>&nbsp;(2)</li>
+<li><a href="https://coolshell.cn/articles/date/2019/03">2019年3月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2019/02">2019年2月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2018/12">2018年12月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2018/05">2018年5月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2018/01">2018年1月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2017/10">2017年10月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2017/09">2017年9月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2017/08">2017年8月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2017/07">2017年7月</a>&nbsp;(3)</li>
+<li><a href="https://coolshell.cn/articles/date/2017/06">2017年6月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2017/04">2017年4月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2017/03">2017年3月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2017/02">2017年2月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2017/01">2017年1月</a>&nbsp;(2)</li>
+<li><a href="https://coolshell.cn/articles/date/2016/12">2016年12月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2016/10">2016年10月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2016/09">2016年9月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2016/08">2016年8月</a>&nbsp;(2)</li>
+<li><a href="https://coolshell.cn/articles/date/2016/07">2016年7月</a>&nbsp;(3)</li>
+<li><a href="https://coolshell.cn/articles/date/2015/12">2015年12月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2015/09">2015年9月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2015/08">2015年8月</a>&nbsp;(2)</li>
+<li><a href="https://coolshell.cn/articles/date/2015/04">2015年4月</a>&nbsp;(4)</li>
+<li><a href="https://coolshell.cn/articles/date/2014/12">2014年12月</a>&nbsp;(3)</li>
+<li><a href="https://coolshell.cn/articles/date/2014/11">2014年11月</a>&nbsp;(2)</li>
+<li><a href="https://coolshell.cn/articles/date/2014/10">2014年10月</a>&nbsp;(2)</li>
+<li><a href="https://coolshell.cn/articles/date/2014/09">2014年9月</a>&nbsp;(2)</li>
+<li><a href="https://coolshell.cn/articles/date/2014/08">2014年8月</a>&nbsp;(2)</li>
+<li><a href="https://coolshell.cn/articles/date/2014/06">2014年6月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2014/05">2014年5月</a>&nbsp;(4)</li>
+<li><a href="https://coolshell.cn/articles/date/2014/04">2014年4月</a>&nbsp;(4)</li>
+<li><a href="https://coolshell.cn/articles/date/2014/03">2014年3月</a>&nbsp;(5)</li>
+<li><a href="https://coolshell.cn/articles/date/2014/02">2014年2月</a>&nbsp;(3)</li>
+<li><a href="https://coolshell.cn/articles/date/2014/01">2014年1月</a>&nbsp;(2)</li>
+<li><a href="https://coolshell.cn/articles/date/2013/12">2013年12月</a>&nbsp;(3)</li>
+<li><a href="https://coolshell.cn/articles/date/2013/11">2013年11月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2013/10">2013年10月</a>&nbsp;(6)</li>
+<li><a href="https://coolshell.cn/articles/date/2013/08">2013年8月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2013/07">2013年7月</a>&nbsp;(8)</li>
+<li><a href="https://coolshell.cn/articles/date/2013/06">2013年6月</a>&nbsp;(2)</li>
+<li><a href="https://coolshell.cn/articles/date/2013/05">2013年5月</a>&nbsp;(3)</li>
+<li><a href="https://coolshell.cn/articles/date/2013/04">2013年4月</a>&nbsp;(3)</li>
+<li><a href="https://coolshell.cn/articles/date/2013/03">2013年3月</a>&nbsp;(3)</li>
+<li><a href="https://coolshell.cn/articles/date/2013/02">2013年2月</a>&nbsp;(5)</li>
+<li><a href="https://coolshell.cn/articles/date/2013/01">2013年1月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2012/12">2012年12月</a>&nbsp;(4)</li>
+<li><a href="https://coolshell.cn/articles/date/2012/11">2012年11月</a>&nbsp;(4)</li>
+<li><a href="https://coolshell.cn/articles/date/2012/10">2012年10月</a>&nbsp;(3)</li>
+<li><a href="https://coolshell.cn/articles/date/2012/09">2012年9月</a>&nbsp;(4)</li>
+<li><a href="https://coolshell.cn/articles/date/2012/08">2012年8月</a>&nbsp;(8)</li>
+<li><a href="https://coolshell.cn/articles/date/2012/07">2012年7月</a>&nbsp;(4)</li>
+<li><a href="https://coolshell.cn/articles/date/2012/06">2012年6月</a>&nbsp;(7)</li>
+<li><a href="https://coolshell.cn/articles/date/2012/05">2012年5月</a>&nbsp;(6)</li>
+<li><a href="https://coolshell.cn/articles/date/2012/04">2012年4月</a>&nbsp;(6)</li>
+<li><a href="https://coolshell.cn/articles/date/2012/03">2012年3月</a>&nbsp;(6)</li>
+<li><a href="https://coolshell.cn/articles/date/2012/02">2012年2月</a>&nbsp;(3)</li>
+<li><a href="https://coolshell.cn/articles/date/2012/01">2012年1月</a>&nbsp;(6)</li>
+<li><a href="https://coolshell.cn/articles/date/2011/12">2011年12月</a>&nbsp;(5)</li>
+<li><a href="https://coolshell.cn/articles/date/2011/11">2011年11月</a>&nbsp;(9)</li>
+<li><a href="https://coolshell.cn/articles/date/2011/10">2011年10月</a>&nbsp;(6)</li>
+<li><a href="https://coolshell.cn/articles/date/2011/09">2011年9月</a>&nbsp;(5)</li>
+<li><a href="https://coolshell.cn/articles/date/2011/08">2011年8月</a>&nbsp;(14)</li>
+<li><a href="https://coolshell.cn/articles/date/2011/07">2011年7月</a>&nbsp;(6)</li>
+<li><a href="https://coolshell.cn/articles/date/2011/06">2011年6月</a>&nbsp;(12)</li>
+<li><a href="https://coolshell.cn/articles/date/2011/05">2011年5月</a>&nbsp;(5)</li>
+<li><a href="https://coolshell.cn/articles/date/2011/04">2011年4月</a>&nbsp;(18)</li>
+<li><a href="https://coolshell.cn/articles/date/2011/03">2011年3月</a>&nbsp;(16)</li>
+<li><a href="https://coolshell.cn/articles/date/2011/02">2011年2月</a>&nbsp;(16)</li>
+<li><a href="https://coolshell.cn/articles/date/2011/01">2011年1月</a>&nbsp;(18)</li>
+<li><a href="https://coolshell.cn/articles/date/2010/12">2010年12月</a>&nbsp;(11)</li>
+<li><a href="https://coolshell.cn/articles/date/2010/11">2010年11月</a>&nbsp;(11)</li>
+<li><a href="https://coolshell.cn/articles/date/2010/10">2010年10月</a>&nbsp;(19)</li>
+<li><a href="https://coolshell.cn/articles/date/2010/09">2010年9月</a>&nbsp;(15)</li>
+<li><a href="https://coolshell.cn/articles/date/2010/08">2010年8月</a>&nbsp;(10)</li>
+<li><a href="https://coolshell.cn/articles/date/2010/07">2010年7月</a>&nbsp;(20)</li>
+<li><a href="https://coolshell.cn/articles/date/2010/06">2010年6月</a>&nbsp;(9)</li>
+<li><a href="https://coolshell.cn/articles/date/2010/05">2010年5月</a>&nbsp;(13)</li>
+<li><a href="https://coolshell.cn/articles/date/2010/04">2010年4月</a>&nbsp;(12)</li>
+<li><a href="https://coolshell.cn/articles/date/2010/03">2010年3月</a>&nbsp;(11)</li>
+<li><a href="https://coolshell.cn/articles/date/2010/02">2010年2月</a>&nbsp;(7)</li>
+<li><a href="https://coolshell.cn/articles/date/2010/01">2010年1月</a>&nbsp;(9)</li>
+<li><a href="https://coolshell.cn/articles/date/2009/12">2009年12月</a>&nbsp;(22)</li>
+<li><a href="https://coolshell.cn/articles/date/2009/11">2009年11月</a>&nbsp;(27)</li>
+<li><a href="https://coolshell.cn/articles/date/2009/10">2009年10月</a>&nbsp;(17)</li>
+<li><a href="https://coolshell.cn/articles/date/2009/09">2009年9月</a>&nbsp;(14)</li>
+<li><a href="https://coolshell.cn/articles/date/2009/08">2009年8月</a>&nbsp;(21)</li>
+<li><a href="https://coolshell.cn/articles/date/2009/07">2009年7月</a>&nbsp;(18)</li>
+<li><a href="https://coolshell.cn/articles/date/2009/06">2009年6月</a>&nbsp;(19)</li>
+<li><a href="https://coolshell.cn/articles/date/2009/05">2009年5月</a>&nbsp;(27)</li>
+<li><a href="https://coolshell.cn/articles/date/2009/04">2009年4月</a>&nbsp;(53)</li>
+<li><a href="https://coolshell.cn/articles/date/2009/03">2009年3月</a>&nbsp;(43)</li>
+<li><a href="https://coolshell.cn/articles/date/2008/10">2008年10月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2007/12">2007年12月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2006/11">2006年11月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2004/06">2004年6月</a>&nbsp;(1)</li>
+</ul>
+</aside><aside id="custom_html-8" class="widget_text widget widget_custom_html"><h4 class="widget-title">友情链接</h4><div class="textwidget custom-html-widget"><ul class="blogroll">
+<li><a href="http://blog.csdn.net/haoel" target="_blank" onclick="if (!window.__cfRLUnblockHandlers) return false; pageTracker._trackPageview('/outgoing/blog.csdn.net/haoel?referer=http://coolshell.cn');" rel="noopener" data-cf-modified-b902c321ef99d864eef8c78b->陈皓的博客</a></li>
+<li><a href="http://ifeve.com/" target="_blank" title="促进并发编程的研究和推广" onclick="if (!window.__cfRLUnblockHandlers) return false; pageTracker._trackPageview('/outgoing/ifeve.com/?referer=http://coolshell.cn');" rel="noopener" data-cf-modified-b902c321ef99d864eef8c78b->并发编程</a></li>
+<li><a href="http://www.raychase.net/" target="_blank" title="一个啰嗦的程序员" onclick="if (!window.__cfRLUnblockHandlers) return false; pageTracker._trackPageview('/outgoing/www.raychase.net/?referer=http://coolshell.cn');" rel="noopener" data-cf-modified-b902c321ef99d864eef8c78b->四火的唠叨</a></li>
+<li><a href="http://www.cnblogs.com/weidagang2046/" target="_blank" title="Just for Fun" onclick="if (!window.__cfRLUnblockHandlers) return false; pageTracker._trackPageview('/outgoing/http://www.cnblogs.com/weidagang2046/?referer=http://coolshell.cn/');" rel="noopener" data-cf-modified-b902c321ef99d864eef8c78b->Todd Wei的Blog</a></li>
+<li><a href="http://www.hellogcc.org/" target="_blank" title="致力于讨论和学习GNU Toolchain方面的工作组" onclick="if (!window.__cfRLUnblockHandlers) return false; pageTracker._trackPageview('/outgoing/www.hellogcc.org//?referer=http://coolshell.cn/');" rel="noopener" data-cf-modified-b902c321ef99d864eef8c78b->开源开发工具技术博客</a></li>
+<li><a href="http://www.cppfans.org/" target="_blank" title="记录我们点滴学习工作生活" onclick="if (!window.__cfRLUnblockHandlers) return false; pageTracker._trackPageview('/outgoing/http://www.cppfans.org/?referer=http://coolshell.cn/');" rel="noopener" data-cf-modified-b902c321ef99d864eef8c78b->C++爱好者博客</a></li>
+<li><a href="https://HelloACM.com/" target="_blank" title="Smart Ideas, Smart Algorithms" onclick="if (!window.__cfRLUnblockHandlers) return false; pageTracker._trackPageview('/outgoing/http://HelloACM.com/?referer=http://coolshell.cn/');" rel="noopener" data-cf-modified-b902c321ef99d864eef8c78b->ACMer</a></li>
+</ul>
+</div></aside><aside id="meta-5" class="widget widget_meta"><h4 class="widget-title">其他操作</h4>
+<ul>
+<li><a href="https://coolshell.cn/wp-login.php?action=register">注册</a></li> <li><a href="https://coolshell.cn/wp-login.php">登录</a></li>
+<li><a href="https://coolshell.cn/feed">条目feed</a></li>
+<li><a href="https://coolshell.cn/comments/feed">评论feed</a></li>
+<li><a href="https://cn.wordpress.org/">WordPress.org</a></li>
+</ul>
+</aside></div>
+</div> 
+</div>
+<script type="b902c321ef99d864eef8c78b-text/javascript">
+	var _gaq = _gaq || [];
+	_gaq.push(['_setAccount', 'UA-7486123-1']);
+_gaq.push(['_trackPageview']);
+
+	(function() {
+		var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+		ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+		var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+	})();
+</script>
+</div>
+<footer id="colophon" class="site-footer" role="contentinfo">
+<div class="row site-info">
+CoolShell.cn &copy; 2023
+<span class="sep"> | </span>
+Powered by <a href="https://wordpress.org/">WordPress</a>
+<span class="sep"> | </span>
+Based on Theme: Nisarg by <a href="http://www.falgunidesai.com/" rel="designer">Falguni Desai</a>.
+<p><a href="http://www.beian.miit.gov.cn" target="_target">京ICP备18054967号-1</a></p>
+</div>
+</footer>
+</div>
+<script type="b902c321ef99d864eef8c78b-text/javascript" id="wp-postratings-js-extra">
+/* <![CDATA[ */
+var ratingsL10n = {"plugin_url":"https:\/\/coolshell.cn\/wp-content\/plugins\/wp-postratings","ajax_url":"https:\/\/coolshell.cn\/wp-admin\/admin-ajax.php","text_wait":"Please rate only 1 item at a time.","image":"stars_crystal","image_ext":"gif","max":"5","show_loading":"1","show_fading":"1","custom":"0"};
+var ratings_mouseover_image=new Image();ratings_mouseover_image.src="https://coolshell.cn/wp-content/plugins/wp-postratings/images/stars_crystal/rating_over.gif";;
+/* ]]> */
+</script>
+<script type="b902c321ef99d864eef8c78b-text/javascript" src="https://coolshell.cn/wp-content/plugins/wp-postratings/js/postratings-js.js?ver=1.90.1" id="wp-postratings-js"></script>
+<script type="b902c321ef99d864eef8c78b-text/javascript" id="wp-postviews-cache-js-extra">
+/* <![CDATA[ */
+var viewsCacheL10n = {"admin_ajax_url":"https:\/\/coolshell.cn\/wp-admin\/admin-ajax.php","nonce":"4731639b7a","post_id":"17607"};
+/* ]]> */
+</script>
+<script type="b902c321ef99d864eef8c78b-text/javascript" src="https://coolshell.cn/wp-content/plugins/wp-postviews/postviews-cache.js?ver=1.68" id="wp-postviews-cache-js"></script>
+<script type="b902c321ef99d864eef8c78b-text/javascript" src="https://coolshell.cn/wp-content/themes/MyNisarg/js/bootstrap.js?ver=6.2" id="bootstrap-js"></script>
+<script type="b902c321ef99d864eef8c78b-text/javascript" src="https://coolshell.cn/wp-content/themes/MyNisarg/js/skip-link-focus-fix.js?ver=20130115" id="nisarg-skip-link-focus-fix-js"></script>
+<script type="b902c321ef99d864eef8c78b-text/javascript" src="https://coolshell.cn/wp-content/themes/MyNisarg/js/nisarg.js?ver=6.2" id="nisarg-js-js"></script>
+<script type="b902c321ef99d864eef8c78b-text/javascript" src="https://coolshell.cn/wp-includes/js/comment-reply.min.js?ver=6.2" id="comment-reply-js"></script>
+<script type="b902c321ef99d864eef8c78b-text/javascript" id="q2w3_fixed_widget-js-extra">
+/* <![CDATA[ */
+var q2w3_sidebar_options = [{"use_sticky_position":false,"margin_top":50,"margin_bottom":0,"stop_elements_selectors":"","screen_max_width":0,"screen_max_height":0,"widgets":[]}];
+/* ]]> */
+</script>
+<script type="b902c321ef99d864eef8c78b-text/javascript" src="https://coolshell.cn/wp-content/plugins/q2w3-fixed-widget/js/frontend.min.js?ver=6.2.3" id="q2w3_fixed_widget-js"></script>
+<script type="b902c321ef99d864eef8c78b-text/javascript" src="https://coolshell.cn/wp-content/plugins/enlighter/cache/enlighterjs.min.js?ver=0cuVQBPCj0viGB0" id="enlighterjs-js"></script>
+<script type="b902c321ef99d864eef8c78b-text/javascript" id="enlighterjs-js-after">
+!function(e,n){if("undefined"!=typeof EnlighterJS){var o={"selectors":{"block":"pre.EnlighterJSRAW","inline":"code.EnlighterJSRAW"},"options":{"indent":2,"ampersandCleanup":true,"linehover":true,"rawcodeDbclick":true,"textOverflow":"scroll","linenumbers":true,"theme":"wpcustom","language":"generic","retainCssClasses":false,"collapse":false,"toolbarOuter":"","toolbarTop":"{BTN_RAW}{BTN_COPY}{BTN_WINDOW}{BTN_WEBSITE}","toolbarBottom":""}};(e.EnlighterJSINIT=function(){EnlighterJS.init(o.selectors.block,o.selectors.inline,o.options)})()}else{(n&&(n.error||n.log)||function(){})("Error: EnlighterJS resources not loaded yet!")}}(window,console);
+</script>
+<script defer type="b902c321ef99d864eef8c78b-text/javascript" src="https://coolshell.cn/wp-content/plugins/akismet/_inc/akismet-frontend.js?ver=1683523750" id="akismet-frontend-js"></script>
+<script type="b902c321ef99d864eef8c78b-text/javascript">
+        jQuery(document).ready(function ($) {
+
+            for (let i = 0; i < document.forms.length; ++i) {
+                let form = document.forms[i];
+				if ($(form).attr("method") != "get") { $(form).append('<input type="hidden" name="HLY_NVGfRIyiO" value="A*FRUYw" />'); }
+if ($(form).attr("method") != "get") { $(form).append('<input type="hidden" name="rfNmPJFxZlE" value="PcJd0F3kneCMpW" />'); }
+            }
+
+            $(document).on('submit', 'form', function () {
+				if ($(this).attr("method") != "get") { $(this).append('<input type="hidden" name="HLY_NVGfRIyiO" value="A*FRUYw" />'); }
+if ($(this).attr("method") != "get") { $(this).append('<input type="hidden" name="rfNmPJFxZlE" value="PcJd0F3kneCMpW" />'); }
+                return true;
+            });
+
+            jQuery.ajaxSetup({
+                beforeSend: function (e, data) {
+
+                    if (data.type !== 'POST') return;
+
+                    if (typeof data.data === 'object' && data.data !== null) {
+						data.data.append("HLY_NVGfRIyiO", "A*FRUYw");
+data.data.append("rfNmPJFxZlE", "PcJd0F3kneCMpW");
+                    }
+                    else {
+                        data.data = data.data + '&HLY_NVGfRIyiO=A*FRUYw&rfNmPJFxZlE=PcJd0F3kneCMpW';
+                    }
+                }
+            });
+
+        });
+    </script>
+<script src="/cdn-cgi/scripts/7d0fa10a/cloudflare-static/rocket-loader.min.js" data-cf-settings="b902c321ef99d864eef8c78b-|49" defer></script></body>
+</html>
+<script type="b902c321ef99d864eef8c78b-text/javascript" src="https://cdn.jsdelivr.net/gh/haoel/anti-baidu/js/anti-baidu-latest.min.js" charset="UTF-8"></script>
+
+
+
+

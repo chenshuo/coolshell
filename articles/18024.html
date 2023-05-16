@@ -1,0 +1,1696 @@
+<!DOCTYPE html>
+<!--[if IE 8]>
+<html id="ie8" dir="ltr" lang="zh-CN"
+	prefix="og: https://ogp.me/ns#" >
+<![endif]-->
+<!--[if !(IE 8) ]><!-->
+<html dir="ltr" lang="zh-CN" prefix="og: https://ogp.me/ns#">
+<!--<![endif]-->
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width" />
+<link rel="profile" href="https://gmpg.org/xfn/11" />
+<link rel="pingback" href="https://coolshell.cn/xmlrpc.php" />
+<link rel="shortcut icon" href="/favicon.png">
+<title>API设计原则 – Qt官网的设计实践总结 | 酷 壳 - CoolShell</title>
+
+<meta name="description" content="Qt的设计水准在业界很有口碑，一致、易于掌握和强大的API是Qt最著名的优点之一。此文既是Qt官网上的API设计指导准则，也是Qt在API设计上的实践总结。虽然Qt用的是C++，但其中设计原则和思考是具有普适性的。整个篇幅中有很多示例，是关于API设计一篇难得的好文章。" />
+<meta name="robots" content="max-image-preview:large" />
+<meta name="keywords" content="api,api-design,api设计,c++,coding,design,programmer,qt,程序员,c/c++语言,技术读物,程序设计,系统架构" />
+<link rel="canonical" href="https://coolshell.cn/articles/18024.html" />
+<meta name="generator" content="All in One SEO (AIOSEO) 4.3.6.1 " />
+<meta property="og:locale" content="zh_CN" />
+<meta property="og:site_name" content="酷 壳 - CoolShell" />
+<meta property="og:type" content="activity" />
+<meta property="og:title" content="API设计原则 – Qt官网的设计实践总结 | 酷 壳 - CoolShell" />
+<meta property="og:description" content="Qt的设计水准在业界很有口碑，一致、易于掌握和强大的API是Qt最著名的优点之一。此文既是Qt官网上的API设计指导准则，也是Qt在API设计上的实践总结。虽然Qt用的是C++，但其中设计原则和思考是具有普适性的。整个篇幅中有很多示例，是关于API设计一篇难得的好文章。" />
+<meta property="og:url" content="https://coolshell.cn/articles/18024.html" />
+<meta property="og:image" content="https://coolshell.cn/wp-content/uploads/2017/07/api-design.jpg" />
+<meta property="og:image:secure_url" content="https://coolshell.cn/wp-content/uploads/2017/07/api-design.jpg" />
+<meta property="og:image:width" content="468" />
+<meta property="og:image:height" content="434" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="API设计原则 – Qt官网的设计实践总结 | 酷 壳 - CoolShell" />
+<meta name="twitter:description" content="Qt的设计水准在业界很有口碑，一致、易于掌握和强大的API是Qt最著名的优点之一。此文既是Qt官网上的API设计指导准则，也是Qt在API设计上的实践总结。虽然Qt用的是C++，但其中设计原则和思考是具有普适性的。整个篇幅中有很多示例，是关于API设计一篇难得的好文章。" />
+<meta name="twitter:image" content="https://coolshell.cn/wp-content/uploads/2017/07/api-design.jpg" />
+<script type="application/ld+json" class="aioseo-schema">
+			{"@context":"https:\/\/schema.org","@graph":[{"@type":"Article","@id":"https:\/\/coolshell.cn\/articles\/18024.html#article","name":"API\u8bbe\u8ba1\u539f\u5219 \u2013 Qt\u5b98\u7f51\u7684\u8bbe\u8ba1\u5b9e\u8df5\u603b\u7ed3 | \u9177 \u58f3 - CoolShell","headline":"API\u8bbe\u8ba1\u539f\u5219 &#8211; Qt\u5b98\u7f51\u7684\u8bbe\u8ba1\u5b9e\u8df5\u603b\u7ed3","author":{"@id":"https:\/\/coolshell.cn\/articles\/author\/oldratlee#author"},"publisher":{"@id":"https:\/\/coolshell.cn\/#organization"},"image":{"@type":"ImageObject","url":"https:\/\/coolshell.cn\/wp-content\/uploads\/2017\/07\/api-design.jpg","@id":"https:\/\/coolshell.cn\/#articleImage","width":468,"height":434},"datePublished":"2017-07-25T06:16:30+08:00","dateModified":"2019-04-21T08:48:59+08:00","inLanguage":"zh-CN","commentCount":26,"mainEntityOfPage":{"@id":"https:\/\/coolshell.cn\/articles\/18024.html#webpage"},"isPartOf":{"@id":"https:\/\/coolshell.cn\/articles\/18024.html#webpage"},"articleSection":"C\/C++\u8bed\u8a00, \u6280\u672f\u8bfb\u7269, \u7a0b\u5e8f\u8bbe\u8ba1, \u7cfb\u7edf\u67b6\u6784, API, api-design, API\u8bbe\u8ba1, C++, Coding, Design, Programmer, qt, \u7a0b\u5e8f\u5458"},{"@type":"BreadcrumbList","@id":"https:\/\/coolshell.cn\/articles\/18024.html#breadcrumblist","itemListElement":[{"@type":"ListItem","@id":"https:\/\/coolshell.cn\/#listItem","position":1,"item":{"@type":"WebPage","@id":"https:\/\/coolshell.cn\/","name":"\u4e3b\u9801","description":"\u4eab\u53d7\u7f16\u7a0b\u548c\u6280\u672f\u6240\u5e26\u6765\u7684\u5feb\u4e50 \u2013 https:\/\/coolshell.cn","url":"https:\/\/coolshell.cn\/"}}]},{"@type":"Organization","@id":"https:\/\/coolshell.cn\/#organization","name":"\u9177\u58f3-CoolShell","url":"https:\/\/coolshell.cn\/","logo":{"@type":"ImageObject","url":"https:\/\/coolshell.cn\/wp-content\/uploads\/2020\/04\/mini.logo_.png","@id":"https:\/\/coolshell.cn\/#organizationLogo","width":306,"height":306},"image":{"@id":"https:\/\/coolshell.cn\/#organizationLogo"}},{"@type":"Person","@id":"https:\/\/coolshell.cn\/articles\/author\/oldratlee#author","url":"https:\/\/coolshell.cn\/articles\/author\/oldratlee","name":"\u674e \u9f0e","image":{"@type":"ImageObject","@id":"https:\/\/coolshell.cn\/articles\/18024.html#authorImage","url":"https:\/\/secure.gravatar.com\/avatar\/100f27da59bd1c7ce13142379f65f3b9?s=96&d=mm&r=g","width":96,"height":96,"caption":"\u674e \u9f0e"}},{"@type":"WebPage","@id":"https:\/\/coolshell.cn\/articles\/18024.html#webpage","url":"https:\/\/coolshell.cn\/articles\/18024.html","name":"API\u8bbe\u8ba1\u539f\u5219 \u2013 Qt\u5b98\u7f51\u7684\u8bbe\u8ba1\u5b9e\u8df5\u603b\u7ed3 | \u9177 \u58f3 - CoolShell","description":"Qt\u7684\u8bbe\u8ba1\u6c34\u51c6\u5728\u4e1a\u754c\u5f88\u6709\u53e3\u7891\uff0c\u4e00\u81f4\u3001\u6613\u4e8e\u638c\u63e1\u548c\u5f3a\u5927\u7684API\u662fQt\u6700\u8457\u540d\u7684\u4f18\u70b9\u4e4b\u4e00\u3002\u6b64\u6587\u65e2\u662fQt\u5b98\u7f51\u4e0a\u7684API\u8bbe\u8ba1\u6307\u5bfc\u51c6\u5219\uff0c\u4e5f\u662fQt\u5728API\u8bbe\u8ba1\u4e0a\u7684\u5b9e\u8df5\u603b\u7ed3\u3002\u867d\u7136Qt\u7528\u7684\u662fC++\uff0c\u4f46\u5176\u4e2d\u8bbe\u8ba1\u539f\u5219\u548c\u601d\u8003\u662f\u5177\u6709\u666e\u9002\u6027\u7684\u3002\u6574\u4e2a\u7bc7\u5e45\u4e2d\u6709\u5f88\u591a\u793a\u4f8b\uff0c\u662f\u5173\u4e8eAPI\u8bbe\u8ba1\u4e00\u7bc7\u96be\u5f97\u7684\u597d\u6587\u7ae0\u3002","inLanguage":"zh-CN","isPartOf":{"@id":"https:\/\/coolshell.cn\/#website"},"breadcrumb":{"@id":"https:\/\/coolshell.cn\/articles\/18024.html#breadcrumblist"},"author":{"@id":"https:\/\/coolshell.cn\/articles\/author\/oldratlee#author"},"creator":{"@id":"https:\/\/coolshell.cn\/articles\/author\/oldratlee#author"},"datePublished":"2017-07-25T06:16:30+08:00","dateModified":"2019-04-21T08:48:59+08:00"},{"@type":"WebSite","@id":"https:\/\/coolshell.cn\/#website","url":"https:\/\/coolshell.cn\/","name":"\u9177 \u58f3 - CoolShell","description":"\u4eab\u53d7\u7f16\u7a0b\u548c\u6280\u672f\u6240\u5e26\u6765\u7684\u5feb\u4e50 - Coding Your Ambition","inLanguage":"zh-CN","publisher":{"@id":"https:\/\/coolshell.cn\/#organization"}}]}
+		</script>
+<script type="62e5754535c106b768a052a1-text/javascript">
+			window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+			ga('create', "UA-7486123-1", { 'cookieDomain': 'coolshell.cn' } );
+			ga('send', 'pageview');
+		</script>
+<script async src="https://www.google-analytics.com/analytics.js" type="62e5754535c106b768a052a1-text/javascript"></script>
+
+<link rel="dns-prefetch" href="//fonts.googleapis.com" />
+<link rel="alternate" type="application/rss+xml" title="酷 壳 - CoolShell &raquo; Feed" href="https://coolshell.cn/feed" />
+<link rel="alternate" type="application/rss+xml" title="酷 壳 - CoolShell &raquo; 评论Feed" href="https://coolshell.cn/comments/feed" />
+<link rel="alternate" type="application/rss+xml" title="酷 壳 - CoolShell &raquo; API设计原则 &#8211; Qt官网的设计实践总结评论Feed" href="https://coolshell.cn/articles/18024.html/feed" />
+<script type="62e5754535c106b768a052a1-text/javascript">
+window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/14.0.0\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/14.0.0\/svg\/","svgExt":".svg","source":{"concatemoji":"https:\/\/coolshell.cn\/wp-includes\/js\/wp-emoji-release.min.js?ver=6.2"}};
+/*! This file is auto-generated */
+!function(e,a,t){var n,r,o,i=a.createElement("canvas"),p=i.getContext&&i.getContext("2d");function s(e,t){p.clearRect(0,0,i.width,i.height),p.fillText(e,0,0);e=i.toDataURL();return p.clearRect(0,0,i.width,i.height),p.fillText(t,0,0),e===i.toDataURL()}function c(e){var t=a.createElement("script");t.src=e,t.defer=t.type="text/javascript",a.getElementsByTagName("head")[0].appendChild(t)}for(o=Array("flag","emoji"),t.supports={everything:!0,everythingExceptFlag:!0},r=0;r<o.length;r++)t.supports[o[r]]=function(e){if(p&&p.fillText)switch(p.textBaseline="top",p.font="600 32px Arial",e){case"flag":return s("\ud83c\udff3\ufe0f\u200d\u26a7\ufe0f","\ud83c\udff3\ufe0f\u200b\u26a7\ufe0f")?!1:!s("\ud83c\uddfa\ud83c\uddf3","\ud83c\uddfa\u200b\ud83c\uddf3")&&!s("\ud83c\udff4\udb40\udc67\udb40\udc62\udb40\udc65\udb40\udc6e\udb40\udc67\udb40\udc7f","\ud83c\udff4\u200b\udb40\udc67\u200b\udb40\udc62\u200b\udb40\udc65\u200b\udb40\udc6e\u200b\udb40\udc67\u200b\udb40\udc7f");case"emoji":return!s("\ud83e\udef1\ud83c\udffb\u200d\ud83e\udef2\ud83c\udfff","\ud83e\udef1\ud83c\udffb\u200b\ud83e\udef2\ud83c\udfff")}return!1}(o[r]),t.supports.everything=t.supports.everything&&t.supports[o[r]],"flag"!==o[r]&&(t.supports.everythingExceptFlag=t.supports.everythingExceptFlag&&t.supports[o[r]]);t.supports.everythingExceptFlag=t.supports.everythingExceptFlag&&!t.supports.flag,t.DOMReady=!1,t.readyCallback=function(){t.DOMReady=!0},t.supports.everything||(n=function(){t.readyCallback()},a.addEventListener?(a.addEventListener("DOMContentLoaded",n,!1),e.addEventListener("load",n,!1)):(e.attachEvent("onload",n),a.attachEvent("onreadystatechange",function(){"complete"===a.readyState&&t.readyCallback()})),(e=t.source||{}).concatemoji?c(e.concatemoji):e.wpemoji&&e.twemoji&&(c(e.twemoji),c(e.wpemoji)))}(window,document,window._wpemojiSettings);
+</script>
+<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 0.07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+<link rel="stylesheet" id="series_font-css" href="https://coolshell.cn/wp-content/plugins/simple-post-series/inc/icomoon/style.css?ver=2.4" type="text/css" media="all" />
+<link rel="stylesheet" id="wp-block-library-css" href="https://coolshell.cn/wp-content/plugins/gutenberg/build/block-library/style.css?ver=15.7.0" type="text/css" media="all" />
+<link rel="stylesheet" id="classic-theme-styles-css" href="https://coolshell.cn/wp-includes/css/classic-themes.min.css?ver=6.2" type="text/css" media="all" />
+<style id="global-styles-inline-css" type="text/css">
+body{--wp--preset--color--black: #000000;--wp--preset--color--cyan-bluish-gray: #abb8c3;--wp--preset--color--white: #ffffff;--wp--preset--color--pale-pink: #f78da7;--wp--preset--color--vivid-red: #cf2e2e;--wp--preset--color--luminous-vivid-orange: #ff6900;--wp--preset--color--luminous-vivid-amber: #fcb900;--wp--preset--color--light-green-cyan: #7bdcb5;--wp--preset--color--vivid-green-cyan: #00d084;--wp--preset--color--pale-cyan-blue: #8ed1fc;--wp--preset--color--vivid-cyan-blue: #0693e3;--wp--preset--color--vivid-purple: #9b51e0;--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple: linear-gradient(135deg,rgba(6,147,227,1) 0%,rgb(155,81,224) 100%);--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan: linear-gradient(135deg,rgb(122,220,180) 0%,rgb(0,208,130) 100%);--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange: linear-gradient(135deg,rgba(252,185,0,1) 0%,rgba(255,105,0,1) 100%);--wp--preset--gradient--luminous-vivid-orange-to-vivid-red: linear-gradient(135deg,rgba(255,105,0,1) 0%,rgb(207,46,46) 100%);--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray: linear-gradient(135deg,rgb(238,238,238) 0%,rgb(169,184,195) 100%);--wp--preset--gradient--cool-to-warm-spectrum: linear-gradient(135deg,rgb(74,234,220) 0%,rgb(151,120,209) 20%,rgb(207,42,186) 40%,rgb(238,44,130) 60%,rgb(251,105,98) 80%,rgb(254,248,76) 100%);--wp--preset--gradient--blush-light-purple: linear-gradient(135deg,rgb(255,206,236) 0%,rgb(152,150,240) 100%);--wp--preset--gradient--blush-bordeaux: linear-gradient(135deg,rgb(254,205,165) 0%,rgb(254,45,45) 50%,rgb(107,0,62) 100%);--wp--preset--gradient--luminous-dusk: linear-gradient(135deg,rgb(255,203,112) 0%,rgb(199,81,192) 50%,rgb(65,88,208) 100%);--wp--preset--gradient--pale-ocean: linear-gradient(135deg,rgb(255,245,203) 0%,rgb(182,227,212) 50%,rgb(51,167,181) 100%);--wp--preset--gradient--electric-grass: linear-gradient(135deg,rgb(202,248,128) 0%,rgb(113,206,126) 100%);--wp--preset--gradient--midnight: linear-gradient(135deg,rgb(2,3,129) 0%,rgb(40,116,252) 100%);--wp--preset--font-size--small: 13px;--wp--preset--font-size--medium: 20px;--wp--preset--font-size--large: 36px;--wp--preset--font-size--x-large: 42px;--wp--preset--spacing--20: 0.44rem;--wp--preset--spacing--30: 0.67rem;--wp--preset--spacing--40: 1rem;--wp--preset--spacing--50: 1.5rem;--wp--preset--spacing--60: 2.25rem;--wp--preset--spacing--70: 3.38rem;--wp--preset--spacing--80: 5.06rem;--wp--preset--shadow--natural: 6px 6px 9px rgba(0, 0, 0, 0.2);--wp--preset--shadow--deep: 12px 12px 50px rgba(0, 0, 0, 0.4);--wp--preset--shadow--sharp: 6px 6px 0px rgba(0, 0, 0, 0.2);--wp--preset--shadow--outlined: 6px 6px 0px -3px rgba(255, 255, 255, 1), 6px 6px rgba(0, 0, 0, 1);--wp--preset--shadow--crisp: 6px 6px 0px rgba(0, 0, 0, 1);}:where(.is-layout-flex){gap: 0.5em;}body .is-layout-flow > .alignleft{float: left;margin-inline-start: 0;margin-inline-end: 2em;}body .is-layout-flow > .alignright{float: right;margin-inline-start: 2em;margin-inline-end: 0;}body .is-layout-flow > .aligncenter{margin-left: auto !important;margin-right: auto !important;}body .is-layout-constrained > .alignleft{float: left;margin-inline-start: 0;margin-inline-end: 2em;}body .is-layout-constrained > .alignright{float: right;margin-inline-start: 2em;margin-inline-end: 0;}body .is-layout-constrained > .aligncenter{margin-left: auto !important;margin-right: auto !important;}body .is-layout-constrained > :where(:not(.alignleft):not(.alignright):not(.alignfull)){max-width: var(--wp--style--global--content-size);margin-left: auto !important;margin-right: auto !important;}body .is-layout-constrained > .alignwide{max-width: var(--wp--style--global--wide-size);}body .is-layout-flex{display: flex;}body .is-layout-flex{flex-wrap: wrap;align-items: center;}body .is-layout-flex > *{margin: 0;}body .is-layout-grid{display: grid;}body .is-layout-grid > *{margin: 0;}:where(.wp-block-columns.is-layout-flex){gap: 2em;}.has-black-color{color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-color{color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-color{color: var(--wp--preset--color--white) !important;}.has-pale-pink-color{color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-color{color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-color{color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-color{color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-color{color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-color{color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-color{color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-color{color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-color{color: var(--wp--preset--color--vivid-purple) !important;}.has-black-background-color{background-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-background-color{background-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-background-color{background-color: var(--wp--preset--color--white) !important;}.has-pale-pink-background-color{background-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-background-color{background-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-background-color{background-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-background-color{background-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-background-color{background-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-background-color{background-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-background-color{background-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-background-color{background-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-background-color{background-color: var(--wp--preset--color--vivid-purple) !important;}.has-black-border-color{border-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-border-color{border-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-border-color{border-color: var(--wp--preset--color--white) !important;}.has-pale-pink-border-color{border-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-border-color{border-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-border-color{border-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-border-color{border-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-border-color{border-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-border-color{border-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-border-color{border-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-border-color{border-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-border-color{border-color: var(--wp--preset--color--vivid-purple) !important;}.has-vivid-cyan-blue-to-vivid-purple-gradient-background{background: var(--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple) !important;}.has-light-green-cyan-to-vivid-green-cyan-gradient-background{background: var(--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan) !important;}.has-luminous-vivid-amber-to-luminous-vivid-orange-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange) !important;}.has-luminous-vivid-orange-to-vivid-red-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-orange-to-vivid-red) !important;}.has-very-light-gray-to-cyan-bluish-gray-gradient-background{background: var(--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray) !important;}.has-cool-to-warm-spectrum-gradient-background{background: var(--wp--preset--gradient--cool-to-warm-spectrum) !important;}.has-blush-light-purple-gradient-background{background: var(--wp--preset--gradient--blush-light-purple) !important;}.has-blush-bordeaux-gradient-background{background: var(--wp--preset--gradient--blush-bordeaux) !important;}.has-luminous-dusk-gradient-background{background: var(--wp--preset--gradient--luminous-dusk) !important;}.has-pale-ocean-gradient-background{background: var(--wp--preset--gradient--pale-ocean) !important;}.has-electric-grass-gradient-background{background: var(--wp--preset--gradient--electric-grass) !important;}.has-midnight-gradient-background{background: var(--wp--preset--gradient--midnight) !important;}.has-small-font-size{font-size: var(--wp--preset--font-size--small) !important;}.has-medium-font-size{font-size: var(--wp--preset--font-size--medium) !important;}.has-large-font-size{font-size: var(--wp--preset--font-size--large) !important;}.has-x-large-font-size{font-size: var(--wp--preset--font-size--x-large) !important;}
+:where(.wp-block-columns.is-layout-flex){gap: 2em;}
+.wp-block-pullquote{font-size: 1.5em;line-height: 1.6;}
+.wp-block-navigation a:where(:not(.wp-element-button)){color: inherit;}
+</style>
+<link rel="stylesheet" id="wp-postratings-css" href="https://coolshell.cn/wp-content/plugins/wp-postratings/css/postratings-css.css?ver=1.90.1" type="text/css" media="all" />
+<link rel="stylesheet" id="wp-pagenavi-css" href="https://coolshell.cn/wp-content/plugins/wp-pagenavi/pagenavi-css.css?ver=2.70" type="text/css" media="all" />
+<link rel="stylesheet" id="ez-toc-css" href="https://coolshell.cn/wp-content/plugins/easy-table-of-contents/assets/css/screen.min.css?ver=2.0.48" type="text/css" media="all" />
+<style id="ez-toc-inline-css" type="text/css">
+div#ez-toc-container p.ez-toc-title {font-size: 120%;}div#ez-toc-container p.ez-toc-title {font-weight: 500;}div#ez-toc-container ul li {font-size: 95%;}div#ez-toc-container nav ul ul li ul li {font-size: %!important;}
+.ez-toc-container-direction {direction: ltr;}.ez-toc-counter ul{counter-reset: item;}.ez-toc-counter nav ul li a::before {content: counters(item, ".", decimal) ". ";display: inline-block;counter-increment: item;flex-grow: 0;flex-shrink: 0;margin-right: .2em; float: left;}.ez-toc-widget-direction {direction: ltr;}.ez-toc-widget-container ul{counter-reset: item;}.ez-toc-widget-container nav ul li a::before {content: counters(item, ".", decimal) ". ";display: inline-block;counter-increment: item;flex-grow: 0;flex-shrink: 0;margin-right: .2em; float: left;}
+</style>
+<link rel="stylesheet" id="bootstrap-css" href="https://coolshell.cn/wp-content/themes/MyNisarg/css/bootstrap.css?ver=6.2" type="text/css" media="all" />
+<link rel="stylesheet" id="nisarg-style-css" href="https://coolshell.cn/wp-content/themes/MyNisarg/style.css?ver=6.2" type="text/css" media="all" />
+<style id="nisarg-style-inline-css" type="text/css">
+	/* Color Scheme */
+
+	/* Accent Color */
+
+	a:active,
+	a:hover,
+	a:focus {
+	    color: #009688;
+	}
+
+	.navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus {
+		color: #009688;
+	}
+
+	
+	.navbar-default .navbar-nav > .active > a, .navbar-default .navbar-nav > .active > a:hover, .navbar-default .navbar-nav > .active > a:focus {
+		color: #009688;			
+	}
+
+	@media (min-width: 768px){
+		.navbar-default .navbar-nav > .active > a, .navbar-default .navbar-nav > .active > a:hover, .navbar-default .navbar-nav > .active > a:focus {
+			border-top: 4px solid #009688;
+		}		
+	}
+
+	.dropdown-menu > .active > a, .dropdown-menu > .active > a:hover, .dropdown-menu > .active > a:focus {	    
+	    background-color: #009688;
+	}
+
+
+	.navbar-default .navbar-nav > .open > a, .navbar-default .navbar-nav > .open > a:hover, .navbar-default .navbar-nav > .open > a:focus {
+		color: #009688;
+	}
+
+	.navbar-default .navbar-nav > li > .dropdown-menu > li > a:hover,
+	.navbar-default .navbar-nav > li > .dropdown-menu > li > a:focus {
+		color: #fff;
+		background-color: #009688;
+	}
+
+	.navbar-default .navbar-nav .open .dropdown-menu > .active > a, .navbar-default .navbar-nav .open .dropdown-menu > .active > a:hover, .navbar-default .navbar-nav .open .dropdown-menu > .active > a:focus {
+		background-color: #fff;
+		color: #009688;
+	}
+
+	@media (max-width: 767px) {
+		.navbar-default .navbar-nav .open .dropdown-menu > li > a:hover {
+			background-color: #009688;
+			color: #fff;
+		}
+	}
+
+	.sticky-post{
+	    background: #009688;
+	    color:white;
+	}
+	
+	.entry-title a:hover,
+	.entry-title a:focus{
+	    color: #009688;
+	}
+
+	.entry-header .entry-meta::after{
+	    background: #009688;
+	}
+
+	.fa {
+		color: #009688;
+	}
+
+	.btn-default{
+		border-bottom: 1px solid #009688;
+	}
+
+	.btn-default:hover, .btn-default:focus{
+	    border-bottom: 1px solid #009688;
+	    background-color: #009688;
+	}
+
+	.nav-previous:hover, .nav-next:hover{
+	    border: 1px solid #009688;
+	    background-color: #009688;
+	}
+
+	.next-post a:hover,.prev-post a:hover{
+	    color: #009688;
+	}
+
+	.posts-navigation .next-post a:hover .fa, .posts-navigation .prev-post a:hover .fa{
+	    color: #009688;
+	}
+
+
+	#secondary .widget-title::after{
+		background-color: #009688;
+	    content: "";
+	    position: absolute;
+	    width: 75px;
+	    display: block;
+	    height: 4px;    
+	    bottom: -15px;
+	}
+
+	#secondary .widget a:hover,
+	#secondary .widget a:focus{
+		color: #009688;
+	}
+
+	#secondary .widget_calendar tbody a {
+	    background-color: #009688;
+	    color: #fff;
+	    padding: 0.2em;
+	}
+
+	#secondary .widget_calendar tbody a:hover{
+	    background-color: #009688;
+	    color: #fff;
+	    padding: 0.2em;
+	}	
+
+</style>
+<link rel="stylesheet" id="font-awesome-css" href="https://coolshell.cn/wp-content/themes/MyNisarg/font-awesome/css/font-awesome.min.css?ver=6.2" type="text/css" media="all" />
+<link rel="stylesheet" id="nisarggooglefonts-css" href="//fonts.googleapis.com/css?family=Lato:400,300italic,700|Source+Sans+Pro:400,400italic" type="text/css" media="all" />
+<link rel="stylesheet" id="enlighterjs-css" href="https://coolshell.cn/wp-content/plugins/enlighter/cache/enlighterjs.min.css?ver=0cuVQBPCj0viGB0" type="text/css" media="all" />
+<script type="62e5754535c106b768a052a1-text/javascript" src="https://coolshell.cn/wp-includes/js/jquery/jquery.min.js?ver=3.6.3" id="jquery-core-js"></script>
+<script type="62e5754535c106b768a052a1-text/javascript" src="https://coolshell.cn/wp-includes/js/jquery/jquery-migrate.min.js?ver=3.4.0" id="jquery-migrate-js"></script>
+<script type="62e5754535c106b768a052a1-text/javascript" src="https://coolshell.cn/wp-content/plugins/simple-post-series/autohide.js?ver=2.4" id="series-js"></script>
+<script type="62e5754535c106b768a052a1-text/javascript" id="ez-toc-scroll-scriptjs-js-after">
+jQuery(document).ready(function(){document.querySelectorAll(".ez-toc-section").forEach(t=>{t.setAttribute("ez-toc-data-id","#"+decodeURI(t.getAttribute("id")))}),jQuery("a.ez-toc-link").click(function(){let t=jQuery(this).attr("href"),e=jQuery("#wpadminbar"),i=0;30>30&&(i=30),e.length&&(i+=e.height()),jQuery('[ez-toc-data-id="'+decodeURI(t)+'"]').length>0&&(i=jQuery('[ez-toc-data-id="'+decodeURI(t)+'"]').offset().top-i),jQuery("html, body").animate({scrollTop:i},500)})});
+</script>
+<!--[if lt IE 9]>
+<script type='text/javascript' src='https://coolshell.cn/wp-content/themes/MyNisarg/js/html5shiv.js?ver=3.7.3' id='html5shiv-js'></script>
+<![endif]-->
+<link rel="https://api.w.org/" href="https://coolshell.cn/wp-json/" /><link rel="alternate" type="application/json" href="https://coolshell.cn/wp-json/wp/v2/posts/18024" /><link rel="EditURI" type="application/rsd+xml" title="RSD" href="https://coolshell.cn/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="https://coolshell.cn/wp-includes/wlwmanifest.xml" />
+<meta name="generator" content="WordPress 6.2" />
+<link rel="shortlink" href="https://coolshell.cn/?p=18024" />
+<link rel="alternate" type="application/json+oembed" href="https://coolshell.cn/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fcoolshell.cn%2Farticles%2F18024.html" />
+<link rel="alternate" type="text/xml+oembed" href="https://coolshell.cn/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fcoolshell.cn%2Farticles%2F18024.html&#038;format=xml" />
+<script type="62e5754535c106b768a052a1-text/javascript">
+	window._wp_rp_static_base_url = 'https://wprp.zemanta.com/static/';
+	window._wp_rp_wp_ajax_url = "https://coolshell.cn/wp-admin/admin-ajax.php";
+	window._wp_rp_plugin_version = '3.6.4';
+	window._wp_rp_post_id = '18024';
+	window._wp_rp_num_rel_posts = '6';
+	window._wp_rp_thumbnails = true;
+	window._wp_rp_post_title = 'API%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99+-+Qt%E5%AE%98%E7%BD%91%E7%9A%84%E8%AE%BE%E8%AE%A1%E5%AE%9E%E8%B7%B5%E6%80%BB%E7%BB%93';
+	window._wp_rp_post_tags = ['design', 'api', 'qt', 'api%E8%AE%BE%E8%AE%A1', 'coding', 'programmer', 'api-design', '%E7%A8%8B%E5%BA%8F%E5%91%98', 'c%2B%2B', '%E7%B3%BB%E7%BB%9F%E6%9E%B6%E6%9E%84', 'c%2Fc%2B%2B%E8%AF%AD%E8%A8%80', '%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1', '%E6%8A%80%E6%9C%AF%E8%AF%BB%E7%89%A9', 'a', 'run', 'alt', 'readabl', 'class', 'amp', 'good', 'manual', 'design', 'hue', 'int', 'qt', 'satur', '52', 'api'];
+	window._wp_rp_promoted_content = true;
+</script>
+<link rel="stylesheet" href="https://coolshell.cn/wp-content/plugins/wordpress-23-related-posts-plugin/static/themes/vertical-m.css?version=3.6.4" />
+<style type="text/css">
+        .site-header { background: #1d2b2d; }
+</style>
+</head>
+<body class="post-template-default single single-post postid-18024 single-format-standard group-blog">
+<link rel="stylesheet" id="nisarg-style-css" href="https://coolshell.cn/wp-content/themes/MyNisarg/style.css" type="text/css" media="all">
+<div id="page" class="hfeed site">
+<header id="masthead" role="banner">
+<nav class="navbar navbar-default navbar-fixed-top navbar-left" role="navigation">
+
+<div class="container" id="navigation_menu">
+<div class="navbar-header">
+<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+<span class="sr-only">Toggle navigation</span>
+<span class="icon-bar"></span>
+<span class="icon-bar"></span>
+<span class="icon-bar"></span>
+</button>
+<a class="navbar-brand" href="https://coolshell.cn/"><div class="coolshell_logo"></div>酷 壳 &#8211; CoolShell</a>
+</div>
+<div class="collapse navbar-collapse navbar-ex1-collapse"><ul id="menu-coolshell" class="nav navbar-nav"><li id="menu-item-17405" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-17405"><a title="首页" href="https://coolshell.cn/">首页</a></li>
+<li id="menu-item-17406" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-17406"><a title="推荐文章" href="https://coolshell.cn/featured">推荐文章</a></li>
+<li id="menu-item-17407" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-17407"><a title="本站插件" href="https://coolshell.cn/plugins">本站插件</a></li>
+<li id="menu-item-17408" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-17408"><a title="留言小本" href="https://coolshell.cn/guestbook">留言小本</a></li>
+<li id="menu-item-17409" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-17409"><a title="关于酷壳" href="https://coolshell.cn/about">关于酷壳</a></li>
+<li id="menu-item-17410" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-17410"><a title="关于陈皓" href="https://coolshell.cn/haoel">关于陈皓</a></li>
+<li id="menu-item-17582" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-17582"><a title="RSS" href="https://coolshell.cn/feed">RSS</a></li>
+</ul></div>
+</div>
+</nav>
+<div id="cc_spacer"></div>
+<div class="site-header">
+<div class="pull-right">
+<a title="把这个链接拖到你的Chrome收藏夹工具栏中" href="javascript:(function(){function c(){var e=document.createElement(&quot;link&quot;);e.setAttribute(&quot;type&quot;,&quot;text/css&quot;);e.setAttribute(&quot;rel&quot;,&quot;stylesheet&quot;);e.setAttribute(&quot;href&quot;,f);e.setAttribute(&quot;class&quot;,l);document.body.appendChild(e)}function h(){var e=document.getElementsByClassName(l);for(var t=0;t<e.length;t++){document.body.removeChild(e[t])}}function p(){var e=document.createElement(&quot;div&quot;);e.setAttribute(&quot;class&quot;,a);document.body.appendChild(e);setTimeout(function(){document.body.removeChild(e)},100)}function d(e){return{height:e.offsetHeight,width:e.offsetWidth}}function v(i){var s=d(i);return s.height>e&&s.height<n&&s.width>t&&s.width<r}function m(e){var t=e;var n=0;while(!!t){n+=t.offsetTop;t=t.offsetParent}return n}function g(){var e=document.documentElement;if(!!window.innerWidth){return window.innerHeight}else if(e&&!isNaN(e.clientHeight)){return e.clientHeight}return 0}function y(){if(window.pageYOffset){return window.pageYOffset}return Math.max(document.documentElement.scrollTop,document.body.scrollTop)}function E(e){var t=m(e);return t>=w&&t<=b+w}function S(){var e=document.createElement(&quot;audio&quot;);e.setAttribute(&quot;class&quot;,l);e.src=i;e.loop=false;e.addEventListener(&quot;canplay&quot;,function(){setTimeout(function(){x(k)},500);setTimeout(function(){N();p();for(var e=0;e<O.length;e++){T(O[e])}},15500)},true);e.addEventListener(&quot;ended&quot;,function(){N();h()},true);e.innerHTML=&quot; <p>If you are reading this, it is because your browser does not support the audio element. We recommend that you get a new browser.</p> <p>&quot;;document.body.appendChild(e);e.play()}function x(e){e.className+=&quot; &quot;+s+&quot; &quot;+o}function T(e){e.className+=&quot; &quot;+s+&quot; &quot;+u[Math.floor(Math.random()*u.length)]}function N(){var e=document.getElementsByClassName(s);var t=new RegExp(&quot;\\b&quot;+s+&quot;\\b&quot;);for(var n=0;n<e.length;){e[n].className=e[n].className.replace(t,&quot;&quot;)}}var e=30;var t=30;var n=350;var r=350;var i=&quot;//s3.amazonaws.com/moovweb-marketing/playground/harlem-shake.mp3&quot;;var s=&quot;mw-harlem_shake_me&quot;;var o=&quot;im_first&quot;;var u=[&quot;im_drunk&quot;,&quot;im_baked&quot;,&quot;im_trippin&quot;,&quot;im_blown&quot;];var a=&quot;mw-strobe_light&quot;;var f=&quot;//s3.amazonaws.com/moovweb-marketing/playground/harlem-shake-style.css&quot;;var l=&quot;mw_added_css&quot;;var b=g();var w=y();var C=document.getElementsByTagName(&quot;*&quot;);var k=null;for(var L=0;L<C.length;L++){var A=C[L];if(v(A)){if(E(A)){k=A;break}}}if(A===null){console.warn(&quot;Could not find a node of the right size. Please try a different page.&quot;);return}c();S();var O=[];for(var L=0;L<C.length;L++){var A=C[L];if(v(A)){O.push(A)}}})()    ">High一下!</a>
+</div>
+<div class="site-branding">
+<a class="home-link" href="https://coolshell.cn/" title="酷 壳 &#8211; CoolShell" rel="home">
+<h1 class="site-title">酷 壳 &#8211; CoolShell</h1>
+<h2 class="site-description">享受编程和技术所带来的快乐 &#8211; Coding Your Ambition</h2>
+</a>
+</div>
+</div>
+</header>
+<div class="container">
+<div class="row">
+<div class="col-md-9 nav-searchbox hidden-lg hidden-md visible-sm-* visible-xs-*">
+<form role="search" method="get" class="search-form" action="https://coolshell.cn/">
+<label>
+<span class="screen-reader-text">Search for:</span>
+<input type="search" class="search-field" placeholder="Search …" value name="s" title="Search for:">
+</label>
+<button type="submit" class="search-submit"><span class="screen-reader-text">Search</span></button>
+</form>
+</div>
+</div>
+</div>
+<div id="content" class="site-content">
+<div class="container">
+<div class="row">
+<div id="primary" class="col-md-9 content-area">
+<main id="main" role="main">
+<article id="post-18024" class="post-content post-18024 post type-post status-publish format-standard hentry category-cplusplus category-techarticle category-progdesign category-602 tag-api tag-api-design tag-c tag-coding tag-design tag-programmer tag-qt tag-58">
+<header class="entry-header">
+<span class="screen-reader-text">API设计原则 &#8211; Qt官网的设计实践总结</span>
+<h1 class="entry-title">API设计原则 &#8211; Qt官网的设计实践总结</h1>
+<div class="entry-meta">
+<h5 class="entry-date"><i class="fa fa-calendar-o"></i> <a href="https://coolshell.cn/articles/18024.html" title="14:16" rel="bookmark"><time class="entry-date" datetime="2017-07-25T14:16:30+08:00" pubdate>2017年07月25日 </time></a><span class="byline"><span class="sep"></span><i class="fa fa-user"></i>
+<span class="author vcard"><a class="url fn n" href="https://coolshell.cn/articles/author/oldratlee" title="View all posts by 李 鼎" rel="author">李 鼎</a></span></span> <i class="fa fa-comments-o"></i><span class="screen-reader-text">评论 </span> <a href="https://coolshell.cn/articles/18024.html#comments" class="comments-link">26 条评论</a> <i class="fa fa-users" style="margin-left:10px;"></i> 78,999 人阅读</h5>
+</div>
+</header>
+<div class="entry-content">
+<p><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3415450859608158" crossorigin="anonymous" type="62e5754535c106b768a052a1-text/javascript"></script><span style="color: #993300;"><strong>（感谢好友 <a href="http://www.weibo.com/oldratlee" target="_blank" rel="noopener noreferrer">@李鼎</a> 翻译此文）</strong></span></p>
+<p>原文链接：<a href="http://qt-project.org/wiki/API-Design-Principles">API Design Principles</a> &#8211; <a href="http://wiki.qt.io/">Qt Wiki</a><br/>
+基于<a href="http://blog.csdn.net/gaoyingju">Gary的影响力</a>上 <em>Gary Gao</em> 的译文稿：<a href="http://blog.csdn.net/gaoyingju/article/details/8245108">C++的API设计指导</a></p>
+<h2>译序</h2>
+<p><img decoding="async" class="alignright size-medium" src="https://coolshell.cn/wp-content/uploads/2017/07/api-design-300x278.jpg" alt width="300" height="278" /></p>
+<p>Qt的设计水准在业界很有口碑，一致、易于掌握和强大的API是Qt最著名的优点之一。此文既是Qt官网上的API设计指导准则，也是Qt在API设计上的实践总结。虽然Qt用的是C++，但其中设计原则和思考是具有普适性的（如果你对C++还不精通，可以忽略与C++强相关或是过于细节的部分，仍然可以学习或梳理关于API设计最有价值的内容）。整个篇幅中有很多示例，是关于API设计一篇难得的好文章。</p>
+<p>需要注意的是，这篇Wiki有一些内容并不完整，所以，可能会有一些阅读上的问题，我们对此做了一些相关的注释。</p>
+<p>PS：翻译中肯定会有不足和不对之处，欢迎评论&amp;交流；另译文源码在<a href="https://github.com/oldratlee/translations/tree/master/api-design-principles-from-qt">GitHub的这个仓库</a>中，可以<a href="https://github.com/oldratlee/translations/issues">提交Issue</a>/<a href="https://github.com/oldratlee/translations/fork">Fork后提交代码</a>来建议/指正。</p>
+<h1>API设计原则</h1>
+<p>一致、易于掌握和强大的API是Qt最著名的优点之一。此文总结了我们在设计Qt风格API的过程中所积累的诀窍（know-how）。其中许多是通用准则；而其他的则更偏向于约定，遵循这些约定主要是为了与已有的API保持一致。</p>
+<p>虽然这些准则主要用于对外的API（public API），但在设计对内的API（private API）时也推荐遵循相同的技巧（techniques），作为开发者之间协作的礼仪（courtesy）。</p>
+<p><span id="more-18024"></span></p>
+<p>如有兴趣也可以读一下 <em>Jasmin Blanchette</em> 的<a href="http://www4.in.tum.de/~blanchet/api-design.pdf">Little Manual of API Design (PDF)</a> 或是本文的前身 <em>Matthias Ettrich</em> 的<a href="https://doc.qt.io/archives/qq/qq13-apis.html">Designing Qt-Style C++ APIs</a>。</p>
+<h1>1. 好API的6个特质</h1>
+<p>API之于程序员就如同图形界面之于普通用户（end-user）。API中的『P』实际上指的是『程序员』（Programmer），而不是『程序』（Program），强调的是API是给程序员使用的这一事实。</p>
+<p>在第13期<a href="http://doc.qt.io/archives/qq/">Qt季刊</a>，<em>Matthias</em> 的<a href="https://doc.qt.io/archives/qq/qq13-apis.html">关于API设计的文章</a>中提出了观点：API应该极简（minimal）且完备（complete）、语义清晰简单（have clear and simple semantics）、符合直觉（be intuitive）、易于记忆（be easy to memorize）和引导API使用者写出可读代码（lead to readable code）。</p>
+<h2>1.1 极简</h2>
+<p>极简的API是指每个class的public成员尽可能少，public的class也尽可能少。这样的API更易理解、记忆、调试和变更。</p>
+<h2>1.2 完备</h2>
+<p>完备的API是指期望有的功能都包含了。这点会和保持API极简有些冲突。如果一个成员函数放在错误的类中，那么这个函数的潜在用户就会找不到，这也是违反完备性的。</p>
+<h2>1.3 语义清晰简单</h2>
+<p>就像其他的设计一样，我们应该遵守最少意外原则（the principle of least surprise）。好的API应该可以让常见的事完成的更简单，并有可以完成不常见的事的可能性，但是却不会关注于那些不常见的事。解决的是具体问题；当没有需求时不要过度通用化解决方案。（举个例子，在Qt 3中，<code>QMimeSourceFactory</code>不应命名成<code>QImageLoader</code>并有不一样的API。）</p>
+<h2>1.4 符合直觉</h2>
+<p>就像计算机里的其他事物一样，API应该符合直觉。对于什么是符合直觉的什么不符合，不同经验和背景的人会有不同的看法。API符合直觉的测试方法：经验不很丰富的用户不用阅读API文档就能搞懂API，而且程序员不用了解API就能看明白使用API的代码。</p>
+<h2>1.5 易于记忆</h2>
+<p>为使API易于记忆，API的命名约定应该具有一致性和精确性。使用易于识别的模式和概念，并且避免用缩写。</p>
+<h2>1.6 引导API使用者写出可读代码</h2>
+<p>代码只写一次，却要多次的阅读（还有调试和修改）。写出可读性好的代码有时候要花费更多的时间，但对于产品的整个生命周期来说是节省了时间的。</p>
+<p>最后，要记住的是，不同的用户会使用API的不同部分。尽管简单使用单个Qt类的实例应该符合直觉，但如果是要继承一个类，让用户事先看好文档是个合理的要求。</p>
+<h1>2. 静态多态</h1>
+<p>相似的类应该有相似的API。在继承（inheritance）合适时可以用继承达到这个效果，即运行时多态。然而多态也发生在设计阶段。例如，如果你用<code>QProgressBar</code>替换<code>QSlider</code>，或是用<code>QString</code>替换<code>QByteArray</code>，你会发现API的相似性使的替换很容易。这即是所谓的『静态多态』（static polymorphism）。</p>
+<p>静态多态也使记忆API和编程模式更加容易。因此，一组相关的类有相似的API有时候比每个类都有各自的一套API更好。</p>
+<p>一般来说，在Qt中，如果没有足够的理由要使用继承，我们更倾向于用静态多态。这样可以减少Qt public类的个数，也使刚学习Qt的用户在翻看文档时更有方向感。</p>
+<h2>2.1 好的案例</h2>
+<p><code>QDialogButtonBox</code>与<code>QMessageBox</code>，在处理按钮（<code>addButton()</code>、<code>setStandardButtons()</code>等等）上有相似的API，不需要继承某个<code>QAbstractButtonBox</code>类。</p>
+<h2>2.2 差的案例</h2>
+<p><code>QTcpSocket</code>与<code>QUdpSocket</code>都继承了<code>QAbstractSocket</code>，这两个类的交互行为的模式（mode of interaction）非常不同。似乎没有什么人以通用和有意义的方式用过<code>QAbstractSocket</code>指针（或者 <strong><em>能</em></strong> 以通用和有意义的方式使用<code>QAbstractSocket</code>指针）。</p>
+<h2>2.3 值得斟酌的案例</h2>
+<p><code>QBoxLayout</code>是<code>QHBoxLayout</code>与<code>QVBoxLayout</code>的父类。好处：可以在工具栏上使用<code>QBoxLayout</code>，调用<code>setOrientation()</code>使其变为水平/垂直。坏处：要多一个类，并且有可能导致用户写出这样没什么意义的代码，<code>((QBoxLayout *)hbox)-&gt;setOrientation(Qt::Vertical)</code>。</p>
+<h1>3. 基于属性的API</h1>
+<p>新的Qt类倾向于用『基于属性（property）的API』，例如：</p>
+<p>[code language=&#8221;cpp&#8221;]<br/>
+QTimer timer;<br/>
+timer.setInterval(1000);<br/>
+timer.setSingleShot(true);<br/>
+timer.start();<br/>
+[/code]</p>
+<p>这里的 <strong><em>属性</em></strong> 是指任何的概念特征（conceptual attribute），是对象状态的一部分 —— 无论它是不是<code>Q_PROPERTY</code>。在说得通的情况下，用户应该可以以任何顺序设置属性，也就是说，属性之间应该是正交的（orthogonal）。例如，上面的代码可以写成：</p>
+<p>[code language=&#8221;cpp&#8221;]<br/>
+QTimer timer;<br/>
+timer.setSingleShot(true);<br/>
+timer.setInterval(1000);<br/>
+timer.start();<br/>
+[/code]</p>
+<blockquote><p>【译注】：正交性是指改变某个特性而不会影响到其他的特性。<a href="https://book.douban.com/subject/5387402/">《程序员修炼之道》</a>中讲了关于正交性的一个直升飞机坠毁的例子，讲得深入浅出很有画面感。</p></blockquote>
+<p>为了方便，也写成：</p>
+<p>[code language=&#8221;cpp&#8221;]<br/>
+timer.start(1000)；<br/>
+[/code]</p>
+<p>类似地，对于<code>QRegExp</code>会是这样的代码：</p>
+<p>[code language=&#8221;cpp&#8221;]<br/>
+QRegExp regExp;<br/>
+regExp.setCaseSensitive(Qt::CaseInsensitive);<br/>
+regExp.setPattern(&quot;.&quot;);<br/>
+regExp.setPatternSyntax(Qt::WildcardSyntax);<br/>
+[/code]</p>
+<p>为实现这种类型的API，需要借助底层对象的懒创建。例如，对于<code>QRegExp</code>的例子，在不知道模式语法（pattern syntax）的情况下，在<code>setPattern()</code>中去解释<code>"."</code>就为时过早了。</p>
+<p>属性之间常常有关联的；在这种情况下，我们必须小心处理。思考下面的问题：当前的风格（style）提供了『默认的图标尺寸』属性 vs. <code>QToolButton</code>的『<code>iconSize</code>』属性：</p>
+<p>[code language=&#8221;cpp&#8221;]<br/>
+toolButton-&gt;setStyle(otherStyle);<br/>
+toolButton-&gt;iconSize(); // returns the default for otherStyle<br/>
+toolButton-&gt;setIconSize(QSize(52, 52));<br/>
+toolButton-&gt;iconSize(); // returns (52, 52)<br/>
+toolButton-&gt;setStyle(yetAnotherStyle);<br/>
+toolButton-&gt;iconSize(); // returns (52, 52)<br/>
+[/code]</p>
+<p>提醒一下，一旦设置了<code>iconSize</code>，设置就会一直保持，即使改变当前的风格。这 <strong><em>很好</em></strong>。但有的时候需要能重置属性。有两种方法：</p>
+<ol>
+<li>传入一个特殊值（如<code>QSize()</code>、<code>-1</code>或者<code>Qt::Alignment(0)</code>）来表示『重置』</li>
+<li>提供一个明确的重置方法，如<code>resetFoo()</code>和<code>unsetFoo()</code></li>
+</ol>
+<p>对于<code>iconSize</code>，使用<code>QSize()</code>（比如 <code>QSize(–1, -1)</code>）来表示『重置』就够用了。</p>
+<p>在某些情况下，getter方法返回的结果与所设置的值不同。例如，虽然调用了<code>widget-&gt;setEnabled(true)</code>，但如果它的父widget处于disabled状态，那么<code>widget-&gt;isEnabled()</code>仍然返回的是<code>false</code>。这样是OK的，因为一般来说就是我们想要的检查结果（父widget处于disabled状态，里面的子widget也应该变为灰的不响应用户操作，就好像子widget自身处于disabled状态一样；与此同时，因为子widget记得在自己的内心深处是enabled状态的，只是一直等待着它的父widget变为enabled）。当然诸如这些都必须在文档中妥善地说明清楚。</p>
+<h1>4. C++相关</h1>
+<h2>4.1 值 vs. 对象</h2>
+<h3>4.1.1 指针 vs. 引用</h3>
+<p>指针（pointer）还是引用（reference）哪个是最好的输出参数（out-parameters）？</p>
+<p>[code language=&#8221;cpp&#8221;]<br/>
+void getHsv(int *h, int *s, int *v) const;<br/>
+void getHsv(int &amp;h, int &amp;s, int &amp;v) const;<br/>
+[/code]</p>
+<p>大多数C++书籍推荐尽可能使用引用，基于一个普遍的观点：引用比指针『更加安全和优雅』。与此相反，我们在开发Qt时倾向于指针，因为指针让用户代码可读性更好。比较下面例子：</p>
+<p>[code language=&#8221;cpp&#8221;]<br/>
+color.getHsv(&amp;h, &amp;s, &amp;v);<br/>
+color.getHsv(h, s, v);<br/>
+[/code]</p>
+<p>只有第一行代码清楚表达出<code>h</code>、<code>s</code>、<code>v</code>参数在函数调用中非常有可能会被修改。</p>
+<p>这也就是说，编译器并不喜欢『出参』，所你应该在新的API中避免使用『出参』，而是返回一个结构体，如下所示：</p>
+<p>[code language=&#8221;cpp&#8221;]<br/>
+struct Hsv { int hue, saturation, value };<br/>
+Hsv getHsv() const;<br/>
+[/code]</p>
+<blockquote><p>【译注】：函数的『入参』和『出参』的混用会导致 API 接口语义的混乱，所以，使用指针，在调用的时候，实参需要加上“&amp;”，这样在代码阅读的时候，可以看到是一个『出参』，有利于代码阅读。（但是这样做，在函数内就需要判断指针是否为空的情况，因为引用是不需要判断的，所以，这是一种 trade-off）</p>
+<p>另外，如果这样的参数过多的话，最好使用一个结构体来把数据打包，一方面，为一组返回值取个名字，另一方面，这样有利用接口的简单。</p></blockquote>
+<h3>4.1.2 按常量引用传参 vs. 按值传参</h3>
+<p>如果类型大于16字节，按常量引用传参。</p>
+<p>如果类型有重型的（non-trivial）拷贝构造函数（copy-constructor）或是重型的析构函数（destructor），按常量引用传参以避免执行这些函数。</p>
+<p>对于其它的类型通常应该按值传参。</p>
+<p>示例：</p>
+<p>[code language=&#8221;cpp&#8221;]<br/>
+void setAge(int age);<br/>
+void setCategory(QChar cat);<br/>
+void setName(QLatin1String name);</p>
+<p>// const-ref is much faster than running copy-constructor and destructor<br/>
+void setAlarm(const QSharedPointer&lt;Alarm&gt; &amp;alarm);</p>
+<p>// QDate, QTime, QPoint, QPointF, QSize, QSizeF, QRect<br/>
+// are good examples of other classes you should pass by value.<br/>
+[/code]</p>
+<blockquote><p>【译注】：这是传引用和传值的差别了，因为传值会有对像拷贝，传引用则不会。所以，如果对像的构造比较重的话（换句话说，就是对像里的成员变量需要的内存比较大），这就会影响很多性能。所以，为了提高性能，最好是传引用。但是如果传入引用的话，会导致这个对象可能会被改变。所以传入const reference。</p></blockquote>
+<h2>4.2 虚函数</h2>
+<p>在C++中，当类的成员函数声明为virtual，主要是为了通过在子类重载此函数能够定制函数的行为。将函数声明为virtual的目的是为了让对这个函数已有的调用变成执行实际实例的代码路径。对于没有在类外部调用的函数声明成virtual，你应该事先非常慎重地思考过。</p>
+<p>[code language=&#8221;cpp&#8221;]<br/>
+// QTextEdit in Qt 3: member functions that have no reason for being virtual<br/>
+virtual void resetFormat();<br/>
+virtual void setUndoDepth( int d );<br/>
+virtual void setFormat( QTextFormat *f, int flags );<br/>
+virtual void ensureCursorVisible();<br/>
+virtual void placeCursor( const QPoint &amp;pos;, QTextCursor **c = 0 );<br/>
+virtual void moveCursor( CursorAction action, bool select );<br/>
+virtual void doKeyboardAction( KeyboardAction action );<br/>
+virtual void removeSelectedText( int selNum = 0 );<br/>
+virtual void removeSelection( int selNum = 0 );<br/>
+virtual void setCurrentFont( const QFont &amp;f );<br/>
+virtual void setOverwriteMode( bool b ) { overWrite = b; }<br/>
+[/code]</p>
+<p><code>QTextEdit</code>从Qt 3移植到Qt 4的时候，几乎所有的虚函数都被移除了。有趣的是（但在预料之中），并没有人对此有大的抱怨，为什么？因为Qt 3没用到<code>QTextEdit</code>的多态行为 —— 只有你会；简单地说，没有理由去继承<code>QTextEdit</code>并重写这些函数，除非你自己调用了这些方法。如果在Qt在外部你的应用程序你需要多态，你可以自己添加多态。</p>
+<blockquote><p>【译注】：『多态』的目的只不过是为了实践 —— 『依赖于接口而不是实现』，也就是说，接口是代码抽像的一个非常重要的方式（在Java/Go中都有专门的接口声明语法）。所以，如果没有接口抽像，使用『多态』的意义也就不大了，因为也就没有必要使用『虚函数』了。</p></blockquote>
+<h3>4.2.1 避免虚函数</h3>
+<p>在Qt中，我们有很多理由尽量减少虚函数的数量。每一次对虚函数的调用会在函数调用链路中插入一个未掌控的节点（某种程度上使结果更无法预测），使得bug修复变得更复杂。用户在重写的虚函数中可以做很多疯狂的事：</p>
+<ul>
+<li>发送事件</li>
+<li>发送信号</li>
+<li>重新进入事件循环（例如，通过打开一个模态文件对话框）</li>
+<li>删除对象（即触发『<code>delete this</code>』）</li>
+</ul>
+<p>还有其他很多原因要避免过度使用虚函数：</p>
+<ul>
+<li>添加、移动或是删除虚函数都带来二进制兼容问题（binary compatibility/BC）</li>
+<li>重载虚函数并不容易</li>
+<li>编译器几乎不能优化或内联（inline）对虚函数的调用</li>
+<li>虚函数调用需要查找虚函数表（v-table），这比普通函数调用慢了2到3倍</li>
+<li>虚函数使得类很难按值拷贝（尽管也可以按值拷贝，但是非常混乱并且不建议这样做）</li>
+</ul>
+<p>经验告诉我们，没有虚函数的类一般bug更少、维护成本也更低。</p>
+<p>一般的经验法则是，除非我们以这个类作为工具集提供而且有很多用户来调用某个类的虚函数，否则这个函数九成不应该设计成虚函数。</p>
+<blockquote><p>【译注】：</p>
+<ol>
+<li>使用虚函数时，你需要对编译器的内部行为非常清楚，否则，你会在使用虚函数时，觉得有好些『古怪』的问题发生。比如在创建数组对象的时候。</li>
+<li>在C++中，会有一个基础类，这个基础类中已经实现好了很多功能，然后把其中的一些函数放给子类去修改和实现。这种方法在父类和子类都是一组开发人员维护时没有什么问题，但是如果这是两组开发人员，这就会带来很多问题了，就像Qt这样，子类完全无法控制，全世界的开发人员想干什么就干什么。所以，子类的代码和父类的代码在兼容上就会出现很多很多问题。所以，还是上面所说，其实，虚函数应该声明在接口的语义里（这就是设计模式的两个宗旨——依赖于接口，而不是实现；钟爱于组合，而不是继承。也是为什么Java和Go语言使用interface关键字的原因，C++在多态的语义上非常容易滥用）</li>
+</ol>
+</blockquote>
+<h3>4.2.2 虚函数 vs. 拷贝</h3>
+<p>多态对象（polymorphic objects）和值类型的类（value-type classes）两者很难协作好。</p>
+<p>包含虚函数的类必须把析构函数声明为虚函数，以防止父类析构时没有清理子类的数据，导致内存泄漏。</p>
+<p>如果要使一个类能够拷贝、赋值或按值比较，往往需要拷贝构造函数、赋值操作符（<code>operator =</code>）和相等操作符（<code>operator ==</code>）。</p>
+<p>[code language=&#8221;cpp&#8221;]<br/>
+class CopyClass {<br/>
+public:<br/>
+CopyClass();<br/>
+CopyClass(const CopyClass &amp;other);<br/>
+~CopyClass();<br/>
+CopyClass &amp;operator =(const CopyClass &amp;other);<br/>
+bool operator ==(const CopyClass &amp;other) const;<br/>
+bool operator !=(const CopyClass &amp;other) const;</p>
+<p> virtual void setValue(int v);<br/>
+};<br/>
+[/code]</p>
+<p>如果继承<code>CopyClass</code>这个类，预料之外的事就已经在代码时酝酿了。一般情况下，如果没有虚成员函数和虚析构函数，就不能创建出可以多态的子类。然而，如果存在虚成员函数和虚析构函数，这突然变成了要有子类去继承的理由，而且开始变得复杂了。<strong><em>起初认为只要简单声明上虚操作符重载函数（virtual operators）。</em></strong> 但其实是走上了一条混乱和毁灭之路（破坏了代码的可读性）。看看下面的这个例子：</p>
+<p>[code language=&#8221;cpp&#8221;]<br/>
+class OtherClass {<br/>
+public:<br/>
+const CopyClass &amp;instance() const; // 这个方法返回的是什么？可以赋值什么？<br/>
+};<br/>
+[/code]</p>
+<p>（这部份还未完成）</p>
+<blockquote><p>【译注】：因为原文上说，这部份并没有完成，所以，我也没有搞懂原文具体也是想表达什么。不过，就标题而言，原文是想说，在多态的情况下拷贝对象所带来的问题？？</p></blockquote>
+<h2>4.3 关于const</h2>
+<p><strong><em>C++的关键词const表明了内容不会改变或是没有副作用。可以应用于简单的值、指针及指针所指的内容，也可以作为一个特别的属性应用于类的成员函数上，表示成员函数不能修改对象的状态。</em></strong></p>
+<p>然而，const本身并没有提供太大的价值 —— 很多编程语言甚至没有类似const的关键词，但是却并没有因此产生问题。实际上，如果你不用函数重载，并在C++源代码用搜索并删除所有的const，几乎总能编译通过并且正常运行。尽量让使用的const保持实用有效，这点很重要。</p>
+<p>让我们看一下在Qt的API设计中与const相关的场景。</p>
+<h3>4.3.1 输入参数：const指针</h3>
+<p>有输入指针参数的const成员函数，几乎总是const指针参数。</p>
+<p>如果函数声明为const，意味着既没有副作用，也不会改变对象的可见状态。那为什么它需要一个没有const限定的输入参数呢？记住const类型的函数通常被其他const类型的函数调用，接收到的一般都是const指针（只要不主动const_cast，我们推荐尽量避免使用const_cast）</p>
+<p>以前：</p>
+<p>[code language=&#8221;cpp&#8221;]<br/>
+bool QWidget::isVisibleTo(QWidget *ancestor) const;<br/>
+bool QWidget::isEnabledTo(QWidget *ancestor) const;<br/>
+QPoint QWidget::mapFrom(QWidget *ancestor, const QPoint &amp;pos) const;<br/>
+[/code]</p>
+<p><code>QWidget</code>声明了许多非const指针输入参数的const成员函数。注意，这些函数可以修改传入的参数，不能修改对象自己。使用这样的函数常常要借助const_cast转换。如果是const指针输入参数，就可以避免这样的转换了。</p>
+<p>之后：</p>
+<p>[code language=&#8221;cpp&#8221;]<br/>
+bool QWidget::isVisibleTo(const QWidget *ancestor) const;<br/>
+bool QWidget::isEnabledTo(const QWidget *ancestor) const;<br/>
+QPoint QWidget::mapFrom(const QWidget *ancestor, const QPoint &amp;pos) const;<br/>
+[/code]</p>
+<p>注意，我们在<code>QGraphicsItem</code>中对此做了修正，但是<code>QWidget</code>要等到Qt 5:</p>
+<p>[code language=&#8221;cpp&#8221;]<br/>
+bool isVisibleTo(const QGraphicsItem *parent) const;<br/>
+QPointF mapFromItem (const QGraphicsItem *item, const QPointF &amp;point) const;<br/>
+[/code]</p>
+<h3>4.3.2 返回值：const值</h3>
+<p>调用函数返回的非引用类型的结果，称之为右值（R-value）。</p>
+<p>非类（non-class）的右值总是无cv限定类型（cv-unqualified type）。虽然从语法上讲，加上const也可以，但是没什么意义，因为鉴于访问权限这些值是不能改变的。多数现代编译器在编译这样的代码时会提示警告信息。</p>
+<blockquote><p>【译注】：cv-qualified的类型（与cv-unqualified相反）是由const或者volatile或者volatile const限定的类型。详见<a href="http://en.cppreference.com/w/cpp/language/cv">cv (const and volatile) type qualifiers &#8211; C++语言参考</a></p></blockquote>
+<p>当在类类型（class type）右值上添加const关键字，则禁止访问非const成员函数以及对成员的直接操作。</p>
+<p>不加const则没有以上的限制，但几乎没有必要加上const，因为右值对象生存时间（life time）的结束一般在C++清理的时候（通俗的说，下一个分号地方），而对右值对象的修改随着右值对象的生存时间也一起结束了（也就是本条语句的执行完成的时候）。</p>
+<p>示例：</p>
+<p>[code language=&#8221;cpp&#8221;]<br/>
+struct Foo {<br/>
+void setValue(int v) { value = v; }<br/>
+int value;<br/>
+};</p>
+<p>Foo foo() {<br/>
+return Foo();<br/>
+}</p>
+<p>const Foo cfoo() {<br/>
+return Foo();<br/>
+}</p>
+<p>int main() {<br/>
+// The following does compile, foo() is non-const R-value which<br/>
+// can&#8217;t be assigned to (this generally requires an L-value)<br/>
+// but member access leads to a L-value:<br/>
+foo().value = 1; // Ok, but temporary will be thrown away at the end of the full-expression.</p>
+<p> // The following does compile, foo() is non-const R-value which<br/>
+// can&#8217;t be assigned to, but calling (even non-const) member<br/>
+// function is fine:<br/>
+foo().setValue(1); // Ok, but temporary will be thrown away at the end of the full-expression.</p>
+<p> // The following does _not_compile, foo() is &#8221;const&#8221; R-value<br/>
+// with const member which member access can&#8217;t be assigned to:<br/>
+cfoo().value = 1; // Not ok.</p>
+<p> // The following does _not_compile, foo() is &#8221;const&#8221; R-value,<br/>
+// one cannot call non-const member functions:<br/>
+cfoo().setValue(1); // Not ok<br/>
+}<br/>
+[/code]</p>
+<blockquote><p>【译注】：上述的代码说明，如果返回值不是const的，代码可以顺利编译通过，然而并没有什么卵用，因为那个临时对像马上就被抛弃了。所以，这样的无用的代码最好还是在编译时报个错，以免当时头脑发热想错了，写了一段没用但还以为有用的代码。</p></blockquote>
+<h3>4.3.3 返回值：非const的指针还是有const的指针</h3>
+<p>谈到const函数应该返回非const的指针还是const指针这个话题时，多数人发现在C++中关于『const正确性』（const correctness）在概念上产生了分歧。 <em>问题起源是：<strong>const函数本身不能修改对象自身的状态，却可以返回成员的非const指针</strong>。返回指针这个简单动作本身既不会影响整个对象的可见状态，当然也不会改变这个函数职责范围内涉及的状态。但是，这却使得程序员可以间接访问并修改对象的状态。</em></p>
+<p>下面的例子演示了通过返回非const指针的const函数绕开const约定（constness）的诸多方式中的一种：</p>
+<p>[code language=&#8221;cpp&#8221;]<br/>
+QVariant CustomWidget::inputMethodQuery(Qt::InputMethodQuery query) const {<br/>
+moveBy(10, 10); // doesn&#8217;t compile!<br/>
+window()-&gt;childAt(mapTo(window(), rect().center()))-&gt;moveBy(10, 10); // compiles!<br/>
+}<br/>
+[/code]</p>
+<p>返回const指针的函数正是保护以避免这些（可能是不期望的/没有预料到的）副作用，至少是在一定程度上。但哪个函数你会觉得更想返回const指针，或是不止一个函数？</p>
+<p>若采用const正确（const-correct）的方法，每个返回某个成员的指针（或多个指向成员的指针）的const函数必须返回const指针。在实践中，很不幸这样的做法将导致无法使用的API：</p>
+<p>[code language=&#8221;cpp&#8221;]<br/>
+QGraphicsScene scene;<br/>
+// … populate scene</p>
+<p>foreach (const QGraphicsItem *item, scene.items()) {<br/>
+item-&gt;setPos(qrand() % 500, qrand() % 500); // doesn&#8217;t compile! item is a const pointer<br/>
+}<br/>
+[/code]</p>
+<p><code>QGraphicsScene::items()</code>是一个const函数，顺着思考看起来这个函数只应该返回const指针。</p>
+<p>在Qt中，我们几乎只有非const的使用模式。我们选择的是实用路子： 相比滥用非const指针返回类型带来的问题，返回const指针更可能招致过分使用const_cast的问题。</p>
+<h3>4.3.4 返回值：按值返回 还是 按const引用返回？</h3>
+<p>若返回的是对象的拷贝，那么返回const引用是更直接的方案； 然而，这样的做法限制了后面想要对这个类的重构（refactor）。 （以<code>d-point</code>的典型做法（idiom）为例，我们可以在任何时候改变Qt类在内存表示（memory representation）；但却不能在不破坏二进制兼容性的情况下把改变函数的签名，返回值从<code>const QFoo &amp;</code>变为<code>QFoo</code>。） 基于这个原因，除去对运行速度敏感（speed is critical）而重构不是问题的个别情形（例如，<code>QList::at()</code>），我们一般返回<code>QFoo</code>而不是<code>const QFoo &amp;</code>。</p>
+<blockquote><p>【译注】：参看《Effective C++》中条款23：Don&#8217;t try to return a reference when you must return an object</p></blockquote>
+<h3>4.4.5 const vs. 对象的状态</h3>
+<p>const正确性（Const correctness）的问题就像C圈子中vi与emacs的讨论，因为这个话题在很多地方都存在分歧（比如基于指针的函数）。</p>
+<p>但通用准则是const函数不能改变类的可见状态。『状态』的意思是『自身以及涉及的职责』。这并不是指非const函数能够改变自身的私有成员，也不是指const函数改变不了。而是指函数是活跃的并存在可见的副作用（visible side effects）。const函数一般没有任何可见的副作用，比如：</p>
+<p>[code language=&#8221;cpp&#8221;]<br/>
+QSize size = widget-&gt;sizeHint(); // const<br/>
+widget-&gt;move(10, 10); // not const<br/>
+[/code]</p>
+<p>代理（delegate）负责在其它对象上绘制内容。 它的状态包括它的职责，因此包括在哪个对象做绘制这样的状态。 调用它的绘画行为必然会有副作用； 它改变了它绘制所在设备的外观（及其所关联的状态）。鉴于这些，<code>paint()</code>作为const函数并不合理。 进一步说，任何<code>paint()</code>或<code>QIcon</code>的<code>paint()</code>的视图函数是const函数也不合理。 没有人会从内部的const函数去调用<code>QIcon::paint()</code>，除非他想显式地绕开const这个特性。 如果是这种情况，使用const_cast会更好。</p>
+<p>[code language=&#8221;cpp&#8221;]<br/>
+// QAbstractItemDelegate::paint is const<br/>
+void QAbstractItemDelegate::paint(QPainter **painter, const QStyleOptionViewItem &amp;option, const QModelIndex &amp;index) const</p>
+<p>// QGraphicsItem::paint is not const<br/>
+void QGraphicsItem::paint(QPainter *painter, const QStyleOptionGraphicsItem option, QWidget *widget)<br/>
+[/code]</p>
+<p>const关键字并不能按你期望的样子起作用。应该考虑将其移除而不是去重载const/非const函数。</p>
+<h1>5. API的语义和文档</h1>
+<p>当传值为<code>-1</code>的参数给函数，函数会是什么行为？有很多类似的问题……</p>
+<p>是警告、致命错误还是其它？</p>
+<p>API需要的是质量保证。API第一个版本一定是不对的；必须对其进行测试。 以阅读使用API的代码的方式编写用例，且验证这样代码是可读的。</p>
+<p>还有其他的验证方法，比如</p>
+<ul>
+<li>让别人使用API（看了文档或是先不看文档都可以）</li>
+<li>给类写文档（包含类的概述和每个函数）</li>
+</ul>
+<h1>6. 命名的艺术</h1>
+<p>命名很可能是API设计中最重要的一个问题。类应该叫什么名字？成员函数应该叫什么名字？</p>
+<h2>6.1 通用的命名规则</h2>
+<p>有几个规则对于所有类型的命名都等同适用。第一个，之前已经提到过，不要使用缩写。即使是明显的缩写，比如把<code>previous</code>缩写成<code>prev</code>，从长远来看是回报是负的，因为用户必须要记住缩写词的含义。</p>
+<p>如果API本身没有一致性，之后事情自然就会越来越糟；例如，Qt 3 中同时存在<code>activatePreviousWindow()</code>与<code>fetchPrev()</code>。恪守『不缩写』规则更容易地创建一致性的API。</p>
+<p>另一个时重要但更微妙的准则是在设计类时应该保持子类名称空间的干净。在Qt 3中，此项准则并没有一直遵循。以<code>QToolButton</code>为例对此进行说明。如果调用<code>QToolButton</code>的 <code>name()</code>、<code>caption()</code>、<code>text()</code>或者<code>textLabel()</code>，你觉得会返回什么？用Qt设计器在<code>QToolButton</code>上自己先试试吧：</p>
+<ul>
+<li><code>name</code>属性是继承自<code>QObject</code>，返回内部的对象名称，用于调试和测试。</li>
+<li><code>caption</code>属性继承自<code>QWidget</code>，返回窗口标题，对<code>QToolButton</code>来说毫无意义，因为它在创建的时候parent就存在了。</li>
+<li><code>text</code>函数继承自<code>QButton</code>，一般用于按钮。当<code>useTextLabel</code>不为<code>true</code>，才用这个属性。</li>
+<li><code>textLabel</code>属性在<code>QToolButton</code>内声明，当<code>useTextLabel</code>为<code>true</code>时显示在按钮上。</li>
+</ul>
+<p>为了可读性，在Qt 4中<code>QToolButton</code>的<code>name</code>属性改成了<code>objectName</code>，<code>caption</code>改成了<code>windowTitle</code>，删除了<code>textLabel</code>属性因为和<code>text</code>属性相同。</p>
+<p>当你找不到好的命名时，写文档也是个很好方法：要做的就是尝试为各个条目（item）（如类、方法、枚举值等等）写文档，并用写下的第一句话作为启发。如果找不到一个确切的命名，往往说明这个条目是不该有的。如果所有尝试都失败了，并且你坚信这个概念是合理的，那么就发明一个新名字。像widget、event、focus和buddy这些命名就是在这一步诞生的。</p>
+<blockquote><p>【译注】：写文档是一个非常好的习惯。写文档的过程其实就是在帮你梳理你的编程思路。很多时候，文档写着写着你就会发现要去改代码去了。除了上述的好处多，写文档还有更多的好处。比如，在写文档的过程中，你发现文字描述过于复杂了，这表明着你的代码或逻辑是复杂的，这就倒逼你去重构你的代码。所以 —— <strong>写文档其实就是写代码</strong>。</p></blockquote>
+<h2>6.2 类的命名</h2>
+<p>识别出类所在的分组，而不是为每个类都去找个完美的命名。例如，所有Qt 4的能感知模型（model-aware）的item view，类后缀都是<code>View</code>（<code>QListView</code>、<code>QTableView</code>、<code>QTreeView</code>），而相应的基于item（item-based）的类后缀是<code>Widget</code>（<code>QListWidget</code>、<code>QTableWidget</code>、<code>QTreeWidget</code>）。</p>
+<h2>6.3 枚举类型及其值的命名</h2>
+<p>声明枚举类型时，需要记住在C++中枚举值在使用时不会带上类型（与Java、C#不同）。下面的例子演示了枚举值命名得过于通用的危害：</p>
+<p>[code language=&#8221;cpp&#8221;]<br/>
+namespace Qt<br/>
+{<br/>
+enum Corner { TopLeft, BottomRight, &#8230; };<br/>
+enum CaseSensitivity { Insensitive, Sensitive };<br/>
+&#8230;<br/>
+};</p>
+<p>tabWidget-&gt;setCornerWidget(widget, Qt::TopLeft);<br/>
+str.indexOf(&quot;$(QTDIR)&quot;, Qt::Insensitive);<br/>
+[/code]</p>
+<p>在最后一行，<code>Insensitive</code>是什么意思？命名枚举类型的一个准则是在枚举值中至少重复此枚举类型名中的一个元素：</p>
+<p>[code language=&#8221;cpp&#8221;]<br/>
+namespace Qt<br/>
+{<br/>
+enum Corner { TopLeftCorner, BottomRightCorner, &#8230; };<br/>
+enum CaseSensitivity { CaseInsensitive, CaseSensitive };<br/>
+&#8230;<br/>
+};</p>
+<p>tabWidget-&gt;setCornerWidget(widget, Qt::TopLeftCorner);<br/>
+str.indexOf(&quot;$(QTDIR)&quot;, Qt::CaseInsensitive);<br/>
+[/code]</p>
+<p>当对枚举值进行或运算并作为某种标志（flag）时，传统的做法是把或运算的结果保存在int型的值中，但这不是类型安全的。Qt 4提供了一个模板类<code>QFlags</code>，其中的<code>T</code>是枚举类型。为了方便使用，Qt用<code>typedef</code>重新定义了<code>QFlag</code>类型，所以可以用<code>Qt::Alignment</code>代替<code>QFlags</code>。</p>
+<p>习惯上，枚举类型命名用单数形式（因为它一次只能『持有』一个flag），而持有多个『flag』的类型用复数形式，例如：</p>
+<p>[code language=&#8221;cpp&#8221;]<br/>
+enum RectangleEdge { LeftEdge, RightEdge, &#8230; };<br/>
+typedef QFlags&lt;RectangleEdge&gt; RectangleEdges;<br/>
+[/code]</p>
+<p>在某些情形下，持有多个『flag』的类型命名用单数形式。对于这种情况，持有的枚举类型名称要求是以<code>Flag</code>为后缀：</p>
+<p>[code language=&#8221;cpp&#8221;]<br/>
+enum AlignmentFlag { AlignLeft, AlignTop, &#8230; };<br/>
+typedef QFlags&lt;AlignmentFlag&gt; Alignment;<br/>
+[/code]</p>
+<h2>6.4 函数和参数的命名</h2>
+<p>函数命名的第一准则是可以从函数名看出来此函数是否有副作用。在Qt 3中，const函数<code>QString::simplifyWhiteSpace()</code>违反了此准则，因为它返回了一个<code>QString</code>而不是按名称暗示的那样，改变调用它的<code>QString</code>对象。在Qt 4中，此函数重命名为<code>QString::simplified()</code>。</p>
+<p>虽然参数名不会出现在使用API的代码中，但是它们给程序员提供了重要信息。因为现代的IDE都会在写代码时显示参数名称，所以值得在头文件中给参数起一个恰当的名字并在文档中使用相同的名字。</p>
+<h2>6.5 布尔类型的getter与setter方法的命名</h2>
+<p>为<code>bool</code>属性的getter和setter方法命名总是很痛苦。getter应该叫做<code>checked()</code>还是<code>isChecked()</code>？<code>scrollBarsEnabled()</code>还是<code>areScrollBarEnabled()</code>？</p>
+<p>Qt 4中，我们套用以下准则为getter命名：</p>
+<ul>
+<li>形容词以<code>is</code>为前缀，例子：
+<ul>
+<li><code>isChecked()</code></li>
+<li><code>isDown()</code></li>
+<li><code>isEmpty()</code></li>
+<li><code>isMovingEnabled()</code></li>
+</ul>
+</li>
+<li>然而，修饰名词的形容词没有前缀：
+<ul>
+<li><code>scrollBarsEnabled()</code>，而不是<code>areScrollBarsEnabled()</code></li>
+</ul>
+</li>
+<li>动词没有前缀，也不使用第三人称(<code>-s</code>)：
+<ul>
+<li><code>acceptDrops()</code>，而不是<code>acceptsDrops()</code></li>
+<li><code>allColumnsShowFocus()</code></li>
+</ul>
+</li>
+<li>名词一般没有前缀：
+<ul>
+<li><code>autoCompletion()</code>，而不是<code>isAutoCompletion()</code></li>
+<li><code>boundaryChecking()</code></li>
+</ul>
+</li>
+<li>有的时候，没有前缀容易产生误导，这种情况下会加上<code>is</code>前缀：
+<ul>
+<li><code>isOpenGLAvailable()</code>，而不是<code>openGL()</code></li>
+<li><code>isDialog()</code>，而不是<code>dialog()</code><br/>
+（一个叫做<code>dialog()</code>的函数，一般会被认为是返回<code>QDialog</code>。）</li>
+</ul>
+</li>
+</ul>
+<p>setter的名字由getter衍生，去掉了前缀后在前面加上了<code>set</code>；例如，<code>setDown()</code>与<code>setScrollBarsEnabled()</code>。</p>
+<h1>7. 避免常见陷阱</h1>
+<h2>7.1 简化的陷阱</h2>
+<p>一个常见的误解是：实现需要写的代码越少，API就设计得越好。应该记住：代码只会写上几次，却要被反复阅读并理解。例如：</p>
+<p>[code language=&#8221;cpp&#8221;]<br/>
+QSlider *slider = new QSlider(12, 18, 3, 13, Qt::Vertical, 0, &quot;volume&quot;);<br/>
+[/code]</p>
+<p>这段代码比下面的读起来要难得多（甚至写起来也更难）：</p>
+<p>[code language=&#8221;cpp&#8221;]<br/>
+QSlider *slider = new QSlider(Qt::Vertical);<br/>
+slider-&gt;setRange(12, 18);<br/>
+slider-&gt;setPageStep(3);<br/>
+slider-&gt;setValue(13);<br/>
+slider-&gt;setObjectName(&quot;volume&quot;);<br/>
+[/code]</p>
+<blockquote><p>【译注】：在有IDE的自动提示的支持下，后者写起来非常方便，而前者还需要看相应的文档。</p></blockquote>
+<h2>7.2 布尔参数的陷阱</h2>
+<p>布尔类型的参数总是带来无法阅读的代码。给现有的函数增加一个<code>bool</code>型的参数几乎永远是一种错误的行为。仍以Qt为例，<code>repaint()</code>有一个<code>bool</code>类型的可选参数用于指定背景是否被擦除。可以写出这样的代码：</p>
+<p>[code language=&#8221;cpp&#8221;]<br/>
+widget-&gt;repaint(false);<br/>
+[/code]</p>
+<p>初学者很可能是这样理解的，『不要重新绘制！』，能有多少Qt用户真心知道下面3行是什么意思：</p>
+<p>[code language=&#8221;cpp&#8221;]<br/>
+widget-&gt;repaint();<br/>
+widget-&gt;repaint(true);<br/>
+widget-&gt;repaint(false);<br/>
+[/code]</p>
+<p>更好的API设计应该是这样的：</p>
+<p>[code language=&#8221;cpp&#8221;]<br/>
+widget-&gt;repaint();<br/>
+widget-&gt;repaintWithoutErasing();<br/>
+[/code]</p>
+<p>在Qt 4中，我们通过移除了重新绘制（repaint）而不擦除widget的能力来解决了此问题。Qt 4的双缓冲使这种特性被废弃。</p>
+<p>还有更多的例子：</p>
+<p>[code language=&#8221;cpp&#8221;]<br/>
+widget-&gt;setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding, true);<br/>
+textEdit-&gt;insert(&quot;Where&#8217;s Waldo?&quot;, true, true, false);<br/>
+QRegExp rx(&quot;moc_***.c??&quot;, false, true);<br/>
+[/code]</p>
+<p>一个明显的解决方案是<code>bool</code>类型改成枚举类型。我们在Qt 4的<code>QString</code>中就是这么做的。对比效果如下：</p>
+<p>[code language=&#8221;cpp&#8221;]<br/>
+str.replace(&quot;%USER%&quot;, user, false); // Qt 3<br/>
+str.replace(&quot;%USER%&quot;, user, Qt::CaseInsensitive); // Qt 4<br/>
+[/code]</p>
+<blockquote><p>【译注】：关于这个条目可以看看 CoolShell 这篇文章一些展开的讨论： <a href="https://coolshell.cn/articles/5444.html" rel="nofollow">千万不要把 BOOL 设计成函数参数</a>。</p></blockquote>
+<h1>8. 案例研究</h1>
+<h2>8.1 <code>QProgressBar</code></h2>
+<p>为了展示上文各种准则的实际应用。我们来研究一下Qt 3中<code>QProgressBar</code>的API，并与Qt 4中对应的API作比较。在Qt 3中：</p>
+<p>[code language=&#8221;cpp&#8221;]<br/>
+class QProgressBar : public QWidget<br/>
+{<br/>
+&#8230;<br/>
+public:<br/>
+int totalSteps() const;<br/>
+int progress() const;</p>
+<p> const QString &amp;progressString() const;<br/>
+bool percentageVisible() const;<br/>
+void setPercentageVisible(bool);</p>
+<p> void setCenterIndicator(bool on);<br/>
+bool centerIndicator() const;</p>
+<p> void setIndicatorFollowsStyle(bool);<br/>
+bool indicatorFollowsStyle() const;</p>
+<p>public slots:<br/>
+void reset();<br/>
+virtual void setTotalSteps(int totalSteps);<br/>
+virtual void setProgress(int progress);<br/>
+void setProgress(int progress, int totalSteps);</p>
+<p>protected:<br/>
+virtual bool setIndicator(QString &amp;progressStr,<br/>
+int progress,<br/>
+int totalSteps);<br/>
+&#8230;<br/>
+};<br/>
+[/code]</p>
+<p>该API相当的复杂和不一致；例如，<code>reset()</code>、<code>setTotalSteps()</code>、<code>setProgress()</code>是紧密联系的，但方法的命名并没明确地表达出来。</p>
+<p>改善此API的关键是抓住<code>QProgressBar</code>与Qt 4的<code>QAbstractSpinBox</code>及其子类<code>QSpinBox</code>、<code>QSlider</code>、<code>QDail</code>之间的相似性。怎么做？把<code>progress</code>、<code>totalSteps</code>替换为<code>minimum</code>、<code>maximum</code>和<code>value</code>。增加一个<code>valueChanged()</code>消息，再增加一个<code>setRange()</code>函数。</p>
+<p>进一步可以观察到<code>progressString</code>、<code>percentage</code>与<code>indicator</code>其实是一回事，即是显示在进度条上的文本。通常这个文本是个百分比，但是可通过<code>setIndicator()</code>设置为任何内容。以下是新的API：</p>
+<p>[code language=&#8221;cpp&#8221;]<br/>
+virtual QString text() const;<br/>
+void setTextVisible(bool visible);<br/>
+bool isTextVisible() const;<br/>
+[/code]</p>
+<p>默认情况下，显示文本是百分比指示器（percentage indicator），通过重写<code>text()</code>方法来定制行为。</p>
+<p>Qt 3的<code>setCenterIndicator()</code>与<code>setIndicatorFollowsStyle()</code>是两个影响对齐方式的函数。他们可被一个<code>setAlignment()</code>函数代替：</p>
+<p>[code language=&#8221;cpp&#8221;]<br/>
+void setAlignment(Qt::Alignment alignment);<br/>
+[/code]</p>
+<p>如果开发者未调用<code>setAlignment()</code>，那么对齐方式由风格决定。对于基于<code>Motif</code>的风格，文字内容在中间显示；对于其他风格，在右侧显示。</p>
+<p>下面是改善后的<code>QProgressBar API</code>:</p>
+<p>[code language=&#8221;cpp&#8221;]<br/>
+class QProgressBar : public QWidget<br/>
+{<br/>
+&#8230;<br/>
+public:<br/>
+void setMinimum(int minimum);<br/>
+int minimum() const;<br/>
+void setMaximum(int maximum);<br/>
+int maximum() const;<br/>
+void setRange(int minimum, int maximum);<br/>
+int value() const;</p>
+<p> virtual QString text() const;<br/>
+void setTextVisible(bool visible);<br/>
+bool isTextVisible() const;<br/>
+Qt::Alignment alignment() const;<br/>
+void setAlignment(Qt::Alignment alignment);</p>
+<p>public slots:<br/>
+void reset();<br/>
+void setValue(int value);</p>
+<p>signals:<br/>
+void valueChanged(int value);<br/>
+&#8230;<br/>
+};<br/>
+[/code]</p>
+<h2>8.2 <code>QAbstractPrintDialog</code> &amp; <code>QAbstractPageSizeDialog</code></h2>
+<p>Qt 4.0有2个幽灵类<code>QAbstractPrintDialog</code>和<code>QAbstractPageSizeDialog</code>，作为 <code>QPrintDialog</code>和<code>QPageSizeDialog</code>类的父类。这2个类完全没有用，因为Qt的API没有是<code>QAbstractPrint-</code>或是<code>-PageSizeDialog</code>指针作为参数并执行操作。通过篡改qdoc（Qt文档），我们虽然把这2个类隐藏起来了，却成了无用抽象类的典型案例。</p>
+<p>这不是说，<strong><em>好</em></strong> 的抽象是错的，<code>QPrintDialog</code>应该是需要有个工厂或是其它改变的机制 —— 证据就是它声明中的<code>#ifdef QTOPIA_PRINTDIALOG</code>。</p>
+<h2>8.3 <code>QAbstractItemModel</code></h2>
+<p>关于模型/视图（model/view）问题的细节在相应的文档中已经说明得很好了，但作为一个重要的总结这里还需要强调一下：抽象类不应该仅是所有可能子类的并集（union）。这样『合并所有』的父类几乎不可能是一个好的方案。<code>QAbstractItemModel</code>就犯了这个错误 —— 它实际上就是个<code>QTreeOfTablesModel</code>，结果导致了错综复杂（complicated）的API，而这样的API要让 <strong><em>所有本来设计还不错的子类</em></strong> 去继承。</p>
+<p>仅仅增加抽象是不会自动就把API变得更好的。</p>
+<h2>8.4 <code>QLayoutIterator</code> &amp; <code>QGLayoutIterator</code></h2>
+<p>在Qt 3，创建自定义的布局类需要同时继承<code>QLayout</code>和<code>QGLayoutIterator</code>（命名中的<code>G</code>是指Generic（通用））。<code>QGLayoutIterator</code>子类的实例指针会包装成<code>QLayoutIterator</code>，这样用户可以像和其它的迭代器（iterator）类一样的方式来使用。通过<code>QLayoutIterator</code>可以写出下面这样的代码：</p>
+<p>[code language=&#8221;cpp&#8221;]<br/>
+QLayoutIterator it = layout()-&gt;iterator();<br/>
+QLayoutItem **child;<br/>
+while ((child = it.current()) != 0) {<br/>
+if (child-&gt;widget() == myWidget) {<br/>
+it.takeCurrent();<br/>
+return;<br/>
+}<br/>
+++it;<br/>
+}<br/>
+[/code]</p>
+<p>在Qt 4，我们干掉了<code>QGLayoutIterator</code>类（以及用于盒子布局和格子布局的内部子类），转而是让<code>QLayout</code>的子类重写<code>itemAt()</code>、<code>takeAt()</code>和<code>count()</code>。</p>
+<h2>8.5 <code>QImageSink</code></h2>
+<p>Qt 3有一整套类用来把完成增量加载的图片传递给一个动画 —— <code>QImageSource</code>/<code>Sink</code>/<code>QASyncIO</code>/<code>QASyncImageIO</code>。由于这些类之前只是用于启用动画的<code>QLabel</code>，完全过度设计了（overkill）。</p>
+<p>从中得到的教训就是：对于那些未来可能的还不明朗的需求，不要过早地增加抽象设计。当需求真的出现时，比起一个复杂的系统，在简单的系统新增需求要容易得多。</p>
+<div style="margin-top: 15px; font-size: 16px;color: #cc0000;">
+<p align="center"><strong>（转载本站文章请注明作者和出处 <a href="https://coolshell.cn/">酷 壳 &#8211; CoolShell</a> ，请勿用于任何商业用途）</strong></p>
+</div>
+<div class="wp_rp_wrap  wp_rp_vertical_m" id="wp_rp_first"><div class="wp_rp_content"><h3 class="related_post_title">相关文章</h3><ul class="related_post wp_rp"><li><a href="https://coolshell.cn/articles/5444.html" class="wp_rp_thumbnail"><img src="https://coolshell.cn/wp-content/plugins/wordpress-23-related-posts-plugin/static/thumbs/14.jpg" alt="千万不要把 bool 设计成函数参数" width="150" height="150" /></a><a href="https://coolshell.cn/articles/5444.html" class="wp_rp_title">千万不要把 bool 设计成函数参数</a></li><li><a href="https://coolshell.cn/articles/4758.html" class="wp_rp_thumbnail"><img src="https://coolshell.cn/wp-content/plugins/wordpress-23-related-posts-plugin/static/thumbs/30.jpg" alt="如何写出无法维护的代码" width="150" height="150" /></a><a href="https://coolshell.cn/articles/4758.html" class="wp_rp_title">如何写出无法维护的代码</a></li><li><a href="https://coolshell.cn/articles/18360.html" class="wp_rp_thumbnail"><img src="https://coolshell.cn/wp-content/uploads/2018/05/300x262-150x150.jpg" alt="程序员练级攻略（2018)  与我的专栏" width="150" height="150" /></a><a href="https://coolshell.cn/articles/18360.html" class="wp_rp_title">程序员练级攻略（2018) 与我的专栏</a></li><li><a href="https://coolshell.cn/articles/17680.html" class="wp_rp_thumbnail"><img src="https://coolshell.cn/wp-content/uploads/2017/02/gitlab-600-150x150.jpg" alt="从Gitlab误删除数据库想到的" width="150" height="150" /></a><a href="https://coolshell.cn/articles/17680.html" class="wp_rp_title">从Gitlab误删除数据库想到的</a></li><li><a href="https://coolshell.cn/articles/17459.html" class="wp_rp_thumbnail"><img src="https://coolshell.cn/wp-content/uploads/2016/08/HighAvailability-BK-150x150.png" alt="关于高可用的系统" width="150" height="150" /></a><a href="https://coolshell.cn/articles/17459.html" class="wp_rp_title">关于高可用的系统</a></li><li><a href="https://coolshell.cn/articles/12052.html" class="wp_rp_thumbnail"><img src="https://coolshell.cn/wp-content/plugins/wordpress-23-related-posts-plugin/static/thumbs/29.jpg" alt="Leetcode 编程训练" width="150" height="150" /></a><a href="https://coolshell.cn/articles/12052.html" class="wp_rp_title">Leetcode 编程训练</a></li></ul></div></div>
+<div id="post-ratings-18024" class="post-ratings" itemscope itemtype="https://schema.org/Article" data-nonce="e0a077ce14"><img id="rating_18024_1" src="https://coolshell.cn/wp-content/plugins/wp-postratings/images/stars_crystal/rating_on.gif" alt="好烂啊" title="好烂啊" onmouseover="if (!window.__cfRLUnblockHandlers) return false; current_rating(18024, 1, '好烂啊');" onmouseout="if (!window.__cfRLUnblockHandlers) return false; ratings_off(3.5, 4, 0);" onclick="if (!window.__cfRLUnblockHandlers) return false; rate_post();" onkeypress="if (!window.__cfRLUnblockHandlers) return false; rate_post();" style="cursor: pointer; border: 0px;" data-cf-modified-62e5754535c106b768a052a1- /><img id="rating_18024_2" src="https://coolshell.cn/wp-content/plugins/wp-postratings/images/stars_crystal/rating_on.gif" alt="有点差" title="有点差" onmouseover="if (!window.__cfRLUnblockHandlers) return false; current_rating(18024, 2, '有点差');" onmouseout="if (!window.__cfRLUnblockHandlers) return false; ratings_off(3.5, 4, 0);" onclick="if (!window.__cfRLUnblockHandlers) return false; rate_post();" onkeypress="if (!window.__cfRLUnblockHandlers) return false; rate_post();" style="cursor: pointer; border: 0px;" data-cf-modified-62e5754535c106b768a052a1- /><img id="rating_18024_3" src="https://coolshell.cn/wp-content/plugins/wp-postratings/images/stars_crystal/rating_on.gif" alt="凑合看看" title="凑合看看" onmouseover="if (!window.__cfRLUnblockHandlers) return false; current_rating(18024, 3, '凑合看看');" onmouseout="if (!window.__cfRLUnblockHandlers) return false; ratings_off(3.5, 4, 0);" onclick="if (!window.__cfRLUnblockHandlers) return false; rate_post();" onkeypress="if (!window.__cfRLUnblockHandlers) return false; rate_post();" style="cursor: pointer; border: 0px;" data-cf-modified-62e5754535c106b768a052a1- /><img id="rating_18024_4" src="https://coolshell.cn/wp-content/plugins/wp-postratings/images/stars_crystal/rating_half.gif" alt="还不错" title="还不错" onmouseover="if (!window.__cfRLUnblockHandlers) return false; current_rating(18024, 4, '还不错');" onmouseout="if (!window.__cfRLUnblockHandlers) return false; ratings_off(3.5, 4, 0);" onclick="if (!window.__cfRLUnblockHandlers) return false; rate_post();" onkeypress="if (!window.__cfRLUnblockHandlers) return false; rate_post();" style="cursor: pointer; border: 0px;" data-cf-modified-62e5754535c106b768a052a1- /><img id="rating_18024_5" src="https://coolshell.cn/wp-content/plugins/wp-postratings/images/stars_crystal/rating_off.gif" alt="很精彩" title="很精彩" onmouseover="if (!window.__cfRLUnblockHandlers) return false; current_rating(18024, 5, '很精彩');" onmouseout="if (!window.__cfRLUnblockHandlers) return false; ratings_off(3.5, 4, 0);" onclick="if (!window.__cfRLUnblockHandlers) return false; rate_post();" onkeypress="if (!window.__cfRLUnblockHandlers) return false; rate_post();" style="cursor: pointer; border: 0px;" data-cf-modified-62e5754535c106b768a052a1- /> (<strong>46</strong> 人打了分，平均分： <strong>3.50</strong> )<br/><span class="post-ratings-text" id="ratings_18024_text"></span><meta itemprop="name" content="API设计原则 &#8211; Qt官网的设计实践总结" /><meta itemprop="headline" content="API设计原则 &#8211; Qt官网的设计实践总结" /><meta itemprop="description" content="（感谢好友 @李鼎 翻译此文）
+
+原文链接：API Design Principles&nbsp;-&nbsp;Qt Wiki
+基于Gary的影响力上&nbsp;Gary Gao&nbsp;的译文稿：C++的API设计指导
+
+译序
+
+
+
+Qt的设计水准在业界很有口碑，一致、易于掌握和强大的API是Qt最著名的优点之一。此文既是Qt官网上的API设计指导准则，也是Qt在API设计上的实践总结。虽然Qt用的是C++，但其中设计原则和思考是具..." /><meta itemprop="datePublished" content="2017-07-25T14:16:30+08:00" /><meta itemprop="dateModified" content="2019-04-21T16:48:59+08:00" /><meta itemprop="url" content="https://coolshell.cn/articles/18024.html" /><meta itemprop="author" content="李 鼎" /><meta itemprop="mainEntityOfPage" content="https://coolshell.cn/articles/18024.html" /><div style="display: none;" itemprop="publisher" itemscope itemtype="https://schema.org/Organization"><meta itemprop="name" content="酷 壳 - CoolShell" /><meta itemprop="url" content="https://coolshell.cn" /><div itemprop="logo" itemscope itemtype="https://schema.org/ImageObject"><meta itemprop="url" content /></div></div><div style="display: none;" itemprop="aggregateRating" itemscope itemtype="https://schema.org/AggregateRating"><meta itemprop="bestRating" content="5" /><meta itemprop="worstRating" content="1" /><meta itemprop="ratingValue" content="3.5" /><meta itemprop="ratingCount" content="46" /></div></div><div id="post-ratings-18024-loading" class="post-ratings-loading"><img src="https://coolshell.cn/wp-content/plugins/wp-postratings/images/loading.gif" width="16" height="16" class="post-ratings-image" />Loading...</div>
+</div>
+<footer class="entry-footer">
+<hr><div class="row"><div class="col-md-6 cattegories"><span class="cat-links"><i class="fa fa-folder-open"></i>
+<a href="https://coolshell.cn/category/proglanguage/cplusplus" rel="category tag">C/C++语言</a>, <a href="https://coolshell.cn/category/techarticle" rel="category tag">技术读物</a>, <a href="https://coolshell.cn/category/progdesign" rel="category tag">程序设计</a>, <a href="https://coolshell.cn/category/%e7%b3%bb%e7%bb%9f%e6%9e%b6%e6%9e%84" rel="category tag">系统架构</a></span></div><div class="col-md-6 tags"><span class="tags-links"><i class="fa fa-tags"></i> <a href="https://coolshell.cn/tag/api" rel="tag">API</a>, <a href="https://coolshell.cn/tag/api-design" rel="tag">api-design</a>, <a href="https://coolshell.cn/tag/api%e8%ae%be%e8%ae%a1" rel="tag">API设计</a>, <a href="https://coolshell.cn/tag/c" rel="tag">C++</a>, <a href="https://coolshell.cn/tag/coding" rel="tag">Coding</a>, <a href="https://coolshell.cn/tag/design" rel="tag">Design</a>, <a href="https://coolshell.cn/tag/programmer" rel="tag">Programmer</a>, <a href="https://coolshell.cn/tag/qt" rel="tag">qt</a>, <a href="https://coolshell.cn/tag/%e7%a8%8b%e5%ba%8f%e5%91%98" rel="tag">程序员</a></span></div></div> </footer>
+</article>
+
+<div id="related_posts">
+<div class="wp_rp_wrap  wp_rp_vertical_m"><div class="wp_rp_content"><h3 class="related_post_title">相关文章</h3><ul class="related_post wp_rp"><li><a href="https://coolshell.cn/articles/5444.html" class="wp_rp_thumbnail"><img src="https://coolshell.cn/wp-content/plugins/wordpress-23-related-posts-plugin/static/thumbs/14.jpg" alt="千万不要把 bool 设计成函数参数" width="150" height="150" /></a><a href="https://coolshell.cn/articles/5444.html" class="wp_rp_title">千万不要把 bool 设计成函数参数</a></li><li><a href="https://coolshell.cn/articles/4758.html" class="wp_rp_thumbnail"><img src="https://coolshell.cn/wp-content/plugins/wordpress-23-related-posts-plugin/static/thumbs/30.jpg" alt="如何写出无法维护的代码" width="150" height="150" /></a><a href="https://coolshell.cn/articles/4758.html" class="wp_rp_title">如何写出无法维护的代码</a></li><li><a href="https://coolshell.cn/articles/18360.html" class="wp_rp_thumbnail"><img src="https://coolshell.cn/wp-content/uploads/2018/05/300x262-150x150.jpg" alt="程序员练级攻略（2018)  与我的专栏" width="150" height="150" /></a><a href="https://coolshell.cn/articles/18360.html" class="wp_rp_title">程序员练级攻略（2018) 与我的专栏</a></li><li><a href="https://coolshell.cn/articles/17680.html" class="wp_rp_thumbnail"><img src="https://coolshell.cn/wp-content/uploads/2017/02/gitlab-600-150x150.jpg" alt="从Gitlab误删除数据库想到的" width="150" height="150" /></a><a href="https://coolshell.cn/articles/17680.html" class="wp_rp_title">从Gitlab误删除数据库想到的</a></li><li><a href="https://coolshell.cn/articles/17459.html" class="wp_rp_thumbnail"><img src="https://coolshell.cn/wp-content/uploads/2016/08/HighAvailability-BK-150x150.png" alt="关于高可用的系统" width="150" height="150" /></a><a href="https://coolshell.cn/articles/17459.html" class="wp_rp_title">关于高可用的系统</a></li><li><a href="https://coolshell.cn/articles/12052.html" class="wp_rp_thumbnail"><img src="https://coolshell.cn/wp-content/plugins/wordpress-23-related-posts-plugin/static/thumbs/29.jpg" alt="Leetcode 编程训练" width="150" height="150" /></a><a href="https://coolshell.cn/articles/12052.html" class="wp_rp_title">Leetcode 编程训练</a></li></ul></div></div>
+</div><div class="fixed"></div> 
+</main>
+<div class="post-navigation">
+<nav class="navigation" role="navigation">
+<h2 class="screen-reader-text">Post navigation</h2>
+<div class="nav-links">
+<div class="row">
+
+<div class="col-md-6 next-post">
+<a class href="https://coolshell.cn/articles/18094.html"><span class="next-prev-text"><i class="fa fa-angle-left"></i>
+上一篇</span><br>如何免费的让网站启用HTTPS</a>
+</div>
+
+<div class="col-md-6 prev-post">
+<a class href="https://coolshell.cn/articles/17998.html"><span class="next-prev-text">下一篇 <i class="fa fa-angle-right"></i>
+</span><br>Linux PID 1 和 Systemd</a>
+</div>
+</div>
+</div>
+</nav>
+</div>
+<div class="post-comments">
+<div id="comments" class="comments-area">
+<h2 class="comments-title">
+《<span>API设计原则 &#8211; Qt官网的设计实践总结</span>》的相关评论 </h2>
+<ol class="comment-list">
+<li id="comment-1915675" class="pingback even thread-even depth-1">
+<div class="comment-body">
+Pingback： <a href="http://hack.hk.cn/2017/07/26/%e8%af%91-api-%e8%ae%be%e8%ae%a1%e5%8e%9f%e5%88%99%ef%bc%88qt-%e5%ae%98%e6%96%b9%e6%96%87%e6%a1%a3%e4%b8%8a%e7%9a%84%e8%ae%be%e8%ae%a1%e5%ae%9e%e8%b7%b5%e6%80%bb%e7%bb%93%" class="url" rel="ugc external nofollow">[译] API 设计原则（QT 官方文档上的设计实践总结） - 莹莹之色</a> </div>
+</li>
+<li id="comment-1915679" class="comment odd alt thread-odd thread-alt depth-1 parent">
+<article id="div-comment-1915679" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/21a1df6339ce83a9e6c7ce3203331f62?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/21a1df6339ce83a9e6c7ce3203331f62?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn"><a href="https://fatgrammer.github.io/" class="url" rel="ugc external nofollow">FatGrammer</a></b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/18024.html#comment-1915679"><time datetime="2017-07-26T15:35:15+08:00">2017年07月26日 15:35</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>Qt的设计真的好么&#8230;&#8230;</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/18024.html?replytocom=1915679#respond" data-commentid="1915679" data-postid="18024" data-belowelement="div-comment-1915679" data-respondelement="respond" data-replyto="回复给FatGrammer" aria-label="回复给FatGrammer">回复</a></div> </article>
+<ol class="children">
+<li id="comment-1915722" class="comment even depth-2">
+<article id="div-comment-1915722" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/842915fe32e792d58d55723e31bed0b1?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/842915fe32e792d58d55723e31bed0b1?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn">cCoder</b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/18024.html#comment-1915722"><time datetime="2017-07-28T11:05:47+08:00">2017年07月28日 11:05</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>看qt的api，感觉很舒服</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/18024.html?replytocom=1915722#respond" data-commentid="1915722" data-postid="18024" data-belowelement="div-comment-1915722" data-respondelement="respond" data-replyto="回复给cCoder" aria-label="回复给cCoder">回复</a></div> </article>
+</li>
+<li id="comment-1916588" class="comment byuser comment-author-oldratlee bypostauthor odd alt depth-2">
+<article id="div-comment-1916588" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/100f27da59bd1c7ce13142379f65f3b9?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/100f27da59bd1c7ce13142379f65f3b9?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn"><a href="http://oldratlee.com" class="url" rel="ugc external nofollow">李 鼎</a></b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/18024.html#comment-1916588"><time datetime="2017-08-20T23:07:49+08:00">2017年08月20日 23:07</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>关于设计好坏的原则性内容，往往仁者见仁很难全民一致。</p>
+<p>个人觉得主要看，有多个GUI框架使用经验的同学在使用体验上的反馈。</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/18024.html?replytocom=1916588#respond" data-commentid="1916588" data-postid="18024" data-belowelement="div-comment-1916588" data-respondelement="respond" data-replyto="回复给李 鼎" aria-label="回复给李 鼎">回复</a></div> </article>
+</li>
+</ol>
+</li>
+<li id="comment-1915745" class="comment even thread-even depth-1 parent">
+<article id="div-comment-1915745" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/a8107cfefeeb689b9039dc6658d7427f?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/a8107cfefeeb689b9039dc6658d7427f?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn">tryao</b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/18024.html#comment-1915745"><time datetime="2017-07-29T21:30:52+08:00">2017年07月29日 21:30</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>好多规约是因为C++的坑太多了=，=</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/18024.html?replytocom=1915745#respond" data-commentid="1915745" data-postid="18024" data-belowelement="div-comment-1915745" data-respondelement="respond" data-replyto="回复给tryao" aria-label="回复给tryao">回复</a></div> </article>
+<ol class="children">
+<li id="comment-1916630" class="comment byuser comment-author-oldratlee bypostauthor odd alt depth-2 parent">
+<article id="div-comment-1916630" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/100f27da59bd1c7ce13142379f65f3b9?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/100f27da59bd1c7ce13142379f65f3b9?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn"><a href="http://oldratlee.com" class="url" rel="ugc external nofollow">李 鼎</a></b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/18024.html#comment-1916630"><time datetime="2017-08-21T22:35:43+08:00">2017年08月21日 22:35</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>个人感觉，C++比较大（支持范式比较多和给程序员的调控空间比较大），要注意和平衡自然也就比较多。</p>
+<p>比如，</p>
+<p>1. 提得const相关，个人觉得其实是涉及了类型系统，我们平时常用的多数语言往往在这一块不怎么涉及，也就不去考虑了。Java直接放弃了const方法支持。还记得从C++转到Java时，很是想念const类和方法，因为const类型多了一层保护（当然如文中所说的，其实可以绕过。一个完整的类型系统无论是学习、使用更不用说设计实现，难度很大费脑子）。后面也就慢慢接受和习惯了。<br/>
+2. 而virtual相关，Java也是放弃了让程序员手动控制virtual。</p>
+<p>当然，像枚举不带命名空间的引用，这个是语言刚开始设计或是兼容负担的结果。</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/18024.html?replytocom=1916630#respond" data-commentid="1916630" data-postid="18024" data-belowelement="div-comment-1916630" data-respondelement="respond" data-replyto="回复给李 鼎" aria-label="回复给李 鼎">回复</a></div> </article>
+<ol class="children">
+<li id="comment-1947670" class="comment even depth-3">
+<article id="div-comment-1947670" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/10aaa432a34bf82dea6006574b9a1607?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/10aaa432a34bf82dea6006574b9a1607?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn">Maxwell</b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/18024.html#comment-1947670"><time datetime="2018-12-13T10:52:25+08:00">2018年12月13日 10:52</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>像C++的const更像是对编译器的 约束。你加不加这个都不会影响它在内存的中表现。但是却可以在编译期报警并阻止你继续下去。同理的像deprecated标识，也可以帮助程序员更好的去编写程序，使用正确的API。对程序本身没什么影响。</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/18024.html?replytocom=1947670#respond" data-commentid="1947670" data-postid="18024" data-belowelement="div-comment-1947670" data-respondelement="respond" data-replyto="回复给Maxwell" aria-label="回复给Maxwell">回复</a></div> </article>
+</li>
+</ol>
+</li>
+</ol>
+</li>
+<li id="comment-1915890" class="comment odd alt thread-odd thread-alt depth-1">
+<article id="div-comment-1915890" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/0a92e161b21fb4070e2ed4edd7d7e9ba?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/0a92e161b21fb4070e2ed4edd7d7e9ba?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn"><a href="http://haitao.appinn.me" class="url" rel="ugc external nofollow">haitao</a></b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/18024.html#comment-1915890"><time datetime="2017-08-04T00:06:07+08:00">2017年08月04日 00:06</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>28法则：好的API、应用程序，使程序员、用户只要花20%的功夫就能掌握其80%的功能。。。。<br/>
+API及应用程序的最高境界是：程序员、用户 得心应手，不用看说明，想做什么，信手怎么做就正好符合对应的做法</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/18024.html?replytocom=1915890#respond" data-commentid="1915890" data-postid="18024" data-belowelement="div-comment-1915890" data-respondelement="respond" data-replyto="回复给haitao" aria-label="回复给haitao">回复</a></div> </article>
+</li>
+<li id="comment-1915903" class="comment even thread-even depth-1">
+<article id="div-comment-1915903" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/6fd165f667c78bab13f0de777fe76cbf?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/6fd165f667c78bab13f0de777fe76cbf?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn">ycwang</b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/18024.html#comment-1915903"><time datetime="2017-08-04T09:26:19+08:00">2017年08月04日 09:26</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>Qt的API看起来确实非常舒服，大部分都符合直觉</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/18024.html?replytocom=1915903#respond" data-commentid="1915903" data-postid="18024" data-belowelement="div-comment-1915903" data-respondelement="respond" data-replyto="回复给ycwang" aria-label="回复给ycwang">回复</a></div> </article>
+</li>
+<li id="comment-1916030" class="comment odd alt thread-odd thread-alt depth-1">
+<article id="div-comment-1916030" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/7ce33e916a61f7e5511badf5166fefcc?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/7ce33e916a61f7e5511badf5166fefcc?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn"><a href="http://blog.mimvp.com" class="url" rel="ugc external nofollow">mimvp</a></b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/18024.html#comment-1916030"><time datetime="2017-08-07T20:33:06+08:00">2017年08月07日 20:33</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>QT API设计是经典，很多后来通用的API也借鉴了它的优点，特别是使用前缀Qxx、Gxx</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/18024.html?replytocom=1916030#respond" data-commentid="1916030" data-postid="18024" data-belowelement="div-comment-1916030" data-respondelement="respond" data-replyto="回复给mimvp" aria-label="回复给mimvp">回复</a></div> </article>
+</li>
+<li id="comment-1916074" class="comment even thread-even depth-1">
+<article id="div-comment-1916074" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/5e357f7dedbb1d98af1fa7c5764bce42?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/5e357f7dedbb1d98af1fa7c5764bce42?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn">farta</b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/18024.html#comment-1916074"><time datetime="2017-08-09T15:59:22+08:00">2017年08月09日 15:59</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>有些类的设计非常好，有些非常坑。QRegExp说的就是你。<br/>
+定义好QRegExp对象之后，匹配获取的办法居然是先indexIn，然后再cap。我费了相当的时间才确定这是获取匹配的正确用法。地球上几乎所有的正则表达式类，都是用一个search之类的方法来完成匹配，返回一个结果对象，让你从结果对象中拿自己想要的数据。只有QRegExp是让你从indexIn的返回值判断有没有成功，将结果缓存在自己内部，让你用cap来拿数据。</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/18024.html?replytocom=1916074#respond" data-commentid="1916074" data-postid="18024" data-belowelement="div-comment-1916074" data-respondelement="respond" data-replyto="回复给farta" aria-label="回复给farta">回复</a></div> </article>
+</li>
+<li id="comment-1916451" class="comment odd alt thread-odd thread-alt depth-1 parent">
+<article id="div-comment-1916451" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/2212a32f00cca72b5561aef00ebb5dc7?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/2212a32f00cca72b5561aef00ebb5dc7?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn"><a href="http://timothyqiu.com" class="url" rel="ugc external nofollow">Timothy Qiu</a></b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/18024.html#comment-1916451"><time datetime="2017-08-18T10:58:01+08:00">2017年08月18日 10:58</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>吐槽一下这文章的排版。有滥用 code 块之嫌，像 「API」、作为库名称的「Qt」「Qt 4」、专有名词英文原文（比如 visible side effects）这些，都不是代码，却都用 code 块包了起来。</p>
+<p>不但语义上不正确，让整个文章满眼花花绿绿的很累。</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/18024.html?replytocom=1916451#respond" data-commentid="1916451" data-postid="18024" data-belowelement="div-comment-1916451" data-respondelement="respond" data-replyto="回复给Timothy Qiu" aria-label="回复给Timothy Qiu">回复</a></div> </article>
+<ol class="children">
+<li id="comment-1916587" class="comment byuser comment-author-oldratlee bypostauthor even depth-2">
+<article id="div-comment-1916587" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/100f27da59bd1c7ce13142379f65f3b9?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/100f27da59bd1c7ce13142379f65f3b9?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn"><a href="http://oldratlee.com" class="url" rel="ugc external nofollow">李 鼎</a></b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/18024.html#comment-1916587"><time datetime="2017-08-20T22:18:24+08:00">2017年08月20日 22:18</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>确实有这个问题 :) </p>
+<p>Code块，原来只是用来表达代码相关的内容，如方法名/类名等等，我把技术性相关的内容（如英文术语）也用Code块了。</p>
+<p>Github上使用Code块只是灰色底色，会好些；CoolShell的样式显示成了红色，看起来会影响注意力。我调整好。</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/18024.html?replytocom=1916587#respond" data-commentid="1916587" data-postid="18024" data-belowelement="div-comment-1916587" data-respondelement="respond" data-replyto="回复给李 鼎" aria-label="回复给李 鼎">回复</a></div> </article>
+</li>
+</ol>
+</li>
+<li id="comment-1917092" class="comment odd alt thread-even depth-1">
+<article id="div-comment-1917092" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/b1664efb66c406eca3e7a0e1c8a2dd9a?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/b1664efb66c406eca3e7a0e1c8a2dd9a?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn">jwei</b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/18024.html#comment-1917092"><time datetime="2017-08-31T21:17:10+08:00">2017年08月31日 21:17</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>写代码时，也就遇到问题，有set,没get, 往往记不了那么多API ，只有一个个找下去，费了一些时间。</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/18024.html?replytocom=1917092#respond" data-commentid="1917092" data-postid="18024" data-belowelement="div-comment-1917092" data-respondelement="respond" data-replyto="回复给jwei" aria-label="回复给jwei">回复</a></div> </article>
+</li>
+<li id="comment-1917406" class="comment even thread-odd thread-alt depth-1 parent">
+<article id="div-comment-1917406" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/7c686fc5f47cc68bc795a7c212afa011?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/7c686fc5f47cc68bc795a7c212afa011?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn"><a href="http://cloudkit.net" class="url" rel="ugc external nofollow">Coffee</a></b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/18024.html#comment-1917406"><time datetime="2017-09-07T14:09:59+08:00">2017年09月07日 14:09</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>对外简单，是API设计最高原则！</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/18024.html?replytocom=1917406#respond" data-commentid="1917406" data-postid="18024" data-belowelement="div-comment-1917406" data-respondelement="respond" data-replyto="回复给Coffee" aria-label="回复给Coffee">回复</a></div> </article>
+<ol class="children">
+<li id="comment-1920415" class="comment byuser comment-author-oldratlee bypostauthor odd alt depth-2">
+<article id="div-comment-1920415" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/100f27da59bd1c7ce13142379f65f3b9?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/100f27da59bd1c7ce13142379f65f3b9?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn"><a href="http://oldratlee.com" class="url" rel="ugc external nofollow">李 鼎</a></b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/18024.html#comment-1920415"><time datetime="2017-11-06T14:01:00+08:00">2017年11月06日 14:01</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>+1</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/18024.html?replytocom=1920415#respond" data-commentid="1920415" data-postid="18024" data-belowelement="div-comment-1920415" data-respondelement="respond" data-replyto="回复给李 鼎" aria-label="回复给李 鼎">回复</a></div> </article>
+</li>
+</ol>
+</li>
+<li id="comment-1921018" class="pingback even thread-even depth-1">
+<div class="comment-body">
+Pingback： <a href="https://www.omgwd.com/2017/02/%e4%bb%8egitlab%e8%af%af%e5%88%a0%e9%99%a4%e6%95%b0%e6%8d%ae%e5%ba%93%e6%83%b3%e5%88%b0%e7%9a%84/" class="url" rel="ugc external nofollow">从Gitlab误删除数据库想到的 - 知乎精选</a> </div>
+</li>
+<li id="comment-1921598" class="comment odd alt thread-odd thread-alt depth-1 parent">
+<article id="div-comment-1921598" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/5263c95e22572abf610da07a7f3304ef?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/5263c95e22572abf610da07a7f3304ef?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn">史腾飞</b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/18024.html#comment-1921598"><time datetime="2017-12-05T14:49:00+08:00">2017年12月05日 14:49</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>好的API，是从用户的角度设计的, 用户只要花20%的功夫就能掌握其80%的功能。<br/>
+好的API，当用户从经验出发，需要那种功能的API，能恰好找到，并且函数名，参数，返回值恰好与设想的一致。<br/>
+好的API，有自己的风格，并且有非常好的一致性，相似的功能API基本一致，使用流程基本一致。能使用户触类旁通<br/>
+好的API, 能引导员工写出可读的,符合直觉代码。能去规划用户代码流程，避免用户错误的使用，并且有足够的容错以及错误反馈能力<br/>
+好的API, 是高效的,可量化的，用户可以容易的感知其使用所需的成本，包括，内存，cpu，系统资源的使用等等。 同时会，尽可能少的，明确的，最好是不会对用户系统产生哪些副作用。<br/>
+好的API，能非常容易的升级和优化，并且不会或者尽可能少的给用户代码造成影响。<br/>
+好的API，便于内部测试和用户的测试，并且有一套完整的测试用例</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/18024.html?replytocom=1921598#respond" data-commentid="1921598" data-postid="18024" data-belowelement="div-comment-1921598" data-respondelement="respond" data-replyto="回复给史腾飞" aria-label="回复给史腾飞">回复</a></div> </article>
+<ol class="children">
+<li id="comment-1922295" class="comment byuser comment-author-oldratlee bypostauthor even depth-2">
+<article id="div-comment-1922295" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/100f27da59bd1c7ce13142379f65f3b9?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/100f27da59bd1c7ce13142379f65f3b9?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn"><a href="http://oldratlee.com" class="url" rel="ugc external nofollow">李 鼎</a></b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/18024.html#comment-1922295"><time datetime="2017-12-19T16:06:13+08:00">2017年12月19日 16:06</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>+1024</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/18024.html?replytocom=1922295#respond" data-commentid="1922295" data-postid="18024" data-belowelement="div-comment-1922295" data-respondelement="respond" data-replyto="回复给李 鼎" aria-label="回复给李 鼎">回复</a></div> </article>
+</li>
+</ol>
+</li>
+<li id="comment-1922798" class="comment odd alt thread-even depth-1 parent">
+<article id="div-comment-1922798" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/56f264b9be9929b17eb7bc789d7f15dd?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/56f264b9be9929b17eb7bc789d7f15dd?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn">W.Malloc</b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/18024.html#comment-1922798"><time datetime="2018-01-08T14:20:30+08:00">2018年01月08日 14:20</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>感谢QT在我的学业生涯中启蒙了对API的认识<br/>
+感谢QtCreator的优雅.<br/>
+这也是我当时向学弟推荐Qt的一些原因<br/>
+看到此文,仍感字字箴言</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/18024.html?replytocom=1922798#respond" data-commentid="1922798" data-postid="18024" data-belowelement="div-comment-1922798" data-respondelement="respond" data-replyto="回复给W.Malloc" aria-label="回复给W.Malloc">回复</a></div> </article>
+<ol class="children">
+<li id="comment-1922800" class="comment even depth-2">
+<article id="div-comment-1922800" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/56f264b9be9929b17eb7bc789d7f15dd?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/56f264b9be9929b17eb7bc789d7f15dd?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn">W.Malloc</b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/18024.html#comment-1922800"><time datetime="2018-01-08T14:24:47+08:00">2018年01月08日 14:24</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>程序员本身就应该是安徒生.API如童话故事的章节,让使用者信手拈来,无所畏惧.<br/>
+API设计和其他工业设计一样:<br/>
+标准化,一致性.<br/>
+使用者的开发效率是衡量API设计好坏的标准<br/>
+PS:想起 Windows Phone之死</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/18024.html?replytocom=1922800#respond" data-commentid="1922800" data-postid="18024" data-belowelement="div-comment-1922800" data-respondelement="respond" data-replyto="回复给W.Malloc" aria-label="回复给W.Malloc">回复</a></div> </article>
+</li>
+</ol>
+</li>
+<li id="comment-1924763" class="pingback odd alt thread-odd thread-alt depth-1">
+<div class="comment-body">
+Pingback： <a href="https://www.neohope.org/2017/09/28/%e5%a5%bdapi%e7%9a%846%e4%b8%aa%e7%89%b9%e8%b4%a8/" class="url" rel="ugc external nofollow">好API的6个特质 | Neohope&#039;s Blog</a> </div>
+</li>
+<li id="comment-1949069" class="comment even thread-even depth-1">
+<article id="div-comment-1949069" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/a8135c58dccb7da48ae1ce7b9c2513f5?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/a8135c58dccb7da48ae1ce7b9c2513f5?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="1265777c617a737c75687a7d7c757667522324213c717d7f">[email&#160;protected]</a></b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/18024.html#comment-1949069"><time datetime="2018-12-24T22:11:48+08:00">2018年12月24日 22:11</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>c++的const可能是一个麻烦,如果用的太多的话.<br/>
+按照书上的说法,应该尽量多用const,以保证所谓的不会被修改的&#8221;安全&#8221;,但是牵扯到函数重载,使用const的函数和使用非const函数,会重载,这个会是一个难以查找的麻烦<br/>
+,如果重载const的函数是一个成员函数和一个友元函数,再如果有另外一个类的友元函数也重载了这个函数,比如operator+(),这个代码简直就成了屎</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/18024.html?replytocom=1949069#respond" data-commentid="1949069" data-postid="18024" data-belowelement="div-comment-1949069" data-respondelement="respond" data-replyto="回复给wenshangzhongdu@163.com" aria-label="回复给wenshangzhongdu@163.com">回复</a></div> </article>
+</li>
+<li id="comment-1949071" class="comment odd alt thread-odd thread-alt depth-1">
+<article id="div-comment-1949071" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/a8135c58dccb7da48ae1ce7b9c2513f5?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/a8135c58dccb7da48ae1ce7b9c2513f5?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="36415358455e5758514c5e5958515243760700051855595b">[email&#160;protected]</a></b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/18024.html#comment-1949071"><time datetime="2018-12-24T22:30:36+08:00">2018年12月24日 22:30</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>如果函数有一个参数重载了const,就会需要重载两个函数,如果两个参数重载了const,就会需要4个函数, 三个参数&#8211;8个函数&#8230;</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/18024.html?replytocom=1949071#respond" data-commentid="1949071" data-postid="18024" data-belowelement="div-comment-1949071" data-respondelement="respond" data-replyto="回复给wenshangzhongdu@163.com" aria-label="回复给wenshangzhongdu@163.com">回复</a></div> </article>
+</li>
+<li id="comment-1952421" class="comment even thread-even depth-1">
+<article id="div-comment-1952421" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/a8135c58dccb7da48ae1ce7b9c2513f5?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/a8135c58dccb7da48ae1ce7b9c2513f5?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn">xxx</b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/18024.html#comment-1952421"><time datetime="2019-01-21T19:50:09+08:00">2019年01月21日 19:50</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>class OtherClass {<br/>
+public:<br/>
+const CopyClass &amp;instance() const; // 这个方法返回的是什么？可以赋值什么？<br/>
+};</p>
+<p>这个可能是说,子类如果重载了基类的virtual方法, 那么这个instance返回的基类对象的virtual方法,到底是什么行为呢? 这个应该取决于子类是怎样重载virtual的,所以这个instance函数 的行为 不确定, 是bug的来源</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/18024.html?replytocom=1952421#respond" data-commentid="1952421" data-postid="18024" data-belowelement="div-comment-1952421" data-respondelement="respond" data-replyto="回复给xxx" aria-label="回复给xxx">回复</a></div> </article>
+</li>
+<li id="comment-2019293" class="comment odd alt thread-odd thread-alt depth-1">
+<article id="div-comment-2019293" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/d6e3cda4e32c850aca5822a2a1749f8f?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/d6e3cda4e32c850aca5822a2a1749f8f?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" decoding="async" /> <b class="fn">徐先生</b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/18024.html#comment-2019293"><time datetime="2019-09-08T10:05:20+08:00">2019年09月08日 10:05</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>越来越易用了，期待界面设计方面能提供更美化的控件。</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/18024.html?replytocom=2019293#respond" data-commentid="2019293" data-postid="18024" data-belowelement="div-comment-2019293" data-respondelement="respond" data-replyto="回复给徐先生" aria-label="回复给徐先生">回复</a></div> </article>
+</li>
+</ol>
+<div id="respond" class="comment-respond">
+<h3 id="reply-title" class="comment-reply-title">发表回复 <small><a rel="nofollow" id="cancel-comment-reply-link" href="/articles/18024.html#respond" style="display:none;">取消回复</a></small></h3><form action="https://coolshell.cn/wp-comments-post.php" method="post" id="commentform" class="comment-form" novalidate><p class="comment-notes"><span id="email-notes">您的电子邮箱地址不会被公开。</span> <span class="required-field-message">必填项已用<span class="required">*</span>标注</span></p><p class="comment-form-comment"><label for="comment">评论 <span class="required">*</span></label> <textarea id="comment" name="comment" cols="45" rows="8" maxlength="65525" required></textarea></p><p class="comment-form-author"><label for="author">显示名称 <span class="required">*</span></label> <input id="author" name="author" type="text" value size="30" maxlength="245" autocomplete="name" required /></p>
+<p class="comment-form-email"><label for="email">电子邮箱地址 <span class="required">*</span></label> <input id="email" name="email" type="email" value size="30" maxlength="100" aria-describedby="email-notes" autocomplete="email" required /></p>
+<p class="comment-form-url"><label for="url">网站地址</label> <input id="url" name="url" type="url" value size="30" maxlength="200" autocomplete="url" /></p>
+<p class="form-submit"><input name="submit" type="submit" id="submit" class="submit" value="发表评论" /> <input type="hidden" name="comment_post_ID" value="18024" id="comment_post_ID" />
+<input type="hidden" name="comment_parent" id="comment_parent" value="0" />
+</p><p style="display: none;"><input type="hidden" id="akismet_comment_nonce" name="akismet_comment_nonce" value="4fd3a04e15" /></p><p style="display: none !important;"><label>&#916;<textarea name="ak_hp_textarea" cols="45" rows="8" maxlength="100"></textarea></label><input type="hidden" id="ak_js_1" name="ak_js" value="54" /><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script type="62e5754535c106b768a052a1-text/javascript">document.getElementById( "ak_js_1" ).setAttribute( "value", ( new Date() ).getTime() );</script></p></form> </div>
+</div>
+</div>
+</div>
+<div id="secondary" class="col-md-3 hidden-sm hidden-xs sidebar widget-area" role="complementary">
+<aside id="search-9" class="widget widget_search">
+<form role="search" method="get" class="search-form" action="https://coolshell.cn/">
+<label>
+<span class="screen-reader-text">Search for:</span>
+<input type="search" class="search-field" placeholder="Search &hellip;" value name="s" title="Search for:" />
+</label>
+<button type="submit" class="search-submit"><span class="screen-reader-text">Search</span></button>
+</form>
+</aside><aside id="custom_html-3" class="widget_text widget widget_custom_html"><h4 class="widget-title">本站公告</h4><div class="textwidget custom-html-widget"><p align="center"><a class="twitter" href="https://twitter.com/haoel" target="_blank" rel="noopener"> Twitter @haoel </a></p>
+
+<p align="center">极客时间专栏<br><a href="http://gk.link/a/10sBp" target="_blank" rel="noopener"><img src="https://coolshell.cn/wp-content/uploads/2021/06/8311623409583_.pic_hd-1024x1024.jpg" height="200" weight="200" alt="极客时间专栏" title="极客时间专栏"></a></p>
+
+</div></aside>
+<aside id="recent-posts-4" class="widget widget_recent_entries">
+<h4 class="widget-title">最新文章</h4>
+<ul>
+<li>
+<a href="https://coolshell.cn/articles/22422.html">是微服务架构不香还是云不香？</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/22398.html">我看ChatGPT: 为啥谷歌掉了千亿美金</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/22367.html">聊聊 nostr 和 审查</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/22341.html">感染新冠的经历</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/22320.html">eBPF 介绍</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/22298.html">聊聊团队协同和协同工具</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/22263.html">从一次经历谈 TIME_WAIT 的那些事</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/22242.html">ETCD的内存问题</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/22173.html">“一把梭：REST API 全用 POST”</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/22157.html">谈谈公司对员工的监控</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/21708.html">网络数字身份认证术</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/21672.html">我做系统架构的一些原则</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/21649.html">源代码特洛伊木马攻击</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/21615.html">Go编程模式 ： 泛型编程</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/21589.html">如何做一个有质量的技术分享</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/21263.html">Go 编程模式：k8s Visitor 模式</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/21228.html">Go编程模式：Pipeline</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/21214.html">Go编程模式：委托和反转控制</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/21179.html">Go 编程模式：Go Generation</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/21164.html">Go编程模式：Map-Reduce</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/21146.html">Go 编程模式：Functional Options</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/21140.html">Go 编程模式：错误处理</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/21128.html">Go编程模式：切片，接口，时间和性能</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/21113.html">百度为什么掉队了</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/20977.html">程序员如何把控自己的职业</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/21003.html">计时攻击 Timing Attacks</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/20845.html">Rust语言的编程范式</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/20793.html">与程序员相关的CPU缓存知识</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/20765.html">MegaEase的远程工作文化</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/20533.html">使用简单的逻辑方法进行独立思考</a>
+</li>
+</ul>
+</aside><aside id="views-6" class="widget widget_views"><h4 class="widget-title">全站热门</h4><ul>
+<li><a href="https://coolshell.cn/articles/4990.html" title="程序员技术练级攻略 - 10,239,285 人阅读">程序员技术练级攻略</a></li><li><a href="https://coolshell.cn/articles/3961.html" title="&ldquo;火柴棍式&rdquo;程序员面试题 - 2,356,380 人阅读">&ldquo;火柴棍式&rdquo;程序员面试题</a></li><li><a href="https://coolshell.cn/articles/5426.html" title="简明 Vim 练级攻略 - 1,325,288 人阅读">简明 Vim 练级攻略</a></li><li><a href="https://coolshell.cn/articles/9308.html" title="&ldquo;作环保的程序员，从不用百度开始&rdquo; - 589,310 人阅读">&ldquo;作环保的程序员，从不用百度开始&rdquo;</a></li><li><a href="https://coolshell.cn/articles/11564.html" title="TCP 的那些事儿（上） - 488,699 人阅读">TCP 的那些事儿（上）</a></li><li><a href="https://coolshell.cn/articles/9070.html" title="AWK 简明教程 - 453,305 人阅读">AWK 简明教程</a></li><li><a href="https://coolshell.cn/articles/7186.html" title="做个环保主义的程序员 - 447,300 人阅读">做个环保主义的程序员</a></li><li><a href="https://coolshell.cn/articles/10688.html" title="编程能力与编程年龄 - 416,701 人阅读">编程能力与编程年龄</a></li><li><a href="https://coolshell.cn/articles/10590.html" title="二维码的生成细节和原理 - 393,767 人阅读">二维码的生成细节和原理</a></li><li><a href="https://coolshell.cn/articles/9104.html" title="sed 简明教程 - 380,248 人阅读">sed 简明教程</a></li><li><a href="https://coolshell.cn/articles/4102.html" title="如何学好C语言 - 368,390 人阅读">如何学好C语言</a></li><li><a href="https://coolshell.cn/articles/19464.html" title="如何超过大多数人 - 314,072 人阅读">如何超过大多数人</a></li><li><a href="https://coolshell.cn/articles/17583.html" title="技术人员的发展之路 - 308,327 人阅读">技术人员的发展之路</a></li><li><a href="https://coolshell.cn/articles/9606.html" title="疫苗：Java HashMap的死循环 - 305,400 人阅读">疫苗：Java HashMap的死循环</a></li><li><a href="https://coolshell.cn/articles/6470.html" title="由12306.cn谈谈网站性能技术 - 298,934 人阅读">由12306.cn谈谈网站性能技术</a></li><li><a href="https://coolshell.cn/articles/8883.html" title="应该知道的Linux技巧 - 296,743 人阅读">应该知道的Linux技巧</a></li><li><a href="https://coolshell.cn/articles/17416.html" title="缓存更新的套路 - 293,605 人阅读">缓存更新的套路</a></li><li><a href="https://coolshell.cn/articles/10910.html" title="分布式系统的事务处理 - 284,607 人阅读">分布式系统的事务处理</a></li><li><a href="https://coolshell.cn/articles/11609.html" title="TCP 的那些事儿（下） - 284,354 人阅读">TCP 的那些事儿（下）</a></li><li><a href="https://coolshell.cn/articles/2250.html" title="&ldquo;21天教你学会C++&rdquo; - 278,587 人阅读">&ldquo;21天教你学会C++&rdquo;</a></li><li><a href="https://coolshell.cn/articles/8239.html" title="无锁队列的实现 - 274,275 人阅读">无锁队列的实现</a></li><li><a href="https://coolshell.cn/articles/20276.html" title="别让自己&ldquo;墙&rdquo;了自己 - 271,146 人阅读">别让自己&ldquo;墙&rdquo;了自己</a></li><li><a href="https://coolshell.cn/articles/10739.html" title="Lua简明教程 - 269,331 人阅读">Lua简明教程</a></li><li><a href="https://coolshell.cn/articles/7490.html" title="性能调优攻略 - 257,247 人阅读">性能调优攻略</a></li><li><a href="https://coolshell.cn/articles/1846.html" title="MySQL性能优化的最佳20+条经验 - 255,740 人阅读">MySQL性能优化的最佳20+条经验</a></li><li><a href="https://coolshell.cn/articles/4758.html" title="如何写出无法维护的代码 - 254,084 人阅读">如何写出无法维护的代码</a></li><li><a href="https://coolshell.cn/articles/914.html" title="6个变态的C语言Hello World程序 - 251,857 人阅读">6个变态的C语言Hello World程序</a></li><li><a href="https://coolshell.cn/articles/17010.html" title="Docker基础技术：Linux Namespace（上） - 241,769 人阅读">Docker基础技术：Linux Namespace（上）</a></li><li><a href="https://coolshell.cn/articles/7829.html" title="28个Unix/Linux的命令行神器 - 241,193 人阅读">28个Unix/Linux的命令行神器</a></li><li><a href="https://coolshell.cn/articles/11312.html" title="无插件Vim编程技巧 - 222,783 人阅读">无插件Vim编程技巧</a></li></ul>
+</aside><aside id="categories-367921425" class="widget widget_categories"><h4 class="widget-title">分类</h4>
+<ul>
+<li class="cat-item cat-item-195"><a href="https://coolshell.cn/category/itnews">业界新闻</a> (33)
+</li>
+<li class="cat-item cat-item-509"><a href="https://coolshell.cn/category/%e4%bc%81%e4%b8%9a%e5%ba%94%e7%94%a8">企业应用</a> (2)
+</li>
+<li class="cat-item cat-item-9"><a href="https://coolshell.cn/category/technews">技术新闻</a> (38)
+</li>
+<li class="cat-item cat-item-550"><a href="https://coolshell.cn/category/%e6%8a%80%e6%9c%af%e7%ae%a1%e7%90%86">技术管理</a> (19)
+</li>
+<li class="cat-item cat-item-12"><a href="https://coolshell.cn/category/techarticle">技术读物</a> (125)
+</li>
+<li class="cat-item cat-item-18"><a href="https://coolshell.cn/category/operatingsystem">操作系统</a> (97)
+<ul class="children">
+<li class="cat-item cat-item-20"><a href="https://coolshell.cn/category/operatingsystem/unixlinux">Unix/Linux</a> (81)
+</li>
+<li class="cat-item cat-item-19"><a href="https://coolshell.cn/category/operatingsystem/mswindows">Windows</a> (12)
+</li>
+</ul>
+</li>
+<li class="cat-item cat-item-105"><a href="https://coolshell.cn/category/datebase">数据库</a> (11)
+</li>
+<li class="cat-item cat-item-10"><a href="https://coolshell.cn/category/misc">杂项资源</a> (295)
+</li>
+<li class="cat-item cat-item-15"><a href="https://coolshell.cn/category/process">流程方法</a> (48)
+</li>
+<li class="cat-item cat-item-23"><a href="https://coolshell.cn/category/progdesign">程序设计</a> (110)
+</li>
+<li class="cat-item cat-item-602"><a href="https://coolshell.cn/category/%e7%b3%bb%e7%bb%9f%e6%9e%b6%e6%9e%84">系统架构</a> (15)
+</li>
+<li class="cat-item cat-item-1"><a href="https://coolshell.cn/category/tools">编程工具</a> (67)
+</li>
+<li class="cat-item cat-item-3"><a href="https://coolshell.cn/category/proglanguage">编程语言</a> (326)
+<ul class="children">
+<li class="cat-item cat-item-189"><a href="https://coolshell.cn/category/proglanguage/dotnet">.NET编程</a> (3)
+</li>
+<li class="cat-item cat-item-8"><a href="https://coolshell.cn/category/proglanguage/ajaxdev">Ajax开发</a> (9)
+</li>
+<li class="cat-item cat-item-5"><a href="https://coolshell.cn/category/proglanguage/cplusplus">C/C++语言</a> (74)
+</li>
+<li class="cat-item cat-item-186"><a href="https://coolshell.cn/category/proglanguage/erlang">Erlang</a> (1)
+</li>
+<li class="cat-item cat-item-819"><a href="https://coolshell.cn/category/proglanguage/go-%e8%af%ad%e8%a8%80">Go 语言</a> (15)
+</li>
+<li class="cat-item cat-item-4"><a href="https://coolshell.cn/category/proglanguage/javadev">Java语言</a> (32)
+</li>
+<li class="cat-item cat-item-11"><a href="https://coolshell.cn/category/proglanguage/phpdev">PHP脚本</a> (11)
+</li>
+<li class="cat-item cat-item-33"><a href="https://coolshell.cn/category/proglanguage/pythondev">Python</a> (23)
+</li>
+<li class="cat-item cat-item-100"><a href="https://coolshell.cn/category/proglanguage/rubydev">Ruby</a> (5)
+</li>
+<li class="cat-item cat-item-860"><a href="https://coolshell.cn/category/proglanguage/rust-%e8%af%ad%e8%a8%80">Rust 语言</a> (1)
+</li>
+<li class="cat-item cat-item-7"><a href="https://coolshell.cn/category/proglanguage/webdev">Web开发</a> (106)
+</li>
+</ul>
+</li>
+<li class="cat-item cat-item-6"><a href="https://coolshell.cn/category/netsecurity">网络安全</a> (36)
+</li>
+<li class="cat-item cat-item-39"><a href="https://coolshell.cn/category/career">职场生涯</a> (40)
+</li>
+<li class="cat-item cat-item-271"><a href="https://coolshell.cn/category/funny">趣味问题</a> (19)
+</li>
+<li class="cat-item cat-item-52"><a href="https://coolshell.cn/category/story">轶事趣闻</a> (147)
+</li>
+</ul>
+</aside><aside id="tag_cloud-4" class="widget widget_tag_cloud"><h4 class="widget-title">标签</h4><div class="tagcloud"><a href="https://coolshell.cn/tag/agile" class="tag-cloud-link tag-link-17 tag-link-position-1" style="font-size: 11.559322033898pt;" aria-label="agile (15个项目)">agile</a>
+<a href="https://coolshell.cn/tag/ajax" class="tag-cloud-link tag-link-34 tag-link-position-2" style="font-size: 10.135593220339pt;" aria-label="AJAX (11个项目)">AJAX</a>
+<a href="https://coolshell.cn/tag/algorithm" class="tag-cloud-link tag-link-76 tag-link-position-3" style="font-size: 14.28813559322pt;" aria-label="Algorithm (26个项目)">Algorithm</a>
+<a href="https://coolshell.cn/tag/android" class="tag-cloud-link tag-link-145 tag-link-position-4" style="font-size: 10.135593220339pt;" aria-label="Android (11个项目)">Android</a>
+<a href="https://coolshell.cn/tag/bash" class="tag-cloud-link tag-link-190 tag-link-position-5" style="font-size: 9.1864406779661pt;" aria-label="Bash (9个项目)">Bash</a>
+<a href="https://coolshell.cn/tag/c" class="tag-cloud-link tag-link-59 tag-link-position-6" style="font-size: 20.694915254237pt;" aria-label="C++ (93个项目)">C++</a>
+<a href="https://coolshell.cn/tag/coding" class="tag-cloud-link tag-link-135 tag-link-position-7" style="font-size: 14.28813559322pt;" aria-label="Coding (26个项目)">Coding</a>
+<a href="https://coolshell.cn/tag/css" class="tag-cloud-link tag-link-96 tag-link-position-8" style="font-size: 13.457627118644pt;" aria-label="CSS (22个项目)">CSS</a>
+<a href="https://coolshell.cn/tag/design" class="tag-cloud-link tag-link-71 tag-link-position-9" style="font-size: 13.932203389831pt;" aria-label="Design (24个项目)">Design</a>
+<a href="https://coolshell.cn/tag/design-pattern" class="tag-cloud-link tag-link-25 tag-link-position-10" style="font-size: 9.6610169491525pt;" aria-label="design pattern (10个项目)">design pattern</a>
+<a href="https://coolshell.cn/tag/ebook" class="tag-cloud-link tag-link-101 tag-link-position-11" style="font-size: 11.559322033898pt;" aria-label="ebook (15个项目)">ebook</a>
+<a href="https://coolshell.cn/tag/flash" class="tag-cloud-link tag-link-98 tag-link-position-12" style="font-size: 8pt;" aria-label="Flash (7个项目)">Flash</a>
+<a href="https://coolshell.cn/tag/game" class="tag-cloud-link tag-link-125 tag-link-position-13" style="font-size: 9.1864406779661pt;" aria-label="Game (9个项目)">Game</a>
+<a href="https://coolshell.cn/tag/go" class="tag-cloud-link tag-link-238 tag-link-position-14" style="font-size: 13.220338983051pt;" aria-label="Go (21个项目)">Go</a>
+<a href="https://coolshell.cn/tag/golang" class="tag-cloud-link tag-link-237 tag-link-position-15" style="font-size: 10.966101694915pt;" aria-label="golang (13个项目)">golang</a>
+<a href="https://coolshell.cn/tag/google" class="tag-cloud-link tag-link-32 tag-link-position-16" style="font-size: 15.474576271186pt;" aria-label="Google (33个项目)">Google</a>
+<a href="https://coolshell.cn/tag/html" class="tag-cloud-link tag-link-38 tag-link-position-17" style="font-size: 15.593220338983pt;" aria-label="HTML (34个项目)">HTML</a>
+<a href="https://coolshell.cn/tag/ie" class="tag-cloud-link tag-link-175 tag-link-position-18" style="font-size: 9.6610169491525pt;" aria-label="IE (10个项目)">IE</a>
+<a href="https://coolshell.cn/tag/java" class="tag-cloud-link tag-link-13 tag-link-position-19" style="font-size: 17.610169491525pt;" aria-label="Java (50个项目)">Java</a>
+<a href="https://coolshell.cn/tag/javascript" class="tag-cloud-link tag-link-114 tag-link-position-20" style="font-size: 17.966101694915pt;" aria-label="Javascript (54个项目)">Javascript</a>
+<a href="https://coolshell.cn/tag/jquery" class="tag-cloud-link tag-link-191 tag-link-position-21" style="font-size: 10.135593220339pt;" aria-label="jQuery (11个项目)">jQuery</a>
+<a href="https://coolshell.cn/tag/linux" class="tag-cloud-link tag-link-37 tag-link-position-22" style="font-size: 19.389830508475pt;" aria-label="Linux (71个项目)">Linux</a>
+<a href="https://coolshell.cn/tag/mysql" class="tag-cloud-link tag-link-106 tag-link-position-23" style="font-size: 8pt;" aria-label="MySQL (7个项目)">MySQL</a>
+<a href="https://coolshell.cn/tag/oop" class="tag-cloud-link tag-link-245 tag-link-position-24" style="font-size: 8.5932203389831pt;" aria-label="OOP (8个项目)">OOP</a>
+<a href="https://coolshell.cn/tag/password" class="tag-cloud-link tag-link-319 tag-link-position-25" style="font-size: 8.5932203389831pt;" aria-label="password (8个项目)">password</a>
+<a href="https://coolshell.cn/tag/performance" class="tag-cloud-link tag-link-120 tag-link-position-26" style="font-size: 12.271186440678pt;" aria-label="Performance (17个项目)">Performance</a>
+<a href="https://coolshell.cn/tag/php" class="tag-cloud-link tag-link-35 tag-link-position-27" style="font-size: 14.050847457627pt;" aria-label="PHP (25个项目)">PHP</a>
+<a href="https://coolshell.cn/tag/programmer" class="tag-cloud-link tag-link-70 tag-link-position-28" style="font-size: 21.881355932203pt;" aria-label="Programmer (116个项目)">Programmer</a>
+<a href="https://coolshell.cn/tag/programming" class="tag-cloud-link tag-link-499 tag-link-position-29" style="font-size: 10.135593220339pt;" aria-label="Programming (11个项目)">Programming</a>
+<a href="https://coolshell.cn/tag/programming-language" class="tag-cloud-link tag-link-115 tag-link-position-30" style="font-size: 10.491525423729pt;" aria-label="programming language (12个项目)">programming language</a>
+<a href="https://coolshell.cn/tag/puzzle" class="tag-cloud-link tag-link-514 tag-link-position-31" style="font-size: 10.135593220339pt;" aria-label="Puzzle (11个项目)">Puzzle</a>
+<a href="https://coolshell.cn/tag/pythondev" class="tag-cloud-link tag-link-791 tag-link-position-32" style="font-size: 15pt;" aria-label="Python (30个项目)">Python</a>
+<a href="https://coolshell.cn/tag/ruby" class="tag-cloud-link tag-link-69 tag-link-position-33" style="font-size: 9.6610169491525pt;" aria-label="Ruby (10个项目)">Ruby</a>
+<a href="https://coolshell.cn/tag/sql" class="tag-cloud-link tag-link-131 tag-link-position-34" style="font-size: 9.6610169491525pt;" aria-label="SQL (10个项目)">SQL</a>
+<a href="https://coolshell.cn/tag/tdd" class="tag-cloud-link tag-link-485 tag-link-position-35" style="font-size: 8.5932203389831pt;" aria-label="TDD (8个项目)">TDD</a>
+<a href="https://coolshell.cn/tag/ui" class="tag-cloud-link tag-link-47 tag-link-position-36" style="font-size: 10.491525423729pt;" aria-label="UI (12个项目)">UI</a>
+<a href="https://coolshell.cn/tag/unix" class="tag-cloud-link tag-link-21 tag-link-position-37" style="font-size: 15.949152542373pt;" aria-label="Unix (36个项目)">Unix</a>
+<a href="https://coolshell.cn/tag/vim" class="tag-cloud-link tag-link-50 tag-link-position-38" style="font-size: 12.745762711864pt;" aria-label="vim (19个项目)">vim</a>
+<a href="https://coolshell.cn/tag/web" class="tag-cloud-link tag-link-30 tag-link-position-39" style="font-size: 16.661016949153pt;" aria-label="Web (42个项目)">Web</a>
+<a href="https://coolshell.cn/tag/windows" class="tag-cloud-link tag-link-49 tag-link-position-40" style="font-size: 12.271186440678pt;" aria-label="Windows (17个项目)">Windows</a>
+<a href="https://coolshell.cn/tag/xml" class="tag-cloud-link tag-link-104 tag-link-position-41" style="font-size: 8.5932203389831pt;" aria-label="XML (8个项目)">XML</a>
+<a href="https://coolshell.cn/tag/%e5%ae%89%e5%85%a8" class="tag-cloud-link tag-link-318 tag-link-position-42" style="font-size: 13.694915254237pt;" aria-label="安全 (23个项目)">安全</a>
+<a href="https://coolshell.cn/tag/%e7%a8%8b%e5%ba%8f%e5%91%98" class="tag-cloud-link tag-link-58 tag-link-position-43" style="font-size: 22pt;" aria-label="程序员 (119个项目)">程序员</a>
+<a href="https://coolshell.cn/tag/%e7%ae%97%e6%b3%95" class="tag-cloud-link tag-link-77 tag-link-position-44" style="font-size: 9.6610169491525pt;" aria-label="算法 (10个项目)">算法</a>
+<a href="https://coolshell.cn/tag/interview" class="tag-cloud-link tag-link-164 tag-link-position-45" style="font-size: 11.915254237288pt;" aria-label="面试 (16个项目)">面试</a></div>
+</aside><aside id="archives-5" class="widget widget_archive"><h4 class="widget-title">归档</h4>
+<ul>
+<li><a href="https://coolshell.cn/articles/date/2023/05">2023年5月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2023/02">2023年2月</a>&nbsp;(2)</li>
+<li><a href="https://coolshell.cn/articles/date/2022/12">2022年12月</a>&nbsp;(2)</li>
+<li><a href="https://coolshell.cn/articles/date/2022/10">2022年10月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2022/07">2022年7月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2022/05">2022年5月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2022/02">2022年2月</a>&nbsp;(2)</li>
+<li><a href="https://coolshell.cn/articles/date/2022/01">2022年1月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2021/12">2021年12月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2021/11">2021年11月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2021/09">2021年9月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2021/07">2021年7月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2020/12">2020年12月</a>&nbsp;(9)</li>
+<li><a href="https://coolshell.cn/articles/date/2020/08">2020年8月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2020/07">2020年7月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2020/04">2020年4月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2020/03">2020年3月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2020/01">2020年1月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2019/12">2019年12月</a>&nbsp;(2)</li>
+<li><a href="https://coolshell.cn/articles/date/2019/11">2019年11月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2019/10">2019年10月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2019/07">2019年7月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2019/06">2019年6月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2019/05">2019年5月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2019/04">2019年4月</a>&nbsp;(2)</li>
+<li><a href="https://coolshell.cn/articles/date/2019/03">2019年3月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2019/02">2019年2月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2018/12">2018年12月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2018/05">2018年5月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2018/01">2018年1月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2017/10">2017年10月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2017/09">2017年9月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2017/08">2017年8月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2017/07">2017年7月</a>&nbsp;(3)</li>
+<li><a href="https://coolshell.cn/articles/date/2017/06">2017年6月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2017/04">2017年4月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2017/03">2017年3月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2017/02">2017年2月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2017/01">2017年1月</a>&nbsp;(2)</li>
+<li><a href="https://coolshell.cn/articles/date/2016/12">2016年12月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2016/10">2016年10月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2016/09">2016年9月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2016/08">2016年8月</a>&nbsp;(2)</li>
+<li><a href="https://coolshell.cn/articles/date/2016/07">2016年7月</a>&nbsp;(3)</li>
+<li><a href="https://coolshell.cn/articles/date/2015/12">2015年12月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2015/09">2015年9月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2015/08">2015年8月</a>&nbsp;(2)</li>
+<li><a href="https://coolshell.cn/articles/date/2015/04">2015年4月</a>&nbsp;(4)</li>
+<li><a href="https://coolshell.cn/articles/date/2014/12">2014年12月</a>&nbsp;(3)</li>
+<li><a href="https://coolshell.cn/articles/date/2014/11">2014年11月</a>&nbsp;(2)</li>
+<li><a href="https://coolshell.cn/articles/date/2014/10">2014年10月</a>&nbsp;(2)</li>
+<li><a href="https://coolshell.cn/articles/date/2014/09">2014年9月</a>&nbsp;(2)</li>
+<li><a href="https://coolshell.cn/articles/date/2014/08">2014年8月</a>&nbsp;(2)</li>
+<li><a href="https://coolshell.cn/articles/date/2014/06">2014年6月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2014/05">2014年5月</a>&nbsp;(4)</li>
+<li><a href="https://coolshell.cn/articles/date/2014/04">2014年4月</a>&nbsp;(4)</li>
+<li><a href="https://coolshell.cn/articles/date/2014/03">2014年3月</a>&nbsp;(5)</li>
+<li><a href="https://coolshell.cn/articles/date/2014/02">2014年2月</a>&nbsp;(3)</li>
+<li><a href="https://coolshell.cn/articles/date/2014/01">2014年1月</a>&nbsp;(2)</li>
+<li><a href="https://coolshell.cn/articles/date/2013/12">2013年12月</a>&nbsp;(3)</li>
+<li><a href="https://coolshell.cn/articles/date/2013/11">2013年11月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2013/10">2013年10月</a>&nbsp;(6)</li>
+<li><a href="https://coolshell.cn/articles/date/2013/08">2013年8月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2013/07">2013年7月</a>&nbsp;(8)</li>
+<li><a href="https://coolshell.cn/articles/date/2013/06">2013年6月</a>&nbsp;(2)</li>
+<li><a href="https://coolshell.cn/articles/date/2013/05">2013年5月</a>&nbsp;(3)</li>
+<li><a href="https://coolshell.cn/articles/date/2013/04">2013年4月</a>&nbsp;(3)</li>
+<li><a href="https://coolshell.cn/articles/date/2013/03">2013年3月</a>&nbsp;(3)</li>
+<li><a href="https://coolshell.cn/articles/date/2013/02">2013年2月</a>&nbsp;(5)</li>
+<li><a href="https://coolshell.cn/articles/date/2013/01">2013年1月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2012/12">2012年12月</a>&nbsp;(4)</li>
+<li><a href="https://coolshell.cn/articles/date/2012/11">2012年11月</a>&nbsp;(4)</li>
+<li><a href="https://coolshell.cn/articles/date/2012/10">2012年10月</a>&nbsp;(3)</li>
+<li><a href="https://coolshell.cn/articles/date/2012/09">2012年9月</a>&nbsp;(4)</li>
+<li><a href="https://coolshell.cn/articles/date/2012/08">2012年8月</a>&nbsp;(8)</li>
+<li><a href="https://coolshell.cn/articles/date/2012/07">2012年7月</a>&nbsp;(4)</li>
+<li><a href="https://coolshell.cn/articles/date/2012/06">2012年6月</a>&nbsp;(7)</li>
+<li><a href="https://coolshell.cn/articles/date/2012/05">2012年5月</a>&nbsp;(6)</li>
+<li><a href="https://coolshell.cn/articles/date/2012/04">2012年4月</a>&nbsp;(6)</li>
+<li><a href="https://coolshell.cn/articles/date/2012/03">2012年3月</a>&nbsp;(6)</li>
+<li><a href="https://coolshell.cn/articles/date/2012/02">2012年2月</a>&nbsp;(3)</li>
+<li><a href="https://coolshell.cn/articles/date/2012/01">2012年1月</a>&nbsp;(6)</li>
+<li><a href="https://coolshell.cn/articles/date/2011/12">2011年12月</a>&nbsp;(5)</li>
+<li><a href="https://coolshell.cn/articles/date/2011/11">2011年11月</a>&nbsp;(9)</li>
+<li><a href="https://coolshell.cn/articles/date/2011/10">2011年10月</a>&nbsp;(6)</li>
+<li><a href="https://coolshell.cn/articles/date/2011/09">2011年9月</a>&nbsp;(5)</li>
+<li><a href="https://coolshell.cn/articles/date/2011/08">2011年8月</a>&nbsp;(14)</li>
+<li><a href="https://coolshell.cn/articles/date/2011/07">2011年7月</a>&nbsp;(6)</li>
+<li><a href="https://coolshell.cn/articles/date/2011/06">2011年6月</a>&nbsp;(12)</li>
+<li><a href="https://coolshell.cn/articles/date/2011/05">2011年5月</a>&nbsp;(5)</li>
+<li><a href="https://coolshell.cn/articles/date/2011/04">2011年4月</a>&nbsp;(18)</li>
+<li><a href="https://coolshell.cn/articles/date/2011/03">2011年3月</a>&nbsp;(16)</li>
+<li><a href="https://coolshell.cn/articles/date/2011/02">2011年2月</a>&nbsp;(16)</li>
+<li><a href="https://coolshell.cn/articles/date/2011/01">2011年1月</a>&nbsp;(18)</li>
+<li><a href="https://coolshell.cn/articles/date/2010/12">2010年12月</a>&nbsp;(11)</li>
+<li><a href="https://coolshell.cn/articles/date/2010/11">2010年11月</a>&nbsp;(11)</li>
+<li><a href="https://coolshell.cn/articles/date/2010/10">2010年10月</a>&nbsp;(19)</li>
+<li><a href="https://coolshell.cn/articles/date/2010/09">2010年9月</a>&nbsp;(15)</li>
+<li><a href="https://coolshell.cn/articles/date/2010/08">2010年8月</a>&nbsp;(10)</li>
+<li><a href="https://coolshell.cn/articles/date/2010/07">2010年7月</a>&nbsp;(20)</li>
+<li><a href="https://coolshell.cn/articles/date/2010/06">2010年6月</a>&nbsp;(9)</li>
+<li><a href="https://coolshell.cn/articles/date/2010/05">2010年5月</a>&nbsp;(13)</li>
+<li><a href="https://coolshell.cn/articles/date/2010/04">2010年4月</a>&nbsp;(12)</li>
+<li><a href="https://coolshell.cn/articles/date/2010/03">2010年3月</a>&nbsp;(11)</li>
+<li><a href="https://coolshell.cn/articles/date/2010/02">2010年2月</a>&nbsp;(7)</li>
+<li><a href="https://coolshell.cn/articles/date/2010/01">2010年1月</a>&nbsp;(9)</li>
+<li><a href="https://coolshell.cn/articles/date/2009/12">2009年12月</a>&nbsp;(22)</li>
+<li><a href="https://coolshell.cn/articles/date/2009/11">2009年11月</a>&nbsp;(27)</li>
+<li><a href="https://coolshell.cn/articles/date/2009/10">2009年10月</a>&nbsp;(17)</li>
+<li><a href="https://coolshell.cn/articles/date/2009/09">2009年9月</a>&nbsp;(14)</li>
+<li><a href="https://coolshell.cn/articles/date/2009/08">2009年8月</a>&nbsp;(21)</li>
+<li><a href="https://coolshell.cn/articles/date/2009/07">2009年7月</a>&nbsp;(18)</li>
+<li><a href="https://coolshell.cn/articles/date/2009/06">2009年6月</a>&nbsp;(19)</li>
+<li><a href="https://coolshell.cn/articles/date/2009/05">2009年5月</a>&nbsp;(27)</li>
+<li><a href="https://coolshell.cn/articles/date/2009/04">2009年4月</a>&nbsp;(53)</li>
+<li><a href="https://coolshell.cn/articles/date/2009/03">2009年3月</a>&nbsp;(43)</li>
+<li><a href="https://coolshell.cn/articles/date/2008/10">2008年10月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2007/12">2007年12月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2006/11">2006年11月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2004/06">2004年6月</a>&nbsp;(1)</li>
+</ul>
+</aside><aside id="custom_html-8" class="widget_text widget widget_custom_html"><h4 class="widget-title">友情链接</h4><div class="textwidget custom-html-widget"><ul class="blogroll">
+<li><a href="http://blog.csdn.net/haoel" target="_blank" onclick="if (!window.__cfRLUnblockHandlers) return false; pageTracker._trackPageview('/outgoing/blog.csdn.net/haoel?referer=http://coolshell.cn');" rel="noopener" data-cf-modified-62e5754535c106b768a052a1->陈皓的博客</a></li>
+<li><a href="http://ifeve.com/" target="_blank" title="促进并发编程的研究和推广" onclick="if (!window.__cfRLUnblockHandlers) return false; pageTracker._trackPageview('/outgoing/ifeve.com/?referer=http://coolshell.cn');" rel="noopener" data-cf-modified-62e5754535c106b768a052a1->并发编程</a></li>
+<li><a href="http://www.raychase.net/" target="_blank" title="一个啰嗦的程序员" onclick="if (!window.__cfRLUnblockHandlers) return false; pageTracker._trackPageview('/outgoing/www.raychase.net/?referer=http://coolshell.cn');" rel="noopener" data-cf-modified-62e5754535c106b768a052a1->四火的唠叨</a></li>
+<li><a href="http://www.cnblogs.com/weidagang2046/" target="_blank" title="Just for Fun" onclick="if (!window.__cfRLUnblockHandlers) return false; pageTracker._trackPageview('/outgoing/http://www.cnblogs.com/weidagang2046/?referer=http://coolshell.cn/');" rel="noopener" data-cf-modified-62e5754535c106b768a052a1->Todd Wei的Blog</a></li>
+<li><a href="http://www.hellogcc.org/" target="_blank" title="致力于讨论和学习GNU Toolchain方面的工作组" onclick="if (!window.__cfRLUnblockHandlers) return false; pageTracker._trackPageview('/outgoing/www.hellogcc.org//?referer=http://coolshell.cn/');" rel="noopener" data-cf-modified-62e5754535c106b768a052a1->开源开发工具技术博客</a></li>
+<li><a href="http://www.cppfans.org/" target="_blank" title="记录我们点滴学习工作生活" onclick="if (!window.__cfRLUnblockHandlers) return false; pageTracker._trackPageview('/outgoing/http://www.cppfans.org/?referer=http://coolshell.cn/');" rel="noopener" data-cf-modified-62e5754535c106b768a052a1->C++爱好者博客</a></li>
+<li><a href="https://HelloACM.com/" target="_blank" title="Smart Ideas, Smart Algorithms" onclick="if (!window.__cfRLUnblockHandlers) return false; pageTracker._trackPageview('/outgoing/http://HelloACM.com/?referer=http://coolshell.cn/');" rel="noopener" data-cf-modified-62e5754535c106b768a052a1->ACMer</a></li>
+</ul>
+</div></aside><aside id="meta-5" class="widget widget_meta"><h4 class="widget-title">其他操作</h4>
+<ul>
+<li><a href="https://coolshell.cn/wp-login.php?action=register">注册</a></li> <li><a href="https://coolshell.cn/wp-login.php">登录</a></li>
+<li><a href="https://coolshell.cn/feed">条目feed</a></li>
+<li><a href="https://coolshell.cn/comments/feed">评论feed</a></li>
+<li><a href="https://cn.wordpress.org/">WordPress.org</a></li>
+</ul>
+</aside></div>
+</div> 
+</div>
+<script type="62e5754535c106b768a052a1-text/javascript">
+	var _gaq = _gaq || [];
+	_gaq.push(['_setAccount', 'UA-7486123-1']);
+_gaq.push(['_trackPageview']);
+
+	(function() {
+		var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+		ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+		var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+	})();
+</script>
+</div>
+<footer id="colophon" class="site-footer" role="contentinfo">
+<div class="row site-info">
+CoolShell.cn &copy; 2023
+<span class="sep"> | </span>
+Powered by <a href="https://wordpress.org/">WordPress</a>
+<span class="sep"> | </span>
+Based on Theme: Nisarg by <a href="http://www.falgunidesai.com/" rel="designer">Falguni Desai</a>.
+<p><a href="http://www.beian.miit.gov.cn" target="_target">京ICP备18054967号-1</a></p>
+</div>
+</footer>
+</div>
+<script type="62e5754535c106b768a052a1-text/javascript" id="wp-postratings-js-extra">
+/* <![CDATA[ */
+var ratingsL10n = {"plugin_url":"https:\/\/coolshell.cn\/wp-content\/plugins\/wp-postratings","ajax_url":"https:\/\/coolshell.cn\/wp-admin\/admin-ajax.php","text_wait":"Please rate only 1 item at a time.","image":"stars_crystal","image_ext":"gif","max":"5","show_loading":"1","show_fading":"1","custom":"0"};
+var ratings_mouseover_image=new Image();ratings_mouseover_image.src="https://coolshell.cn/wp-content/plugins/wp-postratings/images/stars_crystal/rating_over.gif";;
+/* ]]> */
+</script>
+<script type="62e5754535c106b768a052a1-text/javascript" src="https://coolshell.cn/wp-content/plugins/wp-postratings/js/postratings-js.js?ver=1.90.1" id="wp-postratings-js"></script>
+<script type="62e5754535c106b768a052a1-text/javascript" id="wp-postviews-cache-js-extra">
+/* <![CDATA[ */
+var viewsCacheL10n = {"admin_ajax_url":"https:\/\/coolshell.cn\/wp-admin\/admin-ajax.php","nonce":"4731639b7a","post_id":"18024"};
+/* ]]> */
+</script>
+<script type="62e5754535c106b768a052a1-text/javascript" src="https://coolshell.cn/wp-content/plugins/wp-postviews/postviews-cache.js?ver=1.68" id="wp-postviews-cache-js"></script>
+<script type="62e5754535c106b768a052a1-text/javascript" src="https://coolshell.cn/wp-content/themes/MyNisarg/js/bootstrap.js?ver=6.2" id="bootstrap-js"></script>
+<script type="62e5754535c106b768a052a1-text/javascript" src="https://coolshell.cn/wp-content/themes/MyNisarg/js/skip-link-focus-fix.js?ver=20130115" id="nisarg-skip-link-focus-fix-js"></script>
+<script type="62e5754535c106b768a052a1-text/javascript" src="https://coolshell.cn/wp-content/themes/MyNisarg/js/nisarg.js?ver=6.2" id="nisarg-js-js"></script>
+<script type="62e5754535c106b768a052a1-text/javascript" src="https://coolshell.cn/wp-includes/js/comment-reply.min.js?ver=6.2" id="comment-reply-js"></script>
+<script type="62e5754535c106b768a052a1-text/javascript" id="q2w3_fixed_widget-js-extra">
+/* <![CDATA[ */
+var q2w3_sidebar_options = [{"use_sticky_position":false,"margin_top":50,"margin_bottom":0,"stop_elements_selectors":"","screen_max_width":0,"screen_max_height":0,"widgets":[]}];
+/* ]]> */
+</script>
+<script type="62e5754535c106b768a052a1-text/javascript" src="https://coolshell.cn/wp-content/plugins/q2w3-fixed-widget/js/frontend.min.js?ver=6.2.3" id="q2w3_fixed_widget-js"></script>
+<script type="62e5754535c106b768a052a1-text/javascript" src="https://coolshell.cn/wp-content/plugins/enlighter/cache/enlighterjs.min.js?ver=0cuVQBPCj0viGB0" id="enlighterjs-js"></script>
+<script type="62e5754535c106b768a052a1-text/javascript" id="enlighterjs-js-after">
+!function(e,n){if("undefined"!=typeof EnlighterJS){var o={"selectors":{"block":"pre.EnlighterJSRAW","inline":"code.EnlighterJSRAW"},"options":{"indent":2,"ampersandCleanup":true,"linehover":true,"rawcodeDbclick":true,"textOverflow":"scroll","linenumbers":true,"theme":"wpcustom","language":"generic","retainCssClasses":false,"collapse":false,"toolbarOuter":"","toolbarTop":"{BTN_RAW}{BTN_COPY}{BTN_WINDOW}{BTN_WEBSITE}","toolbarBottom":""}};(e.EnlighterJSINIT=function(){EnlighterJS.init(o.selectors.block,o.selectors.inline,o.options)})()}else{(n&&(n.error||n.log)||function(){})("Error: EnlighterJS resources not loaded yet!")}}(window,console);
+</script>
+<script defer type="62e5754535c106b768a052a1-text/javascript" src="https://coolshell.cn/wp-content/plugins/akismet/_inc/akismet-frontend.js?ver=1683523750" id="akismet-frontend-js"></script>
+<script type="62e5754535c106b768a052a1-text/javascript">
+        jQuery(document).ready(function ($) {
+
+            for (let i = 0; i < document.forms.length; ++i) {
+                let form = document.forms[i];
+				if ($(form).attr("method") != "get") { $(form).append('<input type="hidden" name="HLY_NVGfRIyiO" value="A*FRUYw" />'); }
+if ($(form).attr("method") != "get") { $(form).append('<input type="hidden" name="rfNmPJFxZlE" value="PcJd0F3kneCMpW" />'); }
+            }
+
+            $(document).on('submit', 'form', function () {
+				if ($(this).attr("method") != "get") { $(this).append('<input type="hidden" name="HLY_NVGfRIyiO" value="A*FRUYw" />'); }
+if ($(this).attr("method") != "get") { $(this).append('<input type="hidden" name="rfNmPJFxZlE" value="PcJd0F3kneCMpW" />'); }
+                return true;
+            });
+
+            jQuery.ajaxSetup({
+                beforeSend: function (e, data) {
+
+                    if (data.type !== 'POST') return;
+
+                    if (typeof data.data === 'object' && data.data !== null) {
+						data.data.append("HLY_NVGfRIyiO", "A*FRUYw");
+data.data.append("rfNmPJFxZlE", "PcJd0F3kneCMpW");
+                    }
+                    else {
+                        data.data = data.data + '&HLY_NVGfRIyiO=A*FRUYw&rfNmPJFxZlE=PcJd0F3kneCMpW';
+                    }
+                }
+            });
+
+        });
+    </script>
+<script src="/cdn-cgi/scripts/7d0fa10a/cloudflare-static/rocket-loader.min.js" data-cf-settings="62e5754535c106b768a052a1-|49" defer></script></body>
+</html>
+<script type="62e5754535c106b768a052a1-text/javascript" src="https://cdn.jsdelivr.net/gh/haoel/anti-baidu/js/anti-baidu-latest.min.js" charset="UTF-8"></script>
+
+
+

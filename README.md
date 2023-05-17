@@ -2,6 +2,14 @@
 
 <https://coolshell.org>
 
+## In Memoriam of haoel@
+
+Dennis M. Ritchie 逝世十多年后，他的个人主页仍然能正常访问 <https://www.bell-labs.com/usr/dmr/www/>
+
+W. Richard Stevens 已经逝世二十余年，他的个人主页还保持着 1999 年的样子 <http://www.kohala.com/start/>
+
+希望借助 GitHub，让陈皓的文字能长久流传下去。
+
 ## Convert (most) links to local
 
 ```shell
@@ -22,6 +30,6 @@ $ sed '/menu-item-17410/s|https://coolshell.cn/haoel|/haoel|' -i **/*.html
 
 ## Other sites
 
-* <https://github.com/ghostincoolshell/haoel-articles>
-* <https://github.com/soulteary/forever-coolshell>
+* <https://github.com/ghostincoolshell/haoel-articles> 包括 tweets 和微博
+* <https://github.com/soulteary/forever-coolshell> 单机下载版
 

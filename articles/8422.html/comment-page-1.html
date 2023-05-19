@@ -1,0 +1,1500 @@
+<!DOCTYPE html>
+<!--[if IE 8]>
+<html id="ie8" dir="ltr" lang="zh-CN"
+	prefix="og: https://ogp.me/ns#" >
+<![endif]-->
+<!--[if !(IE 8) ]><!-->
+<html dir="ltr" lang="zh-CN" prefix="og: https://ogp.me/ns#">
+<!--<![endif]-->
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width" />
+<link rel="profile" href="https://gmpg.org/xfn/11" />
+<link rel="pingback" href="https://coolshell.cn/xmlrpc.php" />
+<title>TF-IDF模型的概率解释 | 酷 壳 - CoolShell</title>
+<meta name="robots" content="noindex, nofollow, max-image-preview:large" />
+<meta name="keywords" content="algorithm,search,tf-idf,杂项资源,程序设计" />
+<link rel="canonical" href="https://coolshell.cn/articles/8422.html/comment-page-1#comments" />
+<meta name="generator" content="All in One SEO (AIOSEO) 4.2.6.1 " />
+<meta property="og:locale" content="zh_CN" />
+<meta property="og:site_name" content="酷 壳 - CoolShell" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="TF-IDF模型的概率解释 | 酷 壳 - CoolShell" />
+<meta property="og:url" content="https://coolshell.cn/articles/8422.html/comment-page-1#comments" />
+<meta property="og:image" content="https://coolshell.cn/wp-content/uploads/2020/04/mini.logo_.png" />
+<meta property="og:image:secure_url" content="https://coolshell.cn/wp-content/uploads/2020/04/mini.logo_.png" />
+<meta property="og:image:width" content="306" />
+<meta property="og:image:height" content="306" />
+<meta property="article:published_time" content="2012-10-24T01:05:54+00:00" />
+<meta property="article:modified_time" content="2012-11-01T05:26:29+00:00" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="TF-IDF模型的概率解释 | 酷 壳 - CoolShell" />
+<meta name="twitter:image" content="https://coolshell.cn/wp-content/uploads/2020/04/mini.logo_.png" />
+<script type="application/ld+json" class="aioseo-schema">
+			{"@context":"https:\/\/schema.org","@graph":[{"@type":"Article","@id":"https:\/\/coolshell.cn\/articles\/8422.html#article","name":"TF-IDF\u6a21\u578b\u7684\u6982\u7387\u89e3\u91ca | \u9177 \u58f3 - CoolShell","headline":"TF-IDF\u6a21\u578b\u7684\u6982\u7387\u89e3\u91ca","author":{"@id":"https:\/\/coolshell.cn\/articles\/author\/todd#author"},"publisher":{"@id":"https:\/\/coolshell.cn\/#organization"},"image":{"@type":"ImageObject","url":"https:\/\/coolshell.cn\/wp-content\/uploads\/2020\/04\/mini.logo_.png","@id":"https:\/\/coolshell.cn\/#articleImage","width":306,"height":306},"datePublished":"2012-10-24T01:05:54+08:00","dateModified":"2012-10-24T01:05:54+08:00","inLanguage":"zh-CN","commentCount":51,"mainEntityOfPage":{"@id":"https:\/\/coolshell.cn\/articles\/8422.html#webpage"},"isPartOf":{"@id":"https:\/\/coolshell.cn\/articles\/8422.html#webpage"},"articleSection":"\u6742\u9879\u8d44\u6e90, \u7a0b\u5e8f\u8bbe\u8ba1, Algorithm, search, TF-IDF"},{"@type":"BreadcrumbList","@id":"https:\/\/coolshell.cn\/articles\/8422.html#breadcrumblist","itemListElement":[{"@type":"ListItem","@id":"https:\/\/coolshell.cn\/#listItem","position":1,"item":{"@type":"WebPage","@id":"https:\/\/coolshell.cn\/","name":"\u4e3b\u9801","description":"\u4eab\u53d7\u7f16\u7a0b\u548c\u6280\u672f\u6240\u5e26\u6765\u7684\u5feb\u4e50 \u2013 https:\/\/coolshell.cn","url":"https:\/\/coolshell.cn\/"}}]},{"@type":"Organization","@id":"https:\/\/coolshell.cn\/#organization","name":"\u9177\u58f3-CoolShell","url":"https:\/\/coolshell.cn\/","logo":{"@type":"ImageObject","url":"https:\/\/coolshell.cn\/wp-content\/uploads\/2020\/04\/mini.logo_.png","@id":"https:\/\/coolshell.cn\/#organizationLogo","width":306,"height":306},"image":{"@id":"https:\/\/coolshell.cn\/#organizationLogo"}},{"@type":"WebPage","@id":"https:\/\/coolshell.cn\/articles\/8422.html#webpage","url":"https:\/\/coolshell.cn\/articles\/8422.html","name":"TF-IDF\u6a21\u578b\u7684\u6982\u7387\u89e3\u91ca | \u9177 \u58f3 - CoolShell","inLanguage":"zh-CN","isPartOf":{"@id":"https:\/\/coolshell.cn\/#website"},"breadcrumb":{"@id":"https:\/\/coolshell.cn\/articles\/8422.html#breadcrumblist"},"author":"https:\/\/coolshell.cn\/articles\/author\/todd#author","creator":"https:\/\/coolshell.cn\/articles\/author\/todd#author","datePublished":"2012-10-24T01:05:54+08:00","dateModified":"2012-11-01T05:26:29+08:00"},{"@type":"WebSite","@id":"https:\/\/coolshell.cn\/#website","url":"https:\/\/coolshell.cn\/","name":"\u9177 \u58f3 - CoolShell","description":"\u4eab\u53d7\u7f16\u7a0b\u548c\u6280\u672f\u6240\u5e26\u6765\u7684\u5feb\u4e50 - Coding Your Ambition","inLanguage":"zh-CN","publisher":{"@id":"https:\/\/coolshell.cn\/#organization"}}]}
+		</script>
+<script type="08a8c068d41a0f25af4d68b1-text/javascript">
+			window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+			ga('create', "UA-7486123-1", { 'cookieDomain': 'coolshell.cn' } );
+			ga('send', 'pageview');
+		</script>
+<script async src="https://www.google-analytics.com/analytics.js" type="08a8c068d41a0f25af4d68b1-text/javascript"></script>
+<link rel="dns-prefetch" href="//fonts.googleapis.com" />
+<link rel="dns-prefetch" href="//s.w.org" />
+<link rel="alternate" type="application/rss+xml" title="酷 壳 - CoolShell &raquo; Feed" href="https://coolshell.cn/feed" />
+<link rel="alternate" type="application/rss+xml" title="酷 壳 - CoolShell &raquo; 评论Feed" href="https://coolshell.cn/comments/feed" />
+<link rel="alternate" type="application/rss+xml" title="酷 壳 - CoolShell &raquo; TF-IDF模型的概率解释评论Feed" href="https://coolshell.cn/articles/8422.html/feed" />
+<script type="08a8c068d41a0f25af4d68b1-text/javascript">
+window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/14.0.0\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/14.0.0\/svg\/","svgExt":".svg","source":{"concatemoji":"https:\/\/coolshell.cn\/wp-includes\/js\/wp-emoji-release.min.js?ver=6.0.3"}};
+/*! This file is auto-generated */
+!function(e,a,t){var n,r,o,i=a.createElement("canvas"),p=i.getContext&&i.getContext("2d");function s(e,t){var a=String.fromCharCode,e=(p.clearRect(0,0,i.width,i.height),p.fillText(a.apply(this,e),0,0),i.toDataURL());return p.clearRect(0,0,i.width,i.height),p.fillText(a.apply(this,t),0,0),e===i.toDataURL()}function c(e){var t=a.createElement("script");t.src=e,t.defer=t.type="text/javascript",a.getElementsByTagName("head")[0].appendChild(t)}for(o=Array("flag","emoji"),t.supports={everything:!0,everythingExceptFlag:!0},r=0;r<o.length;r++)t.supports[o[r]]=function(e){if(!p||!p.fillText)return!1;switch(p.textBaseline="top",p.font="600 32px Arial",e){case"flag":return s([127987,65039,8205,9895,65039],[127987,65039,8203,9895,65039])?!1:!s([55356,56826,55356,56819],[55356,56826,8203,55356,56819])&&!s([55356,57332,56128,56423,56128,56418,56128,56421,56128,56430,56128,56423,56128,56447],[55356,57332,8203,56128,56423,8203,56128,56418,8203,56128,56421,8203,56128,56430,8203,56128,56423,8203,56128,56447]);case"emoji":return!s([129777,127995,8205,129778,127999],[129777,127995,8203,129778,127999])}return!1}(o[r]),t.supports.everything=t.supports.everything&&t.supports[o[r]],"flag"!==o[r]&&(t.supports.everythingExceptFlag=t.supports.everythingExceptFlag&&t.supports[o[r]]);t.supports.everythingExceptFlag=t.supports.everythingExceptFlag&&!t.supports.flag,t.DOMReady=!1,t.readyCallback=function(){t.DOMReady=!0},t.supports.everything||(n=function(){t.readyCallback()},a.addEventListener?(a.addEventListener("DOMContentLoaded",n,!1),e.addEventListener("load",n,!1)):(e.attachEvent("onload",n),a.attachEvent("onreadystatechange",function(){"complete"===a.readyState&&t.readyCallback()})),(e=t.source||{}).concatemoji?c(e.concatemoji):e.wpemoji&&e.twemoji&&(c(e.twemoji),c(e.wpemoji)))}(window,document,window._wpemojiSettings);
+</script>
+<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 0.07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+<link rel="stylesheet" id="series_font-css" href="https://coolshell.cn/wp-content/plugins/simple-post-series/inc/icomoon/style.css?ver=2.4" type="text/css" media="all" />
+<link rel="stylesheet" id="wp-block-library-css" href="https://coolshell.cn/wp-content/plugins/gutenberg/build/block-library/style.css?ver=14.4.0" type="text/css" media="all" />
+<style id="global-styles-inline-css" type="text/css">
+body{--wp--preset--color--black: #000000;--wp--preset--color--cyan-bluish-gray: #abb8c3;--wp--preset--color--white: #ffffff;--wp--preset--color--pale-pink: #f78da7;--wp--preset--color--vivid-red: #cf2e2e;--wp--preset--color--luminous-vivid-orange: #ff6900;--wp--preset--color--luminous-vivid-amber: #fcb900;--wp--preset--color--light-green-cyan: #7bdcb5;--wp--preset--color--vivid-green-cyan: #00d084;--wp--preset--color--pale-cyan-blue: #8ed1fc;--wp--preset--color--vivid-cyan-blue: #0693e3;--wp--preset--color--vivid-purple: #9b51e0;--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple: linear-gradient(135deg,rgba(6,147,227,1) 0%,rgb(155,81,224) 100%);--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan: linear-gradient(135deg,rgb(122,220,180) 0%,rgb(0,208,130) 100%);--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange: linear-gradient(135deg,rgba(252,185,0,1) 0%,rgba(255,105,0,1) 100%);--wp--preset--gradient--luminous-vivid-orange-to-vivid-red: linear-gradient(135deg,rgba(255,105,0,1) 0%,rgb(207,46,46) 100%);--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray: linear-gradient(135deg,rgb(238,238,238) 0%,rgb(169,184,195) 100%);--wp--preset--gradient--cool-to-warm-spectrum: linear-gradient(135deg,rgb(74,234,220) 0%,rgb(151,120,209) 20%,rgb(207,42,186) 40%,rgb(238,44,130) 60%,rgb(251,105,98) 80%,rgb(254,248,76) 100%);--wp--preset--gradient--blush-light-purple: linear-gradient(135deg,rgb(255,206,236) 0%,rgb(152,150,240) 100%);--wp--preset--gradient--blush-bordeaux: linear-gradient(135deg,rgb(254,205,165) 0%,rgb(254,45,45) 50%,rgb(107,0,62) 100%);--wp--preset--gradient--luminous-dusk: linear-gradient(135deg,rgb(255,203,112) 0%,rgb(199,81,192) 50%,rgb(65,88,208) 100%);--wp--preset--gradient--pale-ocean: linear-gradient(135deg,rgb(255,245,203) 0%,rgb(182,227,212) 50%,rgb(51,167,181) 100%);--wp--preset--gradient--electric-grass: linear-gradient(135deg,rgb(202,248,128) 0%,rgb(113,206,126) 100%);--wp--preset--gradient--midnight: linear-gradient(135deg,rgb(2,3,129) 0%,rgb(40,116,252) 100%);--wp--preset--duotone--dark-grayscale: url('#wp-duotone-dark-grayscale');--wp--preset--duotone--grayscale: url('#wp-duotone-grayscale');--wp--preset--duotone--purple-yellow: url('#wp-duotone-purple-yellow');--wp--preset--duotone--blue-red: url('#wp-duotone-blue-red');--wp--preset--duotone--midnight: url('#wp-duotone-midnight');--wp--preset--duotone--magenta-yellow: url('#wp-duotone-magenta-yellow');--wp--preset--duotone--purple-green: url('#wp-duotone-purple-green');--wp--preset--duotone--blue-orange: url('#wp-duotone-blue-orange');--wp--preset--font-size--small: 13px;--wp--preset--font-size--medium: 20px;--wp--preset--font-size--large: 36px;--wp--preset--font-size--x-large: 42px;--wp--preset--spacing--20: 0.44rem;--wp--preset--spacing--30: 0.67rem;--wp--preset--spacing--40: 1rem;--wp--preset--spacing--50: 1.5rem;--wp--preset--spacing--60: 2.25rem;--wp--preset--spacing--70: 3.38rem;--wp--preset--spacing--80: 5.06rem;}:where(.is-layout-flex){gap: 0.5em;}body .is-layout-flow > .alignleft{float: left;margin-inline-start: 0;margin-inline-end: 2em;}body .is-layout-flow > .alignright{float: right;margin-inline-start: 2em;margin-inline-end: 0;}body .is-layout-flow > .aligncenter{margin-left: auto !important;margin-right: auto !important;}body .is-layout-constrained > .alignleft{float: left;margin-inline-start: 0;margin-inline-end: 2em;}body .is-layout-constrained > .alignright{float: right;margin-inline-start: 2em;margin-inline-end: 0;}body .is-layout-constrained > .aligncenter{margin-left: auto !important;margin-right: auto !important;}body .is-layout-constrained > :where(:not(.alignleft):not(.alignright):not(.alignfull)){max-width: var(--wp--style--global--content-size);margin-left: auto !important;margin-right: auto !important;}body .is-layout-constrained > .alignwide{max-width: var(--wp--style--global--wide-size);}body .is-layout-flex{display: flex;}body .is-layout-flex{flex-wrap: wrap;align-items: center;}body .is-layout-flex > *{margin: 0;}:where(.wp-block-columns.is-layout-flex){gap: 2em;}.has-black-color{color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-color{color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-color{color: var(--wp--preset--color--white) !important;}.has-pale-pink-color{color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-color{color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-color{color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-color{color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-color{color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-color{color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-color{color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-color{color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-color{color: var(--wp--preset--color--vivid-purple) !important;}.has-black-background-color{background-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-background-color{background-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-background-color{background-color: var(--wp--preset--color--white) !important;}.has-pale-pink-background-color{background-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-background-color{background-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-background-color{background-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-background-color{background-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-background-color{background-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-background-color{background-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-background-color{background-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-background-color{background-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-background-color{background-color: var(--wp--preset--color--vivid-purple) !important;}.has-black-border-color{border-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-border-color{border-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-border-color{border-color: var(--wp--preset--color--white) !important;}.has-pale-pink-border-color{border-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-border-color{border-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-border-color{border-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-border-color{border-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-border-color{border-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-border-color{border-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-border-color{border-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-border-color{border-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-border-color{border-color: var(--wp--preset--color--vivid-purple) !important;}.has-vivid-cyan-blue-to-vivid-purple-gradient-background{background: var(--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple) !important;}.has-light-green-cyan-to-vivid-green-cyan-gradient-background{background: var(--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan) !important;}.has-luminous-vivid-amber-to-luminous-vivid-orange-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange) !important;}.has-luminous-vivid-orange-to-vivid-red-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-orange-to-vivid-red) !important;}.has-very-light-gray-to-cyan-bluish-gray-gradient-background{background: var(--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray) !important;}.has-cool-to-warm-spectrum-gradient-background{background: var(--wp--preset--gradient--cool-to-warm-spectrum) !important;}.has-blush-light-purple-gradient-background{background: var(--wp--preset--gradient--blush-light-purple) !important;}.has-blush-bordeaux-gradient-background{background: var(--wp--preset--gradient--blush-bordeaux) !important;}.has-luminous-dusk-gradient-background{background: var(--wp--preset--gradient--luminous-dusk) !important;}.has-pale-ocean-gradient-background{background: var(--wp--preset--gradient--pale-ocean) !important;}.has-electric-grass-gradient-background{background: var(--wp--preset--gradient--electric-grass) !important;}.has-midnight-gradient-background{background: var(--wp--preset--gradient--midnight) !important;}.has-small-font-size{font-size: var(--wp--preset--font-size--small) !important;}.has-medium-font-size{font-size: var(--wp--preset--font-size--medium) !important;}.has-large-font-size{font-size: var(--wp--preset--font-size--large) !important;}.has-x-large-font-size{font-size: var(--wp--preset--font-size--x-large) !important;}
+:where(.wp-block-columns.is-layout-flex){gap: 2em;}
+.wp-block-pullquote{font-size: 1.5em;line-height: 1.6;}
+.wp-block-navigation a:where(:not(.wp-element-button)){color: inherit;}
+</style>
+<link rel="stylesheet" id="classic-theme-styles-css" href="https://coolshell.cn/wp-content/plugins/gutenberg/build/block-library/classic.css?ver=1" type="text/css" media="all" />
+<link rel="stylesheet" id="wp-postratings-css" href="https://coolshell.cn/wp-content/plugins/wp-postratings/css/postratings-css.css?ver=1.90" type="text/css" media="all" />
+<link rel="stylesheet" id="wp-pagenavi-css" href="https://coolshell.cn/wp-content/plugins/wp-pagenavi/pagenavi-css.css?ver=2.70" type="text/css" media="all" />
+<link rel="stylesheet" id="ez-icomoon-css" href="https://coolshell.cn/wp-content/plugins/easy-table-of-contents/vendor/icomoon/style.min.css?ver=2.0.34" type="text/css" media="all" />
+<link rel="stylesheet" id="ez-toc-css" href="https://coolshell.cn/wp-content/plugins/easy-table-of-contents/assets/css/screen.min.css?ver=2.0.34" type="text/css" media="all" />
+<style id="ez-toc-inline-css" type="text/css">
+div#ez-toc-container p.ez-toc-title {font-size: 120%;}div#ez-toc-container p.ez-toc-title {font-weight: 500;}div#ez-toc-container ul li {font-size: 95%;}div#ez-toc-container nav ul ul li ul li {font-size: %!important;}
+.ez-toc-container-direction {
+    direction: ltr;
+}
+
+	.ez-toc-counter ul {
+	    counter-reset: item;
+	}
+
+
+	
+	.ez-toc-counter nav ul li a::before {
+	    content: counters(item, ".", decimal) ". ";
+	    display: inline-block;
+	    counter-increment: item;
+	    margin-right: .2em; 
+
+	    float: left;
+	}
+
+
+.ez-toc-widget-direction {
+    direction: ltr;
+}
+
+	.ez-toc-widget-container ul {
+	    counter-reset: item;
+	}
+
+
+	
+	.ez-toc-widget-container nav ul li a::before {
+	    content: counters(item, ".", decimal) ". ";
+	    display: inline-block;
+	    counter-increment: item;
+	    margin-right: .2em; 
+
+	    float: left;
+	}
+
+
+</style>
+<link rel="stylesheet" id="bootstrap-css" href="https://coolshell.cn/wp-content/themes/MyNisarg/css/bootstrap.css?ver=6.0.3" type="text/css" media="all" />
+<link rel="stylesheet" id="nisarg-style-css" href="https://coolshell.cn/wp-content/themes/MyNisarg/style.css?ver=6.0.3" type="text/css" media="all" />
+<style id="nisarg-style-inline-css" type="text/css">
+	/* Color Scheme */
+
+	/* Accent Color */
+
+	a:active,
+	a:hover,
+	a:focus {
+	    color: #009688;
+	}
+
+	.navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus {
+		color: #009688;
+	}
+
+	
+	.navbar-default .navbar-nav > .active > a, .navbar-default .navbar-nav > .active > a:hover, .navbar-default .navbar-nav > .active > a:focus {
+		color: #009688;			
+	}
+
+	@media (min-width: 768px){
+		.navbar-default .navbar-nav > .active > a, .navbar-default .navbar-nav > .active > a:hover, .navbar-default .navbar-nav > .active > a:focus {
+			border-top: 4px solid #009688;
+		}		
+	}
+
+	.dropdown-menu > .active > a, .dropdown-menu > .active > a:hover, .dropdown-menu > .active > a:focus {	    
+	    background-color: #009688;
+	}
+
+
+	.navbar-default .navbar-nav > .open > a, .navbar-default .navbar-nav > .open > a:hover, .navbar-default .navbar-nav > .open > a:focus {
+		color: #009688;
+	}
+
+	.navbar-default .navbar-nav > li > .dropdown-menu > li > a:hover,
+	.navbar-default .navbar-nav > li > .dropdown-menu > li > a:focus {
+		color: #fff;
+		background-color: #009688;
+	}
+
+	.navbar-default .navbar-nav .open .dropdown-menu > .active > a, .navbar-default .navbar-nav .open .dropdown-menu > .active > a:hover, .navbar-default .navbar-nav .open .dropdown-menu > .active > a:focus {
+		background-color: #fff;
+		color: #009688;
+	}
+
+	@media (max-width: 767px) {
+		.navbar-default .navbar-nav .open .dropdown-menu > li > a:hover {
+			background-color: #009688;
+			color: #fff;
+		}
+	}
+
+	.sticky-post{
+	    background: #009688;
+	    color:white;
+	}
+	
+	.entry-title a:hover,
+	.entry-title a:focus{
+	    color: #009688;
+	}
+
+	.entry-header .entry-meta::after{
+	    background: #009688;
+	}
+
+	.fa {
+		color: #009688;
+	}
+
+	.btn-default{
+		border-bottom: 1px solid #009688;
+	}
+
+	.btn-default:hover, .btn-default:focus{
+	    border-bottom: 1px solid #009688;
+	    background-color: #009688;
+	}
+
+	.nav-previous:hover, .nav-next:hover{
+	    border: 1px solid #009688;
+	    background-color: #009688;
+	}
+
+	.next-post a:hover,.prev-post a:hover{
+	    color: #009688;
+	}
+
+	.posts-navigation .next-post a:hover .fa, .posts-navigation .prev-post a:hover .fa{
+	    color: #009688;
+	}
+
+
+	#secondary .widget-title::after{
+		background-color: #009688;
+	    content: "";
+	    position: absolute;
+	    width: 75px;
+	    display: block;
+	    height: 4px;    
+	    bottom: -15px;
+	}
+
+	#secondary .widget a:hover,
+	#secondary .widget a:focus{
+		color: #009688;
+	}
+
+	#secondary .widget_calendar tbody a {
+	    background-color: #009688;
+	    color: #fff;
+	    padding: 0.2em;
+	}
+
+	#secondary .widget_calendar tbody a:hover{
+	    background-color: #009688;
+	    color: #fff;
+	    padding: 0.2em;
+	}	
+
+</style>
+<link rel="stylesheet" id="font-awesome-css" href="https://coolshell.cn/wp-content/themes/MyNisarg/font-awesome/css/font-awesome.min.css?ver=6.0.3" type="text/css" media="all" />
+<link rel="stylesheet" id="nisarggooglefonts-css" href="//fonts.googleapis.com/css?family=Lato:400,300italic,700|Source+Sans+Pro:400,400italic" type="text/css" media="all" />
+<link rel="stylesheet" id="enlighterjs-css" href="https://coolshell.cn/wp-content/plugins/enlighter/cache/enlighterjs.min.css?ver=iKy2UVJwWdQuA1J" type="text/css" media="all" />
+<script type="08a8c068d41a0f25af4d68b1-text/javascript" src="https://coolshell.cn/wp-includes/js/jquery/jquery.min.js?ver=3.6.0" id="jquery-core-js"></script>
+<script type="08a8c068d41a0f25af4d68b1-text/javascript" src="https://coolshell.cn/wp-includes/js/jquery/jquery-migrate.min.js?ver=3.3.2" id="jquery-migrate-js"></script>
+<script type="08a8c068d41a0f25af4d68b1-text/javascript" src="https://coolshell.cn/wp-content/plugins/simple-post-series/autohide.js?ver=2.4" id="series-js"></script>
+<!--[if lt IE 9]>
+<script type='text/javascript' src='https://coolshell.cn/wp-content/themes/MyNisarg/js/html5shiv.js?ver=3.7.3' id='html5shiv-js'></script>
+<![endif]-->
+<link rel="https://api.w.org/" href="https://coolshell.cn/wp-json/" /><link rel="alternate" type="application/json" href="https://coolshell.cn/wp-json/wp/v2/posts/8422" /><link rel="EditURI" type="application/rsd+xml" title="RSD" href="https://coolshell.cn/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="https://coolshell.cn/wp-includes/wlwmanifest.xml" />
+<meta name="generator" content="WordPress 6.0.3" />
+<link rel="shortlink" href="https://coolshell.cn/?p=8422" />
+<link rel="alternate" type="application/json+oembed" href="https://coolshell.cn/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fcoolshell.cn%2Farticles%2F8422.html" />
+<link rel="alternate" type="text/xml+oembed" href="https://coolshell.cn/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fcoolshell.cn%2Farticles%2F8422.html&#038;format=xml" />
+<script type="08a8c068d41a0f25af4d68b1-text/javascript">
+	window._wp_rp_static_base_url = 'https://wprp.zemanta.com/static/';
+	window._wp_rp_wp_ajax_url = "https://coolshell.cn/wp-admin/admin-ajax.php";
+	window._wp_rp_plugin_version = '3.6.4';
+	window._wp_rp_post_id = '8422';
+	window._wp_rp_num_rel_posts = '6';
+	window._wp_rp_thumbnails = true;
+	window._wp_rp_post_title = 'TF-IDF%E6%A8%A1%E5%9E%8B%E7%9A%84%E6%A6%82%E7%8E%87%E8%A7%A3%E9%87%8A';
+	window._wp_rp_post_tags = ['search', 'tf-idf', 'algorithm', '%E6%9D%82%E9%A1%B9%E8%B5%84%E6%BA%90', '%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1', 'size', '1010', 'term', 'sum', 'di', 'iphon', 'document'];
+	window._wp_rp_promoted_content = true;
+</script>
+<link rel="stylesheet" href="https://coolshell.cn/wp-content/plugins/wordpress-23-related-posts-plugin/static/themes/vertical-m.css?version=3.6.4" />
+<style type="text/css">
+        .site-header { background: #1d2b2d; }
+</style>
+</head>
+<body class="post-template-default single single-post postid-8422 single-format-standard group-blog"><div id=cf_alert_div><style>#cf_alert_div{margin:0 0 5px;padding:0;position:relative;top:0;left:0;display:block;z-index:99999;background-color:#f7f7f8;box-shadow:0 5px 5px rgba(0,0,0,.25)}#cf_alert_div a,#cf_alert_div a:visited{text-decoration:none;color:#276d9b;font-weight:600}#cf_alert_div strong{font-weight:600}#cf_alert_div table{width:100%}#cf_alert_div table td{vertical-align:middle}#cf_alert_div p{margin:0;padding:0;max-width:1100px}#cf_alert_div .wrapper{padding:0;margin:0;text-align:left;font-family:-apple-system,system-ui,BlinkMacSystemFont,segoe ui,Roboto,Oxygen,Ubuntu,helvetica neue,Arial,sans-serif;font-weight:400;font-style:normal;font-size:12px;padding:16px 3.334%}#cf_alert_div .wrapper td.refresh{text-align:center;min-width:140px}#cf_alert_div .wrapper td.refresh a{display:inline-block;padding:8px 24px;border:1.5px solid #276d9b;border-radius:5px;margin-right:20px}#cf_alert_div .wrapper td.content{position:relative;padding-right:25px;color:#1d1f20;font-size:14px;max-width:900px}#cf_alert_div .wrapper .x{position:absolute;top:0;right:-12.5px;height:25px;width:25px;cursor:pointer}#cf_alert_div .wrapper .x .line{display:block;height:15px;width:3px;position:absolute;top:5px;left:11px;background:#4e5255}#cf_alert_div .wrapper .x .line:first-of-type{transform:rotate(135deg)}#cf_alert_div .wrapper .x .line:last-of-type{transform:rotate(45deg)}</style><div class=wrapper><table><tr><td class=refresh><a href=# onclick="document.cookie='cf_use_ob=0;path=/';window.location.reload();return false;">Refresh</a><noscript style="margin:10px 0 10px 0;padding:0;font:12px Helvetica,Arial,sans-serif;color:#404040;display:block">(Enable JavaScript first.)</noscript></td><td class=content><p>This website <strong>coolshell.cn/articles/8422.html/comment-page-1</strong> is currently offline. <a href=https://www.cloudflare.com/always-online/ target=_blank>Cloudflare's Always Online&trade;</a> shows a snapshot of this web page from the <a href=https://archive.org/web/ target=_blank>Internet Archive's Wayback Machine</a>. To check for the live version, click <strong>Refresh</strong>.</p><a class=x href="javascript:void(null);" onclick="document.getElementById('cf_alert_div').style.display='none';"><span class=line></span> <span class=line></span></a></td></tr></table></div></div>
+<link rel="stylesheet" id="nisarg-style-css" href="https://coolshell.cn/wp-content/themes/MyNisarg/style.css" type="text/css" media="all">
+<div id="page" class="hfeed site">
+<header id="masthead" role="banner">
+<nav class="navbar navbar-default navbar-fixed-top navbar-left" role="navigation">
+<div class="container" id="navigation_menu">
+<div class="navbar-header">
+<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+<span class="sr-only">Toggle navigation</span>
+<span class="icon-bar"></span>
+<span class="icon-bar"></span>
+<span class="icon-bar"></span>
+</button>
+<a class="navbar-brand" href="https://coolshell.cn/"><div class="coolshell_logo"></div>酷 壳 &#8211; CoolShell</a>
+</div>
+<div class="collapse navbar-collapse navbar-ex1-collapse"><ul id="menu-coolshell" class="nav navbar-nav"><li id="menu-item-17405" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-17405"><a title="首页" href="https://coolshell.cn/">首页</a></li>
+<li id="menu-item-17406" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-17406"><a title="推荐文章" href="https://coolshell.cn/featured">推荐文章</a></li>
+<li id="menu-item-17407" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-17407"><a title="本站插件" href="https://coolshell.cn/plugins">本站插件</a></li>
+<li id="menu-item-17408" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-17408"><a title="留言小本" href="https://coolshell.cn/guestbook">留言小本</a></li>
+<li id="menu-item-17409" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-17409"><a title="关于酷壳" href="https://coolshell.cn/about">关于酷壳</a></li>
+<li id="menu-item-17410" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-17410"><a title="关于陈皓" href="https://coolshell.cn/haoel">关于陈皓</a></li>
+<li id="menu-item-17582" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-17582"><a title="RSS" href="https://coolshell.cn/feed">RSS</a></li>
+</ul></div>
+</div>
+</nav>
+<div id="cc_spacer"></div>
+<div class="site-header">
+<div class="pull-right">
+<a title="把这个链接拖到你的Chrome收藏夹工具栏中" href="javascript:(function(){function c(){var e=document.createElement(&quot;link&quot;);e.setAttribute(&quot;type&quot;,&quot;text/css&quot;);e.setAttribute(&quot;rel&quot;,&quot;stylesheet&quot;);e.setAttribute(&quot;href&quot;,f);e.setAttribute(&quot;class&quot;,l);document.body.appendChild(e)}function h(){var e=document.getElementsByClassName(l);for(var t=0;t<e.length;t++){document.body.removeChild(e[t])}}function p(){var e=document.createElement(&quot;div&quot;);e.setAttribute(&quot;class&quot;,a);document.body.appendChild(e);setTimeout(function(){document.body.removeChild(e)},100)}function d(e){return{height:e.offsetHeight,width:e.offsetWidth}}function v(i){var s=d(i);return s.height>e&&s.height<n&&s.width>t&&s.width<r}function m(e){var t=e;var n=0;while(!!t){n+=t.offsetTop;t=t.offsetParent}return n}function g(){var e=document.documentElement;if(!!window.innerWidth){return window.innerHeight}else if(e&&!isNaN(e.clientHeight)){return e.clientHeight}return 0}function y(){if(window.pageYOffset){return window.pageYOffset}return Math.max(document.documentElement.scrollTop,document.body.scrollTop)}function E(e){var t=m(e);return t>=w&&t<=b+w}function S(){var e=document.createElement(&quot;audio&quot;);e.setAttribute(&quot;class&quot;,l);e.src=i;e.loop=false;e.addEventListener(&quot;canplay&quot;,function(){setTimeout(function(){x(k)},500);setTimeout(function(){N();p();for(var e=0;e<O.length;e++){T(O[e])}},15500)},true);e.addEventListener(&quot;ended&quot;,function(){N();h()},true);e.innerHTML=&quot; <p>If you are reading this, it is because your browser does not support the audio element. We recommend that you get a new browser.</p> <p>&quot;;document.body.appendChild(e);e.play()}function x(e){e.className+=&quot; &quot;+s+&quot; &quot;+o}function T(e){e.className+=&quot; &quot;+s+&quot; &quot;+u[Math.floor(Math.random()*u.length)]}function N(){var e=document.getElementsByClassName(s);var t=new RegExp(&quot;\\b&quot;+s+&quot;\\b&quot;);for(var n=0;n<e.length;){e[n].className=e[n].className.replace(t,&quot;&quot;)}}var e=30;var t=30;var n=350;var r=350;var i=&quot;//s3.amazonaws.com/moovweb-marketing/playground/harlem-shake.mp3&quot;;var s=&quot;mw-harlem_shake_me&quot;;var o=&quot;im_first&quot;;var u=[&quot;im_drunk&quot;,&quot;im_baked&quot;,&quot;im_trippin&quot;,&quot;im_blown&quot;];var a=&quot;mw-strobe_light&quot;;var f=&quot;//s3.amazonaws.com/moovweb-marketing/playground/harlem-shake-style.css&quot;;var l=&quot;mw_added_css&quot;;var b=g();var w=y();var C=document.getElementsByTagName(&quot;*&quot;);var k=null;for(var L=0;L<C.length;L++){var A=C[L];if(v(A)){if(E(A)){k=A;break}}}if(A===null){console.warn(&quot;Could not find a node of the right size. Please try a different page.&quot;);return}c();S();var O=[];for(var L=0;L<C.length;L++){var A=C[L];if(v(A)){O.push(A)}}})()    ">High一下!</a>
+</div>
+<div class="site-branding">
+<a class="home-link" href="https://coolshell.cn/" title="酷 壳 &#8211; CoolShell" rel="home">
+<h1 class="site-title">酷 壳 &#8211; CoolShell</h1>
+<h2 class="site-description">享受编程和技术所带来的快乐 &#8211; Coding Your Ambition</h2>
+</a>
+</div>
+</div>
+</header>
+<div class="container">
+<div class="row">
+<div class="col-md-9 nav-searchbox hidden-lg hidden-md visible-sm-* visible-xs-*">
+<form role="search" method="get" class="search-form" action="https://coolshell.cn/">
+<label>
+<span class="screen-reader-text">Search for:</span>
+<input type="search" class="search-field" placeholder="Search …" value name="s" title="Search for:">
+</label>
+<button type="submit" class="search-submit"><span class="screen-reader-text">Search</span></button>
+</form>
+</div>
+</div>
+</div>
+<div id="content" class="site-content">
+<div class="container">
+<div class="row">
+<div id="primary" class="col-md-9 content-area">
+<main id="main" role="main">
+<article id="post-8422" class="post-content post-8422 post type-post status-publish format-standard hentry category-misc category-progdesign tag-algorithm tag-search tag-tf-idf">
+<header class="entry-header">
+<span class="screen-reader-text">TF-IDF模型的概率解释</span>
+<h1 class="entry-title">TF-IDF模型的概率解释</h1>
+<div class="entry-meta">
+<h5 class="entry-date"><i class="fa fa-calendar-o"></i> <a href="https://coolshell.cn/articles/8422.html" title="09:05" rel="bookmark"><time class="entry-date" datetime="2012-10-24T09:05:54+08:00" pubdate>2012年10月24日 </time></a><span class="byline"><span class="sep"></span><i class="fa fa-user"></i>
+<span class="author vcard"><a class="url fn n" href="https://coolshell.cn/articles/author/todd" title="View all posts by Todd" rel="author">Todd</a></span></span> <i class="fa fa-comments-o"></i><span class="screen-reader-text">评论 </span> <a href="https://coolshell.cn/articles/8422.html#comments" class="comments-link">51 条评论</a> <i class="fa fa-users" style="margin-left:10px;"></i> 51,497 人阅读</h5>
+</div>
+</header>
+<div class="entry-content">
+<p><strong><span style="color: #cc0000">（感谢 </span></strong><a href="http://weibo.com/weidagang" target="_blank">@猫叔shiro</a><strong><span style="color: #cc0000">（以前的todd） 投递此文）</span></strong></p>
+<div id="ez-toc-container" class="ez-toc-v2_0_34 counter-hierarchy ez-toc-counter ez-toc-grey ez-toc-container-direction">
+<div class="ez-toc-title-container">
+<p class="ez-toc-title">目录</p>
+<span class="ez-toc-title-toggle"></span></div>
+<nav><ul class="ez-toc-list ez-toc-list-level-1"><li class="ez-toc-page-1 ez-toc-heading-level-4"><a class="ez-toc-link ez-toc-heading-1" href="#%E4%BF%A1%E6%81%AF%E6%A3%80%E7%B4%A2%E6%A6%82%E8%BF%B0" title="信息检索概述">信息检索概述</a></li><li class="ez-toc-page-1 ez-toc-heading-level-4"><a class="ez-toc-link ez-toc-heading-2" href="#tf-idf%E6%A8%A1%E5%9E%8B" title="tf-idf模型">tf-idf模型</a></li><li class="ez-toc-page-1 ez-toc-heading-level-4"><a class="ez-toc-link ez-toc-heading-3" href="#%E4%BF%A1%E6%81%AF%E6%A3%80%E7%B4%A2%E9%97%AE%E9%A2%98%E7%9A%84%E6%A6%82%E7%8E%87%E8%A7%86%E8%A7%92" title="信息检索问题的概率视角">信息检索问题的概率视角</a></li><li class="ez-toc-page-1 ez-toc-heading-level-4"><a class="ez-toc-link ez-toc-heading-4" href="#%E7%9B%92%E5%AD%90%E5%B0%8F%E7%90%83%E6%A8%A1%E5%9E%8B" title="盒子小球模型">盒子小球模型</a></li><li class="ez-toc-page-1 ez-toc-heading-level-4"><a class="ez-toc-link ez-toc-heading-5" href="#%E6%96%87%E6%A1%A3%E5%85%88%E9%AA%8C%E6%A6%82%E7%8E%87Pd%E4%B8%8EPageRank" title="文档先验概率P(d)与PageRank">文档先验概率P(d)与PageRank</a></li><li class="ez-toc-page-1 ez-toc-heading-level-4"><a class="ez-toc-link ez-toc-heading-6" href="#%E8%AF%8D%E7%9A%84%E5%85%88%E9%AA%8C%E6%A6%82%E7%8E%87Pw" title="词的先验概率P(w)">词的先验概率P(w)</a></li><li class="ez-toc-page-1 ez-toc-heading-level-4"><a class="ez-toc-link ez-toc-heading-7" href="#%E8%AF%8D%E4%BB%A3%E8%A1%A8%E6%96%87%E6%A1%A3%E4%B8%BB%E9%A2%98%E7%9A%84%E6%9D%A1%E4%BB%B6%E6%A6%82%E7%8E%87Pw_d" title="词代表文档主题的条件概率P(w | d)">词代表文档主题的条件概率P(w | d)</a></li><li class="ez-toc-page-1 ez-toc-heading-level-4"><a class="ez-toc-link ez-toc-heading-8" href="#%E8%AF%8D%E7%9A%84%E4%BF%A1%E6%81%AF%E9%87%8F%E5%92%8Cidf" title="词的信息量和idf">词的信息量和idf</a></li><li class="ez-toc-page-1 ez-toc-heading-level-4"><a class="ez-toc-link ez-toc-heading-9" href="#%E5%A4%9A%E5%85%B3%E9%94%AE%E8%AF%8D" title="多关键词">多关键词</a></li><li class="ez-toc-page-1 ez-toc-heading-level-4"><a class="ez-toc-link ez-toc-heading-10" href="#%E6%80%BB%E7%BB%93" title="总结">总结</a></li></ul></nav></div>
+<h4><span class="ez-toc-section" id="%E4%BF%A1%E6%81%AF%E6%A3%80%E7%B4%A2%E6%A6%82%E8%BF%B0"></span>信息检索概述<span class="ez-toc-section-end"></span></h4>
+<p>信息检索是当前应用十分广泛的一种技术，论文检索、搜索引擎都属于信息检索的范畴。通常，人们把信息检索问题抽象为：在文档集合D上，对于由关键词w[1] &#8230; w[k]组成的查询串q，返回一个按查询q和文档d匹配度relevance(q, d)排序的相关文档列表D&#8217;。</p>
+<p>对于这一问题，先后出现了布尔模型、向量模型等各种经典的信息检索模型，它们从不同的角度提出了自己的一套解决方案。布尔模型以集合的布尔运算为基础，查询效率高，但模型过于简单，无法有效地对不同文档进行排序，查询效果不佳。向量模型把文档和查询串都视为词所构成的多维向量，而文档与查询的相关性即对应于向量间的夹角。不过，由于通常词的数量巨大，向量维度非常高，而大量的维度都是0，计算向量夹角的效果并不好。另外，庞大的计算量也使得向量模型几乎不具有在互联网搜索引擎这样海量数据集上实施的可行性。</p>
+<h4><span class="ez-toc-section" id="tf-idf%E6%A8%A1%E5%9E%8B"></span>tf-idf模型<span class="ez-toc-section-end"></span></h4>
+<p>目前，真正在搜索引擎等实际应用中广泛使用的是tf-idf模型。tf-idf模型的主要思想是：如果词w在一篇文档d中出现的频率高，并且在其他文档中很少出现，则认为词w具有很好的区分能力，适合用来把文章d和其他文章区分开来。该模型主要包含了两个因素：</p>
+<p><span id="more-8422"></span></p>
+<p>1) 词w在文档d中的词频tf (Term Frequency)，即词w在文档d中出现次数count(w, d)和文档d中总词数size(d)的比值：</p>
+<pre><code>tf(w,d) = count(w, d) / size(d) </code></pre>
+<p>2) 词w在整个文档集合中的逆向文档频率idf (Inverse Document Frequency)，即文档总数n与词w所出现文件数docs(w, D)比值的对数:</p>
+<pre><code>idf = log(n / docs(w, D)) </code></pre>
+<p>tf-idf模型根据tf和idf为每一个文档d和由关键词w[1]&#8230;w[k]组成的查询串q计算一个权值，用于表示查询串q与文档d的匹配度：</p>
+<pre><code>
+tf-idf(q, d) 
+= sum { i = 1..k | tf-idf(w[i], d) } 
+= sum { i = 1..k | tf(w[i], d) * idf(w[i]) } 
+</code></pre>
+<h4><span class="ez-toc-section" id="%E4%BF%A1%E6%81%AF%E6%A3%80%E7%B4%A2%E9%97%AE%E9%A2%98%E7%9A%84%E6%A6%82%E7%8E%87%E8%A7%86%E8%A7%92"></span>信息检索问题的概率视角<span class="ez-toc-section-end"></span></h4>
+<p>直观上看，tf描述的是文档中词出现的频率；而idf是和词出现文档数相关的权重。我们比较容易定性地理解tf-idf的基本思想，但具体到tf-idf的一些细节却并不是那么容易说清楚为什么。比如：</p>
+<p>1) 为什么tf是count(w, d) / size(d)？能不能是log(count(w, d) / size(d))等其他形式？</p>
+<p>2) 为什么idf是一个log形式？</p>
+<p>3) 为什么tf和idf之间是乘积关系，而不是加法或指数关系？</p>
+<p>4) 为什么多个关键词的tf-idf值是加法关系，而不是乘法或者指数关系？</p>
+<p>5) 除了tf-idf值，Google还会计算网页的PageRank值，二者相乘得到最后的权值，为什么是乘法，而不是加法或指数？</p>
+<p>据说，最初甚至tf-idf的提出者自己也没有对诸如“为什么idf是log形式”这个问题给出有力的解释，虽然后来有人从信息论的角度对idf的log形式给出了令人信服的解释，但是剩下的其他一些疑问仍然存在。在我了解的范围内，对于tf-idf模型还没有一个真正统一完整的理论解释。在试图为tf-idf找到更好的理论解释的过程中，我意识到对tf-idf模型种种疑问的根源在于tf-idf试图表达的“查询q和文档的匹配度”本身就有一定的模糊性，什么叫做“匹配度”，这就有很大的自由发挥空间。如果说向量模型的用向量夹角来表示匹配度概念还有一定的理论基础，那么用tf-idf来表达匹配度就有点“与其说是科学，不如说是艺术”的味道。</p>
+<p>更进一步，其实，信息检索问题的抽象方式“在文档集合D上，对于给定查询串q，返回一个按查询q和文档d匹配度relevance(q, d)排序的相关文档列表D&#8217;”本身是值得反思的。我们应当考虑抛弃“匹配度”这种模糊的目标，从根源上寻求一种具有明确数学意义的目标。如果我们从概率视角来看，<strong>把“查询串q和文档d的匹配度”问题转换为“当查询串是q时，用户期望获得文档d的概率”问题</strong>，信息检索问题就清晰多了。一方面这个概率描述是站在人的角度来看待信息检索问题的，更加贴近实际的用户体验；另一方面，概率本身是有明确数学意义的，这样我们就首先从目标上对问题进行了严格化。</p>
+<p>下面，我将通过一个模型，从概率的视角，一边解释tf-idf的概率意义，一边指出其不合理之处。</p>
+<h4><span class="ez-toc-section" id="%E7%9B%92%E5%AD%90%E5%B0%8F%E7%90%83%E6%A8%A1%E5%9E%8B"></span>盒子小球模型<span class="ez-toc-section-end"></span></h4>
+<p>为了分析“当查询串是q时，用户期望获得文档d的概率”问题，我首先建立了一种称为“盒子小球模型”的简化模型。盒子小球模型把词想象成各种不同颜色的小球，文档想象成装有若干小球的盒子，把“当查询串是q时，用户期望获得文档d的概率“转换为下面的问题：</p>
+<p><strong>有n个盒子d[1], d[2], &#8230; d[n]，每个盒子中有若干不同颜色的小球，有人随机地选择了一个盒子，并从盒子中随机地拿出了一个颜色为w[j]的小球，那么这个小球来自于盒子d[i]的概率是多少？</strong></p>
+<p>其实，这就是经典的条件概率问题P(d[i] | w[j])，采用贝叶斯推断将其转化为：</p>
+<pre><code>
+P(d[i] | w[j]) 
+= P(d[i], w[j]) / P(w[j]) 
+= P(d[i]) * P(w[j] | d[i]) / P(w[j]) 
+</code></pre>
+<p>我们注意到这个条件概率包括几个部分，P(d[i])是盒子d[i]被选中的先验概率，p(w[j])是w[j]颜色小球被选中的先验概率，P(w[j] | d[i])是在盒子d[i]中选中颜色w[j]小球的条件概率。</p>
+<h4><span class="ez-toc-section" id="%E6%96%87%E6%A1%A3%E5%85%88%E9%AA%8C%E6%A6%82%E7%8E%87Pd%E4%B8%8EPageRank"></span>文档先验概率P(d)与PageRank<span class="ez-toc-section-end"></span></h4>
+<p>首先，我们来看盒子d[i]被选中的先验概率P(d[i])是什么。P(d[i])的意义是：当用户什么也没有输入的时候，它可能对文档d[i]感兴趣的概率。在没有更多信息的情况下，我们可以认为每个盒子被选中的先验概率P(d[i])是相等的，都等于1 / m，其中m表示总文档数（总盒子数），这时P(d[i])作为公共系数可被忽略。不过，在实际应用中，我们通常可以根据其他知识获得各文档的先验概率，比如，学术文献和网页通常可以基于引用度模型计算其先验概率，这些经典论文和热门网页是多数人乐于见到的。说到这里，你可能已经发现，Google PageRank本质上就是这个先验概率P(d[i])乘以某个系数！所以，PageRank实际上也被纳入这个条件概率模型中来了，这就不难解释为什么在Google的排序算法中PageRank权重和tf-idf权重是一种乘积关系而不是加或者指数关系。另一方面，在理解了文档先验概率对整个搜索结果概率的影响后，当搜索引擎中针对PageRank出现各种假链接SEO时，我们可以不拘泥于基于链接引用模型的PageRank，只要是以网页先验概率为目标，不论是采用基于链接引用的PageRank，还是基于搜索结果点击数模型，或是其他模型，都是可以的。这就是“变通”，从原理上“通”了，就可以在方法上“变”。</p>
+<h4><span class="ez-toc-section" id="%E8%AF%8D%E7%9A%84%E5%85%88%E9%AA%8C%E6%A6%82%E7%8E%87Pw"></span>词的先验概率P(w)<span class="ez-toc-section-end"></span></h4>
+<p>下面我们来考察词w[j]的先验概率P(w[j])。P(w[j])的意义是：在整个文档集合中，w[j]被作为搜索关键词的概率，比如：“iPhone 5”，“青花瓷”这类词被用作搜索关键词的概率较高，而“的”，“什么”，“我们”这类高频词不大可能成为搜索关键词。那么，我们如何来定量计算P(w[j])呢？一种思路就是把w[j]在文档集中出现的频率作为其先验概率。不过，显然存在更好的方案：在大量的搜索查询中进行统计，统计方法得出P(w[j])的方法很接近P(w[j])本质的，不需要引入额外的假设。比如，一段时间内某搜索引擎的搜索总次数为10^10次，“公积金”这个词出现了100次，那么，我们可以认为先验概率P(&#8220;公积金&#8221;)就是100 / 10^10 = 10^-8。</p>
+<h4><span class="ez-toc-section" id="%E8%AF%8D%E4%BB%A3%E8%A1%A8%E6%96%87%E6%A1%A3%E4%B8%BB%E9%A2%98%E7%9A%84%E6%9D%A1%E4%BB%B6%E6%A6%82%E7%8E%87Pw_d"></span>词代表文档主题的条件概率P(w | d)<span class="ez-toc-section-end"></span></h4>
+<p>最后，我们来看条件概率P(w[j] | d[i])。P(w[j] | d[i])的意义是在文档d[i]中，人们用关键词w[j]来搜索它的概率。那么，什么样的词是人们会用来搜索一篇文档的呢？多数情况下，是那些代表一篇文档主题的词。比如，有一篇新闻是关于iPhone 5发布会的，那么“iPhone5”， “发布会”，“库克”，“苹果”这些词基本上就构成了文章的主题；那么，反过来说，如果用户想搜索这篇关于iPhone 5发布会的新闻，他就有很大的可能通过这几个词来进行搜索。我们应当注意分辨P(w[j] | d[i])与P(w[j])的区别，后者可以通过大量的查询统计得来，而前者不能与后者直接划等号，因为前者的意义是w[j]代表d[i]主题的概率。如果非要引入统计方法，那么P(w[j] | d[i])对应的统计是：当搜索关键词是w[j]且搜索结果包含d[i]时，用户点击（满意）d[i]作为搜索结果的频率。比如，用“iPhone5 发布会”的搜索，在结果中有都10000次出现了网页x，其中，用户8000次点击了网页x，那么，可以认为有80%的概率网页x的主题是关于“iPhone5 发布会”的。</p>
+<h4><span class="ez-toc-section" id="%E8%AF%8D%E7%9A%84%E4%BF%A1%E6%81%AF%E9%87%8F%E5%92%8Cidf"></span>词的信息量和idf<span class="ez-toc-section-end"></span></h4>
+<p>上面谈到了对P(w[j] | d[i])的计算的统计方法，但该方法有一定的局限，比如，要能进行统计首先需要文档出现在足够多的搜索结果中，需要时间和量的积累。除了统计方法外，我们可以考虑其他方法计算词w[j]代表文档d[i]主题的概率。可能有人立刻会想到要对文章进行语义分析提取关键词，给这些关键词高权重，给其他词低权重。这种想法有一定的合理性，但实现上涉及语义分析，没有成熟高效的方法。实际上，信息论为我们提供了另一条高效方案。上面谈到“的”，“什么”，“我们”这类高频词不会成为文档主题和搜索关键词的原因是它们不能提供足够的信息，而“iPhone 5”，“发布会”这样的词汇则信息量丰富。所谓信息是指对不确定性（熵）的减小程度，信息的单位是比特(bit)，信息量越大对于不确定性的减小程度越大。比如，外面可能在下雨也可能没有下雨，可能性空间大小为2，如果我们看一眼窗外，可能性空间就变成了1，那么“看见窗外在下雨”所提供的信息量就和熵的减小程度成正比，具体来讲等于log(2/1)=1。如果要用二进制编码是否下雨，需要1个bit，0代表没有下雨，1代表下雨。</p>
+<p>但在很多场景下，各个可能性的概率并不相同，比如：欧洲杯16只球队都可能夺冠，赛前它们夺冠的先验概率并不相同，那么结果的不确定性程度实际上是小于log(16)=4。如果你没有看比赛，有人告诉你西班牙夺冠了，你可能会觉得很正常，但如果有人告诉你瑞士夺冠了，你通常会非常惊讶。这一现象的理论解释是，如果赛前西班牙夺冠概率是1/4，而瑞士夺冠概率是1/32，那么，“西班牙夺冠”的信息量为log(4)=2，即把不确定性减小为原来的1/4，而“瑞士夺冠”的信息量为log(32)=5，不确定性减小为原来的1/32，一下子接受比前者大了两倍以上的信息量，当然你会吃惊。</p>
+<p>回到信息检索，比如，“2012美国大选”这个查询串包含了“2012”，“美国”和“大选”3个关键词，我们应该如何定量计算它们的信息量呢？根据信息的定义，词的信息量等于它对不确定性的缩小程度。如果文档总数为2^30，其中2^14篇文档出现了“美国”，那么“美国”这个词就把文档的不确定性从2^30缩小为2^14，它所包含的信息量为log(2^30/2^14)=16；而只有2^10篇文档出现了“大选”，那么大选的信息量就是log(2^30/2^10)=20，比“美国”多了4个bit。而“的”，“什么”，“我们”这些高频词对减小文档不确定性几乎没有帮助，因而信息量为0。相信你已经发现，上面idf(w)公式中的log(n / docs(w, D))实际上就是词w的信息量了。</p>
+<p>如果我们考虑词的信息量对条件概率P(w[j] | d[i])的影响，假设“词w在文档中被选中的概率与其在文档中的出现频率和其信息量的乘积成正比”，那么上面的条件概率模型就变成：</p>
+<pre><code>
+P(d[i] | w[j]) 
+= P(d[i], w[j]) / P(w[j]) 
+= P(d[i]) * P(w[j] | d[i]) / P(w[j]) 
+= P(d[i]) * (tf(w[j], d[i]) * idf(w[j] / sum { k = 1..size(d[i]), tf(w[k], d[i]) * idf(w[k]) }) / p(w[j]) 
+= P(d[i]) * (tf-idf(w[j], d[i]) / sum { k = 1..size(d[i]), tf-idf(w[k], d[i]) }) / p(w[j]) 
+= P(d[i]) * (tf-idf(w[j], d[i]) / tf-idf(d[i])) / p(w[j]) 
+</code></pre>
+<p>我们看到tf-idf已经被纳入框架内了，但是还多出文档先验概率P(d[i])，关键词先验概率P(w[j])和文档各词的总tf-idf(d[i])。普通搜索引擎是基于PageRank和tf-idf的，那么，根据这个概率模型，我们可以看出，它没有考虑文档总tf-idf(d[i])和关键词先验概率p(w[j])。如果考虑这两个因素，相信搜索效果会更好。</p>
+<h4><span class="ez-toc-section" id="%E5%A4%9A%E5%85%B3%E9%94%AE%E8%AF%8D"></span>多关键词<span class="ez-toc-section-end"></span></h4>
+<p>上面的条件概率模型主要是针对单个关键词的情况，下面我们进一步将其扩展到多关键词情况。我们知道，在tf-idf中，多个关键词的所产生的tf-idf值是一种叠加关系，那么这是否符合条件概率模型呢？答案是否定的。在两个关键字情况下，条件概率问题转化为“如果有人从一个盒子中同时摸出颜色w[x]的小球和颜色w[y]的小球，这两个小球来自于盒子d[i]的概率是多少？”。假设从盒子中摸出各个小球事件是相互独立的情况下，即</p>
+<pre><code>
+P(w[x], w[y]) 
+= P(w[x]) * P(w[y]) P(w[x], w[y] | d[i]) 
+= P(w[x] | d[i]) * P(w[y] | d[i]) 
+</code></pre>
+<p>我们可以推导出条件概率：</p>
+<pre><code>
+P(d[i] | w[x], w[y]) 
+= P(d[i], w[x], w[y]) / P(w[x], w[y]) 
+= P(d[i]) * P(w[x], w[y] | d[i]) / P(w[x], w[y]) 
+= P(d[i]) * P(w[x] | d[i]) * P(w[y] | d[i]) / (P(w[x] * P(w[y])) 
+= P(d[i]) * (tf-idf(w[x], d[i]) / tf-idf(d[i])) * ((tf-idf(w[y], d[i]) / tf-idf(d[i]))) / (p(w[x]) * P(w[y])) 
+</code></pre>
+<p>可见，概率模型所得出的各个关键词的tf-idf值之间是乘积关系，这是与tf-idf模型的加法关系是不同的。这一点可能与二者是否要求“文档必须包含所有查询关键词”的基本假设有关系。在文档不包含所有关键字的这种情况下，tf-idf模型可能得出一个非0的匹配度，但条件概率模型得出的概率肯定为0。不过，如果考虑一般查询关键词数量不多（3个以内），而大量文档都同时包含这些关键词，概率模型的乘积关系是比tf-idf模型的加法关系更有理论基础。从根本上讲，这是因为tf-idf的“匹配度”是一个模棱两可的概念，而条件概率有坚实的理论基础。</p>
+<h4><span class="ez-toc-section" id="%E6%80%BB%E7%BB%93"></span>总结<span class="ez-toc-section-end"></span></h4>
+<p>TF-IDF模型是搜索引擎中广泛使用的信息检索模型，但对于TF-IDF模型一直存在各种疑问。本文为信息检索问题一种基于条件概率的盒子小球模型，其核心思想是把“查询串q和文档d的匹配度问题”转化为“查询串q来自于文档d的条件概率问题”。它从概率的视角为信息检索问题定义了比TF-IDF模型所表达的匹配度更为清晰的目标。从概率模型中，我们看到查询串q来自于文档d的条件概率主要包含以下几个因素：1) 文档的先验概率P(d[i])，这与PageRank对应；2) 词w被作为搜索关键词的先验概率P(w)，这可以通过统计方法获得；3) 关键词w代表文档d主题，或以词w搜索文档d的概率，P(w | d)，除了统计方法，这可以通过tf-idf来计算。</p>
+<p align="center"><img src="https://coolshell.cn/wp-content/uploads/2020/03/coolshell.weixin.jpg"> <img loading="lazy" src="https://coolshell.cn/wp-content/uploads/2020/03/coolshell.mini_.jpg" width="300" height="300"> <br/>关注CoolShell微信公众账号和微信小程序</p>
+<div style="margin-top: 15px; font-size: 11px;color: #cc0000;">
+<p align="center"><strong>（转载本站文章请注明作者和出处 <a href="https://coolshell.cn/">酷 壳 &#8211; CoolShell</a> ，请勿用于任何商业用途）</strong></p>
+</div>
+<div style="text-align:center;padding:0px;font-size: 14px;margin-bottom: 50px;">——=== <b>访问 <a href="https://coolshell.cn/404/" target="_blank">酷壳404页面</a> 寻找遗失儿童。</b> ===——</div>
+<div class="wp_rp_wrap  wp_rp_vertical_m" id="wp_rp_first"><div class="wp_rp_content"><h3 class="related_post_title">相关文章</h3><ul class="related_post wp_rp"><li><a href="https://coolshell.cn/articles/17391.html" class="wp_rp_thumbnail"><img src="https://coolshell.cn/wp-content/uploads/2016/07/Community-150x150.jpg" alt="为什么我不在微信公众号上写文章" width="150" height="150" /></a><a href="https://coolshell.cn/articles/17391.html" class="wp_rp_title">为什么我不在微信公众号上写文章</a></li><li><a href="https://coolshell.cn/articles/17225.html" class="wp_rp_thumbnail"><img src="https://coolshell.cn/wp-content/uploads/2015/08/cuckoo-150x150.jpg" alt="Cuckoo Filter：设计与实现" width="150" height="150" /></a><a href="https://coolshell.cn/articles/17225.html" class="wp_rp_title">Cuckoo Filter：设计与实现</a></li><li><a href="https://coolshell.cn/articles/12052.html" class="wp_rp_thumbnail"><img src="https://coolshell.cn/wp-content/plugins/wordpress-23-related-posts-plugin/static/thumbs/29.jpg" alt="Leetcode 编程训练" width="150" height="150" /></a><a href="https://coolshell.cn/articles/12052.html" class="wp_rp_title">Leetcode 编程训练</a></li><li><a href="https://coolshell.cn/articles/11847.html" class="wp_rp_thumbnail"><img src="https://coolshell.cn/wp-content/uploads/2014/08/puzzle-150x150.png" alt="谜题的答案和活动的心得体会" width="150" height="150" /></a><a href="https://coolshell.cn/articles/11847.html" class="wp_rp_title">谜题的答案和活动的心得体会</a></li><li><a href="https://coolshell.cn/articles/11832.html" class="wp_rp_thumbnail"><img src="https://coolshell.cn/wp-content/uploads/2014/08/538efefbgw1eiz9cvx78fj20rm0fmdi8-150x150.jpg" alt="【活动】解迷题送礼物" width="150" height="150" /></a><a href="https://coolshell.cn/articles/11832.html" class="wp_rp_title">【活动】解迷题送礼物</a></li><li><a href="https://coolshell.cn/articles/10590.html" class="wp_rp_thumbnail"><img src="https://coolshell.cn/wp-content/uploads/2013/10/QR-Code-Overview-150x150.jpeg" alt="二维码的生成细节和原理" width="150" height="150" /></a><a href="https://coolshell.cn/articles/10590.html" class="wp_rp_title">二维码的生成细节和原理</a></li></ul></div></div>
+<div id="post-ratings-8422" class="post-ratings" itemscope itemtype="https://schema.org/Article" data-nonce="31933b8927"><img id="rating_8422_1" src="https://coolshell.cn/wp-content/plugins/wp-postratings/images/stars_crystal/rating_on.gif" alt="好烂啊" title="好烂啊" onmouseover="if (!window.__cfRLUnblockHandlers) return false; current_rating(8422, 1, '好烂啊');" onmouseout="if (!window.__cfRLUnblockHandlers) return false; ratings_off(3.9, 4, 0);" onclick="if (!window.__cfRLUnblockHandlers) return false; rate_post();" onkeypress="if (!window.__cfRLUnblockHandlers) return false; rate_post();" style="cursor: pointer; border: 0px;" data-cf-modified-08a8c068d41a0f25af4d68b1- /><img id="rating_8422_2" src="https://coolshell.cn/wp-content/plugins/wp-postratings/images/stars_crystal/rating_on.gif" alt="有点差" title="有点差" onmouseover="if (!window.__cfRLUnblockHandlers) return false; current_rating(8422, 2, '有点差');" onmouseout="if (!window.__cfRLUnblockHandlers) return false; ratings_off(3.9, 4, 0);" onclick="if (!window.__cfRLUnblockHandlers) return false; rate_post();" onkeypress="if (!window.__cfRLUnblockHandlers) return false; rate_post();" style="cursor: pointer; border: 0px;" data-cf-modified-08a8c068d41a0f25af4d68b1- /><img id="rating_8422_3" src="https://coolshell.cn/wp-content/plugins/wp-postratings/images/stars_crystal/rating_on.gif" alt="凑合看看" title="凑合看看" onmouseover="if (!window.__cfRLUnblockHandlers) return false; current_rating(8422, 3, '凑合看看');" onmouseout="if (!window.__cfRLUnblockHandlers) return false; ratings_off(3.9, 4, 0);" onclick="if (!window.__cfRLUnblockHandlers) return false; rate_post();" onkeypress="if (!window.__cfRLUnblockHandlers) return false; rate_post();" style="cursor: pointer; border: 0px;" data-cf-modified-08a8c068d41a0f25af4d68b1- /><img id="rating_8422_4" src="https://coolshell.cn/wp-content/plugins/wp-postratings/images/stars_crystal/rating_half.gif" alt="还不错" title="还不错" onmouseover="if (!window.__cfRLUnblockHandlers) return false; current_rating(8422, 4, '还不错');" onmouseout="if (!window.__cfRLUnblockHandlers) return false; ratings_off(3.9, 4, 0);" onclick="if (!window.__cfRLUnblockHandlers) return false; rate_post();" onkeypress="if (!window.__cfRLUnblockHandlers) return false; rate_post();" style="cursor: pointer; border: 0px;" data-cf-modified-08a8c068d41a0f25af4d68b1- /><img id="rating_8422_5" src="https://coolshell.cn/wp-content/plugins/wp-postratings/images/stars_crystal/rating_off.gif" alt="很精彩" title="很精彩" onmouseover="if (!window.__cfRLUnblockHandlers) return false; current_rating(8422, 5, '很精彩');" onmouseout="if (!window.__cfRLUnblockHandlers) return false; ratings_off(3.9, 4, 0);" onclick="if (!window.__cfRLUnblockHandlers) return false; rate_post();" onkeypress="if (!window.__cfRLUnblockHandlers) return false; rate_post();" style="cursor: pointer; border: 0px;" data-cf-modified-08a8c068d41a0f25af4d68b1- /> (<strong>20</strong> 人打了分，平均分： <strong>3.85</strong> )<br/><span class="post-ratings-text" id="ratings_8422_text"></span><meta itemprop="name" content="TF-IDF模型的概率解释" /><meta itemprop="headline" content="TF-IDF模型的概率解释" /><meta itemprop="description" content="（感谢 @猫叔shiro（以前的todd） 投递此文）
+信息检索概述
+信息检索是当前应用十分广泛的一种技术，论文检索、搜索引擎都属于信息检索的范畴。通常，人们把信息检索问题抽象为：在文档集合D上，对于由关键词w[1] ... w[k]组成的查询串q，返回一个按查询q和文档d匹配度relevance(q, d)排序的相关文档列表D'。
+
+对于这一问题，先后出现了布尔模型、向量模型等各种经典的..." /><meta itemprop="datePublished" content="2012-10-24T09:05:54+08:00" /><meta itemprop="dateModified" content="2012-11-01T13:26:29+08:00" /><meta itemprop="url" content="https://coolshell.cn/articles/8422.html" /><meta itemprop="author" content="Todd" /><meta itemprop="mainEntityOfPage" content="https://coolshell.cn/articles/8422.html" /><div style="display: none;" itemprop="publisher" itemscope itemtype="https://schema.org/Organization"><meta itemprop="name" content="酷 壳 - CoolShell" /><meta itemprop="url" content="https://coolshell.cn" /><div itemprop="logo" itemscope itemtype="https://schema.org/ImageObject"><meta itemprop="url" content /></div></div><div style="display: none;" itemprop="aggregateRating" itemscope itemtype="https://schema.org/AggregateRating"><meta itemprop="bestRating" content="5" /><meta itemprop="worstRating" content="1" /><meta itemprop="ratingValue" content="3.85" /><meta itemprop="ratingCount" content="20" /></div></div><div id="post-ratings-8422-loading" class="post-ratings-loading"><img src="https://coolshell.cn/wp-content/plugins/wp-postratings/images/loading.gif" width="16" height="16" class="post-ratings-image" />Loading...</div>
+</div>
+<footer class="entry-footer">
+<hr><div class="row"><div class="col-md-6 cattegories"><span class="cat-links"><i class="fa fa-folder-open"></i>
+<a href="https://coolshell.cn/category/misc" rel="category tag">杂项资源</a>, <a href="https://coolshell.cn/category/progdesign" rel="category tag">程序设计</a></span></div><div class="col-md-6 tags"><span class="tags-links"><i class="fa fa-tags"></i> <a href="https://coolshell.cn/tag/algorithm" rel="tag">Algorithm</a>, <a href="https://coolshell.cn/tag/search" rel="tag">search</a>, <a href="https://coolshell.cn/tag/tf-idf" rel="tag">TF-IDF</a></span></div></div> </footer>
+</article>
+<div id="related_posts">
+<div class="wp_rp_wrap  wp_rp_vertical_m"><div class="wp_rp_content"><h3 class="related_post_title">相关文章</h3><ul class="related_post wp_rp"><li><a href="https://coolshell.cn/articles/17391.html" class="wp_rp_thumbnail"><img src="https://coolshell.cn/wp-content/uploads/2016/07/Community-150x150.jpg" alt="为什么我不在微信公众号上写文章" width="150" height="150" /></a><a href="https://coolshell.cn/articles/17391.html" class="wp_rp_title">为什么我不在微信公众号上写文章</a></li><li><a href="https://coolshell.cn/articles/17225.html" class="wp_rp_thumbnail"><img src="https://coolshell.cn/wp-content/uploads/2015/08/cuckoo-150x150.jpg" alt="Cuckoo Filter：设计与实现" width="150" height="150" /></a><a href="https://coolshell.cn/articles/17225.html" class="wp_rp_title">Cuckoo Filter：设计与实现</a></li><li><a href="https://coolshell.cn/articles/12052.html" class="wp_rp_thumbnail"><img src="https://coolshell.cn/wp-content/plugins/wordpress-23-related-posts-plugin/static/thumbs/29.jpg" alt="Leetcode 编程训练" width="150" height="150" /></a><a href="https://coolshell.cn/articles/12052.html" class="wp_rp_title">Leetcode 编程训练</a></li><li><a href="https://coolshell.cn/articles/11847.html" class="wp_rp_thumbnail"><img src="https://coolshell.cn/wp-content/uploads/2014/08/puzzle-150x150.png" alt="谜题的答案和活动的心得体会" width="150" height="150" /></a><a href="https://coolshell.cn/articles/11847.html" class="wp_rp_title">谜题的答案和活动的心得体会</a></li><li><a href="https://coolshell.cn/articles/11832.html" class="wp_rp_thumbnail"><img src="https://coolshell.cn/wp-content/uploads/2014/08/538efefbgw1eiz9cvx78fj20rm0fmdi8-150x150.jpg" alt="【活动】解迷题送礼物" width="150" height="150" /></a><a href="https://coolshell.cn/articles/11832.html" class="wp_rp_title">【活动】解迷题送礼物</a></li><li><a href="https://coolshell.cn/articles/10590.html" class="wp_rp_thumbnail"><img src="https://coolshell.cn/wp-content/uploads/2013/10/QR-Code-Overview-150x150.jpeg" alt="二维码的生成细节和原理" width="150" height="150" /></a><a href="https://coolshell.cn/articles/10590.html" class="wp_rp_title">二维码的生成细节和原理</a></li></ul></div></div>
+</div><div class="fixed"></div>
+</main>
+<div class="post-navigation">
+<nav class="navigation" role="navigation">
+<h2 class="screen-reader-text">Post navigation</h2>
+<div class="nav-links">
+<div class="row">
+<div class="col-md-6 next-post">
+<a class href="https://coolshell.cn/articles/8460.html"><span class="next-prev-text"><i class="fa fa-angle-left"></i>
+上一篇</span><br>Go 语言简介（上）— 语法</a>
+</div>
+<div class="col-md-6 prev-post">
+<a class href="https://coolshell.cn/articles/8398.html"><span class="next-prev-text">下一篇 <i class="fa fa-angle-right"></i>
+</span><br>xkcd 神图“Click and Drag”</a>
+</div>
+</div>
+</div>
+</nav>
+</div>
+<div class="post-comments">
+<div id="comments" class="comments-area">
+<h2 class="comments-title">
+《<span>TF-IDF模型的概率解释</span>》的相关评论 </h2>
+<ol class="comment-list">
+<li id="comment-206281" class="comment even thread-even depth-1">
+<article id="div-comment-206281" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/50a85c0613d266f8591eb2fc15ec3326?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/50a85c0613d266f8591eb2fc15ec3326?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" /> <b class="fn">jax</b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/8422.html/comment-page-1#comment-206281"><time datetime="2012-10-24T09:20:44+08:00">2012年10月24日 09:20</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>gg!</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/8422.html/comment-page-1?replytocom=206281#respond" data-commentid="206281" data-postid="8422" data-belowelement="div-comment-206281" data-respondelement="respond" data-replyto="回复给jax" aria-label="回复给jax">回复</a></div> </article>
+</li>
+<li id="comment-206289" class="comment odd alt thread-odd thread-alt depth-1">
+<article id="div-comment-206289" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/3d0238256e03708f615ae7e00de45612?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/3d0238256e03708f615ae7e00de45612?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" /> <b class="fn">vingc</b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/8422.html/comment-page-1#comment-206289"><time datetime="2012-10-24T10:07:39+08:00">2012年10月24日 10:07</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>看不懂了。。。。</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/8422.html/comment-page-1?replytocom=206289#respond" data-commentid="206289" data-postid="8422" data-belowelement="div-comment-206289" data-respondelement="respond" data-replyto="回复给vingc" aria-label="回复给vingc">回复</a></div> </article>
+</li>
+<li id="comment-206297" class="comment even thread-even depth-1">
+<article id="div-comment-206297" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/449ad6c7c81829a211b7e88ec27d14a1?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/449ad6c7c81829a211b7e88ec27d14a1?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" /> <b class="fn">YCloud</b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/8422.html/comment-page-1#comment-206297"><time datetime="2012-10-24T10:47:26+08:00">2012年10月24日 10:47</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>很好，先顶再看</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/8422.html/comment-page-1?replytocom=206297#respond" data-commentid="206297" data-postid="8422" data-belowelement="div-comment-206297" data-respondelement="respond" data-replyto="回复给YCloud" aria-label="回复给YCloud">回复</a></div> </article>
+</li>
+<li id="comment-206302" class="comment odd alt thread-odd thread-alt depth-1">
+<article id="div-comment-206302" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/449ad6c7c81829a211b7e88ec27d14a1?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/449ad6c7c81829a211b7e88ec27d14a1?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" /> <b class="fn">YCloud</b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/8422.html/comment-page-1#comment-206302"><time datetime="2012-10-24T11:03:57+08:00">2012年10月24日 11:03</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>文档中TF-IDF大于多少的词适合用来做特征呢？我的经验是0.02还比较可以，不知道这方面是否有理论？</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/8422.html/comment-page-1?replytocom=206302#respond" data-commentid="206302" data-postid="8422" data-belowelement="div-comment-206302" data-respondelement="respond" data-replyto="回复给YCloud" aria-label="回复给YCloud">回复</a></div> </article>
+</li>
+<li id="comment-206308" class="comment even thread-even depth-1">
+<article id="div-comment-206308" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/4061d8320dee92deb913a03ae98517b9?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/4061d8320dee92deb913a03ae98517b9?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" /> <b class="fn">rtems</b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/8422.html/comment-page-1#comment-206308"><time datetime="2012-10-24T11:51:36+08:00">2012年10月24日 11:51</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>最后的一个推导<br/>
+P(d[i] | w[x], w[y])<br/>
+= P(d[i], w[x], w[y]) / P(w[x], w[y])<br/>
+= P(d[i]) * P(w[x], w[y] | d[i]) / P(w[x], w[y])<br/>
+= P(d[i]) * P(w[x] | d[i]) * P(w[y] | d[i]) / (P(w[x] * P(w[y]))<br/>
+= P(d[i]) * (P(w[x] | d[i]) / P(w[x])) * (P(w[y] | d[i]) / P(w[y]))<br/>
+= P(d[i]) * (tf-idf(w[x], d[i]) / idf(d[i])) * (tf-idf(w[y], d[i]) / idf(d[i])) * C3<br/>
+其中 P(w[x], w[y] | d[i]) = P(w[x] | d[i]) * P(w[y] | d[i])<br/>
+以及 P(w[x], w[y]) = (P(w[x] * P(w[y])) 这个不一定成立吧？</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/8422.html/comment-page-1?replytocom=206308#respond" data-commentid="206308" data-postid="8422" data-belowelement="div-comment-206308" data-respondelement="respond" data-replyto="回复给rtems" aria-label="回复给rtems">回复</a></div> </article>
+</li>
+<li id="comment-206310" class="comment byuser comment-author-todd bypostauthor odd alt thread-odd thread-alt depth-1">
+<article id="div-comment-206310" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/6ff3f136c340de6931974e710bf30f89?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/6ff3f136c340de6931974e710bf30f89?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" /> <b class="fn"><a href="http://www.cnblogs.com/weidagang2046/" rel="external nofollow ugc" class="url">Todd</a></b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/8422.html/comment-page-1#comment-206310"><time datetime="2012-10-24T12:02:43+08:00">2012年10月24日 12:02</time></a> </div>
+</footer>
+<div class="comment-content">
+<p><a href="#comment-206302" rel="nofollow">@YCloud </a><br/>
+我的想法是这样，抛开TF-IDF来看，选那些词做特征的原则是“词是对文章的主题的贡献度“，越是体现主题的词越应该选用。所以，如果以TF-IDF作为指标，应该采用是文档内的相对值，不能以绝对的TF-IDF来作为选取的标准。</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/8422.html/comment-page-1?replytocom=206310#respond" data-commentid="206310" data-postid="8422" data-belowelement="div-comment-206310" data-respondelement="respond" data-replyto="回复给Todd" aria-label="回复给Todd">回复</a></div> </article>
+</li>
+<li id="comment-206311" class="comment byuser comment-author-todd bypostauthor even thread-even depth-1">
+<article id="div-comment-206311" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/6ff3f136c340de6931974e710bf30f89?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/6ff3f136c340de6931974e710bf30f89?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" /> <b class="fn"><a href="http://www.cnblogs.com/weidagang2046/" rel="external nofollow ugc" class="url">Todd</a></b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/8422.html/comment-page-1#comment-206311"><time datetime="2012-10-24T12:04:13+08:00">2012年10月24日 12:04</time></a> </div>
+</footer>
+<div class="comment-content">
+<p><a href="#comment-206308" rel="nofollow">@rtems </a><br/>
+文中对此有相应的假设。</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/8422.html/comment-page-1?replytocom=206311#respond" data-commentid="206311" data-postid="8422" data-belowelement="div-comment-206311" data-respondelement="respond" data-replyto="回复给Todd" aria-label="回复给Todd">回复</a></div> </article>
+</li>
+<li id="comment-206337" class="comment odd alt thread-odd thread-alt depth-1">
+<article id="div-comment-206337" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/91fbbfb46ac2b65896374a2b36ef79d7?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/91fbbfb46ac2b65896374a2b36ef79d7?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" /> <b class="fn"><a href="http://zhangleijuly.me" rel="external nofollow ugc" class="url">Artemis</a></b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/8422.html/comment-page-1#comment-206337"><time datetime="2012-10-24T13:51:29+08:00">2012年10月24日 13:51</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>没搞过信息检索还真的看不懂&#8230;</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/8422.html/comment-page-1?replytocom=206337#respond" data-commentid="206337" data-postid="8422" data-belowelement="div-comment-206337" data-respondelement="respond" data-replyto="回复给Artemis" aria-label="回复给Artemis">回复</a></div> </article>
+</li>
+<li id="comment-206357" class="comment even thread-even depth-1">
+<article id="div-comment-206357" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/4658dce3d9024787476b72aa727cd429?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/4658dce3d9024787476b72aa727cd429?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" /> <b class="fn">M</b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/8422.html/comment-page-1#comment-206357"><time datetime="2012-10-24T14:54:02+08:00">2012年10月24日 14:54</time></a> </div>
+</footer>
+<div class="comment-content">
+<p><a href="#comment-206337" rel="nofollow">@Artemis </a><br/>
+要的就是这效果</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/8422.html/comment-page-1?replytocom=206357#respond" data-commentid="206357" data-postid="8422" data-belowelement="div-comment-206357" data-respondelement="respond" data-replyto="回复给M" aria-label="回复给M">回复</a></div> </article>
+</li>
+<li id="comment-206372" class="comment odd alt thread-odd thread-alt depth-1">
+<article id="div-comment-206372" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/4aedfc4e934793a22541043a1d100862?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/4aedfc4e934793a22541043a1d100862?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" /> <b class="fn"><a href="http://weibo.com/u/1839539725" rel="external nofollow ugc" class="url">fuliang</a></b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/8422.html/comment-page-1#comment-206372"><time datetime="2012-10-24T15:53:56+08:00">2012年10月24日 15:53</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>tf(w,d)= count(w, d) / count(w, D)是这个定义么？</p>
+<p>各种文献基本上是以下几种：<br/>
+1、tf(w,d)= count(w, d)<br/>
+2、归一化的：<br/>
+tf(w,d) = count(w,d)/ length(d)<br/>
+tf(w,d)=count(w,d)/max{count(wi,d)}</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/8422.html/comment-page-1?replytocom=206372#respond" data-commentid="206372" data-postid="8422" data-belowelement="div-comment-206372" data-respondelement="respond" data-replyto="回复给fuliang" aria-label="回复给fuliang">回复</a></div> </article>
+</li>
+<li id="comment-206396" class="comment byuser comment-author-todd bypostauthor even thread-even depth-1">
+<article id="div-comment-206396" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/6ff3f136c340de6931974e710bf30f89?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/6ff3f136c340de6931974e710bf30f89?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" /> <b class="fn"><a href="http://www.cnblogs.com/weidagang2046/" rel="external nofollow ugc" class="url">Todd</a></b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/8422.html/comment-page-1#comment-206396"><time datetime="2012-10-24T17:34:03+08:00">2012年10月24日 17:34</time></a> </div>
+</footer>
+<div class="comment-content">
+<p><a href="#comment-206372" rel="nofollow">@fuliang </a> </p>
+<p>这个定义是我弄错了，谢谢指出！其实，按正确的归一化定义更容易解释为条件概率。我会继续修正这篇文章的，谢谢！</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/8422.html/comment-page-1?replytocom=206396#respond" data-commentid="206396" data-postid="8422" data-belowelement="div-comment-206396" data-respondelement="respond" data-replyto="回复给Todd" aria-label="回复给Todd">回复</a></div> </article>
+</li>
+<li id="comment-206489" class="comment odd alt thread-odd thread-alt depth-1">
+<article id="div-comment-206489" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/7c93826f009cece1813746c45d493012?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/7c93826f009cece1813746c45d493012?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" /> <b class="fn">老王</b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/8422.html/comment-page-1#comment-206489"><time datetime="2012-10-24T22:31:34+08:00">2012年10月24日 22:31</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>Hi, 写的不错。但是，tf-idf就是向量模型中权重表示方法，在这种表示方法下，计算夹角还是直接累加是相似度计算问题。将tf-idf和向量模型对立或分开在概念上似乎有点问题。。</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/8422.html/comment-page-1?replytocom=206489#respond" data-commentid="206489" data-postid="8422" data-belowelement="div-comment-206489" data-respondelement="respond" data-replyto="回复给老王" aria-label="回复给老王">回复</a></div> </article>
+</li>
+<li id="comment-206491" class="comment even thread-even depth-1">
+<article id="div-comment-206491" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/eac9046d4d3fcb13fb55ae0f85c53575?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/eac9046d4d3fcb13fb55ae0f85c53575?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" /> <b class="fn"><a href="http://blog.tektea.com" rel="external nofollow ugc" class="url">茶话汇</a></b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/8422.html/comment-page-1#comment-206491"><time datetime="2012-10-24T22:33:46+08:00">2012年10月24日 22:33</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>没搞过搜索，这个太高深了点，还是希望在酷壳这里看到更多科普点的知识。。。</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/8422.html/comment-page-1?replytocom=206491#respond" data-commentid="206491" data-postid="8422" data-belowelement="div-comment-206491" data-respondelement="respond" data-replyto="回复给茶话汇" aria-label="回复给茶话汇">回复</a></div> </article>
+</li>
+<li id="comment-206493" class="comment byuser comment-author-todd bypostauthor odd alt thread-odd thread-alt depth-1">
+<article id="div-comment-206493" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/6ff3f136c340de6931974e710bf30f89?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/6ff3f136c340de6931974e710bf30f89?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" /> <b class="fn"><a href="http://www.cnblogs.com/weidagang2046/" rel="external nofollow ugc" class="url">Todd</a></b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/8422.html/comment-page-1#comment-206493"><time datetime="2012-10-24T22:38:49+08:00">2012年10月24日 22:38</time></a> </div>
+</footer>
+<div class="comment-content">
+<p><a href="#comment-206489" rel="nofollow">@老王 </a><br/>
+谢谢！据我所知，最早的向量模型并没有结合tf-idf，都是分开介绍的。不过，用tf-idf构成向量倒是一个不错的idea！</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/8422.html/comment-page-1?replytocom=206493#respond" data-commentid="206493" data-postid="8422" data-belowelement="div-comment-206493" data-respondelement="respond" data-replyto="回复给Todd" aria-label="回复给Todd">回复</a></div> </article>
+</li>
+<li id="comment-206507" class="comment even thread-even depth-1">
+<article id="div-comment-206507" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/2c94265deb32889d0d748e02be67c0a2?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/2c94265deb32889d0d748e02be67c0a2?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" /> <b class="fn">zlc</b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/8422.html/comment-page-1#comment-206507"><time datetime="2012-10-25T00:06:42+08:00">2012年10月25日 00:06</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>”词的信息量和idf“ 那节 “所谓 信息 是指对不确定性（熵）的减小程度” 应该是“信息量”。</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/8422.html/comment-page-1?replytocom=206507#respond" data-commentid="206507" data-postid="8422" data-belowelement="div-comment-206507" data-respondelement="respond" data-replyto="回复给zlc" aria-label="回复给zlc">回复</a></div> </article>
+</li>
+<li id="comment-206594" class="comment odd alt thread-odd thread-alt depth-1">
+<article id="div-comment-206594" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/7c93826f009cece1813746c45d493012?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/7c93826f009cece1813746c45d493012?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" /> <b class="fn">老王</b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/8422.html/comment-page-1#comment-206594"><time datetime="2012-10-25T08:13:06+08:00">2012年10月25日 08:13</time></a> </div>
+</footer>
+<div class="comment-content">
+<p><a href="#comment-206493" rel="nofollow">@Todd </a> </p>
+<p>嗨，你的思路很开阔，佩服。但是，现在所有信息检索的教科书中的向量模型都已经结合了tf-idf，可以说两者基本是一回事。另外，您推导的概率那块和目前信息检索中概率模型的思路基本一致，搞IR的都知道的啊，有现成的推导，包括PageRank作为先验结合进去都有现成的说法啊。还有，P(w)对所有文档都一样，排序时完全不需要，所以你的结论那块不是很合理啊。。建议你看一些基本的信息检索教科书。</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/8422.html/comment-page-1?replytocom=206594#respond" data-commentid="206594" data-postid="8422" data-belowelement="div-comment-206594" data-respondelement="respond" data-replyto="回复给老王" aria-label="回复给老王">回复</a></div> </article>
+</li>
+<li id="comment-206605" class="comment byuser comment-author-todd bypostauthor even thread-even depth-1">
+<article id="div-comment-206605" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/6ff3f136c340de6931974e710bf30f89?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/6ff3f136c340de6931974e710bf30f89?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" /> <b class="fn"><a href="http://www.cnblogs.com/weidagang2046/" rel="external nofollow ugc" class="url">Todd</a></b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/8422.html/comment-page-1#comment-206605"><time datetime="2012-10-25T09:00:43+08:00">2012年10月25日 09:00</time></a> </div>
+</footer>
+<div class="comment-content">
+<p><a href="#comment-206594" rel="nofollow">@老王 </a><br/>
+&#8220;P(w)对所有文档都一样，排序时完全不需要，所以你的结论那块不是很合理啊&#8221;</p>
+<p>开始我以为对多个关键词的查询那就不同了，比如“iPhone5发布会”由P(&#8220;iPhone5&#8221;)和P(&#8220;发布会&#8221;)是不同的（可能是受了tf-idf加法的影响)。想了一下，在概率模型中二者是乘积关系，的确是公共的，可以被消掉。</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/8422.html/comment-page-1?replytocom=206605#respond" data-commentid="206605" data-postid="8422" data-belowelement="div-comment-206605" data-respondelement="respond" data-replyto="回复给Todd" aria-label="回复给Todd">回复</a></div> </article>
+</li>
+<li id="comment-206618" class="comment odd alt thread-odd thread-alt depth-1">
+<article id="div-comment-206618" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/06fbd014377552c658e9aa294d29a834?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/06fbd014377552c658e9aa294d29a834?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" /> <b class="fn">Keira</b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/8422.html/comment-page-1#comment-206618"><time datetime="2012-10-25T09:36:31+08:00">2012年10月25日 09:36</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>hi，总体来说我觉得这篇文章写的很不错，为tf-idf赋予了理论上的基础，有一点我觉得@老王 说的很对，就是用来进行检索的query里面多关键字在文档集中出现的先验概率P(w_{1}, w_{2}, &#8230; w_{k})对于单次查询的文档来说，都应该是相同的，所以求最大后验概率在这个时候就等价于求最大似然，也就是Argmax(P(d_{i}) * P(w_{1}, w_{2}, &#8230; w_{k}|d_{i}))。一直到这一步在理论上都是成立的，这篇文章我认为一个十分重要的漏洞就是最关键的两个假设，即P(w_{1} w_{2}) = P(w_{1}) * P(w_{2})以及P(w_{1}w_{2}|d_{i}) = P(w_{1}|d_{i}) * P(w_{2}|d_{i})实际上经常是不成立的，因为我们在进行查询的时候，比如“iphone5”和“苹果”的共现现象就会比较严重，我觉得我们可以弱化独立性假设这个条件，而将假设降低为一阶马尔可夫假设，即P(w_{1}, w_{2}, &#8230; w_{k}) = P(w_{1}) * P(w_{2}|w_{1}) * &#8230; P(w_{k}|w_{k-1})，这样的话我们不仅可以利用贝叶斯后验概率的框架，还可以将一阶语言模型纳入我们的搜索引擎中。</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/8422.html/comment-page-1?replytocom=206618#respond" data-commentid="206618" data-postid="8422" data-belowelement="div-comment-206618" data-respondelement="respond" data-replyto="回复给Keira" aria-label="回复给Keira">回复</a></div> </article>
+</li>
+<li id="comment-206623" class="comment byuser comment-author-todd bypostauthor even thread-even depth-1">
+<article id="div-comment-206623" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/6ff3f136c340de6931974e710bf30f89?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/6ff3f136c340de6931974e710bf30f89?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" /> <b class="fn"><a href="http://www.cnblogs.com/weidagang2046/" rel="external nofollow ugc" class="url">Todd</a></b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/8422.html/comment-page-1#comment-206623"><time datetime="2012-10-25T09:52:07+08:00">2012年10月25日 09:52</time></a> </div>
+</footer>
+<div class="comment-content">
+<p><a href="#comment-206618" rel="nofollow">@Keira </a> </p>
+<p>不做独立性假设当然更合理，一阶马尔科夫假设是一种。另外，P(w[x], w[y]), P(w[x], w[y] | d[i])实际上可以基于搜索统计来做。当然，前者与d无关，作为公共的系数可忽略。比如，搜索“美国 大选”，网页x出现了10000次，其中8000次用户点击（满意）了网页x，可以认为P(&#8220;美国&#8221;, &#8220;大选&#8221; | 网页x)的概率是80%。</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/8422.html/comment-page-1?replytocom=206623#respond" data-commentid="206623" data-postid="8422" data-belowelement="div-comment-206623" data-respondelement="respond" data-replyto="回复给Todd" aria-label="回复给Todd">回复</a></div> </article>
+</li>
+<li id="comment-206627" class="comment odd alt thread-odd thread-alt depth-1">
+<article id="div-comment-206627" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/7c93826f009cece1813746c45d493012?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/7c93826f009cece1813746c45d493012?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" /> <b class="fn">老王</b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/8422.html/comment-page-1#comment-206627"><time datetime="2012-10-25T10:19:27+08:00">2012年10月25日 10:19</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>回@Keira：你的想法不错，但是实际中IR直接只用bigram (一阶马尔科夫链就是bigram model)的较少，原因很多教科书上都有解释。。。有些做法将unigram和bigram结合，但还是以unigram为主。。。不多说了。。</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/8422.html/comment-page-1?replytocom=206627#respond" data-commentid="206627" data-postid="8422" data-belowelement="div-comment-206627" data-respondelement="respond" data-replyto="回复给老王" aria-label="回复给老王">回复</a></div> </article>
+</li>
+<li id="comment-206630" class="comment even thread-even depth-1">
+<article id="div-comment-206630" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/4e4761682526d28fd5ad1dfe1dd08cc3?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/4e4761682526d28fd5ad1dfe1dd08cc3?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" /> <b class="fn">星星向东</b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/8422.html/comment-page-1#comment-206630"><time datetime="2012-10-25T10:28:10+08:00">2012年10月25日 10:28</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>读了有不少启发，有一点疑问：<br/>
+文中求tf-idf(d[i])基于了一个假设没有提出来，就是d[i]中的每一个词都是相互独立的，这个假设应该很难成立，因此对一个文档中包含信息量通过这种方式很难求出来。也许这也是为什么现在的检索模型中没有把tf-idf(d[i])这个因素加上的原因。<br/>
+另外关键词先验概率p(w[j])对于一个query的检索来说应该都是一样的，加上这个因素对搜索结果的排序应该是没有影响的。</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/8422.html/comment-page-1?replytocom=206630#respond" data-commentid="206630" data-postid="8422" data-belowelement="div-comment-206630" data-respondelement="respond" data-replyto="回复给星星向东" aria-label="回复给星星向东">回复</a></div> </article>
+</li>
+<li id="comment-206634" class="comment odd alt thread-odd thread-alt depth-1">
+<article id="div-comment-206634" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/3958cf89ad04d8ff96210f9c2dd7d2c6?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/3958cf89ad04d8ff96210f9c2dd7d2c6?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" /> <b class="fn">forcoding</b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/8422.html/comment-page-1#comment-206634"><time datetime="2012-10-25T10:44:05+08:00">2012年10月25日 10:44</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>不用密码就能评论？</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/8422.html/comment-page-1?replytocom=206634#respond" data-commentid="206634" data-postid="8422" data-belowelement="div-comment-206634" data-respondelement="respond" data-replyto="回复给forcoding" aria-label="回复给forcoding">回复</a></div> </article>
+</li>
+<li id="comment-206637" class="comment even thread-even depth-1">
+<article id="div-comment-206637" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/3958cf89ad04d8ff96210f9c2dd7d2c6?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/3958cf89ad04d8ff96210f9c2dd7d2c6?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" /> <b class="fn">forcoding</b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/8422.html/comment-page-1#comment-206637"><time datetime="2012-10-25T10:45:48+08:00">2012年10月25日 10:45</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>评论没用ajax？</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/8422.html/comment-page-1?replytocom=206637#respond" data-commentid="206637" data-postid="8422" data-belowelement="div-comment-206637" data-respondelement="respond" data-replyto="回复给forcoding" aria-label="回复给forcoding">回复</a></div> </article>
+</li>
+<li id="comment-206640" class="comment odd alt thread-odd thread-alt depth-1">
+<article id="div-comment-206640" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/4061d8320dee92deb913a03ae98517b9?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/4061d8320dee92deb913a03ae98517b9?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" /> <b class="fn">rtems</b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/8422.html/comment-page-1#comment-206640"><time datetime="2012-10-25T10:56:08+08:00">2012年10月25日 10:56</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>在lucene的打分公司中，就是把tf-idf作为向量，来计算文档与query的向量空间的夹角的<a href="#comment-206493" rel="nofollow">@Todd </a></p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/8422.html/comment-page-1?replytocom=206640#respond" data-commentid="206640" data-postid="8422" data-belowelement="div-comment-206640" data-respondelement="respond" data-replyto="回复给rtems" aria-label="回复给rtems">回复</a></div> </article>
+</li>
+<li id="comment-207005" class="comment even thread-even depth-1">
+<article id="div-comment-207005" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/dad60a6a8ebb38e85327444e07192198?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/dad60a6a8ebb38e85327444e07192198?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" /> <b class="fn">robin</b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/8422.html/comment-page-1#comment-207005"><time datetime="2012-10-26T11:32:14+08:00">2012年10月26日 11:32</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>其实写得不太好，吴军的数学之美里有一篇讲的内容跟这个是一样的，没这么多公式，但讲的是清楚明白</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/8422.html/comment-page-1?replytocom=207005#respond" data-commentid="207005" data-postid="8422" data-belowelement="div-comment-207005" data-respondelement="respond" data-replyto="回复给robin" aria-label="回复给robin">回复</a></div> </article>
+</li>
+<li id="comment-207540" class="comment odd alt thread-odd thread-alt depth-1">
+<article id="div-comment-207540" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/f4698496cb9582d68feb1e3380bad313?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/f4698496cb9582d68feb1e3380bad313?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" /> <b class="fn">kyriosli</b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/8422.html/comment-page-1#comment-207540"><time datetime="2012-10-27T23:33:49+08:00">2012年10月27日 23:33</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>以前学信息检索的时候还懂点，现在，，，，</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/8422.html/comment-page-1?replytocom=207540#respond" data-commentid="207540" data-postid="8422" data-belowelement="div-comment-207540" data-respondelement="respond" data-replyto="回复给kyriosli" aria-label="回复给kyriosli">回复</a></div> </article>
+</li>
+<li id="comment-207737" class="comment even thread-even depth-1">
+<article id="div-comment-207737" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/c1f982b9b6be2956f6b6558be70d9ec3?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/c1f982b9b6be2956f6b6558be70d9ec3?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" /> <b class="fn">AlexWcl</b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/8422.html/comment-page-1#comment-207737"><time datetime="2012-10-28T11:49:27+08:00">2012年10月28日 11:49</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>tf-idf的构成关键还是贝叶斯的思想<br/>
+现在我想主流的搜索引擎都已经开始转向机器学习了</p>
+<p>博主可以多写写机器学习，这方面很有意思。<br/>
+之前看到这里好像有kNN，可以再写个 神经网络/支持向量机 的应用~<br/>
+我觉得大部分人都会很喜欢的。<br/>
+也可以讲讲看起来很漂亮的决策树，讲讲贝叶斯的思想，讲讲随机森林的优美数学</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/8422.html/comment-page-1?replytocom=207737#respond" data-commentid="207737" data-postid="8422" data-belowelement="div-comment-207737" data-respondelement="respond" data-replyto="回复给AlexWcl" aria-label="回复给AlexWcl">回复</a></div> </article>
+</li>
+<li id="comment-208039" class="comment odd alt thread-odd thread-alt depth-1">
+<article id="div-comment-208039" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/cc4c8ebf851db4a0f2ee86bec574990e?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/cc4c8ebf851db4a0f2ee86bec574990e?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" /> <b class="fn"><a href="http://www.darouwan.org" rel="external nofollow ugc" class="url">Chen Junfeng</a></b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/8422.html/comment-page-1#comment-208039"><time datetime="2012-10-29T07:24:52+08:00">2012年10月29日 07:24</time></a> </div>
+</footer>
+<div class="comment-content">
+<p><a href="#comment-206310" rel="nofollow">@Todd </a><br/>
+对啊 物以稀为贵嘛~</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/8422.html/comment-page-1?replytocom=208039#respond" data-commentid="208039" data-postid="8422" data-belowelement="div-comment-208039" data-respondelement="respond" data-replyto="回复给Chen Junfeng" aria-label="回复给Chen Junfeng">回复</a></div> </article>
+</li>
+<li id="comment-208045" class="comment even thread-even depth-1">
+<article id="div-comment-208045" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/cc4c8ebf851db4a0f2ee86bec574990e?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/cc4c8ebf851db4a0f2ee86bec574990e?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" /> <b class="fn"><a href="http://www.darouwan.org" rel="external nofollow ugc" class="url">darouwan</a></b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/8422.html/comment-page-1#comment-208045"><time datetime="2012-10-29T07:37:32+08:00">2012年10月29日 07:37</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>之前其实了解一些,这学期也学过相关课程,知道该怎么用idf,tf,却不知道为什么要这么计算,这篇文章真的很好啊</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/8422.html/comment-page-1?replytocom=208045#respond" data-commentid="208045" data-postid="8422" data-belowelement="div-comment-208045" data-respondelement="respond" data-replyto="回复给darouwan" aria-label="回复给darouwan">回复</a></div> </article>
+</li>
+<li id="comment-209188" class="comment byuser comment-author-liuxd odd alt thread-odd thread-alt depth-1">
+<article id="div-comment-209188" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/05cdbb54576585408d487d5e8aca534d?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/05cdbb54576585408d487d5e8aca534d?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" /> <b class="fn">无缺</b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/8422.html/comment-page-1#comment-209188"><time datetime="2012-11-01T13:17:44+08:00">2012年11月01日 13:17</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>很强大的文章，难得看到这么深入讲搜索的文章啊。</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/8422.html/comment-page-1?replytocom=209188#respond" data-commentid="209188" data-postid="8422" data-belowelement="div-comment-209188" data-respondelement="respond" data-replyto="回复给无缺" aria-label="回复给无缺">回复</a></div> </article>
+</li>
+<li id="comment-215288" class="comment even thread-even depth-1">
+<article id="div-comment-215288" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/d29646d37b40bc152b325ae44320e983?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/d29646d37b40bc152b325ae44320e983?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" /> <b class="fn">tedda</b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/8422.html/comment-page-1#comment-215288"><time datetime="2012-11-13T21:03:05+08:00">2012年11月13日 21:03</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>在两个关键字情况下，条件概率问题转化为“如果有人从一个盒子中同时摸出颜色w[x]的小球和颜色w[y]的小球，这两个小球来自于盒子d[i]的概率是多少？”。假设从盒子中摸出各个小球事件是相互独立的情况下.<br/>
+我想说的是，从盒子中摸两种小球的事件是不独立的。。。。</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/8422.html/comment-page-1?replytocom=215288#respond" data-commentid="215288" data-postid="8422" data-belowelement="div-comment-215288" data-respondelement="respond" data-replyto="回复给tedda" aria-label="回复给tedda">回复</a></div> </article>
+</li>
+<li id="comment-218833" class="comment odd alt thread-odd thread-alt depth-1">
+<article id="div-comment-218833" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/2b461d7c5c7107c4de0d51534bb520dc?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/2b461d7c5c7107c4de0d51534bb520dc?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" /> <b class="fn">cuiyuxuan</b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/8422.html/comment-page-1#comment-218833"><time datetime="2012-11-21T17:15:23+08:00">2012年11月21日 17:15</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>看不懂</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/8422.html/comment-page-1?replytocom=218833#respond" data-commentid="218833" data-postid="8422" data-belowelement="div-comment-218833" data-respondelement="respond" data-replyto="回复给cuiyuxuan" aria-label="回复给cuiyuxuan">回复</a></div> </article>
+</li>
+<li id="comment-219517" class="pingback even thread-even depth-1">
+<div class="comment-body">
+Pingback： <a href="http://digest.definite.name/how-to-test-the-shuffling-process.html" rel="external nofollow ugc" class="url">Definite Digest &raquo; 如何测试洗牌程序</a> </div>
+</li>
+<li id="comment-261404" class="comment odd alt thread-odd thread-alt depth-1">
+<article id="div-comment-261404" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/d3b40f6144a059306e7795a441025a64?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/d3b40f6144a059306e7795a441025a64?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" /> <b class="fn">city_hunter</b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/8422.html/comment-page-1#comment-261404"><time datetime="2013-01-09T17:42:43+08:00">2013年01月09日 17:42</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>吴军的数学之美将的很清楚<a href="#comment-209188" rel="nofollow">@无缺 </a></p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/8422.html/comment-page-1?replytocom=261404#respond" data-commentid="261404" data-postid="8422" data-belowelement="div-comment-261404" data-respondelement="respond" data-replyto="回复给city_hunter" aria-label="回复给city_hunter">回复</a></div> </article>
+</li>
+<li id="comment-492243" class="pingback even thread-even depth-1">
+<div class="comment-body">
+Pingback： <a href="http://lc42.me/rs1-1/" rel="external nofollow ugc" class="url">推荐系统系列算法之一：基于内容的推荐 | lc42</a> </div>
+</li>
+<li id="comment-621180" class="pingback odd alt thread-odd thread-alt depth-1">
+<div class="comment-body">
+Pingback： <a href="http://in.sdo.com/?p=430" rel="external nofollow ugc" class="url">[转载]TF-IDF模型的概率解释 | 盛大创新院团队博客 | 数据，更懂人心</a> </div>
+</li>
+<li id="comment-670617" class="comment even thread-even depth-1">
+<article id="div-comment-670617" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/3b299bbbc1fdd64e3a0b9af708d07faf?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/3b299bbbc1fdd64e3a0b9af708d07faf?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" /> <b class="fn"><a href="http://www.chepoo.com" rel="external nofollow ugc" class="url">awnuxkjy</a></b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/8422.html/comment-page-1#comment-670617"><time datetime="2013-08-18T09:00:23+08:00">2013年08月18日 09:00</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>好文，学习，简单明了。</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/8422.html/comment-page-1?replytocom=670617#respond" data-commentid="670617" data-postid="8422" data-belowelement="div-comment-670617" data-respondelement="respond" data-replyto="回复给awnuxkjy" aria-label="回复给awnuxkjy">回复</a></div> </article>
+</li>
+<li id="comment-797246" class="pingback odd alt thread-odd thread-alt depth-1">
+<div class="comment-body">
+Pingback： <a href="http://itblog.cc/529.html" rel="external nofollow ugc" class="url">伙伴分配器的一个极简实现 – IT技术博客大全</a> </div>
+</li>
+<li id="comment-852515" class="pingback even thread-even depth-1">
+<div class="comment-body">
+Pingback： <a href="http://demo.zengine.info/?p=33" rel="external nofollow ugc" class="url">伙伴分配器的一个极简实现 | zengine</a> </div>
+</li>
+<li id="comment-858680" class="pingback odd alt thread-odd thread-alt depth-1">
+<div class="comment-body">
+Pingback： <a href="http://demo.zengine.info/?p=49" rel="external nofollow ugc" class="url">二维码的生成细节和原理 | zengine</a> </div>
+</li>
+<li id="comment-965646" class="pingback even thread-even depth-1">
+<div class="comment-body">
+Pingback： <a href="http://www.xdhcn.com/?p=206" rel="external nofollow ugc" class="url">伙伴分配器的一个极简实现 | 星达红</a> </div>
+</li>
+<li id="comment-1149036" class="comment odd alt thread-odd thread-alt depth-1">
+<article id="div-comment-1149036" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/f8701d4a03377ddcb37876d557dc8916?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/f8701d4a03377ddcb37876d557dc8916?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" /> <b class="fn"><a href="http://weibo.com/silence1214/home?topnav=1&#038;wvr=5" rel="external nofollow ugc" class="url">silence_1214</a></b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/8422.html/comment-page-1#comment-1149036"><time datetime="2014-01-06T23:23:44+08:00">2014年01月06日 23:23</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>布尔模型 只是说在查询多个关键词的时候 对出现结果的合并与否吧。并不是什么比较文档相似度这些模型的吧？</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/8422.html/comment-page-1?replytocom=1149036#respond" data-commentid="1149036" data-postid="8422" data-belowelement="div-comment-1149036" data-respondelement="respond" data-replyto="回复给silence_1214" aria-label="回复给silence_1214">回复</a></div> </article>
+</li>
+<li id="comment-1477228" class="comment even thread-even depth-1">
+<article id="div-comment-1477228" class="comment-body">
+<footer class="comment-meta">
+<div class="comment-author vcard">
+<img alt src="https://secure.gravatar.com/avatar/f3948ad6fd3be1a188df444a4b6b206d?s=50&#038;d=mm&#038;r=g" srcset="https://secure.gravatar.com/avatar/f3948ad6fd3be1a188df444a4b6b206d?s=100&#038;d=mm&#038;r=g 2x" class="avatar avatar-50 photo" height="50" width="50" loading="lazy" /> <b class="fn">stevenxyc</b><span class="says">说道：</span> </div>
+<div class="comment-metadata">
+<a href="https://coolshell.cn/articles/8422.html/comment-page-1#comment-1477228"><time datetime="2014-06-07T22:25:07+08:00">2014年06月07日 22:25</time></a> </div>
+</footer>
+<div class="comment-content">
+<p>公式推导有阶段，麻烦补全一下吧：）</p>
+</div>
+<div class="reply"><a rel="nofollow" class="comment-reply-link" href="https://coolshell.cn/articles/8422.html/comment-page-1?replytocom=1477228#respond" data-commentid="1477228" data-postid="8422" data-belowelement="div-comment-1477228" data-respondelement="respond" data-replyto="回复给stevenxyc" aria-label="回复给stevenxyc">回复</a></div> </article>
+</li>
+<li id="comment-2076775" class="pingback odd alt thread-odd thread-alt depth-1">
+<div class="comment-body">
+Pingback： <a href="http://www.elfship.cn/guanyuxinxishangyulogduishuerfenfahafumanbianmadesikao/" rel="external nofollow ugc" class="url">关于信息熵与log对数、二分法、哈夫曼编码、TF/IDF的思考 - Lily个人网站</a> </div>
+</li>
+<li id="comment-2085647" class="pingback even thread-even depth-1">
+<div class="comment-body">
+Pingback： <a href="https://flashgene.com/archives/108406.html" rel="external nofollow ugc" class="url">文本匹配论文笔记 &#8211; 闪念基因 &#8211; 个人技术分享</a> </div>
+</li>
+<li id="comment-2118686" class="pingback odd alt thread-odd thread-alt depth-1">
+<div class="comment-body">
+Pingback： <a href="http://jiunyiyang.me/2020/06/12/%e8%b3%87%e6%96%99%e5%88%86%e6%9e%90%e6%a6%82%e5%bf%b5%e5%a4%a7%e5%85%a8-%e8%aa%8d%e8%ad%98%e6%96%87%e6%9c%ac%e5%88%86%e6%9e%90-%e6%96%87%e6%9c%ac%e5%ad%97%e8%a9%9e%e5%" rel="external nofollow ugc" class="url">【資料分析概念大全｜認識文本分析】給我一段話，我告訴你重點在哪：對文本重點字詞加權的TF-IDF方法 &#8211; Marketing Analytics</a> </div>
+</li>
+<li id="comment-2143463" class="pingback even thread-even depth-1">
+<div class="comment-body">
+Pingback： <a href="http://jiunyiyang.me/2020/06/12/%e6%8a%80%e8%a1%93%e5%88%86%e4%ba%ab-%e8%b3%87%e6%96%99%e7%a7%91%e5%ad%b8%e5%88%9d%e5%ad%b8%e8%80%85-%e8%aa%8d%e8%ad%98%e6%96%87%e6%9c%ac%e5%88%86%e6%9e%90-%e6%96%87%e6" rel="external nofollow ugc" class="url">【技術分享】給我一段話，我告訴你重點在哪：對文本重點字詞加權的TF-IDF方法 &#8211; Marketing Analytics</a> </div>
+</li>
+<li id="comment-2143464" class="pingback odd alt thread-odd thread-alt depth-1">
+<div class="comment-body">
+Pingback： <a href="http://jiunyiyang.me/2020/06/12/%e6%8a%80%e8%a1%93%e5%88%86%e4%ba%ab-%e8%b3%87%e6%96%99%e7%a7%91%e5%ad%b8%e5%88%9d%e5%ad%b8%e8%80%85-%e8%aa%8d%e8%ad%98%e6%96%87%e6%9c%ac%e5%88%86%e6%9e%90-%e6%96%87%e6" rel="external nofollow ugc" class="url">【技術分享】認識文本分析｜給我一段話，我告訴你重點在哪：對文本重點字詞加權的TF-IDF方法 &#8211; Marketing Analytics</a> </div>
+</li>
+<li id="comment-2333271" class="pingback even thread-even depth-1">
+<div class="comment-body">
+Pingback： <a href="https://jiunyiyang.me/2020/06/12/%e6%8a%80%e8%a1%93%e5%88%86%e4%ba%ab-%e8%b3%87%e6%96%99%e7%a7%91%e5%ad%b8%e5%88%9d%e5%ad%b8%e8%80%85-%e8%aa%8d%e8%ad%98%e6%96%87%e6%9c%ac%e5%88%86%e6%9e%90-%e6%96%87%e" rel="external nofollow ugc" class="url">【技術分享】認識文本分析｜給我一段話，我告訴你重點在哪：對文本重點字詞加權的TF-IDF方法 | Analytic Lens</a> </div>
+</li>
+<li id="comment-2370494" class="pingback odd alt thread-odd thread-alt depth-1">
+<div class="comment-body">
+Pingback： <a href="https://idataagent.com/2020/06/12/%e6%8a%80%e8%a1%93%e5%88%86%e4%ba%ab-%e8%b3%87%e6%96%99%e7%a7%91%e5%ad%b8%e5%88%9d%e5%ad%b8%e8%80%85-%e8%aa%8d%e8%ad%98%e6%96%87%e6%9c%ac%e5%88%86%e6%9e%90-%e6%96%87%" rel="external nofollow ugc" class="url">【技術分享】認識文本分析｜給我一段話，我告訴你重點在哪：對文本重點字詞加權的TF-IDF方法 | Data Agent</a> </div>
+</li>
+</ol>
+<nav class="navigation comment-navigation" role="navigation">
+<h2 class="screen-reader-text">Comment navigation</h2>
+<div class="nav-links">
+<div id="commentnavi">
+<span class="pages"><i class="fa fa-comments"></i> 评论分页</span>
+<div id="commentpager">
+<span aria-current="page" class="page-numbers current">1</span>
+<a class="page-numbers" href="https://coolshell.cn/articles/8422.html/comment-page-2#comments">2</a>
+<a class="next page-numbers" href="https://coolshell.cn/articles/8422.html/comment-page-2#comments">下一页 &raquo;</a> <span id="cp_post_id">8422</span>
+</div>
+<div class="fixed"></div>
+</div>
+</div>
+</nav>
+<div id="respond" class="comment-respond">
+<h3 id="reply-title" class="comment-reply-title">发表回复 <small><a rel="nofollow" id="cancel-comment-reply-link" href="/articles/8422.html/comment-page-1#respond" style="display:none;">取消回复</a></small></h3><form action="https://coolshell.cn/wp-comments-post.php" method="post" id="commentform" class="comment-form" novalidate><p class="comment-notes"><span id="email-notes">您的电子邮箱地址不会被公开。</span> <span class="required-field-message" aria-hidden="true">必填项已用<span class="required" aria-hidden="true">*</span>标注</span></p><p class="comment-form-comment"><label for="comment">评论 <span class="required" aria-hidden="true">*</span></label> <textarea id="comment" name="comment" cols="45" rows="8" maxlength="65525" required></textarea></p><p class="comment-form-author"><label for="author">显示名称 <span class="required" aria-hidden="true">*</span></label> <input id="author" name="author" type="text" value size="30" maxlength="245" required /></p>
+<p class="comment-form-email"><label for="email">电子邮箱地址 <span class="required" aria-hidden="true">*</span></label> <input id="email" name="email" type="email" value size="30" maxlength="100" aria-describedby="email-notes" required /></p>
+<p class="comment-form-url"><label for="url">网站地址</label> <input id="url" name="url" type="url" value size="30" maxlength="200" /></p>
+<p class="form-submit"><input name="submit" type="submit" id="submit" class="submit" value="发表评论" /> <input type="hidden" name="comment_post_ID" value="8422" id="comment_post_ID" />
+<input type="hidden" name="comment_parent" id="comment_parent" value="0" />
+</p><p style="display: none;"><input type="hidden" id="akismet_comment_nonce" name="akismet_comment_nonce" value="901b5ea7f2" /></p><p style="display: none !important;"><label>&#916;<textarea name="ak_hp_textarea" cols="45" rows="8" maxlength="100"></textarea></label><input type="hidden" id="ak_js_1" name="ak_js" value="152" /><script type="08a8c068d41a0f25af4d68b1-text/javascript">document.getElementById( "ak_js_1" ).setAttribute( "value", ( new Date() ).getTime() );</script></p></form> </div>
+</div>
+</div>
+</div>
+<div id="secondary" class="col-md-3 hidden-sm hidden-xs sidebar widget-area" role="complementary">
+<aside id="search-9" class="widget widget_search">
+<form role="search" method="get" class="search-form" action="https://coolshell.cn/">
+<label>
+<span class="screen-reader-text">Search for:</span>
+<input type="search" class="search-field" placeholder="Search &hellip;" value name="s" title="Search for:" />
+</label>
+<button type="submit" class="search-submit"><span class="screen-reader-text">Search</span></button>
+</form>
+</aside><aside id="custom_html-3" class="widget_text widget widget_custom_html"><h4 class="widget-title">本站公告</h4><div class="textwidget custom-html-widget"><p align="center"><a class="twitter" href="https://twitter.com/haoel" target="_blank" rel="noopener"> Twitter @haoel </a></p>
+<p align="center">微信小程序<br><img src="https://coolshell.cn/wp-content/uploads/2020/03/coolshell.mini_.jpg" height="200" weight="200" alt="微信小程序" title="微信小程序"></p>
+<p align="center">微信公众号<br><img src="https://coolshell.cn/wp-content/uploads/2020/03/coolshell.weixin.jpg" height="200" weight="200" alt="微信公众号" title="微信公众号"></p>
+<p align="center">极客时间专栏<br><a href="http://gk.link/a/10sBp" target="_blank" rel="noopener"><img src="https://coolshell.cn/wp-content/uploads/2021/06/8311623409583_.pic_hd-1024x1024.jpg" height="200" weight="200" alt="极客时间专栏" title="极客时间专栏"></a></p>
+</div></aside>
+<aside id="recent-posts-4" class="widget widget_recent_entries">
+<h4 class="widget-title">最新文章</h4>
+<ul>
+<li>
+<a href="https://coolshell.cn/articles/22298.html">聊聊团队协同和协同工具</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/22263.html">从一次经历谈 TIME_WAIT 的那些事</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/22242.html">ETCD的内存问题</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/22173.html">“一把梭：REST API 全用 POST”</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/22157.html">谈谈公司对员工的监控</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/21708.html">网络数字身份认证术</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/21672.html">我做系统架构的一些原则</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/21649.html">源代码特洛伊木马攻击</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/21615.html">Go编程模式 ： 泛型编程</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/21589.html">如何做一个有质量的技术分享</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/21263.html">Go 编程模式：k8s Visitor 模式</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/21228.html">Go编程模式：Pipeline</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/21214.html">Go编程模式：委托和反转控制</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/21179.html">Go 编程模式：Go Generation</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/21164.html">Go编程模式：Map-Reduce</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/21146.html">Go 编程模式：Functional Options</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/21140.html">Go 编程模式：错误处理</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/21128.html">Go编程模式：切片，接口，时间和性能</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/21113.html">百度为什么掉队了</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/20977.html">程序员如何把控自己的职业</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/21003.html">计时攻击 Timing Attacks</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/20845.html">Rust语言的编程范式</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/20793.html">与程序员相关的CPU缓存知识</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/20765.html">MegaEase的远程工作文化</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/20533.html">使用简单的逻辑方法进行独立思考</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/20276.html">别让自己“墙”了自己</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/19996.html">Unix 50 年：Ken Thompson 的密码</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/19840.html">HTTP的前世今生</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/19612.html">50年前的登月程序和程序员有多硬核</a>
+</li>
+<li>
+<a href="https://coolshell.cn/articles/19464.html">如何超过大多数人</a>
+</li>
+</ul>
+</aside><aside id="views-6" class="widget widget_views"><h4 class="widget-title">全站热门</h4><ul>
+<li><a href="https://coolshell.cn/articles/4990.html" title="程序员技术练级攻略 - 10,224,858 人阅读">程序员技术练级攻略</a></li><li><a href="https://coolshell.cn/articles/3961.html" title="&ldquo;火柴棍式&rdquo;程序员面试题 - 2,350,737 人阅读">&ldquo;火柴棍式&rdquo;程序员面试题</a></li><li><a href="https://coolshell.cn/articles/5426.html" title="简明 Vim 练级攻略 - 1,303,405 人阅读">简明 Vim 练级攻略</a></li><li><a href="https://coolshell.cn/articles/9308.html" title="&ldquo;作环保的程序员，从不用百度开始&rdquo; - 569,858 人阅读">&ldquo;作环保的程序员，从不用百度开始&rdquo;</a></li><li><a href="https://coolshell.cn/articles/11564.html" title="TCP 的那些事儿（上） - 476,555 人阅读">TCP 的那些事儿（上）</a></li><li><a href="https://coolshell.cn/articles/9070.html" title="AWK 简明教程 - 446,737 人阅读">AWK 简明教程</a></li><li><a href="https://coolshell.cn/articles/7186.html" title="做个环保主义的程序员 - 442,330 人阅读">做个环保主义的程序员</a></li><li><a href="https://coolshell.cn/articles/10688.html" title="编程能力与编程年龄 - 410,497 人阅读">编程能力与编程年龄</a></li><li><a href="https://coolshell.cn/articles/10590.html" title="二维码的生成细节和原理 - 386,292 人阅读">二维码的生成细节和原理</a></li><li><a href="https://coolshell.cn/articles/9104.html" title="sed 简明教程 - 372,852 人阅读">sed 简明教程</a></li><li><a href="https://coolshell.cn/articles/4102.html" title="如何学好C语言 - 363,027 人阅读">如何学好C语言</a></li><li><a href="https://coolshell.cn/articles/17583.html" title="技术人员的发展之路 - 300,453 人阅读">技术人员的发展之路</a></li><li><a href="https://coolshell.cn/articles/19464.html" title="如何超过大多数人 - 300,292 人阅读">如何超过大多数人</a></li><li><a href="https://coolshell.cn/articles/6470.html" title="由12306.cn谈谈网站性能技术 - 293,854 人阅读">由12306.cn谈谈网站性能技术</a></li><li><a href="https://coolshell.cn/articles/8883.html" title="应该知道的Linux技巧 - 291,820 人阅读">应该知道的Linux技巧</a></li><li><a href="https://coolshell.cn/articles/9606.html" title="疫苗：Java HashMap的死循环 - 288,890 人阅读">疫苗：Java HashMap的死循环</a></li><li><a href="https://coolshell.cn/articles/17416.html" title="缓存更新的套路 - 283,466 人阅读">缓存更新的套路</a></li><li><a href="https://coolshell.cn/articles/10910.html" title="分布式系统的事务处理 - 278,447 人阅读">分布式系统的事务处理</a></li><li><a href="https://coolshell.cn/articles/11609.html" title="TCP 的那些事儿（下） - 277,424 人阅读">TCP 的那些事儿（下）</a></li><li><a href="https://coolshell.cn/articles/2250.html" title="&ldquo;21天教你学会C++&rdquo; - 273,321 人阅读">&ldquo;21天教你学会C++&rdquo;</a></li><li><a href="https://coolshell.cn/articles/8239.html" title="无锁队列的实现 - 264,458 人阅读">无锁队列的实现</a></li><li><a href="https://coolshell.cn/articles/10739.html" title="Lua简明教程 - 263,318 人阅读">Lua简明教程</a></li><li><a href="https://coolshell.cn/articles/20276.html" title="别让自己&ldquo;墙&rdquo;了自己 - 255,824 人阅读">别让自己&ldquo;墙&rdquo;了自己</a></li><li><a href="https://coolshell.cn/articles/7490.html" title="性能调优攻略 - 252,482 人阅读">性能调优攻略</a></li><li><a href="https://coolshell.cn/articles/1846.html" title="MySQL性能优化的最佳20+条经验 - 251,699 人阅读">MySQL性能优化的最佳20+条经验</a></li><li><a href="https://coolshell.cn/articles/4758.html" title="如何写出无法维护的代码 - 248,552 人阅读">如何写出无法维护的代码</a></li><li><a href="https://coolshell.cn/articles/914.html" title="6个变态的C语言Hello World程序 - 248,515 人阅读">6个变态的C语言Hello World程序</a></li><li><a href="https://coolshell.cn/articles/7829.html" title="28个Unix/Linux的命令行神器 - 237,345 人阅读">28个Unix/Linux的命令行神器</a></li><li><a href="https://coolshell.cn/articles/17010.html" title="Docker基础技术：Linux Namespace（上） - 233,606 人阅读">Docker基础技术：Linux Namespace（上）</a></li><li><a href="https://coolshell.cn/articles/11312.html" title="无插件Vim编程技巧 - 218,476 人阅读">无插件Vim编程技巧</a></li></ul>
+</aside><aside id="categories-367921425" class="widget widget_categories"><h4 class="widget-title">分类</h4>
+<ul>
+<li class="cat-item cat-item-195"><a href="https://coolshell.cn/category/itnews">业界新闻</a> (30)
+</li>
+<li class="cat-item cat-item-509"><a href="https://coolshell.cn/category/%e4%bc%81%e4%b8%9a%e5%ba%94%e7%94%a8">企业应用</a> (2)
+</li>
+<li class="cat-item cat-item-9"><a href="https://coolshell.cn/category/technews">技术新闻</a> (37)
+</li>
+<li class="cat-item cat-item-550"><a href="https://coolshell.cn/category/%e6%8a%80%e6%9c%af%e7%ae%a1%e7%90%86">技术管理</a> (19)
+</li>
+<li class="cat-item cat-item-12"><a href="https://coolshell.cn/category/techarticle">技术读物</a> (125)
+</li>
+<li class="cat-item cat-item-18"><a href="https://coolshell.cn/category/operatingsystem">操作系统</a> (96)
+<ul class="children">
+<li class="cat-item cat-item-20"><a href="https://coolshell.cn/category/operatingsystem/unixlinux">Unix/Linux</a> (80)
+</li>
+<li class="cat-item cat-item-19"><a href="https://coolshell.cn/category/operatingsystem/mswindows">Windows</a> (12)
+</li>
+</ul>
+</li>
+<li class="cat-item cat-item-105"><a href="https://coolshell.cn/category/datebase">数据库</a> (11)
+</li>
+<li class="cat-item cat-item-10"><a href="https://coolshell.cn/category/misc">杂项资源</a> (293)
+</li>
+<li class="cat-item cat-item-15"><a href="https://coolshell.cn/category/process">流程方法</a> (48)
+</li>
+<li class="cat-item cat-item-23"><a href="https://coolshell.cn/category/progdesign">程序设计</a> (110)
+</li>
+<li class="cat-item cat-item-602"><a href="https://coolshell.cn/category/%e7%b3%bb%e7%bb%9f%e6%9e%b6%e6%9e%84">系统架构</a> (13)
+</li>
+<li class="cat-item cat-item-1"><a href="https://coolshell.cn/category/tools">编程工具</a> (67)
+</li>
+<li class="cat-item cat-item-3"><a href="https://coolshell.cn/category/proglanguage">编程语言</a> (325)
+<ul class="children">
+<li class="cat-item cat-item-189"><a href="https://coolshell.cn/category/proglanguage/dotnet">.NET编程</a> (3)
+</li>
+<li class="cat-item cat-item-8"><a href="https://coolshell.cn/category/proglanguage/ajaxdev">Ajax开发</a> (9)
+</li>
+<li class="cat-item cat-item-5"><a href="https://coolshell.cn/category/proglanguage/cplusplus">C/C++语言</a> (73)
+</li>
+<li class="cat-item cat-item-186"><a href="https://coolshell.cn/category/proglanguage/erlang">Erlang</a> (1)
+</li>
+<li class="cat-item cat-item-819"><a href="https://coolshell.cn/category/proglanguage/go-%e8%af%ad%e8%a8%80">Go 语言</a> (15)
+</li>
+<li class="cat-item cat-item-4"><a href="https://coolshell.cn/category/proglanguage/javadev">Java语言</a> (32)
+</li>
+<li class="cat-item cat-item-11"><a href="https://coolshell.cn/category/proglanguage/phpdev">PHP脚本</a> (11)
+</li>
+<li class="cat-item cat-item-33"><a href="https://coolshell.cn/category/proglanguage/pythondev">Python</a> (23)
+</li>
+<li class="cat-item cat-item-100"><a href="https://coolshell.cn/category/proglanguage/rubydev">Ruby</a> (5)
+</li>
+<li class="cat-item cat-item-860"><a href="https://coolshell.cn/category/proglanguage/rust-%e8%af%ad%e8%a8%80">Rust 语言</a> (1)
+</li>
+<li class="cat-item cat-item-7"><a href="https://coolshell.cn/category/proglanguage/webdev">Web开发</a> (106)
+</li>
+</ul>
+</li>
+<li class="cat-item cat-item-6"><a href="https://coolshell.cn/category/netsecurity">网络安全</a> (34)
+</li>
+<li class="cat-item cat-item-39"><a href="https://coolshell.cn/category/career">职场生涯</a> (40)
+</li>
+<li class="cat-item cat-item-271"><a href="https://coolshell.cn/category/funny">趣味问题</a> (19)
+</li>
+<li class="cat-item cat-item-52"><a href="https://coolshell.cn/category/story">轶事趣闻</a> (147)
+</li>
+</ul>
+</aside><aside id="tag_cloud-4" class="widget widget_tag_cloud"><h4 class="widget-title">标签</h4><div class="tagcloud"><a href="https://coolshell.cn/tag/agile" class="tag-cloud-link tag-link-17 tag-link-position-1" style="font-size: 11.559322033898pt;" aria-label="agile (15个项目)">agile</a>
+<a href="https://coolshell.cn/tag/ajax" class="tag-cloud-link tag-link-34 tag-link-position-2" style="font-size: 10.135593220339pt;" aria-label="AJAX (11个项目)">AJAX</a>
+<a href="https://coolshell.cn/tag/algorithm" class="tag-cloud-link tag-link-76 tag-link-position-3" style="font-size: 14.28813559322pt;" aria-label="Algorithm (26个项目)">Algorithm</a>
+<a href="https://coolshell.cn/tag/android" class="tag-cloud-link tag-link-145 tag-link-position-4" style="font-size: 10.135593220339pt;" aria-label="Android (11个项目)">Android</a>
+<a href="https://coolshell.cn/tag/bash" class="tag-cloud-link tag-link-190 tag-link-position-5" style="font-size: 9.1864406779661pt;" aria-label="Bash (9个项目)">Bash</a>
+<a href="https://coolshell.cn/tag/c" class="tag-cloud-link tag-link-59 tag-link-position-6" style="font-size: 20.694915254237pt;" aria-label="C++ (93个项目)">C++</a>
+<a href="https://coolshell.cn/tag/coding" class="tag-cloud-link tag-link-135 tag-link-position-7" style="font-size: 14.28813559322pt;" aria-label="Coding (26个项目)">Coding</a>
+<a href="https://coolshell.cn/tag/css" class="tag-cloud-link tag-link-96 tag-link-position-8" style="font-size: 13.457627118644pt;" aria-label="CSS (22个项目)">CSS</a>
+<a href="https://coolshell.cn/tag/design" class="tag-cloud-link tag-link-71 tag-link-position-9" style="font-size: 13.932203389831pt;" aria-label="Design (24个项目)">Design</a>
+<a href="https://coolshell.cn/tag/design-pattern" class="tag-cloud-link tag-link-25 tag-link-position-10" style="font-size: 9.6610169491525pt;" aria-label="design pattern (10个项目)">design pattern</a>
+<a href="https://coolshell.cn/tag/ebook" class="tag-cloud-link tag-link-101 tag-link-position-11" style="font-size: 11.559322033898pt;" aria-label="ebook (15个项目)">ebook</a>
+<a href="https://coolshell.cn/tag/flash" class="tag-cloud-link tag-link-98 tag-link-position-12" style="font-size: 8pt;" aria-label="Flash (7个项目)">Flash</a>
+<a href="https://coolshell.cn/tag/game" class="tag-cloud-link tag-link-125 tag-link-position-13" style="font-size: 9.1864406779661pt;" aria-label="Game (9个项目)">Game</a>
+<a href="https://coolshell.cn/tag/go" class="tag-cloud-link tag-link-238 tag-link-position-14" style="font-size: 13.220338983051pt;" aria-label="Go (21个项目)">Go</a>
+<a href="https://coolshell.cn/tag/golang" class="tag-cloud-link tag-link-237 tag-link-position-15" style="font-size: 10.966101694915pt;" aria-label="golang (13个项目)">golang</a>
+<a href="https://coolshell.cn/tag/google" class="tag-cloud-link tag-link-32 tag-link-position-16" style="font-size: 15.35593220339pt;" aria-label="Google (32个项目)">Google</a>
+<a href="https://coolshell.cn/tag/html" class="tag-cloud-link tag-link-38 tag-link-position-17" style="font-size: 15.593220338983pt;" aria-label="HTML (34个项目)">HTML</a>
+<a href="https://coolshell.cn/tag/ie" class="tag-cloud-link tag-link-175 tag-link-position-18" style="font-size: 9.6610169491525pt;" aria-label="IE (10个项目)">IE</a>
+<a href="https://coolshell.cn/tag/java" class="tag-cloud-link tag-link-13 tag-link-position-19" style="font-size: 17.610169491525pt;" aria-label="Java (50个项目)">Java</a>
+<a href="https://coolshell.cn/tag/javascript" class="tag-cloud-link tag-link-114 tag-link-position-20" style="font-size: 17.966101694915pt;" aria-label="Javascript (54个项目)">Javascript</a>
+<a href="https://coolshell.cn/tag/jquery" class="tag-cloud-link tag-link-191 tag-link-position-21" style="font-size: 10.135593220339pt;" aria-label="jQuery (11个项目)">jQuery</a>
+<a href="https://coolshell.cn/tag/linux" class="tag-cloud-link tag-link-37 tag-link-position-22" style="font-size: 19.271186440678pt;" aria-label="Linux (70个项目)">Linux</a>
+<a href="https://coolshell.cn/tag/mysql" class="tag-cloud-link tag-link-106 tag-link-position-23" style="font-size: 8pt;" aria-label="MySQL (7个项目)">MySQL</a>
+<a href="https://coolshell.cn/tag/oop" class="tag-cloud-link tag-link-245 tag-link-position-24" style="font-size: 8.5932203389831pt;" aria-label="OOP (8个项目)">OOP</a>
+<a href="https://coolshell.cn/tag/password" class="tag-cloud-link tag-link-319 tag-link-position-25" style="font-size: 8.5932203389831pt;" aria-label="password (8个项目)">password</a>
+<a href="https://coolshell.cn/tag/performance" class="tag-cloud-link tag-link-120 tag-link-position-26" style="font-size: 12.271186440678pt;" aria-label="Performance (17个项目)">Performance</a>
+<a href="https://coolshell.cn/tag/php" class="tag-cloud-link tag-link-35 tag-link-position-27" style="font-size: 14.050847457627pt;" aria-label="PHP (25个项目)">PHP</a>
+<a href="https://coolshell.cn/tag/programmer" class="tag-cloud-link tag-link-70 tag-link-position-28" style="font-size: 21.881355932203pt;" aria-label="Programmer (116个项目)">Programmer</a>
+<a href="https://coolshell.cn/tag/programming" class="tag-cloud-link tag-link-499 tag-link-position-29" style="font-size: 10.135593220339pt;" aria-label="Programming (11个项目)">Programming</a>
+<a href="https://coolshell.cn/tag/programming-language" class="tag-cloud-link tag-link-115 tag-link-position-30" style="font-size: 10.491525423729pt;" aria-label="programming language (12个项目)">programming language</a>
+<a href="https://coolshell.cn/tag/puzzle" class="tag-cloud-link tag-link-514 tag-link-position-31" style="font-size: 10.135593220339pt;" aria-label="Puzzle (11个项目)">Puzzle</a>
+<a href="https://coolshell.cn/tag/pythondev" class="tag-cloud-link tag-link-791 tag-link-position-32" style="font-size: 15pt;" aria-label="Python (30个项目)">Python</a>
+<a href="https://coolshell.cn/tag/ruby" class="tag-cloud-link tag-link-69 tag-link-position-33" style="font-size: 9.6610169491525pt;" aria-label="Ruby (10个项目)">Ruby</a>
+<a href="https://coolshell.cn/tag/sql" class="tag-cloud-link tag-link-131 tag-link-position-34" style="font-size: 9.6610169491525pt;" aria-label="SQL (10个项目)">SQL</a>
+<a href="https://coolshell.cn/tag/tdd" class="tag-cloud-link tag-link-485 tag-link-position-35" style="font-size: 8.5932203389831pt;" aria-label="TDD (8个项目)">TDD</a>
+<a href="https://coolshell.cn/tag/ui" class="tag-cloud-link tag-link-47 tag-link-position-36" style="font-size: 10.491525423729pt;" aria-label="UI (12个项目)">UI</a>
+<a href="https://coolshell.cn/tag/unix" class="tag-cloud-link tag-link-21 tag-link-position-37" style="font-size: 15.949152542373pt;" aria-label="Unix (36个项目)">Unix</a>
+<a href="https://coolshell.cn/tag/vim" class="tag-cloud-link tag-link-50 tag-link-position-38" style="font-size: 12.745762711864pt;" aria-label="vim (19个项目)">vim</a>
+<a href="https://coolshell.cn/tag/web" class="tag-cloud-link tag-link-30 tag-link-position-39" style="font-size: 16.661016949153pt;" aria-label="Web (42个项目)">Web</a>
+<a href="https://coolshell.cn/tag/windows" class="tag-cloud-link tag-link-49 tag-link-position-40" style="font-size: 12.271186440678pt;" aria-label="Windows (17个项目)">Windows</a>
+<a href="https://coolshell.cn/tag/xml" class="tag-cloud-link tag-link-104 tag-link-position-41" style="font-size: 8.5932203389831pt;" aria-label="XML (8个项目)">XML</a>
+<a href="https://coolshell.cn/tag/%e5%ae%89%e5%85%a8" class="tag-cloud-link tag-link-318 tag-link-position-42" style="font-size: 13.694915254237pt;" aria-label="安全 (23个项目)">安全</a>
+<a href="https://coolshell.cn/tag/%e7%a8%8b%e5%ba%8f%e5%91%98" class="tag-cloud-link tag-link-58 tag-link-position-43" style="font-size: 22pt;" aria-label="程序员 (119个项目)">程序员</a>
+<a href="https://coolshell.cn/tag/%e7%ae%97%e6%b3%95" class="tag-cloud-link tag-link-77 tag-link-position-44" style="font-size: 9.6610169491525pt;" aria-label="算法 (10个项目)">算法</a>
+<a href="https://coolshell.cn/tag/interview" class="tag-cloud-link tag-link-164 tag-link-position-45" style="font-size: 11.915254237288pt;" aria-label="面试 (16个项目)">面试</a></div>
+</aside><aside id="archives-5" class="widget widget_archive"><h4 class="widget-title">归档</h4>
+<ul>
+<li><a href="https://coolshell.cn/articles/date/2022/10">2022年10月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2022/07">2022年7月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2022/05">2022年5月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2022/02">2022年2月</a>&nbsp;(2)</li>
+<li><a href="https://coolshell.cn/articles/date/2022/01">2022年1月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2021/12">2021年12月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2021/11">2021年11月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2021/09">2021年9月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2021/07">2021年7月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2020/12">2020年12月</a>&nbsp;(9)</li>
+<li><a href="https://coolshell.cn/articles/date/2020/08">2020年8月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2020/07">2020年7月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2020/04">2020年4月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2020/03">2020年3月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2020/01">2020年1月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2019/12">2019年12月</a>&nbsp;(2)</li>
+<li><a href="https://coolshell.cn/articles/date/2019/11">2019年11月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2019/10">2019年10月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2019/07">2019年7月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2019/06">2019年6月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2019/05">2019年5月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2019/04">2019年4月</a>&nbsp;(2)</li>
+<li><a href="https://coolshell.cn/articles/date/2019/03">2019年3月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2019/02">2019年2月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2018/12">2018年12月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2018/05">2018年5月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2018/01">2018年1月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2017/10">2017年10月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2017/09">2017年9月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2017/08">2017年8月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2017/07">2017年7月</a>&nbsp;(3)</li>
+<li><a href="https://coolshell.cn/articles/date/2017/06">2017年6月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2017/04">2017年4月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2017/03">2017年3月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2017/02">2017年2月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2017/01">2017年1月</a>&nbsp;(2)</li>
+<li><a href="https://coolshell.cn/articles/date/2016/12">2016年12月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2016/10">2016年10月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2016/09">2016年9月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2016/08">2016年8月</a>&nbsp;(2)</li>
+<li><a href="https://coolshell.cn/articles/date/2016/07">2016年7月</a>&nbsp;(3)</li>
+<li><a href="https://coolshell.cn/articles/date/2015/12">2015年12月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2015/09">2015年9月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2015/08">2015年8月</a>&nbsp;(2)</li>
+<li><a href="https://coolshell.cn/articles/date/2015/04">2015年4月</a>&nbsp;(4)</li>
+<li><a href="https://coolshell.cn/articles/date/2014/12">2014年12月</a>&nbsp;(3)</li>
+<li><a href="https://coolshell.cn/articles/date/2014/11">2014年11月</a>&nbsp;(2)</li>
+<li><a href="https://coolshell.cn/articles/date/2014/10">2014年10月</a>&nbsp;(2)</li>
+<li><a href="https://coolshell.cn/articles/date/2014/09">2014年9月</a>&nbsp;(2)</li>
+<li><a href="https://coolshell.cn/articles/date/2014/08">2014年8月</a>&nbsp;(2)</li>
+<li><a href="https://coolshell.cn/articles/date/2014/06">2014年6月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2014/05">2014年5月</a>&nbsp;(4)</li>
+<li><a href="https://coolshell.cn/articles/date/2014/04">2014年4月</a>&nbsp;(4)</li>
+<li><a href="https://coolshell.cn/articles/date/2014/03">2014年3月</a>&nbsp;(5)</li>
+<li><a href="https://coolshell.cn/articles/date/2014/02">2014年2月</a>&nbsp;(3)</li>
+<li><a href="https://coolshell.cn/articles/date/2014/01">2014年1月</a>&nbsp;(2)</li>
+<li><a href="https://coolshell.cn/articles/date/2013/12">2013年12月</a>&nbsp;(3)</li>
+<li><a href="https://coolshell.cn/articles/date/2013/11">2013年11月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2013/10">2013年10月</a>&nbsp;(6)</li>
+<li><a href="https://coolshell.cn/articles/date/2013/08">2013年8月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2013/07">2013年7月</a>&nbsp;(8)</li>
+<li><a href="https://coolshell.cn/articles/date/2013/06">2013年6月</a>&nbsp;(2)</li>
+<li><a href="https://coolshell.cn/articles/date/2013/05">2013年5月</a>&nbsp;(3)</li>
+<li><a href="https://coolshell.cn/articles/date/2013/04">2013年4月</a>&nbsp;(3)</li>
+<li><a href="https://coolshell.cn/articles/date/2013/03">2013年3月</a>&nbsp;(3)</li>
+<li><a href="https://coolshell.cn/articles/date/2013/02">2013年2月</a>&nbsp;(5)</li>
+<li><a href="https://coolshell.cn/articles/date/2013/01">2013年1月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2012/12">2012年12月</a>&nbsp;(4)</li>
+<li><a href="https://coolshell.cn/articles/date/2012/11">2012年11月</a>&nbsp;(4)</li>
+<li><a href="https://coolshell.cn/articles/date/2012/10">2012年10月</a>&nbsp;(3)</li>
+<li><a href="https://coolshell.cn/articles/date/2012/09">2012年9月</a>&nbsp;(4)</li>
+<li><a href="https://coolshell.cn/articles/date/2012/08">2012年8月</a>&nbsp;(8)</li>
+<li><a href="https://coolshell.cn/articles/date/2012/07">2012年7月</a>&nbsp;(4)</li>
+<li><a href="https://coolshell.cn/articles/date/2012/06">2012年6月</a>&nbsp;(7)</li>
+<li><a href="https://coolshell.cn/articles/date/2012/05">2012年5月</a>&nbsp;(6)</li>
+<li><a href="https://coolshell.cn/articles/date/2012/04">2012年4月</a>&nbsp;(6)</li>
+<li><a href="https://coolshell.cn/articles/date/2012/03">2012年3月</a>&nbsp;(6)</li>
+<li><a href="https://coolshell.cn/articles/date/2012/02">2012年2月</a>&nbsp;(3)</li>
+<li><a href="https://coolshell.cn/articles/date/2012/01">2012年1月</a>&nbsp;(6)</li>
+<li><a href="https://coolshell.cn/articles/date/2011/12">2011年12月</a>&nbsp;(5)</li>
+<li><a href="https://coolshell.cn/articles/date/2011/11">2011年11月</a>&nbsp;(9)</li>
+<li><a href="https://coolshell.cn/articles/date/2011/10">2011年10月</a>&nbsp;(6)</li>
+<li><a href="https://coolshell.cn/articles/date/2011/09">2011年9月</a>&nbsp;(5)</li>
+<li><a href="https://coolshell.cn/articles/date/2011/08">2011年8月</a>&nbsp;(14)</li>
+<li><a href="https://coolshell.cn/articles/date/2011/07">2011年7月</a>&nbsp;(6)</li>
+<li><a href="https://coolshell.cn/articles/date/2011/06">2011年6月</a>&nbsp;(12)</li>
+<li><a href="https://coolshell.cn/articles/date/2011/05">2011年5月</a>&nbsp;(5)</li>
+<li><a href="https://coolshell.cn/articles/date/2011/04">2011年4月</a>&nbsp;(18)</li>
+<li><a href="https://coolshell.cn/articles/date/2011/03">2011年3月</a>&nbsp;(16)</li>
+<li><a href="https://coolshell.cn/articles/date/2011/02">2011年2月</a>&nbsp;(16)</li>
+<li><a href="https://coolshell.cn/articles/date/2011/01">2011年1月</a>&nbsp;(18)</li>
+<li><a href="https://coolshell.cn/articles/date/2010/12">2010年12月</a>&nbsp;(11)</li>
+<li><a href="https://coolshell.cn/articles/date/2010/11">2010年11月</a>&nbsp;(11)</li>
+<li><a href="https://coolshell.cn/articles/date/2010/10">2010年10月</a>&nbsp;(19)</li>
+<li><a href="https://coolshell.cn/articles/date/2010/09">2010年9月</a>&nbsp;(15)</li>
+<li><a href="https://coolshell.cn/articles/date/2010/08">2010年8月</a>&nbsp;(10)</li>
+<li><a href="https://coolshell.cn/articles/date/2010/07">2010年7月</a>&nbsp;(20)</li>
+<li><a href="https://coolshell.cn/articles/date/2010/06">2010年6月</a>&nbsp;(9)</li>
+<li><a href="https://coolshell.cn/articles/date/2010/05">2010年5月</a>&nbsp;(13)</li>
+<li><a href="https://coolshell.cn/articles/date/2010/04">2010年4月</a>&nbsp;(12)</li>
+<li><a href="https://coolshell.cn/articles/date/2010/03">2010年3月</a>&nbsp;(11)</li>
+<li><a href="https://coolshell.cn/articles/date/2010/02">2010年2月</a>&nbsp;(7)</li>
+<li><a href="https://coolshell.cn/articles/date/2010/01">2010年1月</a>&nbsp;(9)</li>
+<li><a href="https://coolshell.cn/articles/date/2009/12">2009年12月</a>&nbsp;(22)</li>
+<li><a href="https://coolshell.cn/articles/date/2009/11">2009年11月</a>&nbsp;(27)</li>
+<li><a href="https://coolshell.cn/articles/date/2009/10">2009年10月</a>&nbsp;(17)</li>
+<li><a href="https://coolshell.cn/articles/date/2009/09">2009年9月</a>&nbsp;(14)</li>
+<li><a href="https://coolshell.cn/articles/date/2009/08">2009年8月</a>&nbsp;(21)</li>
+<li><a href="https://coolshell.cn/articles/date/2009/07">2009年7月</a>&nbsp;(18)</li>
+<li><a href="https://coolshell.cn/articles/date/2009/06">2009年6月</a>&nbsp;(19)</li>
+<li><a href="https://coolshell.cn/articles/date/2009/05">2009年5月</a>&nbsp;(27)</li>
+<li><a href="https://coolshell.cn/articles/date/2009/04">2009年4月</a>&nbsp;(53)</li>
+<li><a href="https://coolshell.cn/articles/date/2009/03">2009年3月</a>&nbsp;(43)</li>
+<li><a href="https://coolshell.cn/articles/date/2008/10">2008年10月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2007/12">2007年12月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2006/11">2006年11月</a>&nbsp;(1)</li>
+<li><a href="https://coolshell.cn/articles/date/2004/06">2004年6月</a>&nbsp;(1)</li>
+</ul>
+</aside><aside id="custom_html-8" class="widget_text widget widget_custom_html"><h4 class="widget-title">友情链接</h4><div class="textwidget custom-html-widget"><ul class="blogroll">
+<li><a href="http://blog.csdn.net/haoel" target="_blank" onclick="if (!window.__cfRLUnblockHandlers) return false; pageTracker._trackPageview('/outgoing/blog.csdn.net/haoel?referer=http://coolshell.cn');" rel="noopener" data-cf-modified-08a8c068d41a0f25af4d68b1->陈皓的博客</a></li>
+<li><a href="http://ifeve.com/" target="_blank" title="促进并发编程的研究和推广" onclick="if (!window.__cfRLUnblockHandlers) return false; pageTracker._trackPageview('/outgoing/ifeve.com/?referer=http://coolshell.cn');" rel="noopener" data-cf-modified-08a8c068d41a0f25af4d68b1->并发编程</a></li>
+<li><a href="http://www.raychase.net/" target="_blank" title="一个啰嗦的程序员" onclick="if (!window.__cfRLUnblockHandlers) return false; pageTracker._trackPageview('/outgoing/www.raychase.net/?referer=http://coolshell.cn');" rel="noopener" data-cf-modified-08a8c068d41a0f25af4d68b1->四火的唠叨</a></li>
+<li><a href="http://www.cnblogs.com/weidagang2046/" target="_blank" title="Just for Fun" onclick="if (!window.__cfRLUnblockHandlers) return false; pageTracker._trackPageview('/outgoing/http://www.cnblogs.com/weidagang2046/?referer=http://coolshell.cn/');" rel="noopener" data-cf-modified-08a8c068d41a0f25af4d68b1->Todd Wei的Blog</a></li>
+<li><a href="http://www.hellogcc.org/" target="_blank" title="致力于讨论和学习GNU Toolchain方面的工作组" onclick="if (!window.__cfRLUnblockHandlers) return false; pageTracker._trackPageview('/outgoing/www.hellogcc.org//?referer=http://coolshell.cn/');" rel="noopener" data-cf-modified-08a8c068d41a0f25af4d68b1->开源开发工具技术博客</a></li>
+<li><a href="http://www.cppfans.org/" target="_blank" title="记录我们点滴学习工作生活" onclick="if (!window.__cfRLUnblockHandlers) return false; pageTracker._trackPageview('/outgoing/http://www.cppfans.org/?referer=http://coolshell.cn/');" rel="noopener" data-cf-modified-08a8c068d41a0f25af4d68b1->C++爱好者博客</a></li>
+<li><a href="https://HelloACM.com/" target="_blank" title="Smart Ideas, Smart Algorithms" onclick="if (!window.__cfRLUnblockHandlers) return false; pageTracker._trackPageview('/outgoing/http://HelloACM.com/?referer=http://coolshell.cn/');" rel="noopener" data-cf-modified-08a8c068d41a0f25af4d68b1->ACMer</a></li>
+</ul>
+</div></aside><aside id="meta-5" class="widget widget_meta"><h4 class="widget-title">其他操作</h4>
+<ul>
+<li><a href="https://coolshell.cn/wp-login.php?action=register">注册</a></li> <li><a href="https://coolshell.cn/wp-login.php">登录</a></li>
+<li><a href="https://coolshell.cn/feed">条目feed</a></li>
+<li><a href="https://coolshell.cn/comments/feed">评论feed</a></li>
+<li><a href="https://cn.wordpress.org/">WordPress.org</a></li>
+</ul>
+</aside></div>
+</div>
+</div>
+<script type="08a8c068d41a0f25af4d68b1-text/javascript">
+	var _gaq = _gaq || [];
+	_gaq.push(['_setAccount', 'UA-7486123-1']);
+_gaq.push(['_trackPageview']);
+
+	(function() {
+		var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+		ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+		var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+	})();
+</script>
+</div>
+<footer id="colophon" class="site-footer" role="contentinfo">
+<div class="row site-info">
+CoolShell.cn &copy; 2022
+<span class="sep"> | </span>
+Powered by <a href="https://wordpress.org/">WordPress</a>
+<span class="sep"> | </span>
+Based on Theme: Nisarg by <a href="http://www.falgunidesai.com/" rel="designer">Falguni Desai</a>.
+<p><a href="http://www.beian.miit.gov.cn" target="_target">京ICP备18054967号-1</a></p>
+</div>
+</footer>
+</div>
+<script type="08a8c068d41a0f25af4d68b1-text/javascript" id="wp-postratings-js-extra">
+/* <![CDATA[ */
+var ratingsL10n = {"plugin_url":"https:\/\/coolshell.cn\/wp-content\/plugins\/wp-postratings","ajax_url":"https:\/\/coolshell.cn\/wp-admin\/admin-ajax.php","text_wait":"Please rate only 1 item at a time.","image":"stars_crystal","image_ext":"gif","max":"5","show_loading":"1","show_fading":"1","custom":"0"};
+var ratings_mouseover_image=new Image();ratings_mouseover_image.src="https://coolshell.cn/wp-content/plugins/wp-postratings/images/stars_crystal/rating_over.gif";;
+/* ]]> */
+</script>
+<script type="08a8c068d41a0f25af4d68b1-text/javascript" src="https://coolshell.cn/wp-content/plugins/wp-postratings/js/postratings-js.js?ver=1.90" id="wp-postratings-js"></script>
+<script type="08a8c068d41a0f25af4d68b1-text/javascript" id="wp-postviews-cache-js-extra">
+/* <![CDATA[ */
+var viewsCacheL10n = {"admin_ajax_url":"https:\/\/coolshell.cn\/wp-admin\/admin-ajax.php","post_id":"8422"};
+/* ]]> */
+</script>
+<script type="08a8c068d41a0f25af4d68b1-text/javascript" src="https://coolshell.cn/wp-content/plugins/wp-postviews/postviews-cache.js?ver=1.68" id="wp-postviews-cache-js"></script>
+<script type="08a8c068d41a0f25af4d68b1-text/javascript" src="https://coolshell.cn/wp-content/themes/MyNisarg/js/bootstrap.js?ver=6.0.3" id="bootstrap-js"></script>
+<script type="08a8c068d41a0f25af4d68b1-text/javascript" src="https://coolshell.cn/wp-content/themes/MyNisarg/js/skip-link-focus-fix.js?ver=20130115" id="nisarg-skip-link-focus-fix-js"></script>
+<script type="08a8c068d41a0f25af4d68b1-text/javascript" src="https://coolshell.cn/wp-content/themes/MyNisarg/js/nisarg.js?ver=6.0.3" id="nisarg-js-js"></script>
+<script type="08a8c068d41a0f25af4d68b1-text/javascript" src="https://coolshell.cn/wp-includes/js/comment-reply.min.js?ver=6.0.3" id="comment-reply-js"></script>
+<script type="08a8c068d41a0f25af4d68b1-text/javascript" id="q2w3_fixed_widget-js-extra">
+/* <![CDATA[ */
+var q2w3_sidebar_options = [{"use_sticky_position":false,"margin_top":50,"margin_bottom":0,"stop_elements_selectors":"","screen_max_width":0,"screen_max_height":0,"widgets":[]}];
+/* ]]> */
+</script>
+<script type="08a8c068d41a0f25af4d68b1-text/javascript" src="https://coolshell.cn/wp-content/plugins/q2w3-fixed-widget/js/frontend.min.js?ver=6.2.0" id="q2w3_fixed_widget-js"></script>
+<script type="08a8c068d41a0f25af4d68b1-text/javascript" src="https://coolshell.cn/wp-content/plugins/enlighter/cache/enlighterjs.min.js?ver=iKy2UVJwWdQuA1J" id="enlighterjs-js"></script>
+<script type="08a8c068d41a0f25af4d68b1-text/javascript" id="enlighterjs-js-after">
+!function(e,n){if("undefined"!=typeof EnlighterJS){var o={"selectors":{"block":"pre.EnlighterJSRAW","inline":"code.EnlighterJSRAW"},"options":{"indent":2,"ampersandCleanup":true,"linehover":true,"rawcodeDbclick":true,"textOverflow":"scroll","linenumbers":true,"theme":"wpcustom","language":"generic","retainCssClasses":false,"collapse":false,"toolbarOuter":"","toolbarTop":"{BTN_RAW}{BTN_COPY}{BTN_WINDOW}{BTN_WEBSITE}","toolbarBottom":""}};(e.EnlighterJSINIT=function(){EnlighterJS.init(o.selectors.block,o.selectors.inline,o.options)})()}else{(n&&(n.error||n.log)||function(){})("Error: EnlighterJS resources not loaded yet!")}}(window,console);
+</script>
+<script type="08a8c068d41a0f25af4d68b1-text/javascript" src="https://coolshell.cn/wp-content/plugins/easy-table-of-contents/vendor/smooth-scroll/jquery.smooth-scroll.min.js?ver=2.2.0" id="ez-toc-jquery-smooth-scroll-js"></script>
+<script type="08a8c068d41a0f25af4d68b1-text/javascript" src="https://coolshell.cn/wp-content/plugins/easy-table-of-contents/vendor/js-cookie/js.cookie.min.js?ver=2.2.1" id="ez-toc-js-cookie-js"></script>
+<script type="08a8c068d41a0f25af4d68b1-text/javascript" src="https://coolshell.cn/wp-content/plugins/easy-table-of-contents/vendor/sticky-kit/jquery.sticky-kit.min.js?ver=1.9.2" id="ez-toc-jquery-sticky-kit-js"></script>
+<script type="08a8c068d41a0f25af4d68b1-text/javascript" id="ez-toc-js-js-extra">
+/* <![CDATA[ */
+var ezTOC = {"smooth_scroll":"1","scroll_offset":"30"};
+/* ]]> */
+</script>
+<script type="08a8c068d41a0f25af4d68b1-text/javascript" src="https://coolshell.cn/wp-content/plugins/easy-table-of-contents/assets/js/front.min.js?ver=2.0.34-1665557552" id="ez-toc-js-js"></script>
+<script defer type="08a8c068d41a0f25af4d68b1-text/javascript" src="https://coolshell.cn/wp-content/plugins/akismet/_inc/akismet-frontend.js?ver=1665557545" id="akismet-frontend-js"></script>
+<script type="08a8c068d41a0f25af4d68b1-text/javascript">
+        jQuery(document).ready(function ($) {
+
+            for (let i = 0; i < document.forms.length; ++i) {
+                let form = document.forms[i];
+				if ($(form).attr("method") != "get") { $(form).append('<input type="hidden" name="HLY_NVGfRIyiO" value="A*FRUYw" />'); }
+if ($(form).attr("method") != "get") { $(form).append('<input type="hidden" name="rfNmPJFxZlE" value="PcJd0F3kneCMpW" />'); }
+            }
+
+            $(document).on('submit', 'form', function () {
+				if ($(this).attr("method") != "get") { $(this).append('<input type="hidden" name="HLY_NVGfRIyiO" value="A*FRUYw" />'); }
+if ($(this).attr("method") != "get") { $(this).append('<input type="hidden" name="rfNmPJFxZlE" value="PcJd0F3kneCMpW" />'); }
+                return true;
+            });
+
+            jQuery.ajaxSetup({
+                beforeSend: function (e, data) {
+
+                    if (data.type !== 'POST') return;
+
+                    if (typeof data.data === 'object' && data.data !== null) {
+						data.data.append("HLY_NVGfRIyiO", "A*FRUYw");
+data.data.append("rfNmPJFxZlE", "PcJd0F3kneCMpW");
+                    }
+                    else {
+                        data.data = data.data + '&HLY_NVGfRIyiO=A*FRUYw&rfNmPJFxZlE=PcJd0F3kneCMpW';
+                    }
+                }
+            });
+
+        });
+    </script>
+<script src="/cdn-cgi/scripts/7d0fa10a/cloudflare-static/rocket-loader.min.js" data-cf-settings="08a8c068d41a0f25af4d68b1-|49" defer></script></body>
+</html>
+<script type="08a8c068d41a0f25af4d68b1-text/javascript" src="https://cdn.jsdelivr.net/gh/haoel/anti-baidu/js/anti-baidu-latest.min.js" charset="UTF-8"></script>

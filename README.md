@@ -2,9 +2,13 @@
 
 <https://coolshell.org>
 
+740 篇文章列表： https://coolshell.org/articles/
+
 ## In Memoriam of haoel@
 
-Dennis M. Ritchie 逝世十多年后，他的个人主页仍然能正常访问 <https://www.bell-labs.com/usr/dmr/www/>。
+https://giantchen.wordpress.com/2023/05/18/haoel/
+
+Dennis M. Ritchie 逝世十多年后，他的个人主页仍然能原址访问 <https://www.bell-labs.com/usr/dmr/www/>。
 
 W. Richard Stevens 已经逝世二十余年，他的个人主页还保持着 1999 年的样子 <http://www.kohala.com/start/>。
 
